@@ -109,27 +109,13 @@ class _OnboardState extends State<Onboard> {
       body: SafeArea(
         child: Stack(
           children: [
-            // Skip Button (top right)
-            Positioned(
-              top: 10,
-              right: 20,
-              child: TextButton(
-                onPressed: _completeOnboarding,
-                child: Text(
-                  'Skip',
-                  style: TextStyle(
-                    color: const Color(0XFF0066CC),
-                    fontSize: screenWidth * 0.04,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ),
-
-            // Page Content
+            // Main Content Column
             Column(
               children: [
-                // Page View
+                // Top Spacer (for skip button)
+                SizedBox(height: screenHeight * 0.05),
+
+                // Page View Content
                 Expanded(
                   child: PageView.builder(
                     controller: _pageController,
@@ -140,27 +126,29 @@ class _OnboardState extends State<Onboard> {
                       });
                     },
                     itemBuilder: (context, index) {
-                      return SingleChildScrollView(
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: screenWidth * 0.08,
-                            vertical: screenHeight * 0.05,
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              // Image
-                              AspectRatio(
+                      return Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: screenWidth * 0.08,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            // Image with proper margin
+                            Container(
+                              margin: EdgeInsets.only(bottom: screenHeight * 0.04),
+                              child: AspectRatio(
                                 aspectRatio: 1,
                                 child: Image.asset(
                                   _onboardingPages[index].image,
                                   fit: BoxFit.contain,
                                 ),
                               ),
-                              SizedBox(height: screenHeight * 0.04),
+                            ),
 
-                              // Title
-                              Text(
+                            // Title
+                            Container(
+                              margin: EdgeInsets.only(bottom: screenHeight * 0.02),
+                              child: Text(
                                 _onboardingPages[index].title,
                                 style: TextStyle(
                                   fontSize: screenWidth * 0.065,
@@ -169,25 +157,24 @@ class _OnboardState extends State<Onboard> {
                                 ),
                                 textAlign: TextAlign.center,
                               ),
-                              SizedBox(height: screenHeight * 0.02),
+                            ),
 
-                              // Description
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: screenWidth * 0.05,
-                                ),
-                                child: Text(
-                                  _onboardingPages[index].description,
-                                  style: TextStyle(
-                                    fontSize: screenWidth * 0.042,
-                                    color: Colors.grey[700],
-                                    height: 1.5,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
+                            // Description
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: screenWidth * 0.05,
                               ),
-                            ],
-                          ),
+                              child: Text(
+                                _onboardingPages[index].description,
+                                style: TextStyle(
+                                  fontSize: screenWidth * 0.042,
+                                  color: Colors.grey[700],
+                                  height: 1.5,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ],
                         ),
                       );
                     },
@@ -195,18 +182,20 @@ class _OnboardState extends State<Onboard> {
                 ),
 
                 // Page Indicator
-                SmoothPageIndicator(
-                  controller: _pageController,
-                  count: _onboardingPages.length,
-                  effect: const WormEffect(
-                    activeDotColor: Color(0XFF0066CC),
-                    dotColor: Color(0XFF77B7F7),
-                    dotHeight: 10,
-                    dotWidth: 10,
-                    spacing: 8,
+                Container(
+                  margin: EdgeInsets.only(bottom: screenHeight * 0.04),
+                  child: SmoothPageIndicator(
+                    controller: _pageController,
+                    count: _onboardingPages.length,
+                    effect: const WormEffect(
+                      activeDotColor: Color(0XFF0066CC),
+                      dotColor: Color(0XFF77B7F7),
+                      dotHeight: 10,
+                      dotWidth: 10,
+                      spacing: 8,
+                    ),
                   ),
                 ),
-                SizedBox(height: screenHeight * 0.04),
 
                 // Next/Get Started Button
                 Padding(
@@ -250,6 +239,26 @@ class _OnboardState extends State<Onboard> {
                   ),
                 ),
               ],
+            ),
+
+            // Skip Button (positioned absolutely)
+            Positioned(
+              top: screenHeight * 0.02,
+              right: screenWidth * 0.05,
+              child: TextButton(
+                onPressed: _completeOnboarding,
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.all(screenWidth * 0.03),
+                ),
+                child: Text(
+                  'Skip',
+                  style: TextStyle(
+                    color: const Color(0XFF0066CC),
+                    fontSize: screenWidth * 0.04,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
             ),
           ],
         ),

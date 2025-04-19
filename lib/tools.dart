@@ -9,7 +9,7 @@ import 'package:travelmate/safetyalert.dart';
 import 'package:travelmate/settingmenu.dart';
 import 'package:travelmate/spacesharing.dart';
 import 'package:travelmate/travelbuddy.dart';
-import 'package:travelmate/tripmenu.dart';
+import 'package:travelmate/TripMainPage.dart';
 import 'package:travelmate/weather.dart';
 
 import 'ProfilePage.dart';
@@ -65,7 +65,7 @@ class Tools extends StatelessWidget {
             ),
           ],
         ),
-        
+
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -186,7 +186,7 @@ class Tools extends StatelessWidget {
                 if (index == 1) return Tools();
                 if (index == 2) return TripPage();
                 if (index == 3) return MessagePage();
-                if (index == 4) return SettingsMenuPage();
+                if (index == 4) return SettingsMenuPage(previousIndex: currentIndex);
                 return HomePage();
               }),
                   (route) => false,

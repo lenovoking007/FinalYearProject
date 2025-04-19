@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:travelmate/Accountsettingpage.dart';
+import 'package:travelmate/TripMainPage.dart';
 import 'package:travelmate/helppage.dart';
 import 'package:travelmate/languagepage.dart';
 import 'package:travelmate/loginpage.dart';
 import 'package:travelmate/datastoragepage.dart';
 import 'package:travelmate/privacysecuritypage.dart';
+import 'package:travelmate/homepage.dart';
+import 'package:travelmate/tools.dart';
+import 'package:travelmate/chat.dart';
 
 class SettingsMenuPage extends StatefulWidget {
+  final int previousIndex; // Add this to track previous bottom nav index
+
+  const SettingsMenuPage({Key? key, required this.previousIndex}) : super(key: key);
+
   @override
   _SettingsMenuPageState createState() => _SettingsMenuPageState();
 }
@@ -18,96 +26,128 @@ class _SettingsMenuPageState extends State<SettingsMenuPage> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        // Handle back button press
-        return true; // Allow normal back navigation
-      },
-      child: Scaffold(
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: const Text(
+          'Settings',
+          style: TextStyle(
+            color: Color(0xFF0066CC),
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          title: const Text(
-            'Settings',
-            style: TextStyle(
-              color: Color(0xFF0066CC),
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Color(0xFF0066CC)),
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            // Navigate back to the previous bottom nav page
+            switch(widget.previousIndex) {
+              case 0:
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePage()),
+                );
+                break;
+              case 1:
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => Tools()),
+                );
+                break;
+              case 2:
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => TripPage()),
+                );
+                break;
+              case 3:
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => MessagePage()),
+                );
+                break;
+              default:
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePage()),
+                );
+            }
+          },
+        ),
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              children: [
+                _buildSectionHeader('Account'),
+                _buildMenuItem(
+                  icon: Icons.person_outline,
+                  title: 'Account Settings',
+                  onTap: () => _navigateTo(AccountSettingsPage()),
+                ),
+                _buildMenuItem(
+                  icon: Icons.language_outlined,
+                  title: 'Language',
+                  onTap: () => _navigateTo(const LanguagesPage()),
+                ),
+
+                const SizedBox(height: 16),
+                _buildSectionHeader('Preferences'),
+                _buildSwitchItem(
+                  icon: Icons.notifications_outlined,
+                  title: 'Notifications',
+                  value: isNotificationsEnabled,
+                  onChanged: (value) => setState(() => isNotificationsEnabled = value),
+                ),
+                _buildSwitchItem(
+                  icon: Icons.dark_mode_outlined,
+                  title: 'Dark Mode',
+                  value: isDarkMode,
+                  onChanged: (value) => setState(() => isDarkMode = value),
+                ),
+
+                const SizedBox(height: 16),
+                _buildSectionHeader('Privacy'),
+                _buildMenuItem(
+                  icon: Icons.storage_outlined,
+                  title: 'Data Storage',
+                  onTap: () => _navigateTo(DataStoragePage()),
+                ),
+                _buildMenuItem(
+                  icon: Icons.lock_outline,
+                  title: 'Privacy & Security',
+                  onTap: () => _navigateTo(PrivacyAndSecurityPage()),
+                ),
+
+                const SizedBox(height: 16),
+                _buildSectionHeader('Support'),
+                _buildMenuItem(
+                  icon: Icons.help_outline,
+                  title: 'Help & Support',
+                  onTap: () => _navigateTo(HelpAndSupportPage()),
+                ),
+
+                const SizedBox(height: 24),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: _buildLogoutButton(),
+                ),
+                const SizedBox(height: 16),
+              ],
             ),
           ),
-          backgroundColor: Colors.white,
-          elevation: 0,
-          iconTheme: const IconThemeData(color: Color(0xFF0066CC)),
-          centerTitle: true,
-        ),
-        body: Column(
-          children: [
-            Expanded(
-              child: ListView(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                children: [
-                  _buildSectionHeader('Account'),
-                  _buildMenuItem(
-                    icon: Icons.person_outline,
-                    title: 'Account Settings',
-                    onTap: () => _navigateTo(AccountSettingsPage()),
-                  ),
-                  _buildMenuItem(
-                    icon: Icons.language_outlined,
-                    title: 'Language',
-                    onTap: () => _navigateTo(const LanguagesPage()),
-                  ),
-
-                  const SizedBox(height: 16),
-                  _buildSectionHeader('Preferences'),
-                  _buildSwitchItem(
-                    icon: Icons.notifications_outlined,
-                    title: 'Notifications',
-                    value: isNotificationsEnabled,
-                    onChanged: (value) => setState(() => isNotificationsEnabled = value),
-                  ),
-                  _buildSwitchItem(
-                    icon: Icons.dark_mode_outlined,
-                    title: 'Dark Mode',
-                    value: isDarkMode,
-                    onChanged: (value) => setState(() => isDarkMode = value),
-                  ),
-
-                  const SizedBox(height: 16),
-                  _buildSectionHeader('Privacy'),
-                  _buildMenuItem(
-                    icon: Icons.storage_outlined,
-                    title: 'Data Storage',
-                    onTap: () => _navigateTo(DataStoragePage()),
-                  ),
-                  _buildMenuItem(
-                    icon: Icons.lock_outline,
-                    title: 'Privacy & Security',
-                    onTap: () => _navigateTo(PrivacyAndSecurityPage()),
-                  ),
-
-                  const SizedBox(height: 16),
-                  _buildSectionHeader('Support'),
-                  _buildMenuItem(
-                    icon: Icons.help_outline,
-                    title: 'Help & Support',
-                    onTap: () => _navigateTo(HelpAndSupportPage()),
-                  ),
-
-                  const SizedBox(height: 24),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: _buildLogoutButton(),
-                  ),
-                  const SizedBox(height: 16),
-                ],
-              ),
-            ),
-          ],
-        ),
+        ],
       ),
     );
   }
 
+  // Keep all your existing helper methods exactly the same:
   Widget _buildSectionHeader(String title) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, top: 16, bottom: 8),
@@ -268,8 +308,6 @@ class _SettingsMenuPageState extends State<SettingsMenuPage> {
     if (result == true) {
       setState(() => _isLoggingOut = true);
       await Future.delayed(const Duration(milliseconds: 500));
-
-      // Use pushReplacementNamed if you have named routes set up
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => loginn()),

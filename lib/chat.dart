@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:travelmate/homepage.dart';
 import 'package:travelmate/settingmenu.dart';
 import 'package:travelmate/tools.dart';
-import 'package:travelmate/tripmenu.dart';
+import 'package:travelmate/TripMainPage.dart';
 
 import 'ProfilePage.dart';
 
@@ -13,7 +13,7 @@ class AhmadShahiChatPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: const Color(0XFF0066CC),
         elevation: 0,
-        automaticallyImplyLeading: true,
+        automaticallyImplyLeading: false, // This will remove the back arrow
         iconTheme: const IconThemeData(color: Colors.white),
         title: Row(
           children: [
@@ -57,7 +57,6 @@ class AhmadShahiChatPage extends StatelessWidget {
             ),
           ],
         ),
-
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -139,7 +138,7 @@ class _MessagePageState extends State<MessagePage> {
       appBar: AppBar(
         backgroundColor: const Color(0XFF0066CC),
         elevation: 0,
-        automaticallyImplyLeading: true,
+        automaticallyImplyLeading: false,
         iconTheme: const IconThemeData(color: Colors.white),
         title: Row(
           children: [
@@ -182,12 +181,6 @@ class _MessagePageState extends State<MessagePage> {
               ),
             ),
           ],
-        ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
         ),
       ),
       body: Padding(
@@ -293,7 +286,7 @@ class _MessagePageState extends State<MessagePage> {
                   if (index == 1) return Tools();
                   if (index == 2) return TripPage();
                   if (index == 3) return MessagePage();
-                  if (index == 4) return SettingsMenuPage();
+                  if (index == 4) return SettingsMenuPage(previousIndex: currentIndex);
                   return HomePage();
                 }),
                     (route) => false,
