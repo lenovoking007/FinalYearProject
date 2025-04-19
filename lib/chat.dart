@@ -4,32 +4,60 @@ import 'package:travelmate/settingmenu.dart';
 import 'package:travelmate/tools.dart';
 import 'package:travelmate/tripmenu.dart';
 
+import 'ProfilePage.dart';
+
 class AhmadShahiChatPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color(0XFF0066CC),
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Color(0XFF0066CC)),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        automaticallyImplyLeading: true,
+        iconTheme: const IconThemeData(color: Colors.white),
         title: Row(
           children: [
-            CircleAvatar(
-              backgroundImage: AssetImage('assets/images/pic2.png'),
-              radius: 20,
+            Expanded(
+              child: Container(
+                height: 40,
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const TextField(
+                  decoration: InputDecoration(
+                    hintText: 'Search here...',
+                    hintStyle: TextStyle(color: Colors.white70),
+                    prefixIcon: Icon(Icons.search, color: Colors.white, size: 20),
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.only(top: 12),
+                    isDense: true,
+                  ),
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
             ),
-            const SizedBox(width: 10),
-            const Text(
-              'Ahmad Shahi',
-              style: TextStyle(color: Color(0XFF0066CC)),
+            const SizedBox(width: 12),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Profilepage()),
+                );
+              },
+              child: Hero(
+                tag: 'profile-avatar',
+                child: CircleAvatar(
+                  radius: 18,
+                  backgroundImage: NetworkImage(
+                    'https://example.com/profile.jpg', // Replace with your image URL
+                  ),
+                ),
+              ),
             ),
           ],
         ),
+
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -103,76 +131,63 @@ class MessagePage extends StatefulWidget {
 }
 
 class _MessagePageState extends State<MessagePage> {
-  int _selectedIndex = 3;
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-
-    switch (index) {
-      case 0:
-        Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
-        break;
-      case 1:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => Tools()),
-        );
-        break;
-      case 2:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) =>TripPage()),
-        );
-        break;
-      case 3:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => MessagePage()),
-        );
-        break;
-      case 4:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => SettingsMenuPage()),
-        );
-        break;
-    }
-  }
+  int currentIndex = 3;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color(0XFF0066CC),
         elevation: 0,
-        automaticallyImplyLeading: false,
+        automaticallyImplyLeading: true,
+        iconTheme: const IconThemeData(color: Colors.white),
         title: Row(
           children: [
             Expanded(
-              child: SizedBox(
+              child: Container(
                 height: 40,
-                child: TextField(
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const TextField(
                   decoration: InputDecoration(
-                    hintText: 'Search Chats',
-                    prefixIcon: const Icon(Icons.search, color: Color(0XFF0066CC)),
-                    filled: true,
-                    fillColor: Colors.grey[200],
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide.none,
-                    ),
+                    hintText: 'Search here...',
+                    hintStyle: TextStyle(color: Colors.white70),
+                    prefixIcon: Icon(Icons.search, color: Colors.white, size: 20),
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.only(top: 12),
+                    isDense: true,
+                  ),
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Profilepage()),
+                );
+              },
+              child: Hero(
+                tag: 'profile-avatar',
+                child: CircleAvatar(
+                  radius: 18,
+                  backgroundImage: NetworkImage(
+                    'https://example.com/profile.jpg', // Replace with your image URL
                   ),
                 ),
               ),
             ),
-            const SizedBox(width: 16),
-            CircleAvatar(
-              backgroundImage: AssetImage('assets/images/pro.jpg'),
-              radius: 20,
-            ),
           ],
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
       ),
       body: Padding(
@@ -214,20 +229,91 @@ class _MessagePageState extends State<MessagePage> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.build), label: 'Tools'),
-          BottomNavigationBarItem(icon: Icon(Icons.add_circle), label: 'Add'),
-          BottomNavigationBarItem(icon: Icon(Icons.chat), label: 'Chat'),
-          BottomNavigationBarItem(icon: Icon(Icons.menu), label: 'Menu'),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: const Color(0XFF0066CC),
-        unselectedItemColor: Colors.grey,
-        showUnselectedLabels: true,
-        onTap: _onItemTapped,
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 10,
+              spreadRadius: 2,
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+          child: BottomNavigationBar(
+            elevation: 0,
+            type: BottomNavigationBarType.fixed,
+            backgroundColor: Colors.white,
+            selectedFontSize: 12,
+            unselectedFontSize: 12,
+            selectedItemColor: const Color(0XFF0066CC),
+            unselectedItemColor: Colors.grey[600],
+            showUnselectedLabels: true,
+            currentIndex: currentIndex,
+            items: [
+              _buildBottomNavItem(
+                icon: Icons.home_outlined,
+                activeIcon: Icons.home,
+                label: 'Home',
+                isActive: currentIndex == 0,
+              ),
+              _buildBottomNavItem(
+                icon: Icons.widgets_outlined,
+                activeIcon: Icons.widgets,
+                label: 'Tools',
+                isActive: currentIndex == 1,
+              ),
+              _buildBottomNavItem(
+                icon: Icons.airplane_ticket_outlined,
+                activeIcon: Icons.airplane_ticket,
+                label: 'Trips',
+                isActive: currentIndex == 2,
+              ),
+              _buildBottomNavItem(
+                icon: Icons.chat_bubble_outline,
+                activeIcon: Icons.chat_bubble,
+                label: 'Chat',
+                isActive: currentIndex == 3,
+              ),
+              _buildBottomNavItem(
+                icon: Icons.menu_outlined,
+                activeIcon: Icons.menu,
+                label: 'Menu',
+                isActive: currentIndex == 4,
+              ),
+            ],
+            onTap: (index) {
+              if (index == currentIndex) return;
+
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) {
+                  if (index == 0) return HomePage();
+                  if (index == 1) return Tools();
+                  if (index == 2) return TripPage();
+                  if (index == 3) return MessagePage();
+                  if (index == 4) return SettingsMenuPage();
+                  return HomePage();
+                }),
+                    (route) => false,
+              );
+            },
+          ),
+        ),
       ),
+    );
+  }
+
+  BottomNavigationBarItem _buildBottomNavItem({
+    required IconData icon,
+    required IconData activeIcon,
+    required String label,
+    required bool isActive,
+  }) {
+    return BottomNavigationBarItem(
+      icon: Icon(isActive ? activeIcon : icon),
+      label: label,
     );
   }
 

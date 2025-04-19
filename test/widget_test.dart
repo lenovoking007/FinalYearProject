@@ -1,30 +1,38 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
+import 'package:mockito/mockito.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:travelmate/main.dart';
+import 'package:travelmate/splashscreen.dart'; // Make sure to import SplashScreen
+
+class MockFirebaseApp extends Mock implements FirebaseApp {}
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  // Create a mock Firebase app for testing
+  final mockFirebaseApp = MockFirebaseApp();
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  testWidgets('Test app initialization and splash screen', (WidgetTester tester) async {
+    // Setup mock Firebase initialization
+    when(mockFirebaseApp.name).thenReturn('mock');
+    when(mockFirebaseApp.options).thenReturn(const FirebaseOptions(
+      apiKey: 'mock',
+      appId: 'mock',
+      messagingSenderId: 'mock',
+      projectId: 'mock',
+    ));
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    // Build our app with mock initialization
+    await tester.pumpWidget(MyApp(
+      firebaseInitialization: Future.value(mockFirebaseApp),
+    ));
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Verify loading indicator is shown initially
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+    // Complete the future and rebuild
+    await tester.pumpAndSettle();
+
+    // Verify splash screen is shown after initialization
+    expect(find.byType(SplashScreen), findsOneWidget); // Fixed typo here
   });
 }

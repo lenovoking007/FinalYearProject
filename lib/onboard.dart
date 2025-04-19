@@ -1,122 +1,258 @@
 import 'package:flutter/material.dart';
-import 'package:travelmate/model/onboardingmodel.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'loginpage.dart';
-import 'dart:io'; // For app exit functionality
+import 'package:travelmate/loginpage.dart';
+import 'package:travelmate/model/onboardingmodel.dart';
 
-class onboard extends StatefulWidget {
-  onboard({super.key});
+class Onboard extends StatefulWidget {
+  const Onboard({super.key});
 
   @override
-  _onboardState createState() => _onboardState();
+  _OnboardState createState() => _OnboardState();
 }
 
-class _onboardState extends State<onboard> {
-  List<OnBoardingModel> listonboard = [
+class _OnboardState extends State<Onboard> {
+  final PageController _pageController = PageController();
+  int _currentPage = 0;
+  bool _isInitialized = false;
+  bool _showOnboarding = true;
+
+  final List<OnBoardingModel> _onboardingPages = [
     OnBoardingModel(
-        image: 'assets/images/p1.jpg',
-        title: 'Explore the World with Ease',
-        description: 'Find Every Hidden Gem'),
+      image: 'assets/images/p1.jpg',
+      title: 'Explore the World with Ease',
+      description: 'Discover hidden gems and plan your perfect trip with our comprehensive travel tools',
+    ),
     OnBoardingModel(
-        image: 'assets/images/p2.jpg',
-        title: 'Reach Unique Destinations',
-        description: 'Your Journey Awaits'),
+      image: 'assets/images/p2.jpg',
+      title: 'Reach Unique Destinations',
+      description: 'Get personalized recommendations for destinations you\'ll love',
+    ),
     OnBoardingModel(
-        image: 'assets/images/p3.jpg',
-        title: 'Connect with Travel Mate',
-        description: 'For Memories that Last')
+      image: 'assets/images/p3.jpg',
+      title: 'Connect with Travel Community',
+      description: 'Share experiences and get tips from fellow travelers',
+    ),
   ];
 
-  PageController controller = PageController();
-  int previousPageIndex = 0; // Track previous page index
+  @override
+  void initState() {
+    super.initState();
+    _checkFirstLaunch();
+  }
+
+  Future<void> _checkFirstLaunch() async {
+    final prefs = await SharedPreferences.getInstance();
+    final isFirstLaunch = prefs.getBool('first_launch') ?? true;
+
+    if (!isFirstLaunch) {
+      if (mounted) {
+        setState(() {
+          _showOnboarding = false;
+        });
+      }
+      _navigateToLogin();
+    } else {
+      if (mounted) {
+        setState(() {
+          _isInitialized = true;
+        });
+      }
+    }
+  }
+
+  Future<void> _completeOnboarding() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('first_launch', false);
+    _navigateToLogin();
+  }
+
+  void _navigateToLogin() {
+    Navigator.pushReplacement(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (_, __, ___) => const loginn(),
+        transitionDuration: Duration.zero,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          double screenHeight = constraints.maxHeight;
-          double screenWidth = constraints.maxWidth;
+    if (!_isInitialized) {
+      return const Scaffold(
+        backgroundColor: Colors.white,
+        body: Center(
+          child: CircularProgressIndicator(
+            color: Color(0XFF0066CC),
+          ),
+        ),
+      );
+    }
 
-          return Container(
-            color: Colors.white,
-            child: Center(
-              child: Column(
-                children: [
-                  Expanded(
-                    child: PageView.builder(
-                      controller: controller,
-                      itemCount: listonboard.length,
-                      scrollDirection: Axis.horizontal,
-                      onPageChanged: (index) {
-                        // Only trigger when swiping forward to last page
-                        if (index == listonboard.length - 1 &&
-                            previousPageIndex == listonboard.length - 2) {
-                          // Delay the navigation to make sure the user swiped
-                          Future.delayed(Duration(milliseconds: 300), () {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(builder: (context) => loginn()),
-                            );
-                          });
-                        }
-                        previousPageIndex = index; // Update previous page index
-                      },
-                      itemBuilder: (context, i) {
-                        return Center(
+    if (!_showOnboarding) {
+      return const Scaffold(
+        backgroundColor: Colors.white,
+        body: Center(
+          child: CircularProgressIndicator(
+            color: Color(0XFF0066CC),
+          ),
+        ),
+      );
+    }
+
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Stack(
+          children: [
+            // Skip Button (top right)
+            Positioned(
+              top: 10,
+              right: 20,
+              child: TextButton(
+                onPressed: _completeOnboarding,
+                child: Text(
+                  'Skip',
+                  style: TextStyle(
+                    color: const Color(0XFF0066CC),
+                    fontSize: screenWidth * 0.04,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ),
+
+            // Page Content
+            Column(
+              children: [
+                // Page View
+                Expanded(
+                  child: PageView.builder(
+                    controller: _pageController,
+                    itemCount: _onboardingPages.length,
+                    onPageChanged: (index) {
+                      setState(() {
+                        _currentPage = index;
+                      });
+                    },
+                    itemBuilder: (context, index) {
+                      return SingleChildScrollView(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: screenWidth * 0.08,
+                            vertical: screenHeight * 0.05,
+                          ),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Image.asset(
-                                listonboard[i].image.toString(),
-                                height: screenHeight * 0.3,
-                                width: screenWidth * 0.6,
+                              // Image
+                              AspectRatio(
+                                aspectRatio: 1,
+                                child: Image.asset(
+                                  _onboardingPages[index].image,
+                                  fit: BoxFit.contain,
+                                ),
                               ),
-                              SizedBox(height: screenHeight * 0.03),
+                              SizedBox(height: screenHeight * 0.04),
+
+                              // Title
                               Text(
-                                listonboard[i].title.toString(),
+                                _onboardingPages[index].title,
                                 style: TextStyle(
-                                    fontSize: screenHeight * 0.04,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0XFF0066CC)),
+                                  fontSize: screenWidth * 0.065,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0XFF0066CC),
+                                ),
                                 textAlign: TextAlign.center,
                               ),
                               SizedBox(height: screenHeight * 0.02),
+
+                              // Description
                               Padding(
                                 padding: EdgeInsets.symmetric(
-                                    horizontal: screenWidth * 0.1),
+                                  horizontal: screenWidth * 0.05,
+                                ),
                                 child: Text(
-                                  listonboard[i].description.toString(),
+                                  _onboardingPages[index].description,
                                   style: TextStyle(
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: screenHeight * 0.02,
-                                      color: Color(0XFF0066CC) ),
+                                    fontSize: screenWidth * 0.042,
+                                    color: Colors.grey[700],
+                                    height: 1.5,
+                                  ),
                                   textAlign: TextAlign.center,
                                 ),
-                              )
+                              ),
                             ],
                           ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+
+                // Page Indicator
+                SmoothPageIndicator(
+                  controller: _pageController,
+                  count: _onboardingPages.length,
+                  effect: const WormEffect(
+                    activeDotColor: Color(0XFF0066CC),
+                    dotColor: Color(0XFF77B7F7),
+                    dotHeight: 10,
+                    dotWidth: 10,
+                    spacing: 8,
+                  ),
+                ),
+                SizedBox(height: screenHeight * 0.04),
+
+                // Next/Get Started Button
+                Padding(
+                  padding: EdgeInsets.only(
+                    bottom: screenHeight * 0.05,
+                    left: screenWidth * 0.1,
+                    right: screenWidth * 0.1,
+                  ),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      if (_currentPage == _onboardingPages.length - 1) {
+                        _completeOnboarding();
+                      } else {
+                        _pageController.nextPage(
+                          duration: const Duration(milliseconds: 500),
+                          curve: Curves.ease,
                         );
-                      },
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0XFF0066CC),
+                      minimumSize: Size(double.infinity, screenHeight * 0.065),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      elevation: 0,
+                      padding: EdgeInsets.symmetric(
+                        vertical: screenHeight * 0.02,
+                      ),
+                    ),
+                    child: Text(
+                      _currentPage == _onboardingPages.length - 1
+                          ? 'Get Started'
+                          : 'Next',
+                      style: TextStyle(
+                        fontSize: screenWidth * 0.045,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
-                  SmoothPageIndicator(
-                    controller: controller,
-                    count: listonboard.length,
-                    effect: JumpingDotEffect(
-                      activeDotColor: Color(0XFF0066CC),
-                      dotColor: Color(0XFF77B7F7),
-                    ),
-                  ),
-                  SizedBox(
-                    height: screenHeight * 0.1,
-                  )
-                ],
-              ),
+                ),
+              ],
             ),
-          );
-        },
+          ],
+        ),
       ),
     );
   }

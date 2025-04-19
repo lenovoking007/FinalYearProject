@@ -65,12 +65,7 @@ class Tools extends StatelessWidget {
             ),
           ],
         ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
