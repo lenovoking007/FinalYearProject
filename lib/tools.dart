@@ -332,7 +332,7 @@ final List<Tool> tools = [
     subtitle: 'Never miss anything',
     icon: Icons.notifications,
     iconColor: Colors.orange,
-    page: RemindersPage(),
+    page: ReminderPage(),
   ),
   Tool(
     title: 'Packing List',
