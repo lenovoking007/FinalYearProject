@@ -1,9 +1,9 @@
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:travelmate/pinverificationpage.dart';
+import 'package:travelmate/loginpage.dart';
 import 'package:travelmate/services/auth.dart';
-
+import 'package:travelmate/homepage.dart';
 
 class signup extends StatefulWidget {
   const signup({super.key});
@@ -18,11 +18,10 @@ class _signupState extends State<signup> {
   TextEditingController phoneController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool isChecked = false;
-  bool isLoading = false; // Added for loading state
-  String countryCode = '+92'; // Default country code (Pakistan)
+  bool isLoading = false;
+  String countryCode = '+92';
 
   String? validateEmail(String email) {
-    // Basic email validation
     final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
     if (!emailRegex.hasMatch(email)) {
       return 'Enter a valid email address';
@@ -31,7 +30,6 @@ class _signupState extends State<signup> {
   }
 
   String? validatePhone(String phone) {
-    // Ensure phone is exactly 11 digits
     if (phone.length != 11 || !RegExp(r'^\d+$').hasMatch(phone)) {
       return 'Phone number must be exactly 11 digits';
     }
@@ -39,11 +37,91 @@ class _signupState extends State<signup> {
   }
 
   String? validatePassword(String password) {
-    // Password must be at least 6 characters
     if (password.length < 6) {
       return 'Password must be at least 6 characters';
     }
     return null;
+  }
+
+  void _showSuccessDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: const Color(0xFFE8F5E9),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.green.withOpacity(0.2),
+                      blurRadius: 10,
+                      spreadRadius: 2,
+                    ),
+                  ],
+                ),
+                child: const Icon(
+                  Icons.check_circle,
+                  color: Colors.green,
+                  size: 48,
+                ),
+              ),
+              const SizedBox(height: 24),
+              Text(
+                "Registration Successful!",
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: const Color(0xFF0066CC).withOpacity(0.9),
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                "Your account has been created successfully.",
+                style: TextStyle(fontSize: 16, color: Colors.black87),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 24),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF0066CC),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    elevation: 2,
+                  ),
+                  onPressed: () {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => loginn()),
+                          (Route<dynamic> route) => false,
+                    );
+                  },
+                  child: const Text(
+                    "Let's Get Started",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -51,86 +129,81 @@ class _signupState extends State<signup> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white, // App bar background color set to white
-        elevation: 0, // Remove shadow
-
-        scrolledUnderElevation: 0, // Prevent elevation changes on scroll
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0XFF0066CC)), // Blue back icon
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        scrolledUnderElevation: 0,
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
         child: Center(
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Image.asset('assets/images/logo.jpg', width: 100, height: 100), // Smaller logo
-                const SizedBox(height: 10),
+                Image.asset('assets/images/logo.jpg', width: 100, height: 100),
+                const SizedBox(height: 14),
                 const Text(
                   "Create your account",
                   style: TextStyle(
-                      color: Color(0XFF0066CC),
-                      fontSize: 16, // Smaller font size
-                      fontWeight: FontWeight.normal), // Simpler text
+                    color: Color(0XFF0066CC),
+                    fontSize: 16,
+                  ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 14),
                 TextField(
                   controller: fullNameController,
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: const Color(0XFF88F2E8).withOpacity(0.1),
+                    fillColor: const Color(0xFF88F2E8).withOpacity(0.1),
                     enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(color: Color(0XFF0066CC)),
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: const Color(0xFF0066CC).withOpacity(0.5)),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(color: Colors.green),
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(color: Color(0xFF0066CC)),
                     ),
                     hintText: 'Full name',
                     hintStyle: const TextStyle(color: Color(0xFFAAAAAA)),
-                    prefixIcon: const Icon( // Icon on the left
+                    prefixIcon: const Icon(
                       Icons.person,
-                      size: 20, // Smaller icon
+                      size: 24,
                       color: Color(0XFF0066CC),
                     ),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                   ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 14),
                 TextField(
                   controller: emailController,
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: const Color(0XFF88F2E8).withOpacity(0.1),
+                    fillColor: const Color(0xFF88F2E8).withOpacity(0.1),
                     enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(color: Color(0XFF0066CC)),
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: const Color(0xFF0066CC).withOpacity(0.5)),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(color: Colors.green),
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(color: Color(0xFF0066CC)),
                     ),
-                    hintText: 'Valid email',
+                    hintText: 'Email address',
                     hintStyle: const TextStyle(color: Color(0xFFAAAAAA)),
-                    prefixIcon: const Icon( // Icon on the left
+                    prefixIcon: const Icon(
                       Icons.email,
-                      size: 20, // Smaller icon
+                      size: 24,
                       color: Color(0XFF0066CC),
                     ),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                   ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 14),
                 Row(
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: const Color(0XFF0066CC)),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: const Color(0xFF0066CC).withOpacity(0.5)),
                       ),
                       child: CountryCodePicker(
                         onChanged: (code) {
@@ -138,13 +211,14 @@ class _signupState extends State<signup> {
                             countryCode = code.dialCode!;
                           });
                         },
-                        initialSelection: 'PK', // Default to Pakistan
-                        favorite: const ['+92', 'PK'], // Pakistan as favorite
+                        initialSelection: 'PK',
+                        favorite: const ['+92', 'PK'],
                         showCountryOnly: false,
                         showOnlyCountryWhenClosed: false,
                         alignLeft: false,
-                        flagWidth: 20, // Smaller flag icon
-                        textStyle: const TextStyle(fontSize: 14), // Smaller text
+                        flagWidth: 24,
+                        textStyle: const TextStyle(fontSize: 14),
+                        padding: EdgeInsets.zero,
                       ),
                     ),
                     const SizedBox(width: 10),
@@ -157,47 +231,49 @@ class _signupState extends State<signup> {
                         ],
                         decoration: InputDecoration(
                           filled: true,
-                          fillColor: const Color(0XFF88F2E8).withOpacity(0.1),
+                          fillColor: const Color(0xFF88F2E8).withOpacity(0.1),
                           enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: const BorderSide(color: Color(0XFF0066CC)),
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: const Color(0xFF0066CC).withOpacity(0.5)),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: const BorderSide(color: Colors.green),
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: const BorderSide(color: Color(0xFF0066CC)),
                           ),
                           hintText: 'Phone number',
                           hintStyle: const TextStyle(color: Color(0xFFAAAAAA)),
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                         ),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 14),
                 TextField(
                   controller: passwordController,
                   obscureText: true,
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: const Color(0XFF88F2E8).withOpacity(0.1),
+                    fillColor: const Color(0xFF88F2E8).withOpacity(0.1),
                     enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(color: Color(0XFF0066CC)),
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: const Color(0xFF0066CC).withOpacity(0.5)),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(color: Colors.green),
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(color: Color(0xFF0066CC)),
                     ),
-                    hintText: 'Strong Password',
+                    hintText: 'Password',
                     hintStyle: const TextStyle(color: Color(0xFFAAAAAA)),
-                    prefixIcon: const Icon( // Icon on the left
+                    prefixIcon: const Icon(
                       Icons.lock,
-                      size: 20, // Smaller icon
+                      size: 24,
                       color: Color(0XFF0066CC),
                     ),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                   ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 14),
                 Row(
                   children: [
                     Checkbox(
@@ -207,23 +283,20 @@ class _signupState extends State<signup> {
                           isChecked = newValue!;
                         });
                       },
-                      activeColor: const Color(0XFF0066CC), // Blue checkbox
+                      activeColor: const Color(0XFF0066CC),
                       checkColor: Colors.white,
                     ),
                     const Expanded(
                       child: Text(
-                        'By checking the box you agree to our Terms and Conditions.',
-                        softWrap: true,
-                        overflow: TextOverflow.visible,
-                        maxLines: 2,
+                        'I agree to the Terms and Conditions',
                         style: TextStyle(fontSize: 12, color: Color(0XFF0066CC)),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 32),
                 isLoading
-                    ? const CircularProgressIndicator() // Show loading indicator
+                    ? const CircularProgressIndicator()
                     : ElevatedButton(
                   onPressed: () async {
                     final fullName = fullNameController.text;
@@ -231,16 +304,13 @@ class _signupState extends State<signup> {
                     final phone = phoneController.text;
                     final password = passwordController.text;
 
-                    // Perform validation
                     final emailError = validateEmail(email);
                     final phoneError = validatePhone(phone);
                     final passwordError = validatePassword(password);
 
                     if (fullName.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Please enter your full name"),
-                        ),
+                        const SnackBar(content: Text("Please enter your full name")),
                       );
                       return;
                     }
@@ -275,51 +345,20 @@ class _signupState extends State<signup> {
                       return;
                     }
 
-                    // Start loading
-                    setState(() {
-                      isLoading = true;
-                    });
+                    setState(() => isLoading = true);
 
                     try {
-                      // Use AuthServices for signup
                       await AuthServices().signUpUser(
                         email: email,
                         password: password,
                         name: fullName,
                         phone: '$countryCode$phone',
-                      ).then((val) {
-                        setState(() {
-                          isLoading = false; // Stop loading
-                        });
-
-                        // Show success message
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: const Text("Message"),
-                              content: const Text("Registered Successfully"),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => const PinVerificationPage(),
-                                      ),
-                                    );
-                                  },
-                                  child: const Text("Okay"),
-                                ),
-                              ],
-                            );
-                          },
-                        );
+                      ).then((_) {
+                        setState(() => isLoading = false);
+                        _showSuccessDialog(context);
                       });
                     } catch (e) {
-                      setState(() {
-                        isLoading = false; // Stop loading
-                      });
+                      setState(() => isLoading = false);
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text(e.toString())),
                       );
@@ -327,16 +366,16 @@ class _signupState extends State<signup> {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0XFF0066CC),
-                    minimumSize: const Size(double.infinity, 40), // Smaller button
+                    minimumSize: const Size(double.infinity, 50),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(12),
                     ),
                   ),
                   child: const Text(
                     "Sign Up",
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 16, // Smaller font size
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -372,25 +411,23 @@ class _signupState extends State<signup> {
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xffFFFFFF),
-                    minimumSize: const Size(double.infinity, 40), // Smaller button
+                    minimumSize: const Size(double.infinity, 50),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  onPressed: () {
-                    // TODO: Implement Facebook login
-                  },
+                  onPressed: () {},
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Image.asset('assets/images/fb.png', height: 14, width: 14),
                       const SizedBox(width: 10),
                       const Text(
-                        "Sign Up with Facebook",
+                        "Continue with Facebook",
                         style: TextStyle(
                           color: Color(0XFF0066CC),
                           fontWeight: FontWeight.bold,
-                          fontSize: 14, // Smaller font size
+                          fontSize: 15,
                         ),
                       ),
                     ],
@@ -400,29 +437,53 @@ class _signupState extends State<signup> {
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xffFFFFFF),
-                    minimumSize: const Size(double.infinity, 40), // Smaller button
+                    minimumSize: const Size(double.infinity, 50),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  onPressed: () {
-                    // TODO: Implement Google login
-                  },
+                  onPressed: () {},
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Image.asset('assets/images/google.png', height: 14, width: 14),
                       const SizedBox(width: 10),
                       const Text(
-                        "Sign Up with Google",
+                        "Continue with Google",
                         style: TextStyle(
                           color: Color(0XFF0066CC),
                           fontWeight: FontWeight.bold,
-                          fontSize: 14, // Smaller font size
+                          fontSize: 15,
                         ),
                       ),
                     ],
                   ),
+                ),
+                const SizedBox(height: 31.5),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      "Already have an account?",
+                      style: TextStyle(fontSize: 15, color: Color(0XFF0066CC)),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => loginn()),
+                        );
+                      },
+                      child: const Text(
+                        "Login",
+                        style: TextStyle(
+                          color: Color(0XFF0066CC),
+                          fontSize: 15,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -432,5 +493,3 @@ class _signupState extends State<signup> {
     );
   }
 }
-
-

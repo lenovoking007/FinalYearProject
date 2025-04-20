@@ -792,7 +792,7 @@ class LahorePage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: Text(
-                  'Real-Time Reviews',
+                  'User Reviews',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,

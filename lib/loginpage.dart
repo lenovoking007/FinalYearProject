@@ -3,12 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:travelmate/resetpass.dart';
 import 'package:travelmate/services/auth.dart';
 import 'package:travelmate/signuppage.dart';
-
 import 'homepage.dart';
-
-
-
-
 
 class loginn extends StatefulWidget {
   const loginn({super.key});
@@ -21,15 +16,14 @@ class _loginnState extends State<loginn> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool isChecked = false;
-  bool isLoading = false; // Added for loading state
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    _loadSavedCredentials(); // Load saved credentials if "Remember me" was checked
+    _loadSavedCredentials();
   }
 
-  // Load saved email and password
   Future<void> _loadSavedCredentials() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -39,7 +33,6 @@ class _loginnState extends State<loginn> {
     });
   }
 
-  // Save email and password if "Remember me" is checked
   Future<void> _saveCredentials() async {
     final prefs = await SharedPreferences.getInstance();
     if (isChecked) {
@@ -70,11 +63,9 @@ class _loginnState extends State<loginn> {
           ),
         ],
       ),
-    )) ??
-        false;
+    )) ?? false;
   }
 
-  // Updated Login function using AuthServices from Code 1
   Future<void> _loginUser() async {
     if (emailController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -90,11 +81,10 @@ class _loginnState extends State<loginn> {
     }
 
     setState(() {
-      isLoading = true; // Show loading indicator
+      isLoading = true;
     });
 
     try {
-      // Use AuthServices from Code 1 for login
       await AuthServices()
           .loginUser(
         email: emailController.text,
@@ -102,17 +92,17 @@ class _loginnState extends State<loginn> {
       )
           .then((val) {
         setState(() {
-          isLoading = false; // Hide loading indicator
+          isLoading = false;
         });
-        _saveCredentials(); // Save credentials if "Remember me" is checked
+        _saveCredentials();
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) =>  HomePage()),
+          MaterialPageRoute(builder: (context) => HomePage()),
         );
       });
     } catch (e) {
       setState(() {
-        isLoading = false; // Hide loading indicator
+        isLoading = false;
       });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(e.toString())),
@@ -137,7 +127,7 @@ class _loginnState extends State<loginn> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset('assets/images/logo.jpg', width: 100, height: 100), // Smaller logo
+                  Image.asset('assets/images/logo.jpg', width: 100, height: 100),
                   const SizedBox(height: 14),
                   const Text(
                     "Sign in to access your account",
@@ -148,46 +138,48 @@ class _loginnState extends State<loginn> {
                     controller: emailController,
                     decoration: InputDecoration(
                       filled: true,
-                      fillColor: const Color(0XFF88F2E8).withOpacity(0.1),
+                      fillColor: const Color(0xFF88F2E8).withOpacity(0.1),
                       enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: const BorderSide(color: Color(0XFF0066CC)),
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: const Color(0xFF0066CC).withOpacity(0.5)),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: const BorderSide(color: Colors.green),
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: Color(0xFF0066CC)),
                       ),
                       hintText: 'Enter email address',
                       hintStyle: const TextStyle(color: Color(0xFFAAAAAA)),
-                      prefixIcon: const Icon( // Icon on the left
+                      prefixIcon: const Icon(
                         Icons.email,
                         size: 24,
                         color: Color(0XFF0066CC),
                       ),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                     ),
                   ),
                   const SizedBox(height: 14),
                   TextField(
                     controller: passwordController,
-                    obscureText: true, // Hides password
+                    obscureText: true,
                     decoration: InputDecoration(
                       filled: true,
-                      fillColor: const Color(0XFF88F2E8).withOpacity(0.1),
+                      fillColor: const Color(0xFF88F2E8).withOpacity(0.1),
                       enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: const BorderSide(color: Color(0XFF0066CC)),
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: const Color(0xFF0066CC).withOpacity(0.5)),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: const BorderSide(color: Colors.green),
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: Color(0xFF0066CC)),
                       ),
                       hintText: 'Enter your password',
                       hintStyle: const TextStyle(color: Color(0xFFAAAAAA)),
-                      prefixIcon: const Icon( // Icon on the left
+                      prefixIcon: const Icon(
                         Icons.lock,
                         size: 24,
                         color: Color(0XFF0066CC),
                       ),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                     ),
                   ),
                   const SizedBox(height: 14),
@@ -200,7 +192,7 @@ class _loginnState extends State<loginn> {
                             isChecked = newValue!;
                           });
                         },
-                        activeColor: const Color(0XFF0066CC), // Blue checkbox
+                        activeColor: const Color(0XFF0066CC),
                         checkColor: Colors.white,
                       ),
                       const Expanded(
@@ -213,9 +205,7 @@ class _loginnState extends State<loginn> {
                               fontSize: 12, color: Color(0XFF0066CC)),
                         ),
                       ),
-                      const SizedBox(
-                        width: 20,
-                      ),
+                      const SizedBox(width: 20),
                       TextButton(
                           onPressed: () {
                             Navigator.push(context, MaterialPageRoute(builder: (context) => resetpass()));
@@ -229,14 +219,14 @@ class _loginnState extends State<loginn> {
                   ),
                   const SizedBox(height: 32),
                   isLoading
-                      ? const CircularProgressIndicator() // Show loading indicator
+                      ? const CircularProgressIndicator()
                       : ElevatedButton(
-                    onPressed: _loginUser, // Call login function
+                    onPressed: _loginUser,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0XFF0066CC),
-                      minimumSize: const Size(double.infinity, 50), // Full-width button
+                      minimumSize: const Size(double.infinity, 50),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(12),
                       ),
                     ),
                     child: const Text(
@@ -279,14 +269,12 @@ class _loginnState extends State<loginn> {
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xffFFFFFF),
-                      minimumSize: const Size(double.infinity, 50), // Full-width button
+                      minimumSize: const Size(double.infinity, 50),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    onPressed: () {
-                      // TODO: Implement Facebook login
-                    },
+                    onPressed: () {},
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -307,14 +295,12 @@ class _loginnState extends State<loginn> {
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xffFFFFFF),
-                      minimumSize: const Size(double.infinity, 50), // Full-width button
+                      minimumSize: const Size(double.infinity, 50),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    onPressed: () {
-                      // TODO: Implement Google login
-                    },
+                    onPressed: () {},
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -341,7 +327,10 @@ class _loginnState extends State<loginn> {
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => signup()));
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => signup()),
+                          );
                         },
                         child: const Text(
                           "SignUp",
