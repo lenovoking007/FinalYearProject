@@ -44,6 +44,8 @@ dependencies:
   shimmer: ^2.0.0
   mockito: ^5.4.0
   build_runner: ^2.4.0
+  image_picker: ^0.8.7
+  firebase_storage: ^12.4.5
 
 
 
@@ -85,6 +87,7 @@ flutter:
     - assets/images/
     - assets/images/Lahore/
     - assets/images/Karachi/
+    - assets/images/default_avatar.png
 
 
 

@@ -23,6 +23,22 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      builder: (context, child) {
+        return ScrollConfiguration(
+          behavior: const MaterialScrollBehavior().copyWith(
+            overscroll: false, // Disable glow effect
+          ),
+          child: child!,
+        );
+      },
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Color(0XFF0066CC),
+          elevation: 0,
+          iconTheme: IconThemeData(color: Colors.white),
+        ),
+      ),
       home: FutureBuilder(
         future: firebaseInitialization,
         builder: (context, snapshot) {
@@ -30,8 +46,10 @@ class MyApp extends StatelessWidget {
           if (snapshot.hasError) {
             return Material(
               child: Center(
-                child: Text('Initialization failed',
-                    style: TextStyle(color: Colors.red)),
+                child: Text(
+                  'Initialization failed',
+                  style: TextStyle(color: Colors.red),
+                ),
               ),
             );
           }
@@ -44,8 +62,9 @@ class MyApp extends StatelessWidget {
           // Show loading indicator while waiting
           return const Material(
             child: Center(
-              child: CircularProgressIndicator(),
-
+              child: CircularProgressIndicator(
+                color: Color(0XFF0066CC), // Match your app theme
+              ),
             ),
           );
         },

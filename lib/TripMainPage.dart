@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:travelmate/chat.dart';
@@ -131,7 +133,6 @@ class _TripPageState extends State<TripPage> {
         if (index == 1) return Tools();
         if (index == 2) return TripPage();
         if (index == 3) return MessagePage();
-        if (index == 4) return SettingsMenuPage(previousIndex: currentIndex);
         return HomePage();
       }),
           (route) => false,
@@ -139,30 +140,33 @@ class _TripPageState extends State<TripPage> {
   }
 
   Widget _buildCategoryItem(Map<String, dynamic> category) {
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Container(
-      width: 100,
-      margin: const EdgeInsets.only(right: 12),
+      width: screenHeight * 0.12,
+      margin: EdgeInsets.only(right: screenHeight * 0.015),
       child: Column(
         children: [
           Container(
-            width: 80,
-            height: 80,
+            width: screenHeight * 0.08,  // Reduced slightly to prevent overflow
+            height: screenHeight * 0.08, // Reduced slightly to prevent overflow
             decoration: BoxDecoration(
               color: category['color'].withOpacity(0.2),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Icon(
               category['icon'],
-              size: 40,
+              size: screenHeight * 0.04, // Reduced icon size
               color: category['color'],
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: screenHeight * 0.008), // Reduced spacing
           Text(
             category['title'],
             textAlign: TextAlign.center,
-            style: const TextStyle(
+            style: TextStyle(
               fontWeight: FontWeight.bold,
+              fontSize: screenHeight * 0.015, // Reduced font size
             ),
           ),
         ],
@@ -250,27 +254,30 @@ class _TripPageState extends State<TripPage> {
   }
 
   Widget _buildSectionHeader(String title, VoidCallback? onViewAll) {
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: EdgeInsets.symmetric(horizontal: screenHeight * 0.02, vertical: screenHeight * 0.01),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             title,
-            style: const TextStyle(
-              fontSize: 20,
+            style: TextStyle(
+              fontSize: screenHeight * 0.025,
               fontWeight: FontWeight.bold,
-              color: Color(0XFF0066CC),
+              color: const Color(0XFF0066CC),
             ),
           ),
           if (onViewAll != null)
             TextButton(
               onPressed: onViewAll,
-              child: const Text(
+              child: Text(
                 'See All',
                 style: TextStyle(
-                  color: Color(0XFF0066CC),
+                  color: const Color(0XFF0066CC),
                   fontWeight: FontWeight.bold,
+                  fontSize: screenHeight * 0.018,
                 ),
               ),
             ),
@@ -374,199 +381,259 @@ class _TripPageState extends State<TripPage> {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0XFF0066CC),
         elevation: 0,
         automaticallyImplyLeading: false,
         iconTheme: const IconThemeData(color: Colors.white),
-        title: Row(
-          children: [
-            Expanded(
-              child: Container(
-                height: 40,
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Search here...',
-                    hintStyle: TextStyle(color: Colors.white70),
-                    prefixIcon: Icon(Icons.search, color: Colors.white, size: 20),
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.only(top: 12),
-                    isDense: true,
-                  ),
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
-            const SizedBox(width: 12),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Profilepage()),
-                );
-              },
-              child: const Hero(
-                tag: 'profile-avatar',
-                child: CircleAvatar(
-                  radius: 18,
-                  backgroundImage: NetworkImage(
-                    'https://example.com/profile.jpg',
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // 1. Categories Section
-            _buildSectionHeader("Categories", null),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+        title: LayoutBuilder(
+          builder: (context, constraints) {
+            return SizedBox(
+              width: constraints.maxWidth,
+              height: 40,
               child: Row(
-                children: categories.map((category) {
-                  return _buildCategoryItem(category);
-                }).toList(),
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            // 2. Recommended Trips Section
-            _buildSectionHeader("Recommended", () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => AllCitiesPage()),
-              );
-            }),
-            SizedBox(
-              height: 240,
-              child: ListView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                scrollDirection: Axis.horizontal,
-                itemCount: recommendedTrips.length,
-                itemBuilder: (context, index) {
-                  return SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    child: _buildCard(
-                      recommendedTrips[index]['title'],
-                      recommendedTrips[index]['description'],
-                      recommendedTrips[index]['image'],
-                      220,
-                    ),
-                  );
-                },
-              ),
-            ),
-
-            // 3. Famous Activities Section
-            _buildSectionHeader("Famous Activities", () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => AllActivitiesPage()),
-              );
-            }),
-            SizedBox(
-              height: 180,
-              child: ListView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                scrollDirection: Axis.horizontal,
-                itemCount: famousActivities.length,
-                itemBuilder: (context, index) {
-                  return SizedBox(
-                    width: 160,
-                    child: _buildCard(
-                      famousActivities[index]['title'],
-                      famousActivities[index]['description'],
-                      famousActivities[index]['image'],
-                      160,
-                    ),
-                  );
-                },
-              ),
-            ),
-
-            // 4. Featured Destinations Section
-            _buildSectionHeader("Featured Destinations", () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => AllDestinationsPage()),
-              );
-            }),
-            SizedBox(
-              height: 220,
-              child: ListView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                scrollDirection: Axis.horizontal,
-                itemCount: featuredDestinations.length,
-                itemBuilder: (context, index) {
-                  return SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    child: _buildCard(
-                      featuredDestinations[index]['title'],
-                      featuredDestinations[index]['description'],
-                      featuredDestinations[index]['image'],
-                      200,
-                    ),
-                  );
-                },
-              ),
-            ),
-
-            // Action Buttons
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0XFF0066CC),
-                      minimumSize: const Size(double.infinity, 50),
-                      shape: RoundedRectangleBorder(
+                  Flexible(
+                    flex: 5,
+                    fit: FlexFit.tight,
+                    child: Container(
+                      margin: const EdgeInsets.only(right: 8),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.2),
                         borderRadius: BorderRadius.circular(12),
                       ),
-                    ),
-                    onPressed: _showSmartTripDialog,
-                    icon: const Icon(Icons.calculate, color: Colors.white),
-                    label: const Text(
-                      'AI Smart Trip Planner',
-                      style: TextStyle(color: Colors.white),
+                      child: const TextField(
+                        decoration: InputDecoration(
+                          hintText: 'Search here...',
+                          hintStyle: TextStyle(color: Colors.white70),
+                          prefixIcon: Icon(Icons.search, color: Colors.white, size: 20),
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.symmetric(vertical: 8),
+                          isDense: true,
+                        ),
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 12),
-                  OutlinedButton.icon(
-                    style: OutlinedButton.styleFrom(
-                      minimumSize: const Size(double.infinity, 50),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      side: const BorderSide(color: Color(0XFF0066CC)),
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => TripStatusPage()),
-                      );
-                    },
-                    icon: const Icon(Icons.arrow_forward, color: Color(0XFF0066CC)),
-                    label: const Text(
-                      'Trip Status',
-                      style: TextStyle(color: Color(0XFF0066CC)),
+                  Flexible(
+                    flex: 1,
+                    fit: FlexFit.loose,
+                    child: StreamBuilder<DocumentSnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(FirebaseAuth.instance.currentUser?.uid)
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return const CircleAvatar(
+                            radius: 18,
+                            backgroundColor: Colors.white24,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.white,
+                            ),
+                          );
+                        }
+
+                        if (snapshot.hasError || !snapshot.hasData || !snapshot.data!.exists) {
+                          return const CircleAvatar(
+                            radius: 18,
+                            backgroundColor: Colors.white24,
+                            child: Icon(Icons.error, size: 18, color: Colors.white),
+                          );
+                        }
+
+                        final userData = snapshot.data!.data() as Map<String, dynamic>?;
+                        final imageUrl = userData != null ? userData['profileImageUrl'] : null;
+
+                        return Hero(
+                          tag: 'profile-avatar',
+                          child: GestureDetector(
+                            onTap: () {
+                              int _selectedIndex = 2;
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SettingsMenuPage(previousIndex: _selectedIndex),
+                                ),
+                              );
+                            },
+                            child: CircleAvatar(
+                              radius: 18,
+                              backgroundColor: Colors.white24,
+                              backgroundImage: imageUrl != null
+                                  ? NetworkImage(imageUrl) as ImageProvider
+                                  : const AssetImage('assets/images/default_avatar.png') as ImageProvider,
+                              child: imageUrl == null
+                                  ? const Icon(Icons.person, size: 18, color: Colors.white)
+                                  : null,
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ],
               ),
-            ),
-          ],
+            );
+          },
         ),
+      ),
+      body: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // 1. Categories Section
+                  _buildSectionHeader("Categories", null),
+                  SizedBox(
+                    height: screenHeight * 0.12,
+                    child: ListView.builder(
+                      padding: EdgeInsets.symmetric(horizontal: screenHeight * 0.02),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: categories.length,
+                      itemBuilder: (context, index) {
+                        return _buildCategoryItem(categories[index]);
+                      },
+                    ),
+                  ),
+                  SizedBox(height: screenHeight * 0.02),
+
+                  // 2. Recommended Trips Section
+                  _buildSectionHeader("Recommended", () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AllCitiesPage()),
+                    );
+                  }),
+                  SizedBox(
+                    height: screenHeight * 0.3,
+                    child: ListView.builder(
+                      padding: EdgeInsets.symmetric(horizontal: screenHeight * 0.02),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: recommendedTrips.length,
+                      itemBuilder: (context, index) {
+                        return SizedBox(
+                          width: screenWidth * 0.8,
+                          child: _buildCard(
+                            recommendedTrips[index]['title'],
+                            recommendedTrips[index]['description'],
+                            recommendedTrips[index]['image'],
+                            screenHeight * 0.28,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+
+                  // 3. Famous Activities Section
+                  _buildSectionHeader("Famous Activities", () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AllActivitiesPage()),
+                    );
+                  }),
+                  SizedBox(
+                    height: screenHeight * 0.22,
+                    child: ListView.builder(
+                      padding: EdgeInsets.symmetric(horizontal: screenHeight * 0.02),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: famousActivities.length,
+                      itemBuilder: (context, index) {
+                        return SizedBox(
+                          width: screenWidth * 0.4,
+                          child: _buildCard(
+                            famousActivities[index]['title'],
+                            famousActivities[index]['description'],
+                            famousActivities[index]['image'],
+                            screenHeight * 0.2,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+
+                  // 4. Featured Destinations Section
+                  _buildSectionHeader("Featured Destinations", () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AllDestinationsPage()),
+                    );
+                  }),
+                  SizedBox(
+                    height: screenHeight * 0.28,
+                    child: ListView.builder(
+                      padding: EdgeInsets.symmetric(horizontal: screenHeight * 0.02),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: featuredDestinations.length,
+                      itemBuilder: (context, index) {
+                        return SizedBox(
+                          width: screenWidth * 0.8,
+                          child: _buildCard(
+                            featuredDestinations[index]['title'],
+                            featuredDestinations[index]['description'],
+                            featuredDestinations[index]['image'],
+                            screenHeight * 0.26,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+
+                  // Action Buttons
+                  Padding(
+                    padding: EdgeInsets.all(screenHeight * 0.02),
+                    child: Column(
+                      children: [
+                        ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0XFF0066CC),
+                            minimumSize: Size(double.infinity, screenHeight * 0.06),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          onPressed: _showSmartTripDialog,
+                          icon: const Icon(Icons.calculate, color: Colors.white),
+                          label: const Text(
+                            'AI Smart Trip Planner',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                        SizedBox(height: screenHeight * 0.015),
+                        ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0XFF0066CC),
+                            minimumSize: Size(double.infinity, screenHeight * 0.06),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => TripStatusPage()),
+                            );
+                          },
+                          icon: const Icon(Icons.timeline, color: Colors.white),
+                          label: const Text(
+                            'Trip Status',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
@@ -615,12 +682,6 @@ class _TripPageState extends State<TripPage> {
                 label: 'Chat',
                 isActive: currentIndex == 3,
               ),
-              _buildBottomNavItem(
-                icon: Icons.menu_outlined,
-                activeIcon: Icons.menu,
-                label: 'Menu',
-                isActive: currentIndex == 4,
-              ),
             ],
             onTap: _onItemTapped,
           ),
@@ -636,7 +697,22 @@ class _TripPageState extends State<TripPage> {
     required bool isActive,
   }) {
     return BottomNavigationBarItem(
-      icon: Icon(isActive ? activeIcon : icon),
+      icon: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: isActive ? const Color(0XFF0066CC).withOpacity(0.1) : Colors.transparent,
+        ),
+        child: Icon(icon, color: isActive ? const Color(0XFF0066CC) : Colors.grey[600]),
+      ),
+      activeIcon: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: const Color(0XFF0066CC).withOpacity(0.1),
+        ),
+        child: Icon(activeIcon, color: const Color(0XFF0066CC)),
+      ),
       label: label,
     );
   }

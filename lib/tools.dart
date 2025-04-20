@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:travelmate/chat.dart';
 import 'package:travelmate/gallery.dart';
@@ -17,105 +19,161 @@ import 'ProfilePage.dart';
 class Tools extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0XFF0066CC),
         elevation: 0,
-        automaticallyImplyLeading: true,
+        automaticallyImplyLeading: false,
         iconTheme: const IconThemeData(color: Colors.white),
-        title: Row(
-          children: [
-            Expanded(
-              child: Container(
-                height: 40,
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Search here...',
-                    hintStyle: TextStyle(color: Colors.white70),
-                    prefixIcon: Icon(Icons.search, color: Colors.white, size: 20),
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.only(top: 12),
-                    isDense: true,
-                  ),
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
-            const SizedBox(width: 12),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Profilepage()),
-                );
-              },
-              child: Hero(
-                tag: 'profile-avatar',
-                child: CircleAvatar(
-                  radius: 18,
-                  backgroundImage: NetworkImage(
-                    'https://example.com/profile.jpg', // Replace with your image URL
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: CustomScrollView(
-          physics: const BouncingScrollPhysics(),
-          slivers: [
-            SliverToBoxAdapter(
-              child: Column(
+        title: LayoutBuilder(
+          builder: (context, constraints) {
+            return SizedBox(
+              width: constraints.maxWidth,
+              height: 40,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  const SizedBox(height: 10),
-                  Text(
-                    'Travel Tools',
-                    style: TextStyle(
-                      color: Color(0XFF0066CC),
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
+                  Flexible(
+                    flex: 5,
+                    fit: FlexFit.tight,
+                    child: Container(
+                      margin: const EdgeInsets.only(right: 8),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const TextField(
+                        decoration: InputDecoration(
+                          hintText: 'Search here...',
+                          hintStyle: TextStyle(color: Colors.white70),
+                          prefixIcon: Icon(Icons.search, color: Colors.white, size: 20),
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.symmetric(vertical: 8),
+                          isDense: true,
+                        ),
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Everything you need for your perfect trip',
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 14,
+                  Flexible(
+                    flex: 1,
+                    fit: FlexFit.loose,
+                    child: StreamBuilder<DocumentSnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(FirebaseAuth.instance.currentUser?.uid)
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return const CircleAvatar(
+                            radius: 18,
+                            backgroundColor: Colors.white24,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.white,
+                            ),
+                          );
+                        }
+
+                        if (snapshot.hasError || !snapshot.hasData || !snapshot.data!.exists) {
+                          return const CircleAvatar(
+                            radius: 18,
+                            backgroundColor: Colors.white24,
+                            child: Icon(Icons.error, size: 18, color: Colors.white),
+                          );
+                        }
+
+                        final userData = snapshot.data!.data() as Map<String, dynamic>?;
+                        final imageUrl = userData != null ? userData['profileImageUrl'] : null;
+
+                        return Hero(
+                          tag: 'profile-avatar',
+                          child: GestureDetector(
+                            onTap: () {
+                              int _selectedIndex = 1;
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SettingsMenuPage(previousIndex: _selectedIndex),
+                                ),
+                              );
+                            },
+                            child: CircleAvatar(
+                              radius: 18,
+                              backgroundColor: Colors.white24,
+                              backgroundImage: imageUrl != null
+                                  ? NetworkImage(imageUrl) as ImageProvider
+                                  : const AssetImage('assets/images/default_avatar.png') as ImageProvider,
+                              child: imageUrl == null
+                                  ? const Icon(Icons.person, size: 18, color: Colors.white)
+                                  : null,
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ),
-                  const SizedBox(height: 16),
                 ],
               ),
-            ),
-            SliverPadding(
-              padding: const EdgeInsets.only(bottom: 24),
-              sliver: SliverGrid(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 16,
-                  childAspectRatio: 1,
-                ),
-                delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                    final tool = tools[index];
-                    return ToolCard(tool: tool);
-                  },
-                  childCount: tools.length,
-                ),
-              ),
-            ),
-          ],
+            );
+          },
         ),
+      ),
+      body: LayoutBuilder(
+          builder: (context, constraints) {
+            return Padding(
+              padding: EdgeInsets.all(screenHeight * 0.02),
+              child: CustomScrollView(
+                physics: const BouncingScrollPhysics(),
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: Column(
+                      children: [
+                        SizedBox(height: screenHeight * 0.01),
+                        Text(
+                          'Travel Tools',
+                          style: TextStyle(
+                            color: Color(0XFF0066CC),
+                            fontSize: screenHeight * 0.035,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: screenHeight * 0.01),
+                        Text(
+                          'Everything you need for your perfect trip',
+                          style: TextStyle(
+                            color: Colors.grey[600],
+                            fontSize: screenHeight * 0.018,
+                          ),
+                        ),
+                        SizedBox(height: screenHeight * 0.02),
+                      ],
+                    ),
+                  ),
+                  SliverPadding(
+                    padding: EdgeInsets.only(bottom: screenHeight * 0.03),
+                    sliver: SliverGrid(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: screenHeight * 0.02,
+                        mainAxisSpacing: screenHeight * 0.02,
+                        childAspectRatio: 1,
+                      ),
+                      delegate: SliverChildBuilderDelegate(
+                            (context, index) {
+                          final tool = tools[index];
+                          return ToolCard(tool: tool);
+                        },
+                        childCount: tools.length,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
       ),
       bottomNavigationBar: _buildBottomNavigationBar(context, 1),
     );
@@ -169,12 +227,6 @@ class Tools extends StatelessWidget {
               label: 'Chat',
               isActive: currentIndex == 3,
             ),
-            _buildBottomNavItem(
-              icon: Icons.menu_outlined,
-              activeIcon: Icons.menu,
-              label: 'Menu',
-              isActive: currentIndex == 4,
-            ),
           ],
           onTap: (index) {
             if (index == currentIndex) return;
@@ -186,7 +238,6 @@ class Tools extends StatelessWidget {
                 if (index == 1) return Tools();
                 if (index == 2) return TripPage();
                 if (index == 3) return MessagePage();
-                if (index == 4) return SettingsMenuPage(previousIndex: currentIndex);
                 return HomePage();
               }),
                   (route) => false,
@@ -232,6 +283,8 @@ class ToolCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return GestureDetector(
       onTap: () => Navigator.push(
         context,
@@ -253,33 +306,33 @@ class ToolCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              width: 60,
-              height: 60,
+              width: screenHeight * 0.075,
+              height: screenHeight * 0.075,
               decoration: BoxDecoration(
                 color: tool.iconColor.withOpacity(0.1),
                 shape: BoxShape.circle,
               ),
-              child: Icon(tool.icon, size: 30, color: tool.iconColor),
+              child: Icon(tool.icon, size: screenHeight * 0.035, color: tool.iconColor),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: screenHeight * 0.02),
             Text(
               tool.title,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 14,
+              style: TextStyle(
+                fontSize: screenHeight * 0.018,
                 fontWeight: FontWeight.w600,
                 color: Colors.black87,
               ),
             ),
-            const SizedBox(height: 4),
+            SizedBox(height: screenHeight * 0.005),
             if (tool.subtitle != null)
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                padding: EdgeInsets.symmetric(horizontal: screenHeight * 0.01),
                 child: Text(
                   tool.subtitle!,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 11,
+                    fontSize: screenHeight * 0.014,
                     color: Colors.grey[600],
                   ),
                 ),

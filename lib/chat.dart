@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:travelmate/homepage.dart';
 import 'package:travelmate/settingmenu.dart';
@@ -9,57 +11,111 @@ import 'ProfilePage.dart';
 class AhmadShahiChatPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0XFF0066CC),
         elevation: 0,
-        automaticallyImplyLeading: false, // This will remove the back arrow
+        automaticallyImplyLeading: false,
         iconTheme: const IconThemeData(color: Colors.white),
-        title: Row(
-          children: [
-            Expanded(
-              child: Container(
-                height: 40,
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Search here...',
-                    hintStyle: TextStyle(color: Colors.white70),
-                    prefixIcon: Icon(Icons.search, color: Colors.white, size: 20),
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.only(top: 12),
-                    isDense: true,
+        title: LayoutBuilder(
+          builder: (context, constraints) {
+            return SizedBox(
+              width: constraints.maxWidth,
+              height: 40,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Flexible(
+                    flex: 5,
+                    fit: FlexFit.tight,
+                    child: Container(
+                      margin: const EdgeInsets.only(right: 8),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const TextField(
+                        decoration: InputDecoration(
+                          hintText: 'Search here...',
+                          hintStyle: TextStyle(color: Colors.white70),
+                          prefixIcon: Icon(Icons.search, color: Colors.white, size: 20),
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.symmetric(vertical: 8),
+                          isDense: true,
+                        ),
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
                   ),
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
-            const SizedBox(width: 12),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Profilepage()),
-                );
-              },
-              child: Hero(
-                tag: 'profile-avatar',
-                child: CircleAvatar(
-                  radius: 18,
-                  backgroundImage: NetworkImage(
-                    'https://example.com/profile.jpg', // Replace with your image URL
+                  Flexible(
+                    flex: 1,
+                    fit: FlexFit.loose,
+                    child: StreamBuilder<DocumentSnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(FirebaseAuth.instance.currentUser?.uid)
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return const CircleAvatar(
+                            radius: 18,
+                            backgroundColor: Colors.white24,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.white,
+                            ),
+                          );
+                        }
+
+                        if (snapshot.hasError || !snapshot.hasData || !snapshot.data!.exists) {
+                          return const CircleAvatar(
+                            radius: 18,
+                            backgroundColor: Colors.white24,
+                            child: Icon(Icons.error, size: 18, color: Colors.white),
+                          );
+                        }
+
+                        final userData = snapshot.data!.data() as Map<String, dynamic>?;
+                        final imageUrl = userData != null ? userData['profileImageUrl'] : null;
+
+                        return Hero(
+                          tag: 'profile-avatar',
+                          child: GestureDetector(
+                            onTap: () {
+                              int _selectedIndex = 1;
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SettingsMenuPage(previousIndex: _selectedIndex),
+                                ),
+                              );
+                            },
+                            child: CircleAvatar(
+                              radius: 18,
+                              backgroundColor: Colors.white24,
+                              backgroundImage: imageUrl != null
+                                  ? NetworkImage(imageUrl) as ImageProvider
+                                  : const AssetImage('assets/images/default_avatar.png') as ImageProvider,
+                              child: imageUrl == null
+                                  ? const Icon(Icons.person, size: 18, color: Colors.white)
+                                  : null,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                   ),
-                ),
+                ],
               ),
-            ),
-          ],
+            );
+          },
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(screenHeight * 0.02),
         child: Column(
           children: [
             Expanded(
@@ -68,30 +124,30 @@ class AhmadShahiChatPage extends StatelessWidget {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Container(
-                      margin: const EdgeInsets.symmetric(vertical: 10),
-                      padding: const EdgeInsets.all(12),
+                      margin: EdgeInsets.symmetric(vertical: screenHeight * 0.01),
+                      padding: EdgeInsets.all(screenHeight * 0.015),
                       decoration: BoxDecoration(
                         color: Colors.grey[200],
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: const Text(
+                      child: Text(
                         'Assalam-u-alaikum Sami! Lahore ka plan bana raha hoon, kuch famous tourist spots aur local tips suggest kar do. Pehli baar ja raha hoon, tou best jagah aur khanay ki recommendations bhi chahiye.',
-                        style: TextStyle(fontSize: 16),
+                        style: TextStyle(fontSize: screenHeight * 0.018),
                       ),
                     ),
                   ),
                   Align(
                     alignment: Alignment.centerRight,
                     child: Container(
-                      margin: const EdgeInsets.symmetric(vertical: 10),
-                      padding: const EdgeInsets.all(12),
+                      margin: EdgeInsets.symmetric(vertical: screenHeight * 0.01),
+                      padding: EdgeInsets.all(screenHeight * 0.015),
                       decoration: BoxDecoration(
                         color: Color(0XFF0066CC),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: const Text(
+                      child: Text(
                         'Walaikum Salam Ahmad! Shahi Qila, Badshahi Masjid aur Food Street must hain. Pehli baar ke liye perfect spots hain, aur Anarkali se desi khana try karna!',
-                        style: TextStyle(fontSize: 16, color: Colors.white),
+                        style: TextStyle(fontSize: screenHeight * 0.018, color: Colors.white),
                       ),
                     ),
                   ),
@@ -110,7 +166,7 @@ class AhmadShahiChatPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(width: 10),
+                SizedBox(width: screenWidth * 0.02),
                 IconButton(
                   icon: Icon(Icons.send, color: Color(0XFF0066CC)),
                   onPressed: () {},
@@ -134,6 +190,9 @@ class _MessagePageState extends State<MessagePage> {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0XFF0066CC),
@@ -144,7 +203,7 @@ class _MessagePageState extends State<MessagePage> {
           children: [
             Expanded(
               child: Container(
-                height: 40,
+                height: screenHeight * 0.05,
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.2),
                   borderRadius: BorderRadius.circular(12),
@@ -162,41 +221,75 @@ class _MessagePageState extends State<MessagePage> {
                 ),
               ),
             ),
-            const SizedBox(width: 12),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Profilepage()),
+            SizedBox(width: screenWidth * 0.03),
+            StreamBuilder<DocumentSnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(FirebaseAuth.instance.currentUser?.uid)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircleAvatar(
+                    radius: 18,
+                    backgroundColor: Colors.white24,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: Colors.white,
+                    ),
+                  );
+                }
+
+                if (snapshot.hasError || !snapshot.hasData || !snapshot.data!.exists) {
+                  return const CircleAvatar(
+                    radius: 18,
+                    backgroundColor: Colors.white24,
+                    child: Icon(Icons.error, size: 18, color: Colors.white),
+                  );
+                }
+
+                final userData = snapshot.data!.data() as Map<String, dynamic>?;
+                final imageUrl = userData != null ? userData['profileImageUrl'] : null;
+
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const ProfileSettingsPage()),
+                    );
+                  },
+                  child: Hero(
+                    tag: 'profile-avatar',
+                    child: CircleAvatar(
+                      radius: 18,
+                      backgroundColor: Colors.white24,
+                      backgroundImage: imageUrl != null
+                          ? NetworkImage(imageUrl) as ImageProvider
+                          : const AssetImage('assets/images/default_avatar.png') as ImageProvider,
+                      child: imageUrl == null
+                          ? const Icon(Icons.person, size: 18, color: Colors.white)
+                          : null,
+                    ),
+                  ),
                 );
               },
-              child: Hero(
-                tag: 'profile-avatar',
-                child: CircleAvatar(
-                  radius: 18,
-                  backgroundImage: NetworkImage(
-                    'https://example.com/profile.jpg', // Replace with your image URL
-                  ),
-                ),
-              ),
             ),
           ],
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(screenHeight * 0.02),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               'Recent Chats',
               style: TextStyle(
-                fontSize: 18,
+                fontSize: screenHeight * 0.025,
                 fontWeight: FontWeight.bold,
                 color: Color(0XFF0066CC),
               ),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: screenHeight * 0.01),
             Expanded(
               child: ListView(
                 children: [
@@ -269,12 +362,6 @@ class _MessagePageState extends State<MessagePage> {
                 label: 'Chat',
                 isActive: currentIndex == 3,
               ),
-              _buildBottomNavItem(
-                icon: Icons.menu_outlined,
-                activeIcon: Icons.menu,
-                label: 'Menu',
-                isActive: currentIndex == 4,
-              ),
             ],
             onTap: (index) {
               if (index == currentIndex) return;
@@ -286,7 +373,6 @@ class _MessagePageState extends State<MessagePage> {
                   if (index == 1) return Tools();
                   if (index == 2) return TripPage();
                   if (index == 3) return MessagePage();
-                  if (index == 4) return SettingsMenuPage(previousIndex: currentIndex);
                   return HomePage();
                 }),
                     (route) => false,
@@ -305,29 +391,46 @@ class _MessagePageState extends State<MessagePage> {
     required bool isActive,
   }) {
     return BottomNavigationBarItem(
-      icon: Icon(isActive ? activeIcon : icon),
+      icon: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: isActive ? const Color(0XFF0066CC).withOpacity(0.1) : Colors.transparent,
+        ),
+        child: Icon(icon, color: isActive ? const Color(0XFF0066CC) : Colors.grey[600]),
+      ),
+      activeIcon: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: const Color(0XFF0066CC).withOpacity(0.1),
+        ),
+        child: Icon(activeIcon, color: const Color(0XFF0066CC)),
+      ),
       label: label,
     );
   }
 
   Widget _buildChatTile(String name, String message, String time, int unreadCount, String imagePath, Color statusColor) {
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       elevation: 3,
-      margin: const EdgeInsets.symmetric(vertical: 8),
+      margin: EdgeInsets.symmetric(vertical: screenHeight * 0.01),
       child: ListTile(
         leading: Stack(
           children: [
             CircleAvatar(
-              radius: 25,
+              radius: screenHeight * 0.03,
               backgroundImage: AssetImage(imagePath),
             ),
             Positioned(
               bottom: 0,
               right: 0,
               child: Container(
-                width: 12,
-                height: 12,
+                width: screenHeight * 0.015,
+                height: screenHeight * 0.015,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: statusColor,
@@ -339,7 +442,10 @@ class _MessagePageState extends State<MessagePage> {
         ),
         title: Text(
           name,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: screenHeight * 0.02
+          ),
         ),
         subtitle: Text(message),
         trailing: Column(
@@ -347,19 +453,25 @@ class _MessagePageState extends State<MessagePage> {
           children: [
             Text(
               time,
-              style: TextStyle(color: Colors.grey[600], fontSize: 12),
+              style: TextStyle(
+                  color: Colors.grey[600],
+                  fontSize: screenHeight * 0.015
+              ),
             ),
             if (unreadCount > 0)
               Container(
-                margin: const EdgeInsets.only(top: 5),
-                padding: const EdgeInsets.all(6),
+                margin: EdgeInsets.only(top: screenHeight * 0.005),
+                padding: EdgeInsets.all(screenHeight * 0.008),
                 decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                   color: Color(0XFF0066CC),
                 ),
                 child: Text(
                   '$unreadCount',
-                  style: const TextStyle(color: Colors.white, fontSize: 12),
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: screenHeight * 0.015
+                  ),
                 ),
               ),
           ],
