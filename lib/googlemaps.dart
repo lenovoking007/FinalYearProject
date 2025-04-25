@@ -1,15 +1,35 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class googlemaps extends StatefulWidget {
-  const googlemaps({super.key});
+class GoogleMapView extends StatelessWidget {
+  GoogleMapView({super.key});
 
-  @override
-  State<googlemaps> createState() => _googlemapsState();
-}
+  final Completer<GoogleMapController> _controller =
+  Completer<GoogleMapController>();
 
-class _googlemapsState extends State<googlemaps> {
+  static const CameraPosition _initialPosition = CameraPosition(
+    target: LatLng(33.4365, 72.0172),
+    zoom: 14.0, // Added zoom for better visibility
+  );
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Google Map",style:  TextStyle(color: Colors.white),),
+centerTitle: true,
+      ),
+      body: SizedBox.expand(
+        child: GoogleMap(
+          mapType: MapType.hybrid,
+          initialCameraPosition: _initialPosition,
+          onMapCreated: (GoogleMapController controller) {
+            _controller.complete(controller);
+          },
+        ),
+      ),
+    );
   }
 }

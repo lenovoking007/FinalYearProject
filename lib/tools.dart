@@ -415,7 +415,7 @@ final List<Tool> tools = [
     subtitle: 'Navigation & routes',
     icon: Icons.map,
     iconColor: Colors.red,
-    page: googlemaps(),
+    page: GoogleMapView(),
   ),
   Tool(
     title: 'Safety Alerts',
