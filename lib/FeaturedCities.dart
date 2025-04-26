@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
-import 'ActvitiesCode/CamelSafariPage.dart';
-import 'ActvitiesCode/DesertSafariPage.dart';
-import 'ActvitiesCode/HotAirBalloonPage.dart';
-import 'ActvitiesCode/IceClimbingPage.dart';
-import 'ActvitiesCode/JeepRallyPage.dart';
-import 'ActvitiesCode/MountainBikingPage.dart';
-import 'ActvitiesCode/RockClimbingPage.dart';
-import 'ActvitiesCode/ScubaDivingPage.dart';
-import 'ActvitiesCode/TrekkingPage.dart';
-import 'ActvitiesCode/WhiteWaterRaftingPage.dart';
 
-class FamousActivitiesPage extends StatelessWidget {
-  const FamousActivitiesPage({super.key});
+import 'package:travelmate/HyderabadPage.dart';
+import 'package:travelmate/MultanPage.dart';
+import 'package:travelmate/GawadarPage.dart';
+import 'package:travelmate/MuzaffarabadPage.dart';
+import 'package:travelmate/SkarduPage.dart';
+import 'package:travelmate/FaisalabadPage.dart';
+import 'package:travelmate/QuettaPage.dart';
+
+import 'SialkotPage.dart';
+
+class FeaturedCitiesPage extends StatelessWidget {
+  const FeaturedCitiesPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final cardHeight = screenHeight * 0.22; // Responsive card height
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0XFF0066CC),
@@ -24,7 +27,7 @@ class FamousActivitiesPage extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
         ),
         title: const Text(
-          'Adventure Activities',
+          'Featured Cities',
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -45,104 +48,84 @@ class FamousActivitiesPage extends StatelessWidget {
             crossAxisSpacing: 16,
             mainAxisSpacing: 16,
             children: [
-              _buildActivityCard(
+              _buildCityCard(
                 context: context,
-                title: 'Jeep Rally Racing',
-                description: 'Thrilling desert races in Rahim Yar Khan',
-                imagePath: 'assets/images/activities/jeep_rally.jpg',
+                title: 'Sialkot',
+                description: 'City of sports goods',
+                imagePath: 'assets/images/cities/sialkot.jpg',
                 onTap: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => JeepRallyPage()),
+                  MaterialPageRoute(builder: (context) => SialkotPage()),
                 ),
               ),
-              _buildActivityCard(
+              _buildCityCard(
                 context: context,
-                title: 'Rock Climbing',
-                description: 'Scale the cliffs of Hunza Valley',
-                imagePath: 'assets/images/activities/rock_climbing.jpg',
+                title: 'Hyderabad',
+                description: 'City of pearls',
+                imagePath: 'assets/images/cities/hyderabad.jpg',
                 onTap: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => RockClimbingPage()),
+                  MaterialPageRoute(builder: (context) => HyderabadPage()),
                 ),
               ),
-              _buildActivityCard(
+              _buildCityCard(
                 context: context,
-                title: 'White Water Rafting',
-                description: 'Kunhar River rapids adventure',
-                imagePath: 'assets/images/activities/rafting.jpg',
+                title: 'Multan',
+                description: 'City of saints',
+                imagePath: 'assets/images/cities/multan.jpg',
                 onTap: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => WhiteWaterRaftingPage()),
+                  MaterialPageRoute(builder: (context) => MultanPage()),
                 ),
               ),
-              _buildActivityCard(
+              _buildCityCard(
                 context: context,
-                title: 'Cholistan Desert Safari',
-                description: '4x4 adventures in Pakistan\'s desert',
-                imagePath: 'assets/images/activities/desert_safari.jpg',
+                title: 'Gawadar',
+                description: 'Port city',
+                imagePath: 'assets/images/cities/gawadar.jpg',
                 onTap: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => DesertSafariPage()),
+                  MaterialPageRoute(builder: (context) => GawadarPage()),
                 ),
               ),
-              _buildActivityCard(
+              _buildCityCard(
                 context: context,
-                title: 'High Altitude Trekking',
-                description: 'K2 Base Camp and beyond',
-                imagePath: 'assets/images/activities/trekking.jpg',
+                title: 'Muzaffarabad',
+                description: 'Capital of Azad Kashmir',
+                imagePath: 'assets/images/cities/muzaffarabad.jpg',
                 onTap: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => TrekkingPage()),
+                  MaterialPageRoute(builder: (context) => MuzaffarabadPage()),
                 ),
               ),
-              _buildActivityCard(
+              _buildCityCard(
                 context: context,
-                title: 'Scuba Diving',
-                description: 'Explore Gwadar\'s marine life',
-                imagePath: 'assets/images/activities/scuba_diving.jpg',
+                title: 'Skardu',
+                description: 'Gateway to K2',
+                imagePath: 'assets/images/cities/skardu.jpg',
                 onTap: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ScubaDivingPage()),
+                  MaterialPageRoute(builder: (context) => SkarduPage()),
                 ),
               ),
-              _buildActivityCard(
+              _buildCityCard(
                 context: context,
-                title: 'Hot Air Ballooning',
-                description: 'Float over Punjab\'s countryside',
-                imagePath: 'assets/images/activities/hot_air_balloon.jpg',
+                title: 'Faisalabad',
+                description: 'Manchester of Pakistan',
+                imagePath: 'assets/images/cities/faisalabad.jpg',
                 onTap: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => HotAirBalloonPage()),
+                  MaterialPageRoute(builder: (context) => FaisalabadPage()),
                 ),
               ),
-              _buildActivityCard(
+              _buildCityCard(
                 context: context,
-                title: 'Ice Climbing',
-                description: 'Frozen waterfalls in Gilgit-Baltistan',
-                imagePath: 'assets/images/activities/ice_climbing.jpg',
+                title: 'Quetta',
+                description: 'Fruit garden of Pakistan',
+                imagePath: 'assets/images/cities/quetta.jpg',
                 onTap: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => IceClimbingPage()),
-                ),
-              ),
-              _buildActivityCard(
-                context: context,
-                title: 'Camel Safari',
-                description: 'Thar Desert nomadic experience',
-                imagePath: 'assets/images/activities/camel_safari.jpg',
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => CamelSafariPage()),
-                ),
-              ),
-              _buildActivityCard(
-                context: context,
-                title: 'Mountain Biking',
-                description: 'Trails through Northern Areas',
-                imagePath: 'assets/images/activities/mountain_biking.jpg',
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => MountainBikingPage()),
+                  MaterialPageRoute(builder: (context) => QuettaPage()),
                 ),
               ),
             ],
@@ -152,7 +135,7 @@ class FamousActivitiesPage extends StatelessWidget {
     );
   }
 
-  Widget _buildActivityCard({
+  Widget _buildCityCard({
     required BuildContext context,
     required String title,
     required String description,

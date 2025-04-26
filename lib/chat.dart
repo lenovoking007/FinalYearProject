@@ -6,8 +6,6 @@ import 'package:travelmate/settingmenu.dart';
 import 'package:travelmate/tools.dart';
 import 'package:travelmate/TripMainPage.dart';
 
-import 'ProfilePage.dart';
-
 class AhmadShahiChatPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -79,27 +77,26 @@ class AhmadShahiChatPage extends StatelessWidget {
                         }
 
                         final userData = snapshot.data!.data() as Map<String, dynamic>?;
-                        final imageUrl = userData != null ? userData['profileImageUrl'] : null;
+                        final imageUrl = userData?['profileImageUrl']?.toString();
 
                         return Hero(
                           tag: 'profile-avatar',
                           child: GestureDetector(
                             onTap: () {
-                              int _selectedIndex = 1;
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => SettingsMenuPage(previousIndex: _selectedIndex),
+                                  builder: (context) => SettingsMenuPage(previousIndex: 3),
                                 ),
                               );
                             },
                             child: CircleAvatar(
                               radius: 18,
                               backgroundColor: Colors.white24,
-                              backgroundImage: imageUrl != null
+                              backgroundImage: (imageUrl != null && imageUrl.isNotEmpty)
                                   ? NetworkImage(imageUrl) as ImageProvider
                                   : const AssetImage('assets/images/default_avatar.png') as ImageProvider,
-                              child: imageUrl == null
+                              child: (imageUrl == null || imageUrl.isEmpty)
                                   ? const Icon(Icons.person, size: 18, color: Colors.white)
                                   : null,
                             ),
@@ -199,81 +196,97 @@ class _MessagePageState extends State<MessagePage> {
         elevation: 0,
         automaticallyImplyLeading: false,
         iconTheme: const IconThemeData(color: Colors.white),
-        title: Row(
-          children: [
-            Expanded(
-              child: Container(
-                height: screenHeight * 0.05,
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Search here...',
-                    hintStyle: TextStyle(color: Colors.white70),
-                    prefixIcon: Icon(Icons.search, color: Colors.white, size: 20),
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.only(top: 12),
-                    isDense: true,
+        title: LayoutBuilder(
+          builder: (context, constraints) {
+            return SizedBox(
+              width: constraints.maxWidth,
+              height: 40,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Flexible(
+                    flex: 5,
+                    fit: FlexFit.tight,
+                    child: Container(
+                      margin: const EdgeInsets.only(right: 8),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const TextField(
+                        decoration: InputDecoration(
+                          hintText: 'Search here...',
+                          hintStyle: TextStyle(color: Colors.white70),
+                          prefixIcon: Icon(Icons.search, color: Colors.white, size: 20),
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.symmetric(vertical: 8),
+                          isDense: true,
+                        ),
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
                   ),
-                  style: TextStyle(color: Colors.white),
-                ),
+                  Flexible(
+                    flex: 1,
+                    fit: FlexFit.loose,
+                    child: StreamBuilder<DocumentSnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(FirebaseAuth.instance.currentUser?.uid)
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return const CircleAvatar(
+                            radius: 18,
+                            backgroundColor: Colors.white24,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.white,
+                            ),
+                          );
+                        }
+
+                        if (snapshot.hasError || !snapshot.hasData || !snapshot.data!.exists) {
+                          return const CircleAvatar(
+                            radius: 18,
+                            backgroundColor: Colors.white24,
+                            child: Icon(Icons.error, size: 18, color: Colors.white),
+                          );
+                        }
+
+                        final userData = snapshot.data!.data() as Map<String, dynamic>?;
+                        final imageUrl = userData?['profileImageUrl']?.toString();
+
+                        return Hero(
+                          tag: 'profile-avatar',
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SettingsMenuPage(previousIndex: 3),
+                                ),
+                              );
+                            },
+                            child: CircleAvatar(
+                              radius: 18,
+                              backgroundColor: Colors.white24,
+                              backgroundImage: (imageUrl != null && imageUrl.isNotEmpty)
+                                  ? NetworkImage(imageUrl) as ImageProvider
+                                  : const AssetImage('assets/images/default_avatar.png') as ImageProvider,
+                              child: (imageUrl == null || imageUrl.isEmpty)
+                                  ? const Icon(Icons.person, size: 18, color: Colors.white)
+                                  : null,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
-            ),
-            SizedBox(width: screenWidth * 0.03),
-            StreamBuilder<DocumentSnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection('users')
-                  .doc(FirebaseAuth.instance.currentUser?.uid)
-                  .snapshots(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircleAvatar(
-                    radius: 18,
-                    backgroundColor: Colors.white24,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: Colors.white,
-                    ),
-                  );
-                }
-
-                if (snapshot.hasError || !snapshot.hasData || !snapshot.data!.exists) {
-                  return const CircleAvatar(
-                    radius: 18,
-                    backgroundColor: Colors.white24,
-                    child: Icon(Icons.error, size: 18, color: Colors.white),
-                  );
-                }
-
-                final userData = snapshot.data!.data() as Map<String, dynamic>?;
-                final imageUrl = userData != null ? userData['profileImageUrl'] : null;
-
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const ProfileSettingsPage()),
-                    );
-                  },
-                  child: Hero(
-                    tag: 'profile-avatar',
-                    child: CircleAvatar(
-                      radius: 18,
-                      backgroundColor: Colors.white24,
-                      backgroundImage: imageUrl != null
-                          ? NetworkImage(imageUrl) as ImageProvider
-                          : const AssetImage('assets/images/default_avatar.png') as ImageProvider,
-                      child: imageUrl == null
-                          ? const Icon(Icons.person, size: 18, color: Colors.white)
-                          : null,
-                    ),
-                  ),
-                );
-              },
-            ),
-          ],
+            );
+          },
         ),
       ),
       body: Padding(
@@ -368,15 +381,18 @@ class _MessagePageState extends State<MessagePage> {
 
               Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (context) {
-                  if (index == 0) return HomePage();
-                  if (index == 1) return Tools();
-                  if (index == 2) return TripPage();
-                  if (index == 3) return MessagePage();
-                  return HomePage();
-                }),
+                MaterialPageRoute(
+                  builder: (context) {
+                    if (index == 0) return HomePage();
+                    if (index == 1) return Tools();
+                    if (index == 2) return TripPage();
+                    if (index == 3) return MessagePage();
+                    return HomePage();
+                  },
+                ),
                     (route) => false,
               );
+
             },
           ),
         ),

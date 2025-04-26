@@ -1,17 +1,26 @@
 import 'package:flutter/material.dart';
-import 'ActvitiesCode/CamelSafariPage.dart';
-import 'ActvitiesCode/DesertSafariPage.dart';
-import 'ActvitiesCode/HotAirBalloonPage.dart';
-import 'ActvitiesCode/IceClimbingPage.dart';
-import 'ActvitiesCode/JeepRallyPage.dart';
-import 'ActvitiesCode/MountainBikingPage.dart';
-import 'ActvitiesCode/RockClimbingPage.dart';
-import 'ActvitiesCode/ScubaDivingPage.dart';
-import 'ActvitiesCode/TrekkingPage.dart';
-import 'ActvitiesCode/WhiteWaterRaftingPage.dart';
+import 'package:travelmate/FamousTouristPlacesCode/MohenjoDaroPage.dart';
 
-class FamousActivitiesPage extends StatelessWidget {
-  const FamousActivitiesPage({super.key});
+import 'package:travelmate/FamousTouristPlacesCode/DeosaiPlainsPage.dart';
+
+import 'package:travelmate/FamousTouristPlacesCode/ShandurPassPage.dart';
+
+import 'package:travelmate/FamousTouristPlacesCode/BolanValleyPage.dart';
+
+import 'package:travelmate/HingolNationalParkPage.dart';
+
+import 'package:travelmate/FamousTouristPlacesCode/AttabadLakePage.dart';
+
+
+import 'FamousTouristPlacesCode/BabusarTopPage.dart';
+import 'FamousTouristPlacesCode/ConcordiaPage.dart';
+import 'FamousTouristPlacesCode/FairyMeadowsPage.dart';
+import 'FamousTouristPlacesCode/NeelumValleyPage.dart';
+import 'FamousTouristPlacesCode/RamaMeadowPage.dart';
+import 'FamousTouristPlacesCode/SaifUlMalookPage.dart';
+
+class FamousTouristPlacesPage extends StatelessWidget {
+  const FamousTouristPlacesPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +33,7 @@ class FamousActivitiesPage extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
         ),
         title: const Text(
-          'Adventure Activities',
+          'Famous Tourist Places',
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -45,104 +54,124 @@ class FamousActivitiesPage extends StatelessWidget {
             crossAxisSpacing: 16,
             mainAxisSpacing: 16,
             children: [
-              _buildActivityCard(
+              _buildPlaceCard(
                 context: context,
-                title: 'Jeep Rally Racing',
-                description: 'Thrilling desert races in Rahim Yar Khan',
-                imagePath: 'assets/images/activities/jeep_rally.jpg',
+                title: 'Mohenjo-daro',
+                description: 'Ancient Indus Valley Civilization',
+                imagePath: 'assets/images/places/mohenjo_daro.jpg',
                 onTap: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => JeepRallyPage()),
+                  MaterialPageRoute(builder: (context) => MohenjoDaroPage()),
                 ),
               ),
-              _buildActivityCard(
+              _buildPlaceCard(
                 context: context,
-                title: 'Rock Climbing',
-                description: 'Scale the cliffs of Hunza Valley',
-                imagePath: 'assets/images/activities/rock_climbing.jpg',
+                title: 'Saif-ul-Malook',
+                description: 'Legendary alpine lake',
+                imagePath: 'assets/images/places/saif_ul_malook.jpg',
                 onTap: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => RockClimbingPage()),
+                  MaterialPageRoute(builder: (context) => SaifUlMalookPage()),
                 ),
               ),
-              _buildActivityCard(
+              _buildPlaceCard(
                 context: context,
-                title: 'White Water Rafting',
-                description: 'Kunhar River rapids adventure',
-                imagePath: 'assets/images/activities/rafting.jpg',
+                title: 'Deosai Plains',
+                description: 'Land of Giants',
+                imagePath: 'assets/images/places/deosai_plains.jpg',
                 onTap: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => WhiteWaterRaftingPage()),
+                  MaterialPageRoute(builder: (context) => DeosaiPlainsPage()),
                 ),
               ),
-              _buildActivityCard(
+              _buildPlaceCard(
                 context: context,
-                title: 'Cholistan Desert Safari',
-                description: '4x4 adventures in Pakistan\'s desert',
-                imagePath: 'assets/images/activities/desert_safari.jpg',
+                title: 'Neelum Valley',
+                description: 'Paradise of Kashmir',
+                imagePath: 'assets/images/places/neelum_valley.jpg',
                 onTap: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => DesertSafariPage()),
+                  MaterialPageRoute(builder: (context) => NeelumValleyPage()),
                 ),
               ),
-              _buildActivityCard(
+              _buildPlaceCard(
                 context: context,
-                title: 'High Altitude Trekking',
-                description: 'K2 Base Camp and beyond',
-                imagePath: 'assets/images/activities/trekking.jpg',
+                title: 'Shandur Pass',
+                description: 'Roof of the World',
+                imagePath: 'assets/images/places/shandur_pass.jpg',
                 onTap: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => TrekkingPage()),
+                  MaterialPageRoute(builder: (context) => ShandurPassPage()),
                 ),
               ),
-              _buildActivityCard(
+              _buildPlaceCard(
                 context: context,
-                title: 'Scuba Diving',
-                description: 'Explore Gwadar\'s marine life',
-                imagePath: 'assets/images/activities/scuba_diving.jpg',
+                title: 'Fairy Meadows',
+                description: 'Heaven on Earth',
+                imagePath: 'assets/images/places/fairy_meadows.jpg',
                 onTap: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ScubaDivingPage()),
+                  MaterialPageRoute(builder: (context) => FairyMeadowsPage()),
                 ),
               ),
-              _buildActivityCard(
+              _buildPlaceCard(
                 context: context,
-                title: 'Hot Air Ballooning',
-                description: 'Float over Punjab\'s countryside',
-                imagePath: 'assets/images/activities/hot_air_balloon.jpg',
+                title: 'Bolan Valley',
+                description: 'Historic mountain pass',
+                imagePath: 'assets/images/places/bolan_valley.jpg',
                 onTap: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => HotAirBalloonPage()),
+                  MaterialPageRoute(builder: (context) => BolanValleyPage()),
                 ),
               ),
-              _buildActivityCard(
+              _buildPlaceCard(
                 context: context,
-                title: 'Ice Climbing',
-                description: 'Frozen waterfalls in Gilgit-Baltistan',
-                imagePath: 'assets/images/activities/ice_climbing.jpg',
+                title: 'Babusar Top',
+                description: 'Highest point of KKH',
+                imagePath: 'assets/images/places/babusar_top.jpg',
                 onTap: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => IceClimbingPage()),
+                  MaterialPageRoute(builder: (context) => BabusarTopPage()),
                 ),
               ),
-              _buildActivityCard(
+              _buildPlaceCard(
                 context: context,
-                title: 'Camel Safari',
-                description: 'Thar Desert nomadic experience',
-                imagePath: 'assets/images/activities/camel_safari.jpg',
+                title: 'Hingol National Park',
+                description: 'Largest national park',
+                imagePath: 'assets/images/places/hingol_park.jpg',
                 onTap: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => CamelSafariPage()),
+                  MaterialPageRoute(builder: (context) => HingolNationalParkPage()),
                 ),
               ),
-              _buildActivityCard(
+              _buildPlaceCard(
                 context: context,
-                title: 'Mountain Biking',
-                description: 'Trails through Northern Areas',
-                imagePath: 'assets/images/activities/mountain_biking.jpg',
+                title: 'Rama Meadow',
+                description: 'Gateway to Nanga Parbat',
+                imagePath: 'assets/images/places/rama_meadow.jpg',
                 onTap: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => MountainBikingPage()),
+                  MaterialPageRoute(builder: (context) => RamaMeadowPage()),
+                ),
+              ),
+              _buildPlaceCard(
+                context: context,
+                title: 'Attabad Lake',
+                description: 'Turquoise wonder',
+                imagePath: 'assets/images/places/attabad_lake.jpg',
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AttabadLakePage()),
+                ),
+              ),
+              _buildPlaceCard(
+                context: context,
+                title: 'Concordia',
+                description: 'Throne Room of Mountain Gods',
+                imagePath: 'assets/images/places/concordia.jpg',
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ConcordiaPage()),
                 ),
               ),
             ],
@@ -152,7 +181,7 @@ class FamousActivitiesPage extends StatelessWidget {
     );
   }
 
-  Widget _buildActivityCard({
+  Widget _buildPlaceCard({
     required BuildContext context,
     required String title,
     required String description,

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 import 'package:flutter/services.dart';
 import 'loginpage.dart';
 
@@ -14,6 +17,8 @@ class AccountSettingsPage extends StatefulWidget {
 class _AccountSettingsPageState extends State<AccountSettingsPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseStorage _storage = FirebaseStorage.instance;
+  final ImagePicker _picker = ImagePicker();
   late User _currentUser;
 
   // User data
@@ -23,6 +28,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
   String city = "";
   String dob = "";
   String occupation = "";
+  String profileImageUrl = "";
 
   @override
   void initState() {
@@ -42,6 +48,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
         city = userDoc['city'] ?? "";
         dob = userDoc['dob'] ?? "";
         occupation = userDoc['occupation'] ?? "";
+        profileImageUrl = userDoc['profileImageUrl'] ?? "";
       });
     }
   }
@@ -63,6 +70,66 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Error updating: ${e.toString()}")),
+      );
+    }
+  }
+
+  Future<void> _uploadProfileImage() async {
+    try {
+      final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+      if (image == null) return;
+
+      // Delete previous image if exists and is not the default avatar
+      if (profileImageUrl.isNotEmpty && !profileImageUrl.contains('default_avatar')) {
+        try {
+          Reference reference = _storage.refFromURL(profileImageUrl);
+          // Check if the file exists before trying to delete
+          final metadata = await reference.getMetadata().catchError((e) {
+            if (e is FirebaseException && e.code == 'object-not-found') {
+              return null; // File doesn't exist
+            }
+            throw e; // Other error
+          });
+
+          if (metadata != null) {
+            await reference.delete();
+          }
+        } catch (e) {
+          print("Error deleting previous image: $e");
+          // Continue with upload even if deletion fails
+        }
+      }
+
+      // Upload new image
+      File imageFile = File(image.path);
+      String fileName = 'profile_${_currentUser.uid}_${DateTime.now().millisecondsSinceEpoch}';
+      Reference storageRef = _storage.ref().child('profile_images/$fileName');
+      UploadTask uploadTask = storageRef.putFile(imageFile);
+      TaskSnapshot snapshot = await uploadTask;
+      String downloadUrl = await snapshot.ref.getDownloadURL();
+
+      // Update user document with new image URL
+      await _firestore
+          .collection('users')
+          .doc(_currentUser.uid)
+          .update({'profileImageUrl': downloadUrl});
+
+      setState(() {
+        profileImageUrl = downloadUrl;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Profile image updated successfully!")),
+      );
+    } on FirebaseException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error uploading image: ${e.code == 'object-not-found'
+            ? 'Image not found'
+            : e.message ?? 'Unknown error'}")),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error: ${e.toString()}")),
       );
     }
   }
@@ -251,6 +318,15 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                             );
                             await _currentUser
                                 .reauthenticateWithCredential(credential);
+                            // Delete profile image if exists
+                            if (profileImageUrl.isNotEmpty &&
+                                !profileImageUrl.contains('default_avatar')) {
+                              try {
+                                await _storage.refFromURL(profileImageUrl).delete();
+                              } catch (e) {
+                                print("Error deleting profile image: $e");
+                              }
+                            }
                             await _firestore
                                 .collection('users')
                                 .doc(_currentUser.uid)
@@ -316,6 +392,38 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              GestureDetector(
+                onTap: _uploadProfileImage,
+                child: Stack(
+                  alignment: Alignment.bottomRight,
+                  children: [
+                    CircleAvatar(
+                      radius: 60,
+                      backgroundImage: profileImageUrl.isNotEmpty
+                          ? NetworkImage(profileImageUrl) as ImageProvider
+                          : const AssetImage('assets/images/default_avatar.png')
+                      as ImageProvider,
+                      child: profileImageUrl.isEmpty
+                          ? const Icon(Icons.person, size: 60, color: Colors.white)
+                          : null,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: const Color(0XFF0066CC),
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white, width: 2),
+                      ),
+                      child: const Icon(
+                        Icons.camera_alt,
+                        size: 20,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
               _buildInfoCard("Name", name, Icons.person),
               const SizedBox(height: 14),
               _buildInfoCard("Email", email, Icons.email),
@@ -348,7 +456,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           backgroundColor:
-          isDelete ? const Color(0XFF0066CC) : const Color(0XFF0066CC),
+          isDelete ? Colors.red : const Color(0XFF0066CC),
           minimumSize: const Size(double.infinity, 50),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),

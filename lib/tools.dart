@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:travelmate/ToolsCode/JourneyEstimatorPage.dart';
 import 'package:travelmate/chat.dart';
+import 'package:travelmate/currencyconverter.dart';
 import 'package:travelmate/gallery.dart';
 import 'package:travelmate/googlemaps.dart';
 import 'package:travelmate/homepage.dart';
@@ -394,14 +396,14 @@ final List<Tool> tools = [
     subtitle: 'Calculate trip costs',
     icon: Icons.attach_money,
     iconColor: Colors.deepPurple,
-    page: Container(), // Replace with JourneyEstimatorPage
+    page: JourneyEstimatorPage(),
   ),
   Tool(
     title: 'Currency Converter',
     subtitle: 'Live exchange rates',
     icon: Icons.currency_exchange,
     iconColor: Colors.indigo,
-    page: Container(), // Replace with CurrencyConverterPage
+    page: CurrencyPage(),
   ),
   Tool(
     title: 'Ride Sharing',

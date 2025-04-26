@@ -9,8 +9,8 @@ import 'package:travelmate/tools.dart';
 import 'package:travelmate/tripprogresspage.dart';
 
 import 'AllActivitiesPage.dart';
-import 'AllCitiesPage.dart';
-import 'AllDestinationsPage.dart';
+import 'FeaturedCities.dart';
+import 'FAmousPlaces.dart';
 import 'ProfilePage.dart';
 
 class TripPage extends StatefulWidget {
@@ -304,7 +304,7 @@ class _TripPageState extends State<TripPage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 const Text(
-                  "AI Smart Trip Planner",
+                  "Smart Trip Planner",
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -506,10 +506,10 @@ class _TripPageState extends State<TripPage> {
                   SizedBox(height: screenHeight * 0.02),
 
                   // 2. Recommended Trips Section
-                  _buildSectionHeader("Recommended", () {
+                  _buildSectionHeader("Featured Cities", () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => AllCitiesPage()),
+                      MaterialPageRoute(builder: (context) => FeaturedCitiesPage()),
                     );
                   }),
                   SizedBox(
@@ -536,7 +536,7 @@ class _TripPageState extends State<TripPage> {
                   _buildSectionHeader("Famous Activities", () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => AllActivitiesPage()),
+                      MaterialPageRoute(builder: (context) => FamousActivitiesPage()),
                     );
                   }),
                   SizedBox(
@@ -560,10 +560,10 @@ class _TripPageState extends State<TripPage> {
                   ),
 
                   // 4. Featured Destinations Section
-                  _buildSectionHeader("Featured Destinations", () {
+                  _buildSectionHeader("Famous Tourists Places", () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => AllDestinationsPage()),
+                      MaterialPageRoute(builder: (context) => FamousTouristPlacesPage()),
                     );
                   }),
                   SizedBox(
@@ -602,7 +602,7 @@ class _TripPageState extends State<TripPage> {
                           onPressed: _showSmartTripDialog,
                           icon: const Icon(Icons.calculate, color: Colors.white),
                           label: const Text(
-                            'AI Smart Trip Planner',
+                            'Smart Trip Planner',
                             style: TextStyle(color: Colors.white),
                           ),
                         ),
