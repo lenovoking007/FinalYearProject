@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Muzzaffarabadpage extends StatelessWidget {
   final List<String> overviewImages = [
-    'assets/images/Islamabad/islamabad1.jpg',
+    'assets/images/Islamabad/islamabad1.jpg'
     'assets/images/Islamabad/islamabad2.jpg',
     'assets/images/Islamabad/islamabad3.jpg',
   ];
