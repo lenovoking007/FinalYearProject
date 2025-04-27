@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -515,7 +514,7 @@ class Muzzaffarabadpage extends StatelessWidget {
                   ),
                   child: TextField(
                     decoration: InputDecoration(
-                      hintText: 'Search in HYderabad...',
+                      hintText: 'Search in Muzzafarabad...',
                       hintStyle: const TextStyle(color: Colors.white70),
                       prefixIcon: const Icon(Icons.search, color: Colors.white, size: 20),
                       border: InputBorder.none,
@@ -559,35 +558,36 @@ class Muzzaffarabadpage extends StatelessWidget {
                   _buildTabContent(
                     tabName: 'Clothes',
                     images: clothesImages,
-                    sectionTitle: 'Modern Fashion',
-                    sectionDescription: 'Hyderabad offers a mix of traditional and contemporary clothing styles. Explore high-end boutiques and local markets with quality fabrics.',
-                    activityTitle: 'Shopping Destinations',
-                    activityDescription: '• Saddar Bazaar: International brands\n'
-                        '• Tariq Road: Local designers\n'
-                        '• Sunday Bazaar: Affordable fashion',
+                    sectionTitle: 'Traditional Textiles',
+                    sectionDescription: 'Muzaffarabad is known for its traditional Kashmiri shawls, Pashmina scarves, and embroidered fabrics. Explore the colorful bazaars for authentic local crafts.',
+                    activityTitle: 'Top Shopping Spots',
+                    activityDescription: '• Red Square Market: Traditional textiles\n'
+                        '• Chakar Bazaar: Handicrafts & shawls\n'
+                        '• City Mall: Modern shopping options',
                   ),
                   _buildTabContent(
                     tabName: 'Food',
                     images: foodImages,
-                    sectionTitle: 'Hyderabad Cuisine',
-                    sectionDescription: 'Experience diverse dining options from traditional Pakistani to international cuisines in the historic city.',
-                    activityTitle: 'Must-Try Experiences',
-                    activityDescription: '• Biryani at Student Biryani\n'
-                        '• Traditional Dhabas on Autobahn Road\n'
-                        '• Fine dining at Indus Hotel\n'
-                        '• Street food at Hyder Chowk',
+                    sectionTitle: 'Muzaffarabad Cuisine',
+                    sectionDescription: 'Muzaffarabad offers rich and flavorful Kashmiri and local cuisine, influenced by its diverse culture.',
+                    activityTitle: 'Must-Try Specialties',
+                    activityDescription: '• Rogan Josh\n'
+                        '• Yakhni Pulao\n'
+                        '• Kashmiri Kahwa\n'
+                        '• Saffron Wazwan',
                   ),
                   _buildTabContent(
                     tabName: 'Festival',
                     images: festivalImages,
-                    sectionTitle: 'Cultural Events',
-                    sectionDescription: 'Hyderabad hosts various cultural and national events throughout the year.',
-                    activityTitle: 'Key Festivals',
-                    activityDescription: '• Independence Day Celebrations (14th August)\n'
-                        '• Hyderabad Literature Festival\n'
-                        '• Sindh Cultural Festival\n'
-                        '• Flower and Craft Show at Rani Bagh',
+                    sectionTitle: 'Cultural Celebrations',
+                    sectionDescription: 'Muzaffarabad hosts a variety of cultural festivals, celebrating its heritage and natural beauty.',
+                    activityTitle: 'Major Events',
+                    activityDescription: '• Neelum Valley Festival\n'
+                        '• Muzaffarabad Cultural Festival\n'
+                        '• Basant Festival\n'
+                        '• Kashmir Day Celebrations',
                   ),
+
 
                   _buildReviewFeedbackTab(),
                 ],
@@ -696,29 +696,30 @@ class Muzzaffarabadpage extends StatelessWidget {
   Widget _buildAttractionsGrid() {
     final List<Map<String, dynamic>> attractions = [
       {
-        'name': 'Pakka Qila',
-        'image': 'assets/images/Hyderabad/hyderabad1.jpg',
+        'name': 'Pir Chinasi',
+        'image': 'assets/images/Muzaffarabad/muzaffarabad1.jpg',
+        'rating': 4.8,
+        'reviews': 1520,
+      },
+      {
+        'name': 'Red Square Market',
+        'image': 'assets/images/Muzaffarabad/muzaffarabad2.jpg',
         'rating': 4.6,
-        'reviews': 1452,
+        'reviews': 1025,
       },
       {
-        'name': 'Rani Bagh',
-        'image': 'assets/images/Hyderabad/hyderabad2.jpg',
-        'rating': 4.5,
-        'reviews': 1238,
-      },
-      {
-        'name': 'Sindh Museum',
-        'image': 'assets/images/Hyderabad/hyderabad3.jpg',
-        'rating': 4.4,
-        'reviews': 910,
-      },
-      {
-        'name': 'Indus Riverfront',
-        'image': 'assets/images/Hyderabad/food1.jpg',
+        'name': 'Ramkot Fort',
+        'image': 'assets/images/Muzaffarabad/muzaffarabad3.jpg',
         'rating': 4.7,
-        'reviews': 1765,
+        'reviews': 890,
       },
+      {
+        'name': 'Neelum Valley',
+        'image': 'assets/images/Muzaffarabad/food1.jpg',
+        'rating': 4.9,
+        'reviews': 2000,
+      },
+
 
     ];
 
@@ -939,36 +940,37 @@ class Muzzaffarabadpage extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               _buildReviewCard(
-                name: 'Fatima Noor',
+                name: 'Kashan Khan',
                 rating: 5,
-                review: 'Charminar at night is breathtaking! The city\'s vibrant culture amazed me.',
-                imageUrl: 'assets/images/Hyderabad/u1.png',
-                date: '3 days ago',
+                review: 'Pir Chinasi offers breathtaking views of the mountains. A must-see for nature lovers!',
+                imageUrl: 'assets/images/Muzaffarabad/u1.png',
+                date: '5 days ago',
               ),
               const SizedBox(height: 16),
               _buildReviewCard(
-                name: 'Usman Sheikh',
+                name: 'Shabana Iqbal',
                 rating: 4,
-                review: 'Rich history and colorful bazaars. Sindh Museum is a must-visit!',
-                imageUrl: 'assets/images/Hyderabad/u2.png',
+                review: 'The food at Red Square Market is delicious. I loved the Kashmiri Kahwa!',
+                imageUrl: 'assets/images/Muzaffarabad/u2.png',
                 date: '1 week ago',
               ),
               const SizedBox(height: 16),
               _buildReviewCard(
-                name: 'Olivia Brown',
+                name: 'Bilal Shah',
                 rating: 5,
-                review: 'Loved exploring the traditional markets and the warmth of the people.',
-                imageUrl: 'assets/images/Hyderabad/u3.png',
+                review: 'Neelum Valley is an absolute gem. The scenic beauty is unmatched!',
+                imageUrl: 'assets/images/Muzaffarabad/u3.png',
                 date: '2 weeks ago',
               ),
               const SizedBox(height: 16),
               _buildReviewCard(
-                name: 'Bilal Ahmed',
+                name: 'Sarah Aziz',
                 rating: 4,
-                review: 'Delicious biryani and lively streets. A city full of life and flavors!',
-                imageUrl: 'assets/images/Hyderabad/u4.png',
-                date: '1 month ago',
+                review: 'Ramkot Fort is rich in history. A great place to visit with family.',
+                imageUrl: 'assets/images/Muzaffarabad/u4.png',
+                date: '3 weeks ago',
               ),
+
 
               const SizedBox(height: 24),
               Padding(
@@ -1033,7 +1035,7 @@ class Muzzaffarabadpage extends StatelessWidget {
                             borderRadius: BorderRadius.circular(12),
                             borderSide: BorderSide(color: Colors.grey.shade200),
                           ),
-                          hintText: 'Share your experience in Hyderabad...',
+                          hintText: 'Share your experience in Muzzafarabad...',
                         ),
                       ),
                       const SizedBox(height: 16),
@@ -1228,14 +1230,3 @@ class Muzzaffarabadpage extends StatelessWidget {
     );
   }
 }
-=======
-
-class MuzaffarabadPage extends StatelessWidget {
-  const MuzaffarabadPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold();
-  }
-}
->>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4

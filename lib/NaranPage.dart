@@ -1,68 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-<<<<<<< HEAD
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class NaranPage extends StatelessWidget {
+class Naranpage extends StatelessWidget {
   final List<String> overviewImages = [
-    'assets/images/naran/naran1.png',
-    'assets/images/naran/naran2.png',
-    'assets/images/naran/naran3.png',
+    'assets/images/karachi/karachi1.jpg',
+    'assets/images/karachi/karachi1.jpg',
+    'assets/images/karachi/karachi1.jpg',
   ];
 
   final List<String> clothesImages = [
-    'assets/images/naran/cl1.jpg',
-    'assets/images/naran/cl2.jpg',
-    'assets/images/naran/cl3.jpg',
-    'assets/images/naran/cl4.jpg',
+    'assets/images/karachi/karachicl1.jpg',
+    'assets/images/karachi/karachicl1.jpg',
+    'assets/images/karachi/karachicl1.jpg',
+    'assets/images/karachi/karachicl1.jpg',
   ];
 
   final List<String> foodImages = [
-    'assets/images/naran/naranfood1.png',
-    'assets/images/naran/naranfood2.jpg',
-    'assets/images/naran/naranfood3.png',
+    'assets/images/karachi/karachif1.jpg',
+    'assets/images/karachi/karachif1.jpg',
+    'assets/images/karachi/karachif1.jpg',
+    'assets/images/karachi/karachif1.jpg',
   ];
 
   final List<String> festivalImages = [
-    'assets/images/Naran/naranf1.jpg',
-=======
-
-class NaranPage extends StatelessWidget {
-  final List<String> overviewImages = [
-    'assets/images/Naran/naran1.jpg',
-    'assets/images/Naran/naran2.jpg',
-    'assets/images/Naran/naran3.jpg',
+    'assets/images/Islamabad/f1.jpg',
+    'assets/images/Islamabad/f2.jpg',
+    'assets/images/Islamabad/f3.jpg',
+    'assets/images/Islamabad/f4.jpg',
   ];
 
-  final List<String> clothesImages = [
-    'assets/images/Naran/cl1.jpg',
-    'assets/images/Naran/cl2.jpg',
-    'assets/images/Naran/cl3.jpg',
-    'assets/images/Naran/cl4.jpg',
-  ];
-
-  final List<String> foodImages = [
-    'assets/images/Naran/food1.jpg',
-    'assets/images/Naran/food2.jpg',
-    'assets/images/Naran/food3.jpg',
-    'assets/images/Naran/food4.jpg',
-  ];
-
-  final List<String> festivalImages = [
-    'assets/images/Naran/f1.jpg',
->>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
-    'assets/images/Naran/f2.jpg',
-    'assets/images/Naran/f3.jpg',
-    'assets/images/Naran/f4.jpg',
-  ];
-
-<<<<<<< HEAD
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
-  NaranPage({super.key});
-
   Future<void> _saveTripPlanToFirebase(Map<String, dynamic> tripPlan) async {
     try {
       await _firestore.collection('tripPlans').add(tripPlan);
@@ -98,8 +68,7 @@ class NaranPage extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          const Icon(Icons.flight_takeoff,
-                              color: Color(0XFF0066CC), size: 28),
+                          const Icon(Icons.flight_takeoff, color: Color(0XFF0066CC), size: 28),
                           const SizedBox(width: 12),
                           Text(
                             "Plan Your Trip",
@@ -112,15 +81,13 @@ class NaranPage extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(height: 24),
-                      _buildEditableTextField(
-                          "Trip Name", tripNameController, Icons.title),
+                      _buildEditableTextField("Trip Name", tripNameController, Icons.title),
                       const SizedBox(height: 16),
                       Container(
                         decoration: BoxDecoration(
                           color: const Color(0XFF88F2E8).withOpacity(0.1),
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                              color: const Color(0XFF0066CC).withOpacity(0.5)),
+                          border: Border.all(color: const Color(0XFF0066CC).withOpacity(0.5)),
                         ),
                         padding: const EdgeInsets.symmetric(horizontal: 12),
                         child: DropdownButtonFormField<String>(
@@ -129,20 +96,11 @@ class NaranPage extends StatelessWidget {
                           decoration: const InputDecoration(
                             border: InputBorder.none,
                           ),
-                          hint: const Text('Select Trip Type',
-                              style: TextStyle(color: Colors.grey)),
-                          items: [
-                            'Adventure',
-                            'Relaxation',
-                            'Cultural',
-                            'Wildlife',
-                            'Business'
-                          ].map((String type) {
+                          hint: const Text('Select Trip Type', style: TextStyle(color: Colors.grey)),
+                          items: ['Adventure', 'Relaxation', 'Cultural', 'Wildlife', 'Business'].map((String type) {
                             return DropdownMenuItem<String>(
                               value: type,
-                              child: Text(type,
-                                  style:
-                                  const TextStyle(color: Colors.black87)),
+                              child: Text(type, style: const TextStyle(color: Colors.black87)),
                             );
                           }).toList(),
                           onChanged: (value) {
@@ -153,11 +111,9 @@ class NaranPage extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 16),
-                      _buildEditableTextField("Number of People",
-                          peopleCountController, Icons.people),
+                      _buildEditableTextField("Number of People", peopleCountController, Icons.people),
                       const SizedBox(height: 16),
-                      _buildEditableTextField("Budget (PKR)", budgetController,
-                          Icons.account_balance_wallet),
+                      _buildEditableTextField("Budget (PKR)", budgetController, Icons.account_balance_wallet),
                       const SizedBox(height: 16),
                       Text(
                         "Trip Duration",
@@ -174,22 +130,18 @@ class NaranPage extends StatelessWidget {
                           return isSmallScreen
                               ? Column(
                             children: [
-                              _buildDateSelector(
-                                  context, "Start Date", startDate,
-                                      (picked) {
-                                    if (picked != null) {
-                                      setState(() {
-                                        startDate = picked;
-                                        if (startDate.isAfter(endDate)) {
-                                          endDate = startDate
-                                              .add(const Duration(days: 1));
-                                        }
-                                      });
+                              _buildDateSelector(context, "Start Date", startDate, (picked) {
+                                if (picked != null) {
+                                  setState(() {
+                                    startDate = picked;
+                                    if (startDate.isAfter(endDate)) {
+                                      endDate = startDate.add(const Duration(days: 1));
                                     }
-                                  }, startDate),
+                                  });
+                                }
+                              }, startDate),
                               const SizedBox(height: 12),
-                              _buildDateSelector(
-                                  context, "End Date", endDate, (picked) {
+                              _buildDateSelector(context, "End Date", endDate, (picked) {
                                 if (picked != null) {
                                   setState(() {
                                     endDate = picked;
@@ -201,31 +153,26 @@ class NaranPage extends StatelessWidget {
                               : Row(
                             children: [
                               Expanded(
-                                child: _buildDateSelector(
-                                    context, "Start Date", startDate,
-                                        (picked) {
-                                      if (picked != null) {
-                                        setState(() {
-                                          startDate = picked;
-                                          if (startDate.isAfter(endDate)) {
-                                            endDate = startDate
-                                                .add(const Duration(days: 1));
-                                          }
-                                        });
+                                child: _buildDateSelector(context, "Start Date", startDate, (picked) {
+                                  if (picked != null) {
+                                    setState(() {
+                                      startDate = picked;
+                                      if (startDate.isAfter(endDate)) {
+                                        endDate = startDate.add(const Duration(days: 1));
                                       }
-                                    }, startDate),
+                                    });
+                                  }
+                                }, startDate),
                               ),
                               const SizedBox(width: 12),
                               Expanded(
-                                child: _buildDateSelector(
-                                    context, "End Date", endDate,
-                                        (picked) {
-                                      if (picked != null) {
-                                        setState(() {
-                                          endDate = picked;
-                                        });
-                                      }
-                                    }, startDate),
+                                child: _buildDateSelector(context, "End Date", endDate, (picked) {
+                                  if (picked != null) {
+                                    setState(() {
+                                      endDate = picked;
+                                    });
+                                  }
+                                }, startDate),
                               ),
                             ],
                           );
@@ -238,13 +185,11 @@ class NaranPage extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: Colors.amber.withOpacity(0.1),
                           borderRadius: BorderRadius.circular(12),
-                          border:
-                          Border.all(color: Colors.amber.withOpacity(0.3)),
+                          border: Border.all(color: Colors.amber.withOpacity(0.3)),
                         ),
                         child: Row(
                           children: [
-                            Icon(Icons.info_outline,
-                                color: Colors.amber.shade700),
+                            Icon(Icons.info_outline, color: Colors.amber.shade700),
                             const SizedBox(width: 8),
                             Flexible(
                               child: Text(
@@ -269,12 +214,10 @@ class NaranPage extends StatelessWidget {
                           const SizedBox(width: 12),
                           ElevatedButton(
                             onPressed: () async {
-                              if (tripNameController.text.isEmpty ||
-                                  selectedTripType == null) {
+                              if (tripNameController.text.isEmpty || selectedTripType == null) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
-                                    content:
-                                    Text('Please fill all required fields'),
+                                    content: Text('Please fill all required fields'),
                                     backgroundColor: Colors.red,
                                   ),
                                 );
@@ -283,8 +226,7 @@ class NaranPage extends StatelessWidget {
 
                               try {
                                 final User? user = _auth.currentUser;
-                                if (user == null)
-                                  throw Exception('User not authenticated');
+                                if (user == null) throw Exception('User not authenticated');
 
                                 final Map<String, dynamic> tripPlan = {
                                   'userId': user.uid,
@@ -294,7 +236,7 @@ class NaranPage extends StatelessWidget {
                                   'budget': budgetController.text,
                                   'startDate': Timestamp.fromDate(startDate),
                                   'endDate': Timestamp.fromDate(endDate),
-                                  'destination': 'Naran',
+                                  'destination': 'Hunza',
                                   'createdAt': Timestamp.now(),
                                 };
 
@@ -310,8 +252,7 @@ class NaranPage extends StatelessWidget {
                                 Navigator.pop(context);
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
-                                    content: Text(
-                                        'Error saving trip: ${e.toString()}'),
+                                    content: Text('Error saving trip: ${e.toString()}'),
                                     backgroundColor: Colors.red,
                                   ),
                                 );
@@ -322,8 +263,7 @@ class NaranPage extends StatelessWidget {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 24, vertical: 12),
+                              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                             ),
                             child: const Text(
                               "SAVE TRIP",
@@ -391,8 +331,7 @@ class NaranPage extends StatelessWidget {
             const SizedBox(height: 4),
             Row(
               children: [
-                const Icon(Icons.calendar_today,
-                    size: 16, color: Color(0XFF0066CC)),
+                const Icon(Icons.calendar_today, size: 16, color: Color(0XFF0066CC)),
                 const SizedBox(width: 8),
                 Text(
                   "${date.day}/${date.month}/${date.year}",
@@ -406,8 +345,7 @@ class NaranPage extends StatelessWidget {
     );
   }
 
-  void _showSuccessDialog(
-      BuildContext context, String tripName, String tripType, int duration) {
+  void _showSuccessDialog(BuildContext context, String tripName, String tripType, int duration) {
     showDialog(
       context: context,
       builder: (context) => Dialog(
@@ -459,7 +397,7 @@ class NaranPage extends StatelessWidget {
                   children: [
                     _buildSuccessDetailRow("Trip Name:", tripName),
                     const Divider(height: 16, thickness: 0.5),
-                    _buildSuccessDetailRow("Destination:", "Naran"),
+                    _buildSuccessDetailRow("Destination:", "Karachi"),
                     const Divider(height: 16, thickness: 0.5),
                     _buildSuccessDetailRow("Trip Type:", tripType),
                     const Divider(height: 16, thickness: 0.5),
@@ -532,8 +470,7 @@ class NaranPage extends StatelessWidget {
     );
   }
 
-  Widget _buildEditableTextField(
-      String label, TextEditingController controller, IconData icon) {
+  Widget _buildEditableTextField(String label, TextEditingController controller, IconData icon) {
     return TextField(
       controller: controller,
       decoration: InputDecoration(
@@ -541,8 +478,7 @@ class NaranPage extends StatelessWidget {
         fillColor: const Color(0XFF88F2E8).withOpacity(0.1),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide:
-          BorderSide(color: const Color(0XFF0066CC).withOpacity(0.5)),
+          borderSide: BorderSide(color: const Color(0XFF0066CC).withOpacity(0.5)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -551,23 +487,17 @@ class NaranPage extends StatelessWidget {
         labelText: label,
         labelStyle: const TextStyle(color: Colors.grey),
         suffixIcon: Icon(icon, color: const Color(0XFF0066CC).withOpacity(0.7)),
-        contentPadding:
-        const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       ),
     );
   }
 
-=======
-  NaranPage({super.key});
-
->>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 5,
       child: Scaffold(
         appBar: AppBar(
-<<<<<<< HEAD
           backgroundColor: const Color(0XFF0066CC),
           elevation: 0,
           automaticallyImplyLeading: true,
@@ -583,10 +513,9 @@ class NaranPage extends StatelessWidget {
                   ),
                   child: TextField(
                     decoration: InputDecoration(
-                      hintText: 'Search in Naran...',
+                      hintText: 'Search in Hunza...',
                       hintStyle: const TextStyle(color: Colors.white70),
-                      prefixIcon: const Icon(Icons.search,
-                          color: Colors.white, size: 20),
+                      prefixIcon: const Icon(Icons.search, color: Colors.white, size: 20),
                       border: InputBorder.none,
                       contentPadding: const EdgeInsets.only(top: 12),
                       isDense: true,
@@ -598,39 +527,12 @@ class NaranPage extends StatelessWidget {
               const SizedBox(width: 12),
               const CircleAvatar(
                 radius: 18,
-=======
-          backgroundColor: Colors.white,
-          elevation: 0,
-          automaticallyImplyLeading: true,
-          title: Row(
-            children: [
-              Expanded(
-                child: SizedBox(
-                  height: 40,
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: 'Search here',
-                      prefixIcon: const Icon(Icons.search, color: Color(0XFF0066CC)),
-                      filled: true,
-                      fillColor: Colors.grey[200],
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 16),
-              const CircleAvatar(
->>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
                 backgroundImage: AssetImage('assets/images/pro.jpg'),
               ),
             ],
           ),
         ),
         body: Column(
-<<<<<<< HEAD
           children: [
             Container(
               color: const Color(0XFF0066CC),
@@ -645,22 +547,6 @@ class NaranPage extends StatelessWidget {
                   Tab(icon: Icon(Icons.restaurant), text: 'Food'),
                   Tab(icon: Icon(Icons.celebration), text: 'Festival'),
                   Tab(icon: Icon(Icons.reviews), text: 'Reviews'),
-=======
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              color: const Color(0XFF0066CC),
-              child: const TabBar(
-                labelColor: Colors.white,
-                unselectedLabelColor: Colors.white70,
-                indicatorColor: Colors.white,
-                tabs: [
-                  Tab(text: 'Overview'),
-                  Tab(text: 'Clothes'),
-                  Tab(text: 'Food'),
-                  Tab(text: 'Festival'),
-                  Tab(text: 'Review/Feedback'),
->>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
                 ],
               ),
             ),
@@ -668,64 +554,39 @@ class NaranPage extends StatelessWidget {
               child: TabBarView(
                 children: [
                   _buildOverviewTab(context),
-<<<<<<< HEAD
                   _buildTabContent(
                     tabName: 'Clothes',
                     images: clothesImages,
-                    sectionTitle: 'Mountain Gear',
-                    sectionDescription:
-                    'Naran requires warm clothing and trekking equipment. Find quality jackets, hiking boots, and cold-weather accessories.',
-                    activityTitle: 'Essential Items',
-                    activityDescription: '• Thermal innerwear\n'
-                        '• Waterproof trekking shoes\n'
-                        '• Heavy woolen socks\n'
-                        '• Windproof jackets',
+                    sectionTitle: 'Traditional Attire',
+                    sectionDescription: 'Hunza preserves its unique cultural identity through exquisite handmade textiles and traditional woolen crafts.',
+                    activityTitle: 'Authentic Finds',
+                    activityDescription: '• Altit Fort Craft Shops: Handwoven shawls\n'
+                        '• Karimabad Bazaar: Traditional caps\n'
+                        '• Local Women Cooperatives: Embroidery\n'
+                        '• Passu Village: Woolen pattu fabric',
                   ),
                   _buildTabContent(
                     tabName: 'Food',
                     images: foodImages,
-                    sectionTitle: 'Mountain Cuisine',
-                    sectionDescription:
-                    'Enjoy hearty meals perfect for cold weather with local flavors.',
-                    activityTitle: 'Must-Try Dishes',
-                    activityDescription: '• Trout Fish from Kunhar River\n'
-                        '• Chapli Kebabs\n'
-                        '• Local Walnut Dishes\n'
-                        '• Kashmiri Chai',
+                    sectionTitle: 'Hunza Cuisine',
+                    sectionDescription: 'Experience organic mountain flavors and traditional recipes preserved for generations in the Karakoram ranges.',
+                    activityTitle: 'Must-Try Experiences',
+                    activityDescription: '• Chapshuro at Cafe de Hunza\n'
+                        '• Harissa at local home kitchens\n'
+                        '• Apricot dishes in Karimabad\n'
+                        '• Walnut bread with butter tea',
                   ),
                   _buildTabContent(
                     tabName: 'Festival',
                     images: festivalImages,
                     sectionTitle: 'Mountain Festivals',
-                    sectionDescription:
-                    'Naran hosts various cultural and adventure-focused events.',
-                    activityTitle: 'Key Events',
-                    activityDescription: '• Summer Tourism Festival\n'
-                        '• Mountain Trekking Competitions\n'
-                        '• Trout Fishing Competitions\n'
-                        '• Local Folk Music Nights',
+                    sectionDescription: 'Hunza celebrates ancient cultural traditions with seasonal festivals against breathtaking mountain backdrops.',
+                    activityTitle: 'Key Festivals',
+                    activityDescription: '• Silk Route Festival\n'
+                        '• Nauroz (Persian New Year)\n'
+                        '• Harvest Festivals\n'
+                        '• Traditional Pamiri Music Fest',
                   ),
-=======
-                  _buildTabContent('Clothes', clothesImages, 'Traditional Attire',
-                      'Naran offers a variety of traditional clothing that reflects the culture of the northern regions of Pakistan. Woolen shawls, caps, and handwoven fabrics are popular here.',
-                      'Top Recommendations',
-                      '• Local Markets: Famous for woolen shawls and caps.\n'
-                          '• Handwoven Fabrics: Unique designs and patterns.\n'
-                          '• Traditional Jackets: Perfect for the cold weather.'),
-                  _buildTabContent('Food', foodImages, 'Naran Cuisine',
-                      'Naran is known for its hearty and warming dishes, perfect for the cold climate. The food here is simple yet delicious, with a focus on local ingredients.',
-                      'Must-Try Dishes',
-                      '• Chapshuro: A meat-filled bread, similar to a stuffed paratha.\n'
-                          '• Trout Fish: Freshly caught from the rivers and grilled to perfection.\n'
-                          '• Harissa: A traditional porridge made with meat and wheat.\n'
-                          '• Butter Tea: A local favorite to keep warm.'),
-                  _buildTabContent('Festival', festivalImages, 'Cultural Festivals',
-                      'Naran hosts a few cultural festivals that celebrate the beauty and traditions of the region.',
-                      'Popular Festivals',
-                      '• Shandur Polo Festival: Held nearby, showcasing traditional polo matches.\n'
-                          '• Summer Festivals: Celebrating the natural beauty of Naran.\n'
-                          '• Local Music and Dance: Traditional performances by local artists.'),
->>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
                   _buildReviewFeedbackTab(),
                 ],
               ),
@@ -743,54 +604,19 @@ class NaranPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildCarousel(overviewImages),
-<<<<<<< HEAD
           const SizedBox(height: 24),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Text(
-              "Discover Naran",
+              "Discover Hunza",
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: const Color(0XFF0066CC).withOpacity(0.9),
-=======
-          const SizedBox(height: 16),
-          const Padding(
-            padding: EdgeInsets.all(16),
-            child: Text(
-              "Discover Naran",
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: Color(0XFF0066CC),
-              ),
-            ),
-          ),
-          const Text(
-            'About Naran',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Color(0XFF0066CC),
-            ),
-          ),
-          const SizedBox(height: 8),
-          const Card(
-            elevation: 4,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(12)),
-            ),
-            child: Padding(
-              padding: EdgeInsets.all(16),
-              child: Text(
-                'Naran is a picturesque town located in the Kaghan Valley, known for its stunning landscapes, crystal-clear rivers, and lush green meadows. It is a popular tourist destination for nature lovers and adventure seekers.',
-                style: TextStyle(fontSize: 16, color: Colors.black87),
->>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
               ),
             ),
           ),
           const SizedBox(height: 16),
-<<<<<<< HEAD
           Card(
             elevation: 0,
             shape: RoundedRectangleBorder(
@@ -803,7 +629,7 @@ class NaranPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'About Naran',
+                    'Hunza',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -812,10 +638,10 @@ class NaranPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   const Text(
-                    'Naran, a picturesque valley in Khyber Pakhtunkhwa, is gateway to the stunning Kaghan Valley. '
-                        'Known for its alpine meadows, glacial lakes, and adventure sports, it\'s a haven for nature enthusiasts and trekkers.',
-                    style: TextStyle(
-                        fontSize: 15, color: Colors.black87, height: 1.5),
+                    'Hunza, Pakistan\'s mountain jewel, is celebrated for its mountainous splendor, '
+                        'ancient cultural heritage, and breathtaking natural beauty. Nestled in the Karakoram Range, '
+                        'it showcases a harmonious combination of traditional villages and dramatic mountain vistas.',
+                    style: TextStyle(fontSize: 15, color: Colors.black87, height: 1.5),
                   ),
                 ],
               ),
@@ -841,37 +667,14 @@ class NaranPage extends StatelessWidget {
               icon: const Icon(Icons.flight, color: Colors.white, size: 20),
               label: const Text(
                 'Plan Your Trip Now',
-=======
-          Center(
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                backgroundColor: const Color(0XFF0066CC),
-              ),
-              onPressed: () {
-                // Add navigation or functionality for planning a trip
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Plan your trip functionality coming soon!'),
-                  ),
-                );
-              },
-              child: const Text(
-                'Plan Trip',
->>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-<<<<<<< HEAD
               style: ElevatedButton.styleFrom(
-                padding:
-                const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -883,41 +686,36 @@ class NaranPage extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 24),
-=======
-            ),
-          ),
->>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
         ],
       ),
     );
   }
 
-<<<<<<< HEAD
   Widget _buildAttractionsGrid() {
     final List<Map<String, dynamic>> attractions = [
       {
-        'name': 'Saif-ul-Malook Lake',
-        'image': 'assets/images/Naran/naran1.jpg',
+        'name': 'Baltit Fort',
+        'image': 'assets/images/Hunza/hunza1.jpg',
         'rating': 4.9,
-        'reviews': 2450,
+        'reviews': 1678,
       },
       {
-        'name': 'Babusar Top',
-        'image': 'assets/images/Naran/naran2.jpg',
+        'name': 'Attabad Lake',
+        'image': 'assets/images/Hunza/hunza2.jpg',
         'rating': 4.8,
-        'reviews': 1980,
+        'reviews': 1892,
       },
       {
-        'name': 'Lulusar Lake',
-        'image': 'assets/images/Naran/naran3.jpg',
+        'name': 'Eagle\'s Nest',
+        'image': 'assets/images/Hunza/hunza3.jpg',
         'rating': 4.7,
-        'reviews': 1650,
+        'reviews': 1325,
       },
       {
-        'name': 'Ansoo Lake',
-        'image': 'assets/images/Naran/food1.jpg',
+        'name': 'Passu Cones',
+        'image': 'assets/images/Hunza/hunza4.jpg',
         'rating': 4.6,
-        'reviews': 1420,
+        'reviews': 1143,
       },
     ];
 
@@ -942,8 +740,7 @@ class NaranPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ClipRRect(
-                borderRadius:
-                const BorderRadius.vertical(top: Radius.circular(16)),
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
                 child: Stack(
                   children: [
                     Image.asset(
@@ -956,8 +753,7 @@ class NaranPage extends StatelessWidget {
                       top: 8,
                       right: 8,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 4),
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
                           color: Colors.black.withOpacity(0.6),
                           borderRadius: BorderRadius.circular(12),
@@ -965,8 +761,7 @@ class NaranPage extends StatelessWidget {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Icon(Icons.star,
-                                color: Colors.amber, size: 14),
+                            const Icon(Icons.star, color: Colors.amber, size: 14),
                             const SizedBox(width: 4),
                             Text(
                               attractions[index]['rating'].toString(),
@@ -1000,8 +795,7 @@ class NaranPage extends StatelessWidget {
                     const SizedBox(height: 6),
                     Row(
                       children: [
-                        Icon(Icons.star,
-                            color: Colors.amber.shade700, size: 14),
+                        Icon(Icons.star, color: Colors.amber.shade700, size: 14),
                         const SizedBox(width: 4),
                         Text(
                           attractions[index]['rating'].toString(),
@@ -1026,8 +820,7 @@ class NaranPage extends StatelessWidget {
                       child: ElevatedButton(
                         onPressed: () {},
                         style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                          const Color(0XFF0066CC).withOpacity(0.1),
+                          backgroundColor: const Color(0XFF0066CC).withOpacity(0.1),
                           foregroundColor: const Color(0XFF0066CC),
                           padding: const EdgeInsets.symmetric(horizontal: 8),
                           minimumSize: Size.zero,
@@ -1060,23 +853,12 @@ class NaranPage extends StatelessWidget {
     required String activityTitle,
     required String activityDescription,
   }) {
-=======
-  Widget _buildTabContent(
-      String tabName,
-      List<String> images,
-      String sectionTitle,
-      String sectionDescription,
-      String activityTitle,
-      String activityDescription,
-      ) {
->>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildCarousel(images),
-<<<<<<< HEAD
           const SizedBox(height: 24),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -1094,8 +876,7 @@ class NaranPage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Text(
               sectionDescription,
-              style: const TextStyle(
-                  fontSize: 15, color: Colors.black87, height: 1.5),
+              style: const TextStyle(fontSize: 15, color: Colors.black87, height: 1.5),
             ),
           ),
           const SizedBox(height: 24),
@@ -1116,63 +897,22 @@ class NaranPage extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
               side: BorderSide(color: Colors.grey.shade200),
-=======
-          const SizedBox(height: 16),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Text(
-              sectionTitle,
-              style: const TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: Color(0XFF0066CC),
-              ),
-            ),
-          ),
-          Text(
-            sectionDescription,
-            style: const TextStyle(fontSize: 16, color: Colors.black87),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            activityTitle,
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Color(0XFF0066CC),
-            ),
-          ),
-          const SizedBox(height: 8),
-          Card(
-            elevation: 4,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(12)),
->>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
             ),
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Text(
                 activityDescription,
-<<<<<<< HEAD
-                style: const TextStyle(
-                    fontSize: 15, color: Colors.black87, height: 1.5),
+                style: const TextStyle(fontSize: 15, color: Colors.black87, height: 1.5),
               ),
             ),
           ),
           const SizedBox(height: 24),
-=======
-                style: const TextStyle(fontSize: 16, color: Colors.black87),
-              ),
-            ),
-          ),
->>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
         ],
       ),
     );
   }
 
   Widget _buildReviewFeedbackTab() {
-<<<<<<< HEAD
     int selectedRating = 0;
     final reviewController = TextEditingController();
 
@@ -1196,39 +936,35 @@ class NaranPage extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               _buildReviewCard(
-                name: 'Ali Raza',
+                name: 'Laila Begum',
                 rating: 5,
-                review:
-                'Breathtaking views at Saif-ul-Malook! The boat ride was magical during sunset.',
-                imageUrl: 'assets/images/Naran/u1.png',
+                review: 'Baltit Fort at sunrise is magical! The mountain vistas and ancient architecture left me awestruck.',
+                imageUrl: 'assets/images/Hunza/u1.png',
                 date: '3 days ago',
               ),
               const SizedBox(height: 16),
               _buildReviewCard(
-                name: 'Sara Khan',
+                name: 'Nadir Khan',
                 rating: 4,
-                review:
-                'Perfect for trekking enthusiasts. Proper warm clothing is a must!',
-                imageUrl: 'assets/images/Naran/u2.png',
+                review: 'Perfect blend of nature and culture. The Attabad Lake boat ride is unforgettable!',
+                imageUrl: 'assets/images/Hunza/u2.png',
                 date: '1 week ago',
               ),
               const SizedBox(height: 16),
               _buildReviewCard(
-                name: 'Bilal Ahmed',
+                name: 'Emma Wilson',
                 rating: 5,
-                review:
-                'Ansoo Lake trek was challenging but worth every step. Unforgettable experience!',
-                imageUrl: 'assets/images/Naran/u3.png',
+                review: 'Loved the serene valleys and apricot orchards. A paradise for nature lovers!',
+                imageUrl: 'assets/images/Hunza/u3.png',
                 date: '2 weeks ago',
               ),
               const SizedBox(height: 16),
               _buildReviewCard(
-                name: 'Fatima Malik',
+                name: 'Wali Ahmed',
                 rating: 4,
-                review:
-                'Local trout dishes are a must-try. Fresh and delicious!',
-                imageUrl: 'assets/images/Naran/u4.png',
-                date: '3 weeks ago',
+                review: 'Amazing hospitality - must try local chapshuro bread with Hunza tea!',
+                imageUrl: 'assets/images/Hunza/u4.png',
+                date: '1 month ago',
               ),
               const SizedBox(height: 24),
               Padding(
@@ -1265,12 +1001,9 @@ class NaranPage extends StatelessWidget {
                       Row(
                         children: List.generate(5, (index) {
                           return GestureDetector(
-                            onTap: () =>
-                                setState(() => selectedRating = index + 1),
+                            onTap: () => setState(() => selectedRating = index + 1),
                             child: Icon(
-                              index < selectedRating
-                                  ? Icons.star
-                                  : Icons.star_border,
+                              index < selectedRating ? Icons.star : Icons.star_border,
                               color: Colors.amber,
                               size: 32,
                             ),
@@ -1296,7 +1029,7 @@ class NaranPage extends StatelessWidget {
                             borderRadius: BorderRadius.circular(12),
                             borderSide: BorderSide(color: Colors.grey.shade200),
                           ),
-                          hintText: 'Share your experience in Naran...',
+                          hintText: 'Share your experience in Hunza...',
                         ),
                       ),
                       const SizedBox(height: 16),
@@ -1307,8 +1040,7 @@ class NaranPage extends StatelessWidget {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 32, vertical: 14),
+                            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
                             elevation: 2,
                           ),
                           onPressed: () {
@@ -1420,8 +1152,7 @@ class NaranPage extends StatelessWidget {
               children: [
                 IconButton(
                   onPressed: () {},
-                  icon: Icon(Icons.thumb_up,
-                      color: Colors.grey.shade600, size: 18),
+                  icon: Icon(Icons.thumb_up, color: Colors.grey.shade600, size: 18),
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(),
                 ),
@@ -1436,8 +1167,7 @@ class NaranPage extends StatelessWidget {
                 const SizedBox(width: 16),
                 IconButton(
                   onPressed: () {},
-                  icon: Icon(Icons.comment,
-                      color: Colors.grey.shade600, size: 18),
+                  icon: Icon(Icons.comment, color: Colors.grey.shade600, size: 18),
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(),
                 ),
@@ -1451,78 +1181,6 @@ class NaranPage extends StatelessWidget {
                 ),
               ],
             ),
-=======
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'User Reviews',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Color(0XFF0066CC),
-            ),
-          ),
-          const SizedBox(height: 16),
-          _buildReviewCard(
-              'Michael Smith', 5, 'Naran is a paradise on Earth!', 'assets/images/Naran/u1.png'),
-          const SizedBox(height: 16),
-          _buildReviewCard(
-              'Jae Lee', 4, 'The views are breathtaking.', 'assets/images/Naran/u2.png'),
-          const SizedBox(height: 16),
-          _buildReviewCard(
-              'Asim Khan', 5, 'Perfect for adventure lovers.', 'assets/images/Naran/u3.png'),
-          const SizedBox(height: 16),
-          _buildReviewCard(
-              'Ali Khan', 4, 'The food is amazing!', 'assets/images/Naran/u4.png'),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildReviewCard(String name, int rating, String review, String imageUrl) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      elevation: 4,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          children: [
-            CircleAvatar(
-              radius: 30,
-              backgroundImage: AssetImage(imageUrl),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    name,
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: List.generate(
-                      5,
-                          (index) => Icon(
-                        index < rating ? Icons.star : Icons.star_border,
-                        color: Colors.amber,
-                        size: 20,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    review,
-                    style: const TextStyle(fontSize: 14, color: Colors.black87),
-                  ),
-                ],
-              ),
-            ),
->>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
           ],
         ),
       ),
@@ -1531,27 +1189,12 @@ class NaranPage extends StatelessWidget {
 
   Widget _buildCarousel(List<String> images) {
     return CarouselSlider(
-<<<<<<< HEAD
-=======
-      items: images.map((imagePath) {
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(16),
-          child: Image.asset(
-            imagePath,
-            fit: BoxFit.cover,
-            width: double.infinity,
-            height: 200,
-          ),
-        );
-      }).toList(),
->>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
       options: CarouselOptions(
         height: 200,
         autoPlay: true,
         enlargeCenterPage: true,
         viewportFraction: 0.9,
         aspectRatio: 16 / 9,
-<<<<<<< HEAD
         autoPlayInterval: const Duration(seconds: 4),
       ),
       items: images.map((imagePath) {
@@ -1581,9 +1224,3 @@ class NaranPage extends StatelessWidget {
     );
   }
 }
-=======
-      ),
-    );
-  }
-}
->>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -1228,14 +1227,3 @@ class Hyderabadpage extends StatelessWidget {
     );
   }
 }
-=======
-
-class HyderabadPage extends StatelessWidget {
-  const HyderabadPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold();
-  }
-}
->>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4

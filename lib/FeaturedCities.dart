@@ -55,7 +55,7 @@ class FeaturedCitiesPage extends StatelessWidget {
                 imagePath: 'assets/images/cities/sialkot.jpg',
                 onTap: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => SialkotPage()),
+                  MaterialPageRoute(builder: (context) => Sialkotpage()),
                 ),
               ),
               _buildCityCard(
@@ -66,7 +66,6 @@ class FeaturedCitiesPage extends StatelessWidget {
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => Hyderabadpage()),
-                  MaterialPageRoute(builder: (context) => HyderabadPage()),
                 ),
               ),
               _buildCityCard(
@@ -96,11 +95,8 @@ class FeaturedCitiesPage extends StatelessWidget {
                 imagePath: 'assets/images/cities/muzaffarabad.jpg',
                 onTap: () => Navigator.push(
                   context,
-<<<<<<< HEAD
                   MaterialPageRoute(builder: (context) => Muzzaffarabadpage()),
-=======
-                  MaterialPageRoute(builder: (context) => MuzaffarabadPage()),
->>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
+
                 ),
               ),
               _buildCityCard(
@@ -110,7 +106,7 @@ class FeaturedCitiesPage extends StatelessWidget {
                 imagePath: 'assets/images/cities/skardu.jpg',
                 onTap: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => SkarduPage()),
+                  MaterialPageRoute(builder: (context) => Skardupage()),
                 ),
               ),
               _buildCityCard(
@@ -120,11 +116,8 @@ class FeaturedCitiesPage extends StatelessWidget {
                 imagePath: 'assets/images/cities/faisalabad.jpg',
                 onTap: () => Navigator.push(
                   context,
-<<<<<<< HEAD
                   MaterialPageRoute(builder: (context) => Faisalabadpage()),
-=======
-                  MaterialPageRoute(builder: (context) => FaisalabadPage()),
->>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
+
                 ),
               ),
               _buildCityCard(
@@ -134,14 +127,10 @@ class FeaturedCitiesPage extends StatelessWidget {
                 imagePath: 'assets/images/cities/quetta.jpg',
                 onTap: () => Navigator.push(
                   context,
-<<<<<<< HEAD
                   MaterialPageRoute(builder: (context) => Quettapage()),
-=======
-                  MaterialPageRoute(builder: (context) => QuettaPage()),
->>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
-                ),
+
               ),
-            ],
+              ) ],
           );
         },
       ),

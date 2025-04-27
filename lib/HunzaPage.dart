@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-<<<<<<< HEAD
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -492,38 +491,6 @@ class HunzaPage extends StatelessWidget {
       ),
     );
   }
-=======
-
-class HunzaPage extends StatelessWidget {
-  final List<String> overviewImages = [
-    'assets/images/Hunza/hunza1.jpg',
-    'assets/images/Hunza/hunza2.jpg',
-    'assets/images/Hunza/hunza3.jpg',
-  ];
-
-  final List<String> clothesImages = [
-    'assets/images/Hunza/cl1.jpg',
-    'assets/images/Hunza/cl2.jpg',
-    'assets/images/Hunza/cl3.jpg',
-    'assets/images/Hunza/cl4.jpg',
-  ];
-
-  final List<String> foodImages = [
-    'assets/images/Hunza/food1.jpg',
-    'assets/images/Hunza/food2.jpg',
-    'assets/images/Hunza/food3.jpg',
-    'assets/images/Hunza/food4.jpg',
-  ];
-
-  final List<String> festivalImages = [
-    'assets/images/Hunza/f1.jpg',
-    'assets/images/Hunza/f2.jpg',
-    'assets/images/Hunza/f3.jpg',
-    'assets/images/Hunza/f4.jpg',
-  ];
-
-  HunzaPage({super.key});
->>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
 
   @override
   Widget build(BuildContext context) {
@@ -531,7 +498,6 @@ class HunzaPage extends StatelessWidget {
       length: 5,
       child: Scaffold(
         appBar: AppBar(
-<<<<<<< HEAD
           backgroundColor: const Color(0XFF0066CC),
           elevation: 0,
           automaticallyImplyLeading: true,
@@ -561,39 +527,12 @@ class HunzaPage extends StatelessWidget {
               const SizedBox(width: 12),
               const CircleAvatar(
                 radius: 18,
-=======
-          backgroundColor: Colors.white,
-          elevation: 0,
-          automaticallyImplyLeading: true,
-          title: Row(
-            children: [
-              Expanded(
-                child: SizedBox(
-                  height: 40,
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: 'Search here',
-                      prefixIcon: const Icon(Icons.search, color: Color(0XFF0066CC)),
-                      filled: true,
-                      fillColor: Colors.grey[200],
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 16),
-              const CircleAvatar(
->>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
                 backgroundImage: AssetImage('assets/images/pro.jpg'),
               ),
             ],
           ),
         ),
         body: Column(
-<<<<<<< HEAD
           children: [
             Container(
               color: const Color(0XFF0066CC),
@@ -608,22 +547,6 @@ class HunzaPage extends StatelessWidget {
                   Tab(icon: Icon(Icons.restaurant), text: 'Food'),
                   Tab(icon: Icon(Icons.celebration), text: 'Festival'),
                   Tab(icon: Icon(Icons.reviews), text: 'Reviews'),
-=======
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              color: const Color(0XFF0066CC),
-              child: const TabBar(
-                labelColor: Colors.white,
-                unselectedLabelColor: Colors.white70,
-                indicatorColor: Colors.white,
-                tabs: [
-                  Tab(text: 'Overview'),
-                  Tab(text: 'Clothes'),
-                  Tab(text: 'Food'),
-                  Tab(text: 'Festival'),
-                  Tab(text: 'Review/Feedback'),
->>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
                 ],
               ),
             ),
@@ -631,7 +554,6 @@ class HunzaPage extends StatelessWidget {
               child: TabBarView(
                 children: [
                   _buildOverviewTab(context),
-<<<<<<< HEAD
                   _buildTabContent(
                     tabName: 'Clothes',
                     images: clothesImages,
@@ -665,27 +587,6 @@ class HunzaPage extends StatelessWidget {
                         '• Harvest Festivals\n'
                         '• Traditional Pamiri Music Fest',
                   ),
-=======
-                  _buildTabContent('Clothes', clothesImages, 'Traditional Attire',
-                      'Hunza is known for its unique traditional clothing, reflecting the rich culture of the region. The local markets offer a variety of handwoven fabrics and embroidered outfits.',
-                      'Top Recommendations',
-                      '• Karimabad Bazaar: Famous for traditional Hunza attire.\n'
-                          '• Altit Market: Offers a mix of modern and traditional clothing.\n'
-                          '• Local Artisans: Handcrafted shawls and scarves.'),
-                  _buildTabContent('Food', foodImages, 'Hunza Cuisine',
-                      'Hunza offers a delightful culinary experience with its traditional dishes and fresh local produce. The food is simple, organic, and nutritious.',
-                      'Must-Try Dishes',
-                      '• Chapshuro: A meat-filled bread, similar to a stuffed paratha.\n'
-                          '• Hunza Pie: A savory pie made with local ingredients.\n'
-                          '• Apricot Dishes: Various dishes made from fresh apricots.\n'
-                          '• Butter Tea: A local favorite to keep warm.'),
-                  _buildTabContent('Festival', festivalImages, 'Cultural Festivals',
-                      'Hunza hosts several cultural festivals that celebrate its heritage and natural beauty.',
-                      'Popular Festivals',
-                      '• Navroz Festival: Celebrates the Persian New Year with music and dance.\n'
-                          '• Cherry Blossom Festival: Marks the arrival of spring.\n'
-                          '• Polo Festivals: Traditional polo matches in the region.'),
->>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
                   _buildReviewFeedbackTab(),
                 ],
               ),
@@ -703,7 +604,6 @@ class HunzaPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildCarousel(overviewImages),
-<<<<<<< HEAD
           const SizedBox(height: 24),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -713,44 +613,10 @@ class HunzaPage extends StatelessWidget {
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: const Color(0XFF0066CC).withOpacity(0.9),
-=======
-          const SizedBox(height: 16),
-          const Padding(
-            padding: EdgeInsets.all(16),
-            child: Text(
-              "Discover Hunza",
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: Color(0XFF0066CC),
-              ),
-            ),
-          ),
-          const Text(
-            'About Hunza',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Color(0XFF0066CC),
-            ),
-          ),
-          const SizedBox(height: 8),
-          const Card(
-            elevation: 4,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(12)),
-            ),
-            child: Padding(
-              padding: EdgeInsets.all(16),
-              child: Text(
-                'Hunza, often referred to as the "Shangri-La of Pakistan," is a breathtaking valley known for its stunning landscapes, crystal-clear rivers, and rich cultural heritage. It is a paradise for nature lovers and history enthusiasts alike.',
-                style: TextStyle(fontSize: 16, color: Colors.black87),
->>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
               ),
             ),
           ),
           const SizedBox(height: 16),
-<<<<<<< HEAD
           Card(
             elevation: 0,
             shape: RoundedRectangleBorder(
@@ -801,34 +667,12 @@ class HunzaPage extends StatelessWidget {
               icon: const Icon(Icons.flight, color: Colors.white, size: 20),
               label: const Text(
                 'Plan Your Trip Now',
-=======
-          Center(
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                backgroundColor: const Color(0XFF0066CC),
-              ),
-              onPressed: () {
-                // Add navigation or functionality for planning a trip
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Plan your trip functionality coming soon!'),
-                  ),
-                );
-              },
-              child: const Text(
-                'Plan Trip',
->>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-<<<<<<< HEAD
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
                 shape: RoundedRectangleBorder(
@@ -842,16 +686,11 @@ class HunzaPage extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 24),
-=======
-            ),
-          ),
->>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
         ],
       ),
     );
   }
 
-<<<<<<< HEAD
   Widget _buildAttractionsGrid() {
     final List<Map<String, dynamic>> attractions = [
       {
@@ -1014,23 +853,12 @@ class HunzaPage extends StatelessWidget {
     required String activityTitle,
     required String activityDescription,
   }) {
-=======
-  Widget _buildTabContent(
-      String tabName,
-      List<String> images,
-      String sectionTitle,
-      String sectionDescription,
-      String activityTitle,
-      String activityDescription,
-      ) {
->>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildCarousel(images),
-<<<<<<< HEAD
           const SizedBox(height: 24),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -1069,62 +897,22 @@ class HunzaPage extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
               side: BorderSide(color: Colors.grey.shade200),
-=======
-          const SizedBox(height: 16),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Text(
-              sectionTitle,
-              style: const TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: Color(0XFF0066CC),
-              ),
-            ),
-          ),
-          Text(
-            sectionDescription,
-            style: const TextStyle(fontSize: 16, color: Colors.black87),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            activityTitle,
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Color(0XFF0066CC),
-            ),
-          ),
-          const SizedBox(height: 8),
-          Card(
-            elevation: 4,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(12)),
->>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
             ),
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Text(
                 activityDescription,
-<<<<<<< HEAD
                 style: const TextStyle(fontSize: 15, color: Colors.black87, height: 1.5),
               ),
             ),
           ),
           const SizedBox(height: 24),
-=======
-                style: const TextStyle(fontSize: 16, color: Colors.black87),
-              ),
-            ),
-          ),
->>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
         ],
       ),
     );
   }
 
   Widget _buildReviewFeedbackTab() {
-<<<<<<< HEAD
     int selectedRating = 0;
     final reviewController = TextEditingController();
 
@@ -1393,78 +1181,6 @@ class HunzaPage extends StatelessWidget {
                 ),
               ],
             ),
-=======
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'User Reviews',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Color(0XFF0066CC),
-            ),
-          ),
-          const SizedBox(height: 16),
-          _buildReviewCard(
-              'Michael Smith', 5, 'Hunza is a hidden gem!', 'assets/images/Hunza/u1.png'),
-          const SizedBox(height: 16),
-          _buildReviewCard(
-              'Jae Lee', 4, 'The landscapes are breathtaking.', 'assets/images/Hunza/u2.png'),
-          const SizedBox(height: 16),
-          _buildReviewCard(
-              'Asim Khan', 5, 'A perfect getaway for nature lovers.', 'assets/images/Hunza/u3.png'),
-          const SizedBox(height: 16),
-          _buildReviewCard(
-              'Ali Khan', 4, 'The food is amazing!', 'assets/images/Hunza/u4.png'),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildReviewCard(String name, int rating, String review, String imageUrl) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      elevation: 4,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          children: [
-            CircleAvatar(
-              radius: 30,
-              backgroundImage: AssetImage(imageUrl),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    name,
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: List.generate(
-                      5,
-                          (index) => Icon(
-                        index < rating ? Icons.star : Icons.star_border,
-                        color: Colors.amber,
-                        size: 20,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    review,
-                    style: const TextStyle(fontSize: 14, color: Colors.black87),
-                  ),
-                ],
-              ),
-            ),
->>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
           ],
         ),
       ),
@@ -1473,27 +1189,12 @@ class HunzaPage extends StatelessWidget {
 
   Widget _buildCarousel(List<String> images) {
     return CarouselSlider(
-<<<<<<< HEAD
-=======
-      items: images.map((imagePath) {
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(16),
-          child: Image.asset(
-            imagePath,
-            fit: BoxFit.cover,
-            width: double.infinity,
-            height: 200,
-          ),
-        );
-      }).toList(),
->>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
       options: CarouselOptions(
         height: 200,
         autoPlay: true,
         enlargeCenterPage: true,
         viewportFraction: 0.9,
         aspectRatio: 16 / 9,
-<<<<<<< HEAD
         autoPlayInterval: const Duration(seconds: 4),
       ),
       items: images.map((imagePath) {
@@ -1520,9 +1221,6 @@ class HunzaPage extends StatelessWidget {
           ),
         );
       }).toList(),
-=======
-      ),
->>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
     );
   }
 }
