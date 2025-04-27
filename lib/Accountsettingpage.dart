@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:io';
 import 'package:flutter/services.dart';
 import 'loginpage.dart';
 
@@ -17,18 +14,16 @@ class AccountSettingsPage extends StatefulWidget {
 class _AccountSettingsPageState extends State<AccountSettingsPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseStorage _storage = FirebaseStorage.instance;
-  final ImagePicker _picker = ImagePicker();
   late User _currentUser;
 
-  // User data
-  String name = "";
-  String email = "";
-  String phone = "";
-  String city = "";
-  String dob = "";
-  String occupation = "";
-  String profileImageUrl = "";
+  // User data with default values
+  String name = "Loading...";
+  String email = "Loading...";
+  String phone = "Not set";
+  String city = "Not set";
+  String dob = "Not set";
+  String occupation = "Not set";
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -38,99 +33,97 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
   }
 
   Future<void> _loadUserData() async {
-    DocumentSnapshot userDoc =
-    await _firestore.collection('users').doc(_currentUser.uid).get();
-    if (userDoc.exists) {
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      DocumentSnapshot userDoc =
+      await _firestore.collection('users').doc(_currentUser.uid).get();
+
+      // Prepare default values
+      String defaultName = _currentUser.displayName ?? "User";
+      String defaultEmail = _currentUser.email ?? "Not set";
+
+      Map<String, dynamic> userData = {
+        'name': defaultName,
+        'email': defaultEmail,
+        'phone': "Not set",
+        'city': "Not set",
+        'dob': "Not set",
+        'occupation': "Not set",
+      };
+
+      // If document exists, safely merge data
+      if (userDoc.exists) {
+        final existingData = userDoc.data();
+        if (existingData != null && existingData is Map<String, dynamic>) {
+          userData.addAll(existingData);
+        }
+      }
+
+      // Ensure we have all required fields
+      userData['name'] = userData['name']?.toString() ?? defaultName;
+      userData['email'] = userData['email']?.toString() ?? defaultEmail;
+      userData['phone'] = userData['phone']?.toString() ?? "Not set";
+      userData['city'] = userData['city']?.toString() ?? "Not set";
+      userData['dob'] = userData['dob']?.toString() ?? "Not set";
+      userData['occupation'] = userData['occupation']?.toString() ?? "Not set";
+
+      // Update Firestore document
+      await _firestore.collection('users').doc(_currentUser.uid)
+          .set(userData, SetOptions(merge: true));
+
+      // Update state
       setState(() {
-        name = userDoc['name'] ?? "";
-        email = _currentUser.email ?? "";
-        phone = userDoc['phone']?.toString() ?? "";
-        city = userDoc['city'] ?? "";
-        dob = userDoc['dob'] ?? "";
-        occupation = userDoc['occupation'] ?? "";
-        profileImageUrl = userDoc['profileImageUrl'] ?? "";
+        name = userData['name']!;
+        email = userData['email']!;
+        phone = userData['phone']!;
+        city = userData['city']!;
+        dob = userData['dob']!;
+        occupation = userData['occupation']!;
+      });
+
+    } catch (e) {
+      print("Error loading user data: $e");
+      // Fallback to auth data
+      setState(() {
+        name = _currentUser.displayName ?? "User";
+        email = _currentUser.email ?? "Not set";
+      });
+    } finally {
+      setState(() {
+        isLoading = false;
       });
     }
   }
 
   Future<void> _updateUserData(Map<String, dynamic> updatedData) async {
     try {
-      await _firestore
-          .collection('users')
-          .doc(_currentUser.uid)
-          .update(updatedData);
+      // Remove null values
+      updatedData.removeWhere((key, value) => value == null);
+
+      await _firestore.collection('users').doc(_currentUser.uid)
+          .set(updatedData, SetOptions(merge: true));
+
       if (updatedData.containsKey('email') &&
           updatedData['email'] != _currentUser.email) {
         await _currentUser.verifyBeforeUpdateEmail(updatedData['email']);
       }
+
       await _loadUserData();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Information updated successfully!")),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error updating: ${e.toString()}")),
-      );
-    }
-  }
 
-  Future<void> _uploadProfileImage() async {
-    try {
-      final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-      if (image == null) return;
-
-      // Delete previous image if exists and is not the default avatar
-      if (profileImageUrl.isNotEmpty && !profileImageUrl.contains('default_avatar')) {
-        try {
-          Reference reference = _storage.refFromURL(profileImageUrl);
-          // Check if the file exists before trying to delete
-          final metadata = await reference.getMetadata().catchError((e) {
-            if (e is FirebaseException && e.code == 'object-not-found') {
-              return null; // File doesn't exist
-            }
-            throw e; // Other error
-          });
-
-          if (metadata != null) {
-            await reference.delete();
-          }
-        } catch (e) {
-          print("Error deleting previous image: $e");
-          // Continue with upload even if deletion fails
-        }
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Information updated successfully!")),
+        );
       }
-
-      // Upload new image
-      File imageFile = File(image.path);
-      String fileName = 'profile_${_currentUser.uid}_${DateTime.now().millisecondsSinceEpoch}';
-      Reference storageRef = _storage.ref().child('profile_images/$fileName');
-      UploadTask uploadTask = storageRef.putFile(imageFile);
-      TaskSnapshot snapshot = await uploadTask;
-      String downloadUrl = await snapshot.ref.getDownloadURL();
-
-      // Update user document with new image URL
-      await _firestore
-          .collection('users')
-          .doc(_currentUser.uid)
-          .update({'profileImageUrl': downloadUrl});
-
-      setState(() {
-        profileImageUrl = downloadUrl;
-      });
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Profile image updated successfully!")),
-      );
-    } on FirebaseException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error uploading image: ${e.code == 'object-not-found'
-            ? 'Image not found'
-            : e.message ?? 'Unknown error'}")),
-      );
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error: ${e.toString()}")),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Error updating: ${e.toString()}")),
+        );
+      }
     }
   }
 
@@ -138,6 +131,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
     TextEditingController currentPassController = TextEditingController();
     TextEditingController newPassController = TextEditingController();
     TextEditingController confirmPassController = TextEditingController();
+
     return showDialog(
       context: context,
       builder: (context) {
@@ -160,14 +154,11 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  _buildPasswordField(
-                      "Current Password", currentPassController, Icons.lock),
+                  _buildPasswordField("Current Password", currentPassController, Icons.lock),
                   const SizedBox(height: 14),
-                  _buildPasswordField(
-                      "New Password", newPassController, Icons.lock_outline),
+                  _buildPasswordField("New Password", newPassController, Icons.lock_outline),
                   const SizedBox(height: 14),
-                  _buildPasswordField("Confirm New Password",
-                      confirmPassController, Icons.lock_reset),
+                  _buildPasswordField("Confirm New Password", confirmPassController, Icons.lock_reset),
                   const SizedBox(height: 24),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -195,30 +186,30 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () async {
-                            if (newPassController.text !=
-                                confirmPassController.text) {
+                            if (newPassController.text != confirmPassController.text) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text("Passwords don't match!")),
+                                const SnackBar(content: Text("Passwords don't match!")),
                               );
                               return;
                             }
+
                             try {
-                              AuthCredential credential =
-                              EmailAuthProvider.credential(
-                                email: _currentUser.email!,
-                                password: currentPassController.text,
-                              );
-                              await _currentUser
-                                  .reauthenticateWithCredential(credential);
-                              await _currentUser
-                                  .updatePassword(newPassController.text);
-                              Navigator.pop(context);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content:
-                                    Text("Password changed successfully!")),
-                              );
+                              if (_currentUser.email != null) {
+                                AuthCredential credential = EmailAuthProvider.credential(
+                                  email: _currentUser.email!,
+                                  password: currentPassController.text,
+                                );
+                                await _currentUser.reauthenticateWithCredential(credential);
+                                await _currentUser.updatePassword(newPassController.text);
+                                Navigator.pop(context);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text("Password changed successfully!")),
+                                );
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text("No email associated with this account")),
+                                );
+                              }
                             } catch (e) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(content: Text("Error: ${e.toString()}")),
@@ -254,6 +245,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
 
   Future<void> _deleteAccount() async {
     TextEditingController passwordController = TextEditingController();
+
     return showDialog(
       context: context,
       builder: (context) {
@@ -281,8 +273,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                   style: TextStyle(color: Colors.black87),
                 ),
                 const SizedBox(height: 20),
-                _buildPasswordField("Enter Password to Confirm",
-                    passwordController, Icons.lock),
+                _buildPasswordField("Enter Password to Confirm", passwordController, Icons.lock),
                 const SizedBox(height: 24),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -311,33 +302,30 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                       child: ElevatedButton(
                         onPressed: () async {
                           try {
-                            AuthCredential credential =
-                            EmailAuthProvider.credential(
-                              email: _currentUser.email!,
-                              password: passwordController.text,
-                            );
-                            await _currentUser
-                                .reauthenticateWithCredential(credential);
-                            // Delete profile image if exists
-                            if (profileImageUrl.isNotEmpty &&
-                                !profileImageUrl.contains('default_avatar')) {
-                              try {
-                                await _storage.refFromURL(profileImageUrl).delete();
-                              } catch (e) {
-                                print("Error deleting profile image: $e");
-                              }
+                            if (_currentUser.email != null) {
+                              AuthCredential credential = EmailAuthProvider.credential(
+                                email: _currentUser.email!,
+                                password: passwordController.text,
+                              );
+                              await _currentUser.reauthenticateWithCredential(credential);
+
+                              // Delete user data from Firestore
+                              await _firestore.collection('users').doc(_currentUser.uid).delete();
+
+                              // Delete the user account
+                              await _currentUser.delete();
+
+                              // Navigate to login page
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(builder: (context) => const loginn()),
+                                    (Route<dynamic> route) => false,
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text("No email associated with this account")),
+                              );
                             }
-                            await _firestore
-                                .collection('users')
-                                .doc(_currentUser.uid)
-                                .delete();
-                            await _currentUser.delete();
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const loginn()),
-                                  (Route<dynamic> route) => false,
-                            );
                           } catch (e) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content: Text("Error: ${e.toString()}")),
@@ -370,93 +358,13 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text(
-          "Account Settings",
-          style: TextStyle(
-            color: Color(0XFF0066CC),
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        backgroundColor: Colors.white,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Color(0XFF0066CC)),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              GestureDetector(
-                onTap: _uploadProfileImage,
-                child: Stack(
-                  alignment: Alignment.bottomRight,
-                  children: [
-                    CircleAvatar(
-                      radius: 60,
-                      backgroundImage: profileImageUrl.isNotEmpty
-                          ? NetworkImage(profileImageUrl) as ImageProvider
-                          : const AssetImage('assets/images/default_avatar.png')
-                      as ImageProvider,
-                      child: profileImageUrl.isEmpty
-                          ? const Icon(Icons.person, size: 60, color: Colors.white)
-                          : null,
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: const Color(0XFF0066CC),
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white, width: 2),
-                      ),
-                      child: const Icon(
-                        Icons.camera_alt,
-                        size: 20,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-              _buildInfoCard("Name", name, Icons.person),
-              const SizedBox(height: 14),
-              _buildInfoCard("Email", email, Icons.email),
-              const SizedBox(height: 14),
-              _buildInfoCard("Phone", phone, Icons.phone),
-              const SizedBox(height: 14),
-              _buildInfoCard("City", city, Icons.location_city),
-              const SizedBox(height: 14),
-              _buildInfoCard("Date of Birth", dob, Icons.cake),
-              const SizedBox(height: 14),
-              _buildInfoCard("Occupation", occupation, Icons.work),
-              const SizedBox(height: 32),
-              _buildActionButton("Edit Information", () => _showEditPopup(context)),
-              const SizedBox(height: 10),
-              _buildActionButton("Change Password", _changePassword),
-              const SizedBox(height: 10),
-              _buildActionButton("Delete Account", _deleteAccount, isDelete: true),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildActionButton(String text, VoidCallback onPressed,
-      {bool isDelete = false}) {
+  Widget _buildActionButton(String text, VoidCallback onPressed) {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor:
-          isDelete ? Colors.red : const Color(0XFF0066CC),
+          backgroundColor: const Color(0XFF0066CC),
           minimumSize: const Size(double.infinity, 50),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
@@ -500,7 +408,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  value.isNotEmpty ? value : "Not set",
+                  value,
                   style: const TextStyle(
                     fontSize: 14,
                     color: Colors.black54,
@@ -517,11 +425,11 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
   void _showEditPopup(BuildContext context) {
     TextEditingController nameController = TextEditingController(text: name);
     TextEditingController emailController = TextEditingController(text: email);
-    TextEditingController phoneController = TextEditingController(text: phone);
-    TextEditingController cityController = TextEditingController(text: city);
-    TextEditingController dobController = TextEditingController(text: dob);
-    TextEditingController occupationController =
-    TextEditingController(text: occupation);
+    TextEditingController phoneController = TextEditingController(text: phone == "Not set" ? "" : phone);
+    TextEditingController cityController = TextEditingController(text: city == "Not set" ? "" : city);
+    TextEditingController dobController = TextEditingController(text: dob == "Not set" ? "" : dob);
+    TextEditingController occupationController = TextEditingController(text: occupation == "Not set" ? "" : occupation);
+
     showDialog(
       context: context,
       builder: (context) {
@@ -554,8 +462,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                   const SizedBox(height: 14),
                   _buildEditableField("Date of Birth", dobController, Icons.cake),
                   const SizedBox(height: 14),
-                  _buildEditableField(
-                      "Occupation", occupationController, Icons.work),
+                  _buildEditableField("Occupation", occupationController, Icons.work),
                   const SizedBox(height: 24),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -583,14 +490,15 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
-                            _updateUserData({
+                            Map<String, dynamic> updatedData = {
                               'name': nameController.text,
                               'email': emailController.text,
-                              'phone': phoneController.text,
-                              'city': cityController.text,
-                              'dob': dobController.text,
-                              'occupation': occupationController.text,
-                            });
+                              'phone': phoneController.text.isEmpty ? "Not set" : phoneController.text,
+                              'city': cityController.text.isEmpty ? "Not set" : cityController.text,
+                              'dob': dobController.text.isEmpty ? "Not set" : dobController.text,
+                              'occupation': occupationController.text.isEmpty ? "Not set" : occupationController.text,
+                            };
+                            _updateUserData(updatedData);
                             Navigator.pop(context);
                           },
                           style: ElevatedButton.styleFrom(
@@ -620,8 +528,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
     );
   }
 
-  Widget _buildEditableField(
-      String label, TextEditingController controller, IconData icon) {
+  Widget _buildEditableField(String label, TextEditingController controller, IconData icon) {
     return TextField(
       controller: controller,
       decoration: InputDecoration(
@@ -629,8 +536,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
         fillColor: const Color(0xFF88F2E8).withOpacity(0.1),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide:
-          BorderSide(color: const Color(0xFF0066CC).withOpacity(0.5)),
+          borderSide: BorderSide(color: const Color(0xFF0066CC).withOpacity(0.5)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -643,14 +549,12 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
           size: 24,
           color: const Color(0XFF0066CC),
         ),
-        contentPadding:
-        const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       ),
     );
   }
 
-  Widget _buildPasswordField(
-      String label, TextEditingController controller, IconData icon) {
+  Widget _buildPasswordField(String label, TextEditingController controller, IconData icon) {
     return TextField(
       controller: controller,
       obscureText: true,
@@ -659,8 +563,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
         fillColor: const Color(0xFF88F2E8).withOpacity(0.1),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide:
-          BorderSide(color: const Color(0xFF0066CC).withOpacity(0.5)),
+          borderSide: BorderSide(color: const Color(0xFF0066CC).withOpacity(0.5)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -673,8 +576,61 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
           size: 24,
           color: const Color(0XFF0066CC),
         ),
-        contentPadding:
-        const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: const Text(
+          "Account Settings",
+          style: TextStyle(
+            color: Color(0XFF0066CC),
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Color(0XFF0066CC)),
+      ),
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator(color: Color(0XFF0066CC)))
+          : Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const CircleAvatar(
+                radius: 60,
+                backgroundColor: Color(0XFF0066CC),
+                child: Icon(Icons.person, size: 60, color: Colors.white),
+              ),
+              const SizedBox(height: 20),
+              _buildInfoCard("Name", name, Icons.person),
+              const SizedBox(height: 14),
+              _buildInfoCard("Email", email, Icons.email),
+              const SizedBox(height: 14),
+              _buildInfoCard("Phone", phone, Icons.phone),
+              const SizedBox(height: 14),
+              _buildInfoCard("City", city, Icons.location_city),
+              const SizedBox(height: 14),
+              _buildInfoCard("Date of Birth", dob, Icons.cake),
+              const SizedBox(height: 14),
+              _buildInfoCard("Occupation", occupation, Icons.work),
+              const SizedBox(height: 32),
+              _buildActionButton("Edit Information", () => _showEditPopup(context)),
+              const SizedBox(height: 10),
+              _buildActionButton("Change Password", _changePassword),
+              const SizedBox(height: 10),
+              _buildActionButton("Delete Account", _deleteAccount),
+            ],
+          ),
+        ),
       ),
     );
   }

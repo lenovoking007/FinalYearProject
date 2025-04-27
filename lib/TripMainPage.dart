@@ -7,13 +7,13 @@ import 'package:travelmate/homepage.dart';
 import 'package:travelmate/settingmenu.dart';
 import 'package:travelmate/tools.dart';
 import 'package:travelmate/tripprogresspage.dart';
-
 import 'AllActivitiesPage.dart';
 import 'FeaturedCities.dart';
 import 'FAmousPlaces.dart';
-import 'ProfilePage.dart';
 
 class TripPage extends StatefulWidget {
+  const TripPage({Key? key}) : super(key: key);
+
   @override
   _TripPageState createState() => _TripPageState();
 }
@@ -22,105 +22,33 @@ class _TripPageState extends State<TripPage> {
   int currentIndex = 2; // For bottom nav bar
 
   final List<Map<String, dynamic>> categories = [
-    {
-      'title': 'Adventure',
-      'icon': Icons.terrain,
-      'color': Colors.orange
-    },
-    {
-      'title': 'Beach',
-      'icon': Icons.beach_access,
-      'color': Colors.blue
-    },
-    {
-      'title': 'Cultural',
-      'icon': Icons.account_balance,
-      'color': Colors.purple
-    },
-    {
-      'title': 'Food',
-      'icon': Icons.restaurant,
-      'color': Colors.red
-    },
-    {
-      'title': 'History',
-      'icon': Icons.history,
-      'color': Colors.brown
-    },
-    {
-      'title': 'Nature',
-      'icon': Icons.nature,
-      'color': Colors.green
-    },
+    {'title': 'Adventure', 'icon': Icons.terrain, 'color': Colors.orange},
+    {'title': 'Beach', 'icon': Icons.beach_access, 'color': Colors.blue},
+    {'title': 'Cultural', 'icon': Icons.account_balance, 'color': Colors.purple},
+    {'title': 'Food', 'icon': Icons.restaurant, 'color': Colors.red},
+    {'title': 'History', 'icon': Icons.history, 'color': Colors.brown},
+    {'title': 'Nature', 'icon': Icons.nature, 'color': Colors.green},
   ];
 
   final List<Map<String, dynamic>> recommendedTrips = [
-    {
-      'title': 'Islamabad',
-      'description': 'Capital of Pakistan',
-      'image': 'assets/images/islamabad.jpg'
-    },
-    {
-      'title': 'Lahore',
-      'description': 'Cultural Heart of Pakistan',
-      'image': 'assets/images/lahore.jpg'
-    },
-    {
-      'title': 'Karachi',
-      'description': 'City of Lights',
-      'image': 'assets/images/karachi.jpg'
-    },
-    {
-      'title': 'Murree',
-      'description': 'Queen of Hills',
-      'image': 'assets/images/murree.jpg'
-    },
+    {'title': 'Islamabad', 'description': 'Capital of Pakistan', 'image': 'assets/images/islamabad.jpg'},
+    {'title': 'Lahore', 'description': 'Cultural Heart of Pakistan', 'image': 'assets/images/lahore.jpg'},
+    {'title': 'Karachi', 'description': 'City of Lights', 'image': 'assets/images/karachi.jpg'},
+    {'title': 'Murree', 'description': 'Queen of Hills', 'image': 'assets/images/murree.jpg'},
   ];
 
   final List<Map<String, dynamic>> famousActivities = [
-    {
-      'title': 'Hiking',
-      'description': 'Margalla Hills',
-      'image': 'assets/images/hiking.jpg'
-    },
-    {
-      'title': 'Sightseeing',
-      'description': 'Badshahi Mosque',
-      'image': 'assets/images/sightseeing.jpg'
-    },
-    {
-      'title': 'Food Tour',
-      'description': 'Burns Road',
-      'image': 'assets/images/food.jpg'
-    },
-    {
-      'title': 'Shopping',
-      'description': 'Centaurus Mall',
-      'image': 'assets/images/shopping.jpg'
-    },
+    {'title': 'Hiking', 'description': 'Margalla Hills', 'image': 'assets/images/hiking.jpg'},
+    {'title': 'Sightseeing', 'description': 'Badshahi Mosque', 'image': 'assets/images/sightseeing.jpg'},
+    {'title': 'Food Tour', 'description': 'Burns Road', 'image': 'assets/images/food.jpg'},
+    {'title': 'Shopping', 'description': 'Centaurus Mall', 'image': 'assets/images/shopping.jpg'},
   ];
 
   final List<Map<String, dynamic>> featuredDestinations = [
-    {
-      'title': 'Hunza Valley',
-      'description': 'Heaven on Earth',
-      'image': 'assets/images/hunza.jpg'
-    },
-    {
-      'title': 'Swat Valley',
-      'description': 'Switzerland of Pakistan',
-      'image': 'assets/images/swat.jpg'
-    },
-    {
-      'title': 'Skardu',
-      'description': 'Land of Mountains',
-      'image': 'assets/images/skardu.jpg'
-    },
-    {
-      'title': 'Naran Kaghan',
-      'description': 'Beautiful Valleys',
-      'image': 'assets/images/naran.jpg'
-    },
+    {'title': 'Hunza Valley', 'description': 'Heaven on Earth', 'image': 'assets/images/hunza.jpg'},
+    {'title': 'Swat Valley', 'description': 'Switzerland of Pakistan', 'image': 'assets/images/swat.jpg'},
+    {'title': 'Skardu', 'description': 'Land of Mountains', 'image': 'assets/images/skardu.jpg'},
+    {'title': 'Naran Kaghan', 'description': 'Beautiful Valleys', 'image': 'assets/images/naran.jpg'},
   ];
 
   void _onItemTapped(int index) {
@@ -129,11 +57,11 @@ class _TripPageState extends State<TripPage> {
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (context) {
-        if (index == 0) return HomePage();
-        if (index == 1) return Tools();
-        if (index == 2) return TripPage();
-        if (index == 3) return MessagePage();
-        return HomePage();
+        if (index == 0) return  HomePage();
+        if (index == 1) return  Tools();
+        if (index == 2) return  TripPage();
+        if (index == 3) return  MessagePage();
+        return const HomePage();
       }),
           (route) => false,
     );
@@ -148,25 +76,25 @@ class _TripPageState extends State<TripPage> {
       child: Column(
         children: [
           Container(
-            width: screenHeight * 0.08,  // Reduced slightly to prevent overflow
-            height: screenHeight * 0.08, // Reduced slightly to prevent overflow
+            width: screenHeight * 0.08,
+            height: screenHeight * 0.08,
             decoration: BoxDecoration(
               color: category['color'].withOpacity(0.2),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Icon(
               category['icon'],
-              size: screenHeight * 0.04, // Reduced icon size
+              size: screenHeight * 0.04,
               color: category['color'],
             ),
           ),
-          SizedBox(height: screenHeight * 0.008), // Reduced spacing
+          SizedBox(height: screenHeight * 0.008),
           Text(
             category['title'],
             textAlign: TextAlign.center,
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: screenHeight * 0.015, // Reduced font size
+              fontSize: screenHeight * 0.015,
             ),
           ),
         ],
@@ -390,98 +318,55 @@ class _TripPageState extends State<TripPage> {
         elevation: 0,
         automaticallyImplyLeading: false,
         iconTheme: const IconThemeData(color: Colors.white),
-        title: LayoutBuilder(
-          builder: (context, constraints) {
-            return SizedBox(
-              width: constraints.maxWidth,
-              height: 40,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Flexible(
-                    flex: 5,
-                    fit: FlexFit.tight,
-                    child: Container(
-                      margin: const EdgeInsets.only(right: 8),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: const TextField(
-                        decoration: InputDecoration(
-                          hintText: 'Search here...',
-                          hintStyle: TextStyle(color: Colors.white70),
-                          prefixIcon: Icon(Icons.search, color: Colors.white, size: 20),
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.symmetric(vertical: 8),
-                          isDense: true,
-                        ),
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
+        title: SizedBox(
+          height: 40,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Flexible(
+                flex: 5,
+                fit: FlexFit.tight,
+                child: Container(
+                  margin: const EdgeInsets.only(right: 8),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  Flexible(
-                    flex: 1,
-                    fit: FlexFit.loose,
-                    child: StreamBuilder<DocumentSnapshot>(
-                      stream: FirebaseFirestore.instance
-                          .collection('users')
-                          .doc(FirebaseAuth.instance.currentUser?.uid)
-                          .snapshots(),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
-                          return const CircleAvatar(
-                            radius: 18,
-                            backgroundColor: Colors.white24,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: Colors.white,
-                            ),
-                          );
-                        }
-
-                        if (snapshot.hasError || !snapshot.hasData || !snapshot.data!.exists) {
-                          return const CircleAvatar(
-                            radius: 18,
-                            backgroundColor: Colors.white24,
-                            child: Icon(Icons.error, size: 18, color: Colors.white),
-                          );
-                        }
-
-                        final userData = snapshot.data!.data() as Map<String, dynamic>?;
-                        final imageUrl = userData != null ? userData['profileImageUrl'] : null;
-
-                        return Hero(
-                          tag: 'profile-avatar',
-                          child: GestureDetector(
-                            onTap: () {
-                              int _selectedIndex = 2;
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => SettingsMenuPage(previousIndex: _selectedIndex),
-                                ),
-                              );
-                            },
-                            child: CircleAvatar(
-                              radius: 18,
-                              backgroundColor: Colors.white24,
-                              backgroundImage: imageUrl != null
-                                  ? NetworkImage(imageUrl) as ImageProvider
-                                  : const AssetImage('assets/images/default_avatar.png') as ImageProvider,
-                              child: imageUrl == null
-                                  ? const Icon(Icons.person, size: 18, color: Colors.white)
-                                  : null,
-                            ),
-                          ),
-                        );
-                      },
+                  child: const TextField(
+                    decoration: InputDecoration(
+                      hintText: 'Search here...',
+                      hintStyle: TextStyle(color: Colors.white70),
+                      prefixIcon: Icon(Icons.search, color: Colors.white, size: 20),
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.symmetric(vertical: 8),
+                      isDense: true,
                     ),
+                    style: TextStyle(color: Colors.white),
                   ),
-                ],
+                ),
               ),
-            );
-          },
+              Flexible(
+                flex: 1,
+                fit: FlexFit.loose,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const SettingsMenuPage(previousIndex: 2),
+                      ),
+                    );
+                  },
+                  child: CircleAvatar(
+                    radius: 18,
+                    backgroundColor: Colors.white24,
+                    backgroundImage: const AssetImage('assets/images/default_avatar.png'),
+                    child: null,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
       body: LayoutBuilder(
@@ -509,7 +394,7 @@ class _TripPageState extends State<TripPage> {
                   _buildSectionHeader("Featured Cities", () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => FeaturedCitiesPage()),
+                      MaterialPageRoute(builder: (context) => const FeaturedCitiesPage()),
                     );
                   }),
                   SizedBox(
@@ -536,7 +421,7 @@ class _TripPageState extends State<TripPage> {
                   _buildSectionHeader("Famous Activities", () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => FamousActivitiesPage()),
+                      MaterialPageRoute(builder: (context) => const FamousActivitiesPage()),
                     );
                   }),
                   SizedBox(
@@ -563,7 +448,7 @@ class _TripPageState extends State<TripPage> {
                   _buildSectionHeader("Famous Tourists Places", () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => FamousTouristPlacesPage()),
+                      MaterialPageRoute(builder: (context) => const FamousTouristPlacesPage()),
                     );
                   }),
                   SizedBox(
@@ -618,7 +503,7 @@ class _TripPageState extends State<TripPage> {
                           onPressed: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => TripStatusPage()),
+                              MaterialPageRoute(builder: (context) => const TripStatusPage()),
                             );
                           },
                           icon: const Icon(Icons.timeline, color: Colors.white),

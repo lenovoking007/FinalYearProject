@@ -35,8 +35,8 @@ class _SettingsMenuPageState extends State<SettingsMenuPage> {
   bool _isLoggingOut = false;
   bool _isUploading = false;
 
-  String name = "";
-  String email = "";
+  String name = "Loading...";
+  String email = "Loading...";
   String? profileImageUrl;
   File? _imageFile;
 
@@ -47,24 +47,51 @@ class _SettingsMenuPageState extends State<SettingsMenuPage> {
   }
 
   Future<void> _loadUserData() async {
-    final user = _auth.currentUser;
-    if (user != null) {
-      final userDoc = await _firestore.collection('users').doc(user.uid).get();
+    try {
+      final user = _auth.currentUser;
+      if (user != null) {
+        final userDoc = await _firestore.collection('users').doc(user.uid).get();
+        if (mounted) {
+          setState(() {
+            name = userDoc['name'] ?? "User";
+            email = user.email ?? "No email provided";
+            profileImageUrl = userDoc['profileImageUrl'];
+          });
+        }
+      }
+    } catch (e) {
       if (mounted) {
         setState(() {
-          name = userDoc['name'] ?? "";
-          email = user.email ?? "";
-          profileImageUrl = userDoc['profileImageUrl'];
+          name = "Error loading name";
+          email = "Error loading email";
         });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Error loading user data: ${e.toString()}")),
+        );
       }
     }
   }
 
   Future<void> _pickImage() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      setState(() => _imageFile = File(pickedFile.path));
-      await _uploadImage();
+    try {
+      final pickedFile = await _picker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 85,
+        maxWidth: 800,
+        maxHeight: 800,
+      );
+
+      if (pickedFile != null) {
+        setState(() => _imageFile = File(pickedFile.path));
+        await _uploadImage();
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Failed to pick image: ${e.toString()}"),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 
@@ -83,8 +110,19 @@ class _SettingsMenuPageState extends State<SettingsMenuPage> {
 
       // Upload new image
       final ref = _storage.ref('profile_images/${_auth.currentUser!.uid}.jpg');
-      await ref.putFile(_imageFile!);
-      final url = await ref.getDownloadURL();
+      final uploadTask = ref.putFile(_imageFile!);
+
+      // Show upload progress
+      uploadTask.snapshotEvents.listen((taskSnapshot) {
+        final progress = taskSnapshot.bytesTransferred / taskSnapshot.totalBytes;
+        debugPrint("Upload progress: ${(progress * 100).toStringAsFixed(2)}%");
+      });
+
+      // Wait for upload to complete
+      final taskSnapshot = await uploadTask.whenComplete(() {});
+
+      // Get download URL
+      final url = await taskSnapshot.ref.getDownloadURL();
 
       // Update Firestore
       await _firestore.collection('users').doc(_auth.currentUser!.uid).update({
@@ -96,15 +134,30 @@ class _SettingsMenuPageState extends State<SettingsMenuPage> {
           profileImageUrl = url;
           _isUploading = false;
         });
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Profile picture updated successfully!"),
+            backgroundColor: Colors.green,
+          ),
+        );
       }
     } catch (e) {
       if (mounted) {
         setState(() => _isUploading = false);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Error uploading image: ${e.toString()}")),
+          SnackBar(
+            content: Text("Failed to upload image: ${e.toString()}"),
+            backgroundColor: Colors.red,
+          ),
         );
       }
     }
+  }
+
+  ImageProvider _getProfileImage() {
+    if (_imageFile != null) return FileImage(_imageFile!);
+    if (profileImageUrl != null) return NetworkImage(profileImageUrl!);
+    return const AssetImage('assets/images/default_avatar.png');
   }
 
   @override
@@ -131,31 +184,31 @@ class _SettingsMenuPageState extends State<SettingsMenuPage> {
               case 0:
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => HomePage()),
+                  MaterialPageRoute(builder: (context) =>  HomePage()),
                 );
                 break;
               case 1:
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => Tools()),
+                  MaterialPageRoute(builder: (context) =>  Tools()),
                 );
                 break;
               case 2:
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => TripPage()),
+                  MaterialPageRoute(builder: (context) =>  TripPage()),
                 );
                 break;
               case 3:
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => MessagePage()),
+                  MaterialPageRoute(builder: (context) =>  MessagePage()),
                 );
                 break;
               default:
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => HomePage()),
+                  MaterialPageRoute(builder: (context) =>  HomePage()),
                 );
             }
           },
@@ -178,24 +231,31 @@ class _SettingsMenuPageState extends State<SettingsMenuPage> {
                     alignment: Alignment.center,
                     children: [
                       CircleAvatar(
-                        radius: 40,
+                        radius: 50,
                         backgroundColor: const Color(0xFF88F2E8).withOpacity(0.3),
                         backgroundImage: _getProfileImage(),
+                        child: _imageFile == null && profileImageUrl == null
+                            ? const Icon(Icons.person, size: 40, color: Colors.white)
+                            : null,
                       ),
                       if (_isUploading)
-                        const CircularProgressIndicator(color: Color(0xFF0066CC)),
+                        const CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF0066CC)),
+                          strokeWidth: 3,
+                        ),
                       Positioned(
                         bottom: 0,
                         right: 0,
                         child: Container(
-                          padding: const EdgeInsets.all(6),
-                          decoration: const BoxDecoration(
-                            color: Color(0xFF0066CC),
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF0066CC),
                             shape: BoxShape.circle,
+                            border: Border.all(color: Colors.white, width: 2),
                           ),
                           child: const Icon(
                             Icons.camera_alt,
-                            size: 16,
+                            size: 20,
                             color: Colors.white,
                           ),
                         ),
@@ -207,18 +267,24 @@ class _SettingsMenuPageState extends State<SettingsMenuPage> {
                 Text(
                   name,
                   style: const TextStyle(
-                    fontSize: 20,
+                    fontSize: 22,
                     fontWeight: FontWeight.bold,
                     color: Colors.black87,
                   ),
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 4),
                 Text(
                   email,
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 16,
                     color: Colors.grey[600],
                   ),
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),
@@ -233,7 +299,7 @@ class _SettingsMenuPageState extends State<SettingsMenuPage> {
                 _buildMenuItem(
                   icon: Icons.person_outline,
                   title: 'Account Settings',
-                  onTap: () => _navigateTo(AccountSettingsPage()),
+                  onTap: () => _navigateTo(const AccountSettingsPage()),
                 ),
                 _buildMenuItem(
                   icon: Icons.language_outlined,
@@ -261,12 +327,12 @@ class _SettingsMenuPageState extends State<SettingsMenuPage> {
                 _buildMenuItem(
                   icon: Icons.storage_outlined,
                   title: 'Data Storage',
-                  onTap: () => _navigateTo(DataStoragePage()),
+                  onTap: () => _navigateTo( DataStoragePage()),
                 ),
                 _buildMenuItem(
                   icon: Icons.lock_outline,
                   title: 'Privacy & Security',
-                  onTap: () => _navigateTo(PrivacyAndSecurityPage()),
+                  onTap: () => _navigateTo( PrivacyAndSecurityPage()),
                 ),
 
                 const SizedBox(height: 16),
@@ -274,7 +340,7 @@ class _SettingsMenuPageState extends State<SettingsMenuPage> {
                 _buildMenuItem(
                   icon: Icons.help_outline,
                   title: 'Help & Support',
-                  onTap: () => _navigateTo(HelpAndSupportPage()),
+                  onTap: () => _navigateTo( HelpAndSupportPage()),
                 ),
 
                 const SizedBox(height: 24),
@@ -289,12 +355,6 @@ class _SettingsMenuPageState extends State<SettingsMenuPage> {
         ],
       ),
     );
-  }
-
-  ImageProvider? _getProfileImage() {
-    if (_imageFile != null) return FileImage(_imageFile!);
-    if (profileImageUrl != null) return NetworkImage(profileImageUrl!);
-    return const AssetImage('assets/images/default_avatar.png');
   }
 
   Widget _buildSectionHeader(String title) {
@@ -320,21 +380,22 @@ class _SettingsMenuPageState extends State<SettingsMenuPage> {
       margin: const EdgeInsets.symmetric(vertical: 4),
       elevation: 0,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(12),
         side: BorderSide(color: Colors.grey[200]!, width: 1),
       ),
       child: ListTile(
-        leading: Icon(icon, color: const Color(0xFF0066CC)),
+        leading: Icon(icon, color: const Color(0xFF0066CC), size: 24),
         title: Text(
           title,
           style: const TextStyle(
             color: Colors.black87,
             fontSize: 16,
+            fontWeight: FontWeight.w500,
           ),
         ),
-        trailing: const Icon(Icons.chevron_right, color: Colors.grey),
+        trailing: const Icon(Icons.chevron_right, color: Colors.grey, size: 24),
         onTap: onTap,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         minLeadingWidth: 24,
       ),
     );
@@ -350,7 +411,7 @@ class _SettingsMenuPageState extends State<SettingsMenuPage> {
       margin: const EdgeInsets.symmetric(vertical: 4),
       elevation: 0,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(12),
         side: BorderSide(color: Colors.grey[200]!, width: 1),
       ),
       child: SwitchListTile(
@@ -363,10 +424,11 @@ class _SettingsMenuPageState extends State<SettingsMenuPage> {
           style: const TextStyle(
             color: Colors.black87,
             fontSize: 16,
+            fontWeight: FontWeight.w500,
           ),
         ),
-        secondary: Icon(icon, color: const Color(0xFF0066CC)),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+        secondary: Icon(icon, color: const Color(0xFF0066CC), size: 24),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       ),
     );
   }
@@ -380,16 +442,16 @@ class _SettingsMenuPageState extends State<SettingsMenuPage> {
           backgroundColor: const Color(0xFF0066CC),
           padding: const EdgeInsets.symmetric(vertical: 16),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(12),
           ),
           elevation: 0,
         ),
         child: _isLoggingOut
             ? const SizedBox(
-          height: 20,
-          width: 20,
+          height: 24,
+          width: 24,
           child: CircularProgressIndicator(
-            strokeWidth: 2,
+            strokeWidth: 3,
             color: Colors.white,
           ),
         )
@@ -418,25 +480,32 @@ class _SettingsMenuPageState extends State<SettingsMenuPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(16),
           ),
           title: const Text(
             'Logout',
             style: TextStyle(
               color: Colors.black87,
               fontWeight: FontWeight.bold,
+              fontSize: 20,
             ),
           ),
           content: const Text(
             'Are you sure you want to logout?',
-            style: TextStyle(color: Colors.black54),
+            style: TextStyle(
+              color: Colors.black54,
+              fontSize: 16,
+            ),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(false),
               child: const Text(
                 'Cancel',
-                style: TextStyle(color: Color(0xFF0066CC)),
+                style: TextStyle(
+                  color: Color(0xFF0066CC),
+                  fontSize: 16,
+                ),
               ),
             ),
             TextButton(
@@ -445,6 +514,7 @@ class _SettingsMenuPageState extends State<SettingsMenuPage> {
                 'Logout',
                 style: TextStyle(
                   color: Color(0xFF0066CC),
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -456,12 +526,26 @@ class _SettingsMenuPageState extends State<SettingsMenuPage> {
 
     if (result == true) {
       setState(() => _isLoggingOut = true);
-      await Future.delayed(const Duration(milliseconds: 500));
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => const loginn()),
-            (route) => false,
-      );
+      try {
+        await _auth.signOut();
+        if (mounted) {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const loginn()),
+                (route) => false,
+          );
+        }
+      } catch (e) {
+        if (mounted) {
+          setState(() => _isLoggingOut = false);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("Logout failed: ${e.toString()}"),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
     }
   }
 }

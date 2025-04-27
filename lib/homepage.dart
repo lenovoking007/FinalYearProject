@@ -9,30 +9,51 @@ import 'package:travelmate/IslamabadPage.dart';
 import 'package:travelmate/NaranPage.dart';
 import 'package:travelmate/SwatPage.dart';
 import 'package:travelmate/HunzaPage.dart';
-
 import 'package:travelmate/chat.dart';
 import 'package:travelmate/settingmenu.dart';
 import 'package:travelmate/tools.dart';
 import 'package:travelmate/TripMainPage.dart';
-import 'package:travelmate/ProfilePage.dart';
-
 import 'ActvitiesCode/SwimmingPage.dart';
 import 'ActvitiesCode/ZiplinePage.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
+
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  int _selectedIndex = 0; // This is the currentIndex we'll use
+  int _selectedIndex = 0;
   late String currentGreeting;
   late String currentSubtext;
+  String? profileImageUrl;
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _updateGreetings();
+    _loadProfileImage();
+  }
+
+  Future<void> _loadProfileImage() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final userDoc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+      if (mounted) {
+        setState(() {
+          profileImageUrl = userDoc['profileImageUrl'];
+        });
+      }
+    }
+  }
+
+  ImageProvider _getProfileImage() {
+    if (profileImageUrl != null) {
+      return NetworkImage(profileImageUrl!);
+    }
+    return const AssetImage('assets/images/default_avatar.png');
   }
 
   void _updateGreetings() {
@@ -66,9 +87,9 @@ class _HomePageState extends State<HomePage> {
 
     switch (index) {
       case 0: break; // Stay on Home Page
-      case 1: Navigator.push(context, MaterialPageRoute(builder: (context) => Tools()));
-      case 2: Navigator.push(context, MaterialPageRoute(builder: (context) => TripPage()));
-      case 3: Navigator.push(context, MaterialPageRoute(builder: (context) => MessagePage()));
+      case 1: Navigator.push(context, MaterialPageRoute(builder: (context) =>  Tools()));
+      case 2: Navigator.push(context, MaterialPageRoute(builder: (context) =>  TripPage()));
+      case 3: Navigator.push(context, MaterialPageRoute(builder: (context) =>  MessagePage()));
     }
   }
 
@@ -96,7 +117,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     _updateGreetings();
     final screenHeight = MediaQuery.of(context).size.height;
-    final cardHeight = screenHeight * 0.25; // Adjusted for better flexibility
+    final cardHeight = screenHeight * 0.25;
 
     return WillPopScope(
       onWillPop: _onWillPop,
@@ -106,228 +127,230 @@ class _HomePageState extends State<HomePage> {
           elevation: 0,
           automaticallyImplyLeading: false,
           iconTheme: const IconThemeData(color: Colors.white),
-          title: LayoutBuilder(
-            builder: (context, constraints) {
-              return SizedBox(
-                width: constraints.maxWidth,
-                height: 40,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Flexible(
-                      flex: 5,
-                      fit: FlexFit.tight,
-                      child: Container(
-                        margin: const EdgeInsets.only(right: 8),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: const TextField(
-                          decoration: InputDecoration(
-                            hintText: 'Search here...',
-                            hintStyle: TextStyle(color: Colors.white70),
-                            prefixIcon: Icon(Icons.search, color: Colors.white, size: 20),
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(vertical: 8),
-                            isDense: true,
-                          ),
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
+          title: SizedBox(
+            height: 40,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Flexible(
+                  flex: 5,
+                  fit: FlexFit.tight,
+                  child: Container(
+                    margin: const EdgeInsets.only(right: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                    Flexible(
-                      flex: 1,
-                      fit: FlexFit.loose,
-                      child: StreamBuilder<DocumentSnapshot>(
-                        stream: FirebaseFirestore.instance
-                            .collection('users')
-                            .doc(FirebaseAuth.instance.currentUser?.uid)
-                            .snapshots(),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState == ConnectionState.waiting) {
-                            return const CircleAvatar(
-                              radius: 18,
-                              backgroundColor: Colors.white24,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: Colors.white,
-                              ),
-                            );
-                          }
-
-                          if (snapshot.hasError || !snapshot.hasData || !snapshot.data!.exists) {
-                            return const CircleAvatar(
-                              radius: 18,
-                              backgroundColor: Colors.white24,
-                              child: Icon(Icons.error, size: 18, color: Colors.white),
-                            );
-                          }
-
-                          final userData = snapshot.data!.data() as Map<String, dynamic>?;
-                          final imageUrl = userData != null ? userData['profileImageUrl'] : null;
-
-                          return Hero(
-                            tag: 'profile-avatar',
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => SettingsMenuPage(previousIndex: _selectedIndex),
-                                  ),
-                                );
-                              },
-                              child: CircleAvatar(
-                                radius: 18,
-                                backgroundColor: Colors.white24,
-                                backgroundImage: imageUrl != null
-                                    ? NetworkImage(imageUrl) as ImageProvider
-                                    : const AssetImage('assets/images/default_avatar.png') as ImageProvider,
-                                child: imageUrl == null
-                                    ? const Icon(Icons.person, size: 18, color: Colors.white)
-                                    : null,
-                              ),
-                            ),
-                          );
-                        },
+                    child: TextField(
+                      controller: _searchController,
+                      decoration: const InputDecoration(
+                        hintText: 'Search here...',
+                        hintStyle: TextStyle(color: Colors.white70),
+                        prefixIcon: Icon(Icons.search, color: Colors.white, size: 20),
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.symmetric(vertical: 8),
+                        isDense: true,
                       ),
+                      style: const TextStyle(color: Colors.white),
                     ),
-                  ],
-                ),
-              );
-            },
-          ),
-        ),
-        body: LayoutBuilder(
-            builder: (context, constraints) {
-              return SingleChildScrollView(
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(minHeight: constraints.maxHeight),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: screenHeight * 0.02),
-                      Center(
-                        child: Column(
-                          children: [
-                            Text(
-                              currentGreeting,
-                              style: TextStyle(
-                                fontSize: screenHeight * 0.03,
-                                fontWeight: FontWeight.bold,
-                                color: const Color(0XFF0066CC),
-                              ),
-                            ),
-                            SizedBox(height: screenHeight * 0.005),
-                            Text(
-                              currentSubtext,
-                              style: TextStyle(
-                                fontSize: screenHeight * 0.018,
-                                color: const Color(0XFF0066CC),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: screenHeight * 0.02),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: screenHeight * 0.02),
-                        child: Text(
-                          'Plan your next adventure',
-                          style: TextStyle(
-                            fontSize: screenHeight * 0.025,
-                            fontWeight: FontWeight.bold,
-                            color: const Color(0XFF0066CC),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: screenHeight * 0.01),
-                      SizedBox(
-                        height: cardHeight,
-                        child: CarouselSlider(
-                          items: [
-                            _buildCityCard('Karachi', 'City of lights', 'assets/images/karachi.jpg', cardHeight),
-                            _buildCityCard('Lahore', 'Heart of Pakistan', 'assets/images/lahore.jpg', cardHeight),
-                            _buildCityCard('Islamabad', 'Capital city', 'assets/images/islamabad.jpg', cardHeight),
-                          ],
-                          options: CarouselOptions(
-                            height: cardHeight,
-                            autoPlay: true,
-                            enlargeCenterPage: true,
-                            aspectRatio: 16/9,
-                            viewportFraction: 0.85,
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: screenHeight * 0.02),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: screenHeight * 0.02),
-                        child: Text(
-                          'Trending with Travelers',
-                          style: TextStyle(
-                            fontSize: screenHeight * 0.025,
-                            fontWeight: FontWeight.bold,
-                            color: const Color(0XFF0066CC),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: screenHeight * 0.01),
-                      SizedBox(
-                        height: cardHeight,
-                        child: CarouselSlider(
-                          items: [
-                            _buildPlaceCard('Naran', 'Beautiful Valley', 'assets/images/naran.jpg', cardHeight),
-                            _buildPlaceCard('Swat', 'Switzerland of East', 'assets/images/swat.jpg', cardHeight),
-                            _buildPlaceCard('Hunza', 'A heaven on earth', 'assets/images/hunza.jpg', cardHeight),
-                          ],
-                          options: CarouselOptions(
-                            height: cardHeight,
-                            autoPlay: true,
-                            enlargeCenterPage: true,
-                            aspectRatio: 16/9,
-                            viewportFraction: 0.85,
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: screenHeight * 0.02),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: screenHeight * 0.02),
-                        child: Text(
-                          'Famous Activities',
-                          style: TextStyle(
-                            fontSize: screenHeight * 0.025,
-                            fontWeight: FontWeight.bold,
-                            color: const Color(0XFF0066CC),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: screenHeight * 0.01),
-                      SizedBox(
-                        height: cardHeight,
-                        child: CarouselSlider(
-                          items: [
-                            _buildActivityCard('Swimming', 'assets/images/swim.jpg', cardHeight),
-                            _buildActivityCard('Paragliding', 'assets/images/para.jpg', cardHeight),
-                            _buildActivityCard('Zipline', 'assets/images/zipline.jpg', cardHeight),
-                          ],
-                          options: CarouselOptions(
-                            height: cardHeight,
-                            autoPlay: true,
-                            enlargeCenterPage: true,
-                            aspectRatio: 16/9,
-                            viewportFraction: 0.85,
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: screenHeight * 0.02),
-                    ],
                   ),
                 ),
-              );
-            }
+                Flexible(
+                  flex: 1,
+                  fit: FlexFit.loose,
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SettingsMenuPage(previousIndex: 0),
+                        ),
+                      );
+                    },
+                    child: CircleAvatar(
+                      radius: 18,
+                      backgroundColor: Colors.white24,
+                      backgroundImage: const AssetImage('assets/images/default_avatar.png'),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
-        bottomNavigationBar: _buildBottomNavigationBar(context, _selectedIndex),
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: screenHeight * 0.02),
+              Center(
+                child: Column(
+                  children: [
+                    Text(
+                      currentGreeting,
+                      style: TextStyle(
+                        fontSize: screenHeight * 0.03,
+                        fontWeight: FontWeight.bold,
+                        color: const Color(0XFF0066CC),
+                      ),
+                    ),
+                    SizedBox(height: screenHeight * 0.005),
+                    Text(
+                      currentSubtext,
+                      style: TextStyle(
+                        fontSize: screenHeight * 0.018,
+                        color: const Color(0XFF0066CC),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              SizedBox(height: screenHeight * 0.02),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: screenHeight * 0.02),
+                child: Text(
+                  'Plan your next adventure',
+                  style: TextStyle(
+                    fontSize: screenHeight * 0.025,
+                    fontWeight: FontWeight.bold,
+                    color: const Color(0XFF0066CC),
+                  ),
+                ),
+              ),
+              SizedBox(height: screenHeight * 0.01),
+              SizedBox(
+                height: cardHeight,
+                child: CarouselSlider(
+                  items: [
+                    _buildCityCard('Karachi', 'City of lights', 'assets/images/karachi.jpg', cardHeight),
+                    _buildCityCard('Lahore', 'Heart of Pakistan', 'assets/images/lahore.jpg', cardHeight),
+                    _buildCityCard('Islamabad', 'Capital city', 'assets/images/islamabad.jpg', cardHeight),
+                  ],
+                  options: CarouselOptions(
+                    height: cardHeight,
+                    autoPlay: true,
+                    enlargeCenterPage: true,
+                    aspectRatio: 16/9,
+                    viewportFraction: 0.85,
+                  ),
+                ),
+              ),
+              SizedBox(height: screenHeight * 0.02),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: screenHeight * 0.02),
+                child: Text(
+                  'Trending with Travelers',
+                  style: TextStyle(
+                    fontSize: screenHeight * 0.025,
+                    fontWeight: FontWeight.bold,
+                    color: const Color(0XFF0066CC),
+                  ),
+                ),
+              ),
+              SizedBox(height: screenHeight * 0.01),
+              SizedBox(
+                height: cardHeight,
+                child: CarouselSlider(
+                  items: [
+                    _buildPlaceCard('Naran', 'Beautiful Valley', 'assets/images/naran.jpg', cardHeight),
+                    _buildPlaceCard('Swat', 'Switzerland of East', 'assets/images/swat.jpg', cardHeight),
+                    _buildPlaceCard('Hunza', 'A heaven on earth', 'assets/images/hunza.jpg', cardHeight),
+                  ],
+                  options: CarouselOptions(
+                    height: cardHeight,
+                    autoPlay: true,
+                    enlargeCenterPage: true,
+                    aspectRatio: 16/9,
+                    viewportFraction: 0.85,
+                  ),
+                ),
+              ),
+              SizedBox(height: screenHeight * 0.02),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: screenHeight * 0.02),
+                child: Text(
+                  'Famous Activities',
+                  style: TextStyle(
+                    fontSize: screenHeight * 0.025,
+                    fontWeight: FontWeight.bold,
+                    color: const Color(0XFF0066CC),
+                  ),
+                ),
+              ),
+              SizedBox(height: screenHeight * 0.01),
+              SizedBox(
+                height: cardHeight,
+                child: CarouselSlider(
+                  items: [
+                    _buildActivityCard('Swimming', 'assets/images/swim.jpg', cardHeight),
+                    _buildActivityCard('Paragliding', 'assets/images/para.jpg', cardHeight),
+                    _buildActivityCard('Zipline', 'assets/images/zipline.jpg', cardHeight),
+                  ],
+                  options: CarouselOptions(
+                    height: cardHeight,
+                    autoPlay: true,
+                    enlargeCenterPage: true,
+                    aspectRatio: 16/9,
+                    viewportFraction: 0.85,
+                  ),
+                ),
+              ),
+              SizedBox(height: screenHeight * 0.02),
+            ],
+          ),
+        ),
+        bottomNavigationBar: Container(
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 10,
+                spreadRadius: 2,
+              ),
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+            child: BottomNavigationBar(
+              elevation: 0,
+              type: BottomNavigationBarType.fixed,
+              backgroundColor: Colors.white,
+              selectedFontSize: 12,
+              unselectedFontSize: 12,
+              selectedItemColor: const Color(0XFF0066CC),
+              unselectedItemColor: Colors.grey[600],
+              showUnselectedLabels: true,
+              currentIndex: _selectedIndex,
+              items: [
+                _buildBottomNavItem(
+                  icon: Icons.home_outlined,
+                  activeIcon: Icons.home,
+                  label: 'Home',
+                  isActive: _selectedIndex == 0,
+                ),
+                _buildBottomNavItem(
+                  icon: Icons.widgets_outlined,
+                  activeIcon: Icons.widgets,
+                  label: 'Tools',
+                  isActive: _selectedIndex == 1,
+                ),
+                _buildBottomNavItem(
+                  icon: Icons.airplane_ticket_outlined,
+                  activeIcon: Icons.airplane_ticket,
+                  label: 'Trips',
+                  isActive: _selectedIndex == 2,
+                ),
+                _buildBottomNavItem(
+                  icon: Icons.chat_bubble_outline,
+                  activeIcon: Icons.chat_bubble,
+                  label: 'Chat',
+                  isActive: _selectedIndex == 3,
+                ),
+              ],
+              onTap: _onItemTapped,
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -336,11 +359,11 @@ class _HomePageState extends State<HomePage> {
     return GestureDetector(
       onTap: () {
         if (title == 'Karachi') {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => KarachiPage()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) =>  KarachiPage()));
         } else if (title == 'Lahore') {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => LahorePage()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) =>  LahorePage()));
         } else if (title == 'Islamabad') {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => IslamabadPage()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) =>  IslamabadPage()));
         }
       },
       child: Card(
@@ -426,11 +449,11 @@ class _HomePageState extends State<HomePage> {
     return GestureDetector(
       onTap: () {
         if (title == 'Naran') {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => NaranPage()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) =>  NaranPage()));
         } else if (title == 'Swat') {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => SwatPage()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) =>  SwatPage()));
         } else if (title == 'Hunza') {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => HunzaPage()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) =>  HunzaPage()));
         }
       },
       child: Card(
@@ -516,11 +539,11 @@ class _HomePageState extends State<HomePage> {
     return GestureDetector(
       onTap: () {
         if (title == 'Swimming') {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => SwimmingPage()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) =>  SwimmingPage()));
         } else if (title == 'Paragliding') {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => ParaglidingPage()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) =>  ParaglidingPage()));
         } else if (title == 'Zipline') {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => ZiplinePage()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) =>  ZiplinePage()));
         }
       },
       child: Card(
@@ -578,61 +601,6 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildBottomNavigationBar(BuildContext context, int currentIndex) {
-    return Container(
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 10,
-            spreadRadius: 2,
-          ),
-        ],
-      ),
-      child: ClipRRect(
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-        child: BottomNavigationBar(
-          elevation: 0,
-          type: BottomNavigationBarType.fixed,
-          backgroundColor: Colors.white,
-          selectedFontSize: 12,
-          unselectedFontSize: 12,
-          selectedItemColor: const Color(0XFF0066CC),
-          unselectedItemColor: Colors.grey[600],
-          showUnselectedLabels: true,
-          currentIndex: currentIndex,
-          items: [
-            _buildBottomNavItem(
-              icon: Icons.home_outlined,
-              activeIcon: Icons.home,
-              label: 'Home',
-              isActive: currentIndex == 0,
-            ),
-            _buildBottomNavItem(
-              icon: Icons.widgets_outlined,
-              activeIcon: Icons.widgets,
-              label: 'Tools',
-              isActive: currentIndex == 1,
-            ),
-            _buildBottomNavItem(
-              icon: Icons.airplane_ticket_outlined,
-              activeIcon: Icons.airplane_ticket,
-              label: 'Trips',
-              isActive: currentIndex == 2,
-            ),
-            _buildBottomNavItem(
-              icon: Icons.chat_bubble_outline,
-              activeIcon: Icons.chat_bubble,
-              label: 'Chat',
-              isActive: currentIndex == 3,
-            ),
-          ],
-          onTap: _onItemTapped,
         ),
       ),
     );
