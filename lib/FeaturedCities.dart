@@ -65,11 +65,8 @@ class FeaturedCitiesPage extends StatelessWidget {
                 imagePath: 'assets/images/cities/hyderabad.jpg',
                 onTap: () => Navigator.push(
                   context,
-<<<<<<< HEAD
                   MaterialPageRoute(builder: (context) => Hyderabadpage()),
-=======
                   MaterialPageRoute(builder: (context) => HyderabadPage()),
->>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
                 ),
               ),
               _buildCityCard(

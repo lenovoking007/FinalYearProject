@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-<<<<<<< HEAD
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -23,7 +22,6 @@ class IslamabadPage extends StatelessWidget {
     'assets/images/Islamabad/food2.jpeg',
     'assets/images/Islamabad/food3.jpg',
     'assets/images/Islamabad/food4.jpg',
-=======
 
 class IslamabadPage extends StatelessWidget {
   final List<String> overviewImages = [
@@ -45,17 +43,13 @@ class IslamabadPage extends StatelessWidget {
     'assets/images/Islamabad/isf2.jpg',
     'assets/images/Islamabad/isf3.jpg',
     'assets/images/Islamabad/isf4.jpg',
->>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
   ];
-
   final List<String> festivalImages = [
     'assets/images/Islamabad/f1.jpg',
     'assets/images/Islamabad/f2.jpg',
     'assets/images/Islamabad/f3.jpg',
     'assets/images/Islamabad/f4.jpg',
   ];
-
-<<<<<<< HEAD
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -1520,7 +1514,6 @@ class IslamabadPage extends StatelessWidget {
       }).toList(),
 =======
       ),
->>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
     );
   }
 }
