@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthServices {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   /// Sign Up
   Future<User?> signUpUser({
@@ -59,6 +61,45 @@ class AuthServices {
     } catch (e) {
       print("Error during password reset: $e");
       rethrow; // Rethrow the error to handle it in the UI
+    }
+  }
+
+  /// Google Sign-In/Sign-Up
+  Future<User?> signInWithGoogle() async {
+    try {
+      // Trigger the Google Sign-In flow
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      if (googleUser == null) return null;
+
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+
+      // Create a new credential
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      // Sign in to Firebase with the Google credential
+      UserCredential userCredential = await _auth.signInWithCredential(credential);
+      User? user = userCredential.user;
+
+      // Check if this is a new user (sign-up)
+      if (userCredential.additionalUserInfo!.isNewUser) {
+        // Save user data to Firestore
+        await _firestore.collection('users').doc(user!.uid).set({
+          'uid': user.uid,
+          'name': user.displayName ?? googleUser.displayName ?? 'Google User',
+          'email': user.email ?? googleUser.email,
+          'phone': user.phoneNumber ?? '',
+          'createdAt': FieldValue.serverTimestamp(),
+        });
+      }
+
+      return user;
+    } catch (e) {
+      print("Error during Google sign-in: $e");
+      rethrow;
     }
   }
 }

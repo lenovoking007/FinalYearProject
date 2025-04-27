@@ -2,13 +2,22 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:travelmate/ActvitiesCode/ParaglidingPage.dart';
 import 'package:travelmate/KarachiPage.dart';
 import 'package:travelmate/LahorePage.dart';
+import 'package:travelmate/IslamabadPage.dart';
+import 'package:travelmate/NaranPage.dart';
+import 'package:travelmate/SwatPage.dart';
+import 'package:travelmate/HunzaPage.dart';
+
 import 'package:travelmate/chat.dart';
 import 'package:travelmate/settingmenu.dart';
 import 'package:travelmate/tools.dart';
 import 'package:travelmate/TripMainPage.dart';
 import 'package:travelmate/ProfilePage.dart';
+
+import 'ActvitiesCode/SwimmingPage.dart';
+import 'ActvitiesCode/ZiplinePage.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -326,10 +335,13 @@ class _HomePageState extends State<HomePage> {
   Widget _buildCityCard(String title, String description, String imagePath, double cardHeight) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => title == 'Karachi' ? KarachiPage() : LahorePage()),
-        );
+        if (title == 'Karachi') {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => KarachiPage()));
+        } else if (title == 'Lahore') {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => LahorePage()));
+        } else if (title == 'Islamabad') {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => IslamabadPage()));
+        }
       },
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -413,10 +425,13 @@ class _HomePageState extends State<HomePage> {
   Widget _buildPlaceCard(String title, String description, String imagePath, double cardHeight) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => LahorePage()),
-        );
+        if (title == 'Naran') {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => NaranPage()));
+        } else if (title == 'Swat') {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => SwatPage()));
+        } else if (title == 'Hunza') {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => HunzaPage()));
+        }
       },
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -500,10 +515,13 @@ class _HomePageState extends State<HomePage> {
   Widget _buildActivityCard(String title, String imagePath, double cardHeight) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => LahorePage()),
-        );
+        if (title == 'Swimming') {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => SwimmingPage()));
+        } else if (title == 'Paragliding') {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => ParaglidingPage()));
+        } else if (title == 'Zipline') {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => ZiplinePage()));
+        }
       },
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),

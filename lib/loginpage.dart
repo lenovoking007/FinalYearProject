@@ -4,6 +4,8 @@ import 'package:travelmate/resetpass.dart';
 import 'package:travelmate/services/auth.dart';
 import 'package:travelmate/signuppage.dart';
 import 'homepage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class loginn extends StatefulWidget {
   const loginn({super.key});
@@ -17,6 +19,8 @@ class _loginnState extends State<loginn> {
   TextEditingController passwordController = TextEditingController();
   bool isChecked = false;
   bool isLoading = false;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   void initState() {
@@ -106,6 +110,48 @@ class _loginnState extends State<loginn> {
       });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(e.toString())),
+      );
+    }
+  }
+
+  Future<void> _signInWithGoogle() async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      if (googleUser == null) {
+        setState(() {
+          isLoading = false;
+        });
+        return;
+      }
+
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      final UserCredential userCredential = await _auth.signInWithCredential(credential);
+      final User? user = userCredential.user;
+
+      if (user != null) {
+        setState(() {
+          isLoading = false;
+        });
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage()),
+        );
+      }
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error signing in with Google: ${e.toString()}')),
       );
     }
   }
@@ -219,7 +265,9 @@ class _loginnState extends State<loginn> {
                   ),
                   const SizedBox(height: 32),
                   isLoading
-                      ? const CircularProgressIndicator()
+                      ? CircularProgressIndicator(
+                    color: Color(0XFF0066CC),
+                  )
                       : ElevatedButton(
                     onPressed: _loginUser,
                     style: ElevatedButton.styleFrom(
@@ -274,33 +322,7 @@ class _loginnState extends State<loginn> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    onPressed: () {},
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset('assets/images/fb.png', height: 14, width: 14),
-                        const SizedBox(width: 10),
-                        const Text(
-                          "Continue with Facebook",
-                          style: TextStyle(
-                            color: Color(0XFF0066CC),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xffFFFFFF),
-                      minimumSize: const Size(double.infinity, 50),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    onPressed: () {},
+                    onPressed: _signInWithGoogle,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
