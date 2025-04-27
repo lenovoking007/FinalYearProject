@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+<<<<<<< HEAD
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -25,11 +26,38 @@ class NaranPage extends StatelessWidget {
 
   final List<String> festivalImages = [
     'assets/images/Naran/naranf1.jpg',
+=======
+
+class NaranPage extends StatelessWidget {
+  final List<String> overviewImages = [
+    'assets/images/Naran/naran1.jpg',
+    'assets/images/Naran/naran2.jpg',
+    'assets/images/Naran/naran3.jpg',
+  ];
+
+  final List<String> clothesImages = [
+    'assets/images/Naran/cl1.jpg',
+    'assets/images/Naran/cl2.jpg',
+    'assets/images/Naran/cl3.jpg',
+    'assets/images/Naran/cl4.jpg',
+  ];
+
+  final List<String> foodImages = [
+    'assets/images/Naran/food1.jpg',
+    'assets/images/Naran/food2.jpg',
+    'assets/images/Naran/food3.jpg',
+    'assets/images/Naran/food4.jpg',
+  ];
+
+  final List<String> festivalImages = [
+    'assets/images/Naran/f1.jpg',
+>>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
     'assets/images/Naran/f2.jpg',
     'assets/images/Naran/f3.jpg',
     'assets/images/Naran/f4.jpg',
   ];
 
+<<<<<<< HEAD
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -529,12 +557,17 @@ class NaranPage extends StatelessWidget {
     );
   }
 
+=======
+  NaranPage({super.key});
+
+>>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 5,
       child: Scaffold(
         appBar: AppBar(
+<<<<<<< HEAD
           backgroundColor: const Color(0XFF0066CC),
           elevation: 0,
           automaticallyImplyLeading: true,
@@ -565,12 +598,39 @@ class NaranPage extends StatelessWidget {
               const SizedBox(width: 12),
               const CircleAvatar(
                 radius: 18,
+=======
+          backgroundColor: Colors.white,
+          elevation: 0,
+          automaticallyImplyLeading: true,
+          title: Row(
+            children: [
+              Expanded(
+                child: SizedBox(
+                  height: 40,
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: 'Search here',
+                      prefixIcon: const Icon(Icons.search, color: Color(0XFF0066CC)),
+                      filled: true,
+                      fillColor: Colors.grey[200],
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 16),
+              const CircleAvatar(
+>>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
                 backgroundImage: AssetImage('assets/images/pro.jpg'),
               ),
             ],
           ),
         ),
         body: Column(
+<<<<<<< HEAD
           children: [
             Container(
               color: const Color(0XFF0066CC),
@@ -585,6 +645,22 @@ class NaranPage extends StatelessWidget {
                   Tab(icon: Icon(Icons.restaurant), text: 'Food'),
                   Tab(icon: Icon(Icons.celebration), text: 'Festival'),
                   Tab(icon: Icon(Icons.reviews), text: 'Reviews'),
+=======
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              color: const Color(0XFF0066CC),
+              child: const TabBar(
+                labelColor: Colors.white,
+                unselectedLabelColor: Colors.white70,
+                indicatorColor: Colors.white,
+                tabs: [
+                  Tab(text: 'Overview'),
+                  Tab(text: 'Clothes'),
+                  Tab(text: 'Food'),
+                  Tab(text: 'Festival'),
+                  Tab(text: 'Review/Feedback'),
+>>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
                 ],
               ),
             ),
@@ -592,6 +668,7 @@ class NaranPage extends StatelessWidget {
               child: TabBarView(
                 children: [
                   _buildOverviewTab(context),
+<<<<<<< HEAD
                   _buildTabContent(
                     tabName: 'Clothes',
                     images: clothesImages,
@@ -628,6 +705,27 @@ class NaranPage extends StatelessWidget {
                         '• Trout Fishing Competitions\n'
                         '• Local Folk Music Nights',
                   ),
+=======
+                  _buildTabContent('Clothes', clothesImages, 'Traditional Attire',
+                      'Naran offers a variety of traditional clothing that reflects the culture of the northern regions of Pakistan. Woolen shawls, caps, and handwoven fabrics are popular here.',
+                      'Top Recommendations',
+                      '• Local Markets: Famous for woolen shawls and caps.\n'
+                          '• Handwoven Fabrics: Unique designs and patterns.\n'
+                          '• Traditional Jackets: Perfect for the cold weather.'),
+                  _buildTabContent('Food', foodImages, 'Naran Cuisine',
+                      'Naran is known for its hearty and warming dishes, perfect for the cold climate. The food here is simple yet delicious, with a focus on local ingredients.',
+                      'Must-Try Dishes',
+                      '• Chapshuro: A meat-filled bread, similar to a stuffed paratha.\n'
+                          '• Trout Fish: Freshly caught from the rivers and grilled to perfection.\n'
+                          '• Harissa: A traditional porridge made with meat and wheat.\n'
+                          '• Butter Tea: A local favorite to keep warm.'),
+                  _buildTabContent('Festival', festivalImages, 'Cultural Festivals',
+                      'Naran hosts a few cultural festivals that celebrate the beauty and traditions of the region.',
+                      'Popular Festivals',
+                      '• Shandur Polo Festival: Held nearby, showcasing traditional polo matches.\n'
+                          '• Summer Festivals: Celebrating the natural beauty of Naran.\n'
+                          '• Local Music and Dance: Traditional performances by local artists.'),
+>>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
                   _buildReviewFeedbackTab(),
                 ],
               ),
@@ -645,6 +743,7 @@ class NaranPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildCarousel(overviewImages),
+<<<<<<< HEAD
           const SizedBox(height: 24),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -654,10 +753,44 @@ class NaranPage extends StatelessWidget {
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: const Color(0XFF0066CC).withOpacity(0.9),
+=======
+          const SizedBox(height: 16),
+          const Padding(
+            padding: EdgeInsets.all(16),
+            child: Text(
+              "Discover Naran",
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Color(0XFF0066CC),
+              ),
+            ),
+          ),
+          const Text(
+            'About Naran',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Color(0XFF0066CC),
+            ),
+          ),
+          const SizedBox(height: 8),
+          const Card(
+            elevation: 4,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(12)),
+            ),
+            child: Padding(
+              padding: EdgeInsets.all(16),
+              child: Text(
+                'Naran is a picturesque town located in the Kaghan Valley, known for its stunning landscapes, crystal-clear rivers, and lush green meadows. It is a popular tourist destination for nature lovers and adventure seekers.',
+                style: TextStyle(fontSize: 16, color: Colors.black87),
+>>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
               ),
             ),
           ),
           const SizedBox(height: 16),
+<<<<<<< HEAD
           Card(
             elevation: 0,
             shape: RoundedRectangleBorder(
@@ -708,12 +841,34 @@ class NaranPage extends StatelessWidget {
               icon: const Icon(Icons.flight, color: Colors.white, size: 20),
               label: const Text(
                 'Plan Your Trip Now',
+=======
+          Center(
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                backgroundColor: const Color(0XFF0066CC),
+              ),
+              onPressed: () {
+                // Add navigation or functionality for planning a trip
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Plan your trip functionality coming soon!'),
+                  ),
+                );
+              },
+              child: const Text(
+                'Plan Trip',
+>>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
+<<<<<<< HEAD
               style: ElevatedButton.styleFrom(
                 padding:
                 const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
@@ -728,11 +883,16 @@ class NaranPage extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 24),
+=======
+            ),
+          ),
+>>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
         ],
       ),
     );
   }
 
+<<<<<<< HEAD
   Widget _buildAttractionsGrid() {
     final List<Map<String, dynamic>> attractions = [
       {
@@ -900,12 +1060,23 @@ class NaranPage extends StatelessWidget {
     required String activityTitle,
     required String activityDescription,
   }) {
+=======
+  Widget _buildTabContent(
+      String tabName,
+      List<String> images,
+      String sectionTitle,
+      String sectionDescription,
+      String activityTitle,
+      String activityDescription,
+      ) {
+>>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildCarousel(images),
+<<<<<<< HEAD
           const SizedBox(height: 24),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -945,23 +1116,63 @@ class NaranPage extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
               side: BorderSide(color: Colors.grey.shade200),
+=======
+          const SizedBox(height: 16),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Text(
+              sectionTitle,
+              style: const TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Color(0XFF0066CC),
+              ),
+            ),
+          ),
+          Text(
+            sectionDescription,
+            style: const TextStyle(fontSize: 16, color: Colors.black87),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            activityTitle,
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Color(0XFF0066CC),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Card(
+            elevation: 4,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(12)),
+>>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
             ),
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Text(
                 activityDescription,
+<<<<<<< HEAD
                 style: const TextStyle(
                     fontSize: 15, color: Colors.black87, height: 1.5),
               ),
             ),
           ),
           const SizedBox(height: 24),
+=======
+                style: const TextStyle(fontSize: 16, color: Colors.black87),
+              ),
+            ),
+          ),
+>>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
         ],
       ),
     );
   }
 
   Widget _buildReviewFeedbackTab() {
+<<<<<<< HEAD
     int selectedRating = 0;
     final reviewController = TextEditingController();
 
@@ -1240,6 +1451,78 @@ class NaranPage extends StatelessWidget {
                 ),
               ],
             ),
+=======
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'User Reviews',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Color(0XFF0066CC),
+            ),
+          ),
+          const SizedBox(height: 16),
+          _buildReviewCard(
+              'Michael Smith', 5, 'Naran is a paradise on Earth!', 'assets/images/Naran/u1.png'),
+          const SizedBox(height: 16),
+          _buildReviewCard(
+              'Jae Lee', 4, 'The views are breathtaking.', 'assets/images/Naran/u2.png'),
+          const SizedBox(height: 16),
+          _buildReviewCard(
+              'Asim Khan', 5, 'Perfect for adventure lovers.', 'assets/images/Naran/u3.png'),
+          const SizedBox(height: 16),
+          _buildReviewCard(
+              'Ali Khan', 4, 'The food is amazing!', 'assets/images/Naran/u4.png'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildReviewCard(String name, int rating, String review, String imageUrl) {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 4,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          children: [
+            CircleAvatar(
+              radius: 30,
+              backgroundImage: AssetImage(imageUrl),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    name,
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: List.generate(
+                      5,
+                          (index) => Icon(
+                        index < rating ? Icons.star : Icons.star_border,
+                        color: Colors.amber,
+                        size: 20,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    review,
+                    style: const TextStyle(fontSize: 14, color: Colors.black87),
+                  ),
+                ],
+              ),
+            ),
+>>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
           ],
         ),
       ),
@@ -1248,12 +1531,27 @@ class NaranPage extends StatelessWidget {
 
   Widget _buildCarousel(List<String> images) {
     return CarouselSlider(
+<<<<<<< HEAD
+=======
+      items: images.map((imagePath) {
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(16),
+          child: Image.asset(
+            imagePath,
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: 200,
+          ),
+        );
+      }).toList(),
+>>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
       options: CarouselOptions(
         height: 200,
         autoPlay: true,
         enlargeCenterPage: true,
         viewportFraction: 0.9,
         aspectRatio: 16 / 9,
+<<<<<<< HEAD
         autoPlayInterval: const Duration(seconds: 4),
       ),
       items: images.map((imagePath) {
@@ -1283,3 +1581,9 @@ class NaranPage extends StatelessWidget {
     );
   }
 }
+=======
+      ),
+    );
+  }
+}
+>>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4

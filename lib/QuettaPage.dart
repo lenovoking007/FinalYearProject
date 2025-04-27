@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+<<<<<<< HEAD
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -492,6 +493,38 @@ class Quettapage extends StatelessWidget {
       ),
     );
   }
+=======
+
+class QuettaPage extends StatelessWidget {
+  final List<String> overviewImages = [
+    'assets/images/quetta/quetta1.jpg',
+    'assets/images/quetta/quetta2.jpg',
+    'assets/images/quetta/quetta3.jpg',
+  ];
+
+  final List<String> clothesImages = [
+    'assets/images/quetta/cl1.jpg',
+    'assets/images/quetta/cl2.jpg',
+    'assets/images/quetta/cl3.jpg',
+    'assets/images/quetta/cl4.jpg',
+  ];
+
+  final List<String> foodImages = [
+    'assets/images/quetta/food1.jpg',
+    'assets/images/quetta/food2.jpg',
+    'assets/images/quetta/food3.jpg',
+    'assets/images/quetta/food4.jpg',
+  ];
+
+  final List<String> festivalImages = [
+    'assets/images/quetta/f1.jpg',
+    'assets/images/quetta/f2.jpg',
+    'assets/images/quetta/f3.jpg',
+    'assets/images/quetta/f4.jpg',
+  ];
+
+  QuettaPage({super.key});
+>>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
 
   @override
   Widget build(BuildContext context) {
@@ -499,6 +532,7 @@ class Quettapage extends StatelessWidget {
       length: 5,
       child: Scaffold(
         appBar: AppBar(
+<<<<<<< HEAD
           backgroundColor: const Color(0XFF0066CC),
           elevation: 0,
           automaticallyImplyLeading: true,
@@ -528,12 +562,39 @@ class Quettapage extends StatelessWidget {
               const SizedBox(width: 12),
               const CircleAvatar(
                 radius: 18,
+=======
+          backgroundColor: Colors.white,
+          elevation: 0,
+          automaticallyImplyLeading: true,
+          title: Row(
+            children: [
+              Expanded(
+                child: SizedBox(
+                  height: 40,
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: 'Search here',
+                      prefixIcon: const Icon(Icons.search, color: Color(0XFF0066CC)),
+                      filled: true,
+                      fillColor: Colors.grey[200],
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 16),
+              const CircleAvatar(
+>>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
                 backgroundImage: AssetImage('assets/images/pro.jpg'),
               ),
             ],
           ),
         ),
         body: Column(
+<<<<<<< HEAD
           children: [
             Container(
               color: const Color(0XFF0066CC),
@@ -548,6 +609,22 @@ class Quettapage extends StatelessWidget {
                   Tab(icon: Icon(Icons.restaurant), text: 'Food'),
                   Tab(icon: Icon(Icons.celebration), text: 'Festival'),
                   Tab(icon: Icon(Icons.reviews), text: 'Reviews'),
+=======
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              color: const Color(0XFF0066CC),
+              child: const TabBar(
+                labelColor: Colors.white,
+                unselectedLabelColor: Colors.white70,
+                indicatorColor: Colors.white,
+                tabs: [
+                  Tab(text: 'Overview'),
+                  Tab(text: 'Clothes'),
+                  Tab(text: 'Food'),
+                  Tab(text: 'Festival'),
+                  Tab(text: 'Review/Feedback'),
+>>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
                 ],
               ),
             ),
@@ -556,6 +633,7 @@ class Quettapage extends StatelessWidget {
                 children: [
                   _buildOverviewTab(context),
                   _buildTabContent(
+<<<<<<< HEAD
                     tabName: 'Clothes',
                     images: clothesImages,
                     sectionTitle: 'Traditional Textiles',
@@ -588,6 +666,38 @@ class Quettapage extends StatelessWidget {
                         '• Quetta Flower Show',
                   ),
 
+=======
+                    'Clothes',
+                    clothesImages,
+                    'Traditional Attire',
+                    'Quetta is known for its unique traditional clothing, reflecting the rich culture of Balochistan. The local markets offer a variety of handwoven fabrics and embroidered outfits.',
+                    'Top Recommendations',
+                    '• Liaquat Bazaar: Famous for traditional Balochi attire.\n'
+                        '• Kandahari Bazaar: Offers a mix of modern and traditional clothing.\n'
+                        '• Local Artisans: Handcrafted shawls and scarves.',
+                  ),
+                  _buildTabContent(
+                    'Food',
+                    foodImages,
+                    'Quetta Cuisine',
+                    'Quetta offers a delightful culinary experience with its traditional dishes and fresh local produce. The food is rich in flavors and spices.',
+                    'Must-Try Dishes',
+                    '• Sajji: A roasted lamb dish, a specialty of Balochistan.\n'
+                        '• Kaak: A type of bread baked in traditional ovens.\n'
+                        '• Landhi: Dried meat, a winter delicacy.\n'
+                        '• Green Tea: A local favorite, often served with dried fruits.',
+                  ),
+                  _buildTabContent(
+                    'Festival',
+                    festivalImages,
+                    'Cultural Festivals',
+                    'Quetta hosts several cultural festivals that celebrate its heritage and traditions.',
+                    'Popular Festivals',
+                    '• Sibi Mela: A traditional festival showcasing Baloch culture.\n'
+                        '• Jashn-e-Baharan: Celebrates the arrival of spring.\n'
+                        '• Lok Mela: A festival of folk music and dance.',
+                  ),
+>>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
                   _buildReviewFeedbackTab(),
                 ],
               ),
@@ -605,6 +715,7 @@ class Quettapage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildCarousel(overviewImages),
+<<<<<<< HEAD
           const SizedBox(height: 24),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -614,10 +725,44 @@ class Quettapage extends StatelessWidget {
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: const Color(0XFF0066CC).withOpacity(0.9),
+=======
+          const SizedBox(height: 16),
+          const Padding(
+            padding: EdgeInsets.all(16),
+            child: Text(
+              "Discover Quetta",
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Color(0XFF0066CC),
+              ),
+            ),
+          ),
+          const Text(
+            'About Quetta',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Color(0XFF0066CC),
+            ),
+          ),
+          const SizedBox(height: 8),
+          const Card(
+            elevation: 4,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(12)),
+            ),
+            child: Padding(
+              padding: EdgeInsets.all(16),
+              child: Text(
+                'Quetta, the capital of Balochistan, is a city surrounded by rugged mountains and known for its rich cultural heritage. It is a hub of traditional Balochi culture and offers breathtaking landscapes.',
+                style: TextStyle(fontSize: 16, color: Colors.black87),
+>>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
               ),
             ),
           ),
           const SizedBox(height: 16),
+<<<<<<< HEAD
           Card(
             elevation: 0,
             shape: RoundedRectangleBorder(
@@ -667,12 +812,33 @@ class Quettapage extends StatelessWidget {
               icon: const Icon(Icons.flight, color: Colors.white, size: 20),
               label: const Text(
                 'Plan Your Trip Now',
+=======
+          Center(
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                backgroundColor: const Color(0XFF0066CC),
+              ),
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Plan your trip functionality coming soon!'),
+                  ),
+                );
+              },
+              child: const Text(
+                'Plan Trip',
+>>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
+<<<<<<< HEAD
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
                 shape: RoundedRectangleBorder(
@@ -686,11 +852,16 @@ class Quettapage extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 24),
+=======
+            ),
+          ),
+>>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
         ],
       ),
     );
   }
 
+<<<<<<< HEAD
   Widget _buildAttractionsGrid() {
     final List<Map<String, dynamic>> attractions = [
       {
@@ -854,12 +1025,23 @@ class Quettapage extends StatelessWidget {
     required String activityTitle,
     required String activityDescription,
   }) {
+=======
+  Widget _buildTabContent(
+      String tabName,
+      List<String> images,
+      String sectionTitle,
+      String sectionDescription,
+      String activityTitle,
+      String activityDescription,
+      ) {
+>>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildCarousel(images),
+<<<<<<< HEAD
           const SizedBox(height: 24),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -898,22 +1080,62 @@ class Quettapage extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
               side: BorderSide(color: Colors.grey.shade200),
+=======
+          const SizedBox(height: 16),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Text(
+              sectionTitle,
+              style: const TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Color(0XFF0066CC),
+              ),
+            ),
+          ),
+          Text(
+            sectionDescription,
+            style: const TextStyle(fontSize: 16, color: Colors.black87),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            activityTitle,
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Color(0XFF0066CC),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Card(
+            elevation: 4,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(12)),
+>>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
             ),
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Text(
                 activityDescription,
+<<<<<<< HEAD
                 style: const TextStyle(fontSize: 15, color: Colors.black87, height: 1.5),
               ),
             ),
           ),
           const SizedBox(height: 24),
+=======
+                style: const TextStyle(fontSize: 16, color: Colors.black87),
+              ),
+            ),
+          ),
+>>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
         ],
       ),
     );
   }
 
   Widget _buildReviewFeedbackTab() {
+<<<<<<< HEAD
     int selectedRating = 0;
     final reviewController = TextEditingController();
 
@@ -1183,6 +1405,74 @@ class Quettapage extends StatelessWidget {
                 ),
               ],
             ),
+=======
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'User Reviews',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Color(0XFF0066CC),
+            ),
+          ),
+          const SizedBox(height: 16),
+          _buildReviewCard('Michael Smith', 5, 'Quetta is a hidden gem!', 'assets/images/quetta/u1.png'),
+          const SizedBox(height: 16),
+          _buildReviewCard('Jae Lee', 4, 'The landscapes are breathtaking.', 'assets/images/quetta/u2.png'),
+          const SizedBox(height: 16),
+          _buildReviewCard('Asim Khan', 5, 'A perfect getaway for nature lovers.', 'assets/images/quetta/u3.png'),
+          const SizedBox(height: 16),
+          _buildReviewCard('Ali Khan', 4, 'The food is amazing!', 'assets/images/quetta/u4.png'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildReviewCard(String name, int rating, String review, String imageUrl) {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 4,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          children: [
+            CircleAvatar(
+              radius: 30,
+              backgroundImage: AssetImage(imageUrl),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    name,
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: List.generate(
+                      5,
+                          (index) => Icon(
+                        index < rating ? Icons.star : Icons.star_border,
+                        color: Colors.amber,
+                        size: 20,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    review,
+                    style: const TextStyle(fontSize: 14, color: Colors.black87),
+                  ),
+                ],
+              ),
+            ),
+>>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
           ],
         ),
       ),
@@ -1191,12 +1481,27 @@ class Quettapage extends StatelessWidget {
 
   Widget _buildCarousel(List<String> images) {
     return CarouselSlider(
+<<<<<<< HEAD
+=======
+      items: images.map((imagePath) {
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(16),
+          child: Image.asset(
+            imagePath,
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: 200,
+          ),
+        );
+      }).toList(),
+>>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
       options: CarouselOptions(
         height: 200,
         autoPlay: true,
         enlargeCenterPage: true,
         viewportFraction: 0.9,
         aspectRatio: 16 / 9,
+<<<<<<< HEAD
         autoPlayInterval: const Duration(seconds: 4),
       ),
       items: images.map((imagePath) {
@@ -1226,3 +1531,9 @@ class Quettapage extends StatelessWidget {
     );
   }
 }
+=======
+      ),
+    );
+  }
+}
+>>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4

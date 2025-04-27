@@ -11,7 +11,11 @@ plugins {
 android {
     namespace = "com.example.travelmate"
     compileSdk = 35
+<<<<<<< HEAD
     ndkVersion = "29.0.13113456"
+=======
+    ndkVersion = "27.0.12077973"
+>>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
 
     compileOptions {
         

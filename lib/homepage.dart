@@ -336,7 +336,11 @@ class _HomePageState extends State<HomePage> {
     return GestureDetector(
       onTap: () {
         if (title == 'Karachi') {
+<<<<<<< HEAD
           Navigator.push(context, MaterialPageRoute(builder: (context) => Karachipage()));
+=======
+          Navigator.push(context, MaterialPageRoute(builder: (context) => KarachiPage()));
+>>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
         } else if (title == 'Lahore') {
           Navigator.push(context, MaterialPageRoute(builder: (context) => LahorePage()));
         } else if (title == 'Islamabad') {
@@ -428,7 +432,11 @@ class _HomePageState extends State<HomePage> {
         if (title == 'Naran') {
           Navigator.push(context, MaterialPageRoute(builder: (context) => NaranPage()));
         } else if (title == 'Swat') {
+<<<<<<< HEAD
           Navigator.push(context, MaterialPageRoute(builder: (context) => Swatpage()));
+=======
+          Navigator.push(context, MaterialPageRoute(builder: (context) => SwatPage()));
+>>>>>>> 64faab2222d1e3fef2f153640c7593e7d35ac4f4
         } else if (title == 'Hunza') {
           Navigator.push(context, MaterialPageRoute(builder: (context) => HunzaPage()));
         }
