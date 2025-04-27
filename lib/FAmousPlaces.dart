@@ -91,7 +91,7 @@ class FamousTouristPlacesPage extends StatelessWidget {
                 imagePath: 'assets/images/places/neelum_valley.jpg',
                 onTap: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => NeelumValleyPage()),
+                  MaterialPageRoute(builder: (context) => NeelumvalleyPage()),
                 ),
               ),
               _buildPlaceCard(
@@ -141,7 +141,7 @@ class FamousTouristPlacesPage extends StatelessWidget {
                 imagePath: 'assets/images/places/hingol_park.jpg',
                 onTap: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => HingolNationalParkPage()),
+                  MaterialPageRoute(builder: (context) => Hingolnationalparkpage()),
                 ),
               ),
               _buildPlaceCard(
