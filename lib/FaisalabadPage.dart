@@ -6,10 +6,10 @@ import 'package:travelmate/tripprogresspage.dart';
 
 class Faisalabadpage extends StatelessWidget {
   final List<String> overviewImages = [
-    'assets/images/Lahore/lahore1.jpg',
-    'assets/images/Lahore/lahore2.jpg',
-    'assets/images/Lahore/lahore3.jpg',
-  ];
+    'assets/images/faislabad/faso1.jpg',
+    'assets/images/faislabad/fas02.jpg',
+    'assets/images/faislabad/fas03.jpg',
+    ];
   final List<String> clothesImages = [
     'assets/images/Lahore/cl1.jpg',
     'assets/images/Lahore/cl2.jpg',
@@ -23,10 +23,10 @@ class Faisalabadpage extends StatelessWidget {
     'assets/images/Lahore/food4.jpg',
   ];
   final List<String> festivalImages = [
-    'assets/images/Lahore/f1.jpg',
-    'assets/images/Lahore/f2.jpg',
-    'assets/images/Lahore/f3.jpg',
-    'assets/images/Lahore/f4.jpg',
+    'assets/images/faislabad/fasf1.jpg',
+    'assets/images/faislabad/fasf2.jpg',
+    'assets/images/faislabad/fasf3.jpg',
+    'assets/images/faislabad/fasf4.jpeg',
   ];
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -865,22 +865,22 @@ class Faisalabadpage extends StatelessWidget {
       {
         "name": "Clock Tower",
         "address": "Faisalabad City Center",
-        "image": "assets/images/Faisalabad/spot1.jpg"
+        "image": "assets/images/faislabad/faso1.jpg",
       },
       {
         "name": "Jinnah Garden",
         "address": "Faisalabad",
-        "image": "assets/images/Faisalabad/spot2.jpg"
+        "image": 'assets/images/faislabad/fas02.jpg',
       },
       {
         "name": "Gatwala Wildlife Park",
         "address": "Gatwala, Faisalabad",
-        "image": "assets/images/Faisalabad/spot3.jpg"
+        "image": 'assets/images/faislabad/fas03.jpg',
       },
       {
         "name": "Lyallpur Museum",
         "address": "Faisalabad",
-        "image": "assets/images/Faisalabad/spot4.jpg"
+        "image": 'assets/images/faislabad/fas04.jpg',
       }
     ];
     return GridView.builder(
@@ -944,22 +944,22 @@ class Faisalabadpage extends StatelessWidget {
       {
         "name": "Faisalabad Mall",
         "details": "Popular shopping center offering a variety of clothing, accessories, and electronics.",
-        "image": "assets/images/Faisalabad/cl1.jpg"
+        "image": "assets/images/faislabad/fascl1.jpg"
       },
       {
         "name": "D Ground Market",
         "details": "Known for clothing, textiles, and traditional items.",
-        "image": "assets/images/Faisalabad/cl2.jpg"
+        "image": "assets/images/faisalbad/fascl2.jpg"
       },
       {
         "name": "ChenOne Mall",
         "details": "A modern shopping mall featuring both local and international brands.",
-        "image": "assets/images/Faisalabad/cl3.jpg"
+        "image": "assets/images/faisalbad/fascl3.jpg"
       },
       {
         "name": "Kohinoor Market",
         "details": "Famous for fashion wear, footwear, and home goods.",
-        "image": "assets/images/Faisalabad/cl4.jpg"
+        "image": "assets/images/faislabad/fascl4.jpg"
       }
 
     ];
@@ -1024,22 +1024,22 @@ class Faisalabadpage extends StatelessWidget {
       {
         "name": "Faisalabad Restaurant",
         "details": "Known for traditional Punjabi dishes, including Biryani and BBQ.",
-        "image": "assets/images/Faisalabad/food1.jpg"
+        "image": "assets/images/faisalabad/fasfood1.jpg"
       },
       {
         "name": "Dera Restaurant",
         "details": "Famous for local delicacies, including chapli kebabs and naan.",
-        "image": "assets/images/Faisalabad/food2.jpg"
+        "image": "assets/images/faisalabad/fasfood2.jpg"
       },
       {
         "name": "Tandoor Restaurant",
         "details": "Specializes in traditional tandoori dishes, grilled meats, and naan.",
-        "image": "assets/images/Faisalabad/food3.jpg"
+        "image": "assets/images/faisalabad/fasfood3.jpg"
       },
       {
         "name": "Khaas Restaurant",
         "details": "Offers a wide variety of local and continental dishes.",
-        "image": "assets/images/Faisalabad/food4.jpg"
+        "image": "assets/images/faisalabad/fasfood4.jpg"
       }
 
     ];
@@ -1104,22 +1104,22 @@ class Faisalabadpage extends StatelessWidget {
       {
         "name": "Faisalabad Food Festival",
         "details": "Annual food festival showcasing local and regional cuisines.",
-        "image": "assets/images/Faisalabad/f1.jpg"
+        "image": "assets/images/faislabad/fasf1.jpg"
       },
       {
         "name": "Faisalabad Cultural Festival",
         "details": "Celebration of local culture, music, dance, and traditional crafts.",
-        "image": "assets/images/Faisalabad/f2.jpg"
+        "image": "assets/images/faislabad/fasf2.jpg"
       },
       {
         "name": "Lyallpur Mela",
         "details": "A cultural and folk music event celebrating the heritage of Faisalabad.",
-        "image": "assets/images/Faisalabad/f3.jpg"
+        "image": "assets/images/faislabad/fasf3.jpg"
       },
       {
         "name": "Faisalabad Textile Expo",
         "details": "Event highlighting Faisalabad’s textile industry with exhibitions and trade shows.",
-        "image": "assets/images/Faisalabad/f4.jpg"
+        "image": "assets/images/faislabad/fasf4.jpg"
       }
 
     ];

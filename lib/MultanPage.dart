@@ -24,9 +24,8 @@ class Multanpage extends StatelessWidget {
   ];
   final List<String> festivalImages = [
     'assets/images/multan/multanfes3.jpg',
-    'assets/images/multan/multano1.jpg'
-        'assets/images/multan/multano2.jpg',
-    'assets/images/multan/multano3.jpg',
+    'assets/images/multan/multano1.jpg',
+        'assets/images/multan/multano3.jpg'
   ];
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;

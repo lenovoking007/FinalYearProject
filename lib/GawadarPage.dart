@@ -24,7 +24,7 @@ class Gawadarpage extends StatelessWidget {
   ];
   final List<String> festivalImages = [
     'assets/images/gwadar/gaf1.jpg',
-    'assets/images/gwadar/ga02.jpg',
+    'assets/images/gwadar/gao2.jpg',
     'assets/images/gwadar/gao4.jpg',
     'assets/images/gwadar/gaf4.jpg',
   ];

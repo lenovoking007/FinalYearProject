@@ -206,13 +206,13 @@ class CamelSafariPage extends StatelessWidget {
       {
         'name': 'Thar Desert',
         'location': 'Pakistan',
-        'details': 'Famous for its colorful culture, wildlife, and picturesque landscapes.',
+        'details': 'Famous for its colorful culture, wildlife,',
         'image': 'assets/images/CamelSafari/tharparkar.jpg',
       },
       {
         'name': 'Rann of Kutch',
         'location': 'Pakistan',
-        'details': 'A unique salt marsh, known for its stunning landscape and seasonal festivals.',
+        'details': 'A unique salt marsh, known for its stunning landscape ',
         'image': 'assets/images/CamelSafari/rannofkutch.jpg',
       },
     ];

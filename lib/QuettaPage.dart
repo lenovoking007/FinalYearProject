@@ -6,12 +6,13 @@ import 'package:travelmate/tripprogresspage.dart';
 
 class Quettapage extends StatelessWidget {
   final List<String> overviewImages = [
-    'assets/images/Lahore/lahore1.jpg',
-    'assets/images/Lahore/lahore2.jpg',
-    'assets/images/Lahore/lahore3.jpg',
+    'assets/images/quetta/quetta04.jpg',
+    'assets/images/quetta/quettao2.jpg',
+    'assets/images/quetta/quettao3.jpg',
+    'assets/images/quetta/quettao1.jpg',
   ];
   final List<String> clothesImages = [
-    'assets/images/Lahore/cl1.jpg',
+    'assets/images/quetta/quettacl4.jpg',
     'assets/images/Lahore/cl2.jpg',
     'assets/images/Lahore/cl3.jpg',
     'assets/images/Lahore/cl4.jpg',
@@ -23,10 +24,10 @@ class Quettapage extends StatelessWidget {
     'assets/images/Lahore/food4.jpg',
   ];
   final List<String> festivalImages = [
-    'assets/images/Lahore/f1.jpg',
-    'assets/images/Lahore/f2.jpg',
-    'assets/images/Lahore/f3.jpg',
-    'assets/images/Lahore/f4.jpg',
+    'assets/images/quetta/quettaf1.jpg',
+    'assets/images/quetta/quettaf2.jpg',
+    'assets/images/quetta/quettaf2.jpg',
+    'assets/images/quetta/quettaf3.jpg',
   ];
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -861,22 +862,22 @@ class Quettapage extends StatelessWidget {
       {
         "name": "Hanna Lake",
         "address": "Quetta",
-        "image": "assets/images/Quetta/spot1.jpg"
+        "image": "assets/images/quetta/quettao1.jpg"
       },
       {
         "name": "Quetta Fort",
         "address": "Quetta City",
-        "image": "assets/images/Quetta/spot2.jpg"
+        "image": "assets/images/quetta/quettao2.jpg"
       },
       {
         "name": "Ziarat",
         "address": "Ziarat, near Quetta",
-        "image": "assets/images/Quetta/spot3.jpg"
+        "image": "assets/images/quetta/quettao3.jpg"
       },
       {
         "name": "Bolan Pass",
         "address": "Quetta",
-        "image": "assets/images/Quetta/spot4.jpg"
+        "image":"assets/images/quetta/quetta04.jpg"
       }
     ];
     return GridView.builder(
@@ -940,22 +941,22 @@ class Quettapage extends StatelessWidget {
       {
         "name": "Quetta Saddar Bazaar",
         "details": "A bustling market known for traditional handicrafts, clothing, and local goods.",
-        "image": "assets/images/Quetta/cl1.jpg"
+        "image": "assets/images/quetta/quettacl1.jpg"
       },
       {
         "name": "Jinnah Road Market",
         "details": "Offers a variety of goods, including textiles, spices, and traditional items.",
-        "image": "assets/images/Quetta/cl2.jpg"
+        "image": "assets/images/quetta/quettacl2.jpg"
       },
       {
         "name": "Quetta Bazaar",
         "details": "Famous for its handicrafts, woolen goods, and spices.",
-        "image": "assets/images/Quetta/cl3.jpg"
+        "image": "assets/images/quetta/quettacl3.jpeg"
       },
       {
         "name": "Balochistan Handicraft Market",
         "details": "Specializes in Balochi embroidery, rugs, and traditional crafts.",
-        "image": "assets/images/Quetta/cl4.jpg"
+        "image": "assets/images/quetta/quettacl4.jpg"
       }
 
     ];
@@ -1020,12 +1021,12 @@ class Quettapage extends StatelessWidget {
       {
         "name": "Savor Restaurant",
         "details": "Famous for its traditional Balochi dishes, including Sajji and kebabs.",
-        "image": "assets/images/Quetta/food1.jpg"
+        "image": "assets/images/quetta/quettafood1.jpg"
       },
       {
         "name": "Chai Wala",
         "details": "Known for local snacks, tea, and traditional Baloch food.",
-        "image": "assets/images/Quetta/food2.jpg"
+        "image": "assets/images/quetta/quettafood2.jpg"
       },
       {
         "name": "Quetta Grill",
@@ -1101,22 +1102,22 @@ class Quettapage extends StatelessWidget {
       {
         "name": "Quetta Cultural Festival",
         "details": "Annual event celebrating the rich culture of Balochistan with music, dance, and handicrafts.",
-        "image": "assets/images/Quetta/f1.jpg"
+        "image": "assets/images/quetta/quettaf1.jpg"
       },
       {
         "name": "Sajji Festival",
         "details": "A festival celebrating the traditional Balochi dish, Sajji, with food stalls and cultural performances.",
-        "image": "assets/images/Quetta/f2.jpg"
+        "image": "assets/images/quetta/quettaf2.jpg"
       },
       {
         "name": "Balochistan Literature Festival",
         "details": "An event that highlights local literature, poetry, and storytelling from Balochistan.",
-        "image": "assets/images/Quetta/f3.jpg"
+        "image": "assets/images/quetta/quettaf3.jpg"
       },
       {
         "name": "Balochi Folk Music Festival",
         "details": "Celebration of traditional Balochi music and dance performances.",
-        "image": "assets/images/Quetta/f4.jpg"
+        "image": "assets/images/quetta/quettaf4.jpg"
       }
 
     ];
