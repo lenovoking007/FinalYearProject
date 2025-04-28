@@ -98,6 +98,11 @@ flutter:
     - assets/images/gwadar/
     - assets/images/faislabad/
     - assets/images/quetta/
+    - assets/images/naran/
+    - assets/images/sawat/
+    - assets/images/hunza/
+    - assets/images/skardu/
+    - assets/images/muzaffarabad/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 
