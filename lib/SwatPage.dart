@@ -6,9 +6,11 @@ import 'package:travelmate/tripprogresspage.dart';
 
 class Swatpage extends StatelessWidget {
   final List<String> overviewImages = [
-    'assets/images/Lahore/lahore1.jpg',
-    'assets/images/Lahore/lahore2.jpg',
-    'assets/images/Lahore/lahore3.jpg',
+    'assets/images/sawat/sawato1.jpg',
+    'assets/images/sawat/sawato2.jpg',
+    'assets/images/sawat/sawato3.jpg',
+    'assets/images/sawat/sawato4.jpg',
+
   ];
   final List<String> clothesImages = [
     'assets/images/Lahore/cl1.jpg',
@@ -23,10 +25,10 @@ class Swatpage extends StatelessWidget {
     'assets/images/Lahore/food4.jpg',
   ];
   final List<String> festivalImages = [
-    'assets/images/Lahore/f1.jpg',
-    'assets/images/Lahore/f2.jpg',
-    'assets/images/Lahore/f3.jpg',
-    'assets/images/Lahore/f4.jpg',
+    'assets/images/sawat/sawatf1.jpg',
+    'assets/images/sawat/sawatf4.jpg',
+    'assets/images/sawat/sawatf3.jpg',
+    'assets/images/sawat/sawatf4.png',
   ];
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -863,22 +865,22 @@ class Swatpage extends StatelessWidget {
       {
         "name": "Malam Jabba",
         "address": "Malam Jabba, Swat",
-        "image": "assets/images/Swat/spot1.jpg"
+        "image": "assets/images/sawat/sawato1.jpg"
       },
       {
         "name": "Fizagat Park",
         "address": "Mingora, Swat",
-        "image": "assets/images/Swat/spot2.jpg"
+        "image": "assets/images/sawat/sawato2.jpg"
       },
       {
         "name": "Bahrain Valley",
         "address": "Bahrain, Swat",
-        "image": "assets/images/Swat/spot3.jpg"
+        "image": "assets/images/sawat/sawato3.jpg"
       },
       {
         "name": "Ushu Forest",
         "address": "Ushu, Swat",
-        "image": "assets/images/Swat/spot4.jpg"
+        "image": "assets/images/swat/swato4.jpg"
       }
     ];
     return GridView.builder(
@@ -942,22 +944,22 @@ class Swatpage extends StatelessWidget {
       {
         "name": "Mingora Bazaar",
         "details": "A bustling market offering traditional crafts, textiles, and local products.",
-        "image": "assets/images/Swat/cl1.jpg"
+        "image": "assets/images/sawat/sawatcl1.jpg"
       },
       {
         "name": "Fizagat Market",
         "details": "Known for fresh fruits, traditional goods, and handicrafts.",
-        "image": "assets/images/Swat/cl2.jpg"
+        "image": "assets/images/sawat/sawatcl2.jpg"
       },
       {
         "name": "Kalam Market",
         "details": "Specializes in handmade woolen goods, local artifacts, and souvenirs.",
-        "image": "assets/images/Swat/cl3.jpg"
+        "image": "assets/images/sawat/sawatcl3.jpg"
       },
       {
         "name": "Swat Handicraft Bazaar",
         "details": "Features locally crafted jewelry, pottery, and textiles.",
-        "image": "assets/images/Swat/cl4.jpg"
+        "image": "assets/images/sawat/sawatcl4.jpg"
       }
 
     ];
@@ -1022,22 +1024,22 @@ class Swatpage extends StatelessWidget {
       {
         "name": "Swat Valley Restaurant",
         "details": "Famous for traditional Pashtun dishes, including chapli kebabs and lamb.",
-        "image": "assets/images/Swat/food1.jpg"
+        "image": "assets/images/sawat/sawatfood1.jpg"
       },
       {
         "name": "Malam Jabba Restaurant",
         "details": "Known for its local specialties like trout and traditional Pashtun cuisines.",
-        "image": "assets/images/Swat/food2.jpg"
+        "image": "assets/images/sawat/sawatfood2.jpg"
       },
       {
         "name": "Bahrain Restaurant",
         "details": "Specializes in grilled meats, fresh fish, and traditional flatbreads.",
-        "image": "assets/images/Swat/food3.jpg"
+        "image": "assets/images/sawat/sawatfood3.jpg"
       },
       {
         "name": "Kalam Food Corner",
         "details": "Offers local snacks and traditional Swati dishes, including kebabs and stews.",
-        "image": "assets/images/Swat/food4.jpg"
+        "image": "assets/images/sawat/sawatfood4.png"
       }
 
     ];
@@ -1102,22 +1104,22 @@ class Swatpage extends StatelessWidget {
       {
         "name": "Swat Cultural Festival",
         "details": "Annual festival celebrating Swati culture, with traditional music, dance, and arts.",
-        "image": "assets/images/Swat/f1.jpg"
+        "image": "assets/images/sawat/sawatf1.jpg"
       },
       {
         "name": "Malam Jabba Winter Festival",
         "details": "Celebration of winter sports, local performances, and cultural festivities in the scenic Malam Jabba.",
-        "image": "assets/images/Swat/f2.jpg"
+        "image": "assets/images/sawat/sawatf2.jpg"
       },
       {
         "name": "Kalam Summer Festival",
         "details": "A festival focusing on the beauty of the Swat Valley, with cultural exhibitions and local performances.",
-        "image": "assets/images/Swat/f3.jpg"
+        "image": "assets/images/sawat/sawatf3.jpg"
       },
       {
         "name": "Swat Adventure Festival",
         "details": "Event celebrating outdoor adventures, including trekking, rafting, and exploring the beautiful landscapes of Swat.",
-        "image": "assets/images/Swat/f4.jpg"
+        "image": "assets/images/sawat/sawatf4.jpg"
       }
 
     ];

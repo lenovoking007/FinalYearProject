@@ -6,27 +6,29 @@ import 'package:travelmate/tripprogresspage.dart';
 
 class Naranpage extends StatelessWidget {
   final List<String> overviewImages = [
-    'assets/images/Lahore/lahore1.jpg',
-    'assets/images/Lahore/lahore2.jpg',
-    'assets/images/Lahore/lahore3.jpg',
-  ];
+    'assets/images/naran/narano1.jpg',
+    'assets/images/naran/narano2.jpg',
+    'assets/images/naran/naran03.jpg',
+    'assets/images/naran/naran04.jpg',
+
+    ];
   final List<String> clothesImages = [
+    'assets/images/Lahore/cl4.jpg',
+    'assets/images/Lahore/c3.jpg',
     'assets/images/Lahore/cl1.jpg',
     'assets/images/Lahore/cl2.jpg',
-    'assets/images/Lahore/cl3.jpg',
-    'assets/images/Lahore/cl4.jpg',
   ];
   final List<String> foodImages = [
-    'assets/images/Lahore/food1.jpg',
-    'assets/images/Lahore/food2.jpeg',
-    'assets/images/Lahore/food3.jpg',
     'assets/images/Lahore/food4.jpg',
+    'assets/images/Lahore/food3.jpeg',
+    'assets/images/Lahore/food2.jpg',
+    'assets/images/Lahore/food1.jpg',
   ];
   final List<String> festivalImages = [
-    'assets/images/Lahore/f1.jpg',
-    'assets/images/Lahore/f2.jpg',
-    'assets/images/Lahore/f3.jpg',
-    'assets/images/Lahore/f4.jpg',
+    'assets/images/naran/naranf1.jpg',
+    'assets/images/naran/naranf1.jpg',
+    'assets/images/naran/naranf1.jpg',
+    'assets/images/naran/naranf1.jpg',
   ];
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -862,22 +864,22 @@ class Naranpage extends StatelessWidget {
       {
         "name": "Saif-ul-Malook Lake",
         "address": "Naran Valley, Kaghan Valley",
-        "image": "assets/images/Naran/saif_ul_malook.jpg"
+        "image": "assets/images/naran/narano1.jpg"
       },
       {
         "name": "Lulusar Lake",
         "address": "Naran, Kaghan Valley",
-        "image": "assets/images/Naran/lulusar_lake.jpg"
+        "image": "assets/images/naran/narano2.jpg"
       },
       {
         "name": "Babusar Top",
         "address": "Kaghan Valley, Naran",
-        "image": "assets/images/Naran/babusar_top.jpg"
+        "image": "assets/images/naran/naran03.jpg"
       },
       {
         "name": "Sharan Forest",
         "address": "Naran, Kaghan Valley",
-        "image": "assets/images/Naran/sharan_forest.jpg"
+        "image": "assets/images/naran/naran.jpg"
       }
 
     ];
@@ -942,22 +944,22 @@ class Naranpage extends StatelessWidget {
       {
         "name": "Naran Bazaar",
         "details": "A local market offering traditional woolen shawls, handicrafts, and souvenirs.",
-        "image": "assets/images/Naran/naran_bazaar.jpg"
+        "image": "assets/images/naran/narancl1.jpg"
       },
       {
         "name": "Kaghan Market",
         "details": "Known for traditional handmade woolen goods, local jewelry, and crafts.",
-        "image": "assets/images/Naran/kaghan_market.jpg"
+        "image": "assets/images/naran/narancl2.jpg"
       },
       {
         "name": "Babu Sar Top Market",
         "details": "Local goods and souvenirs reflecting the highland culture and tradition.",
-        "image": "assets/images/Naran/babusar_top_market.jpg"
+        "image": "assets/images/naran/narancl3.jpg"
       },
       {
         "name": "Sharan Village Market",
         "details": "Traditional stalls selling local food, crafts, and woolen clothes.",
-        "image": "assets/images/Naran/sharan_village_market.jpg"
+        "image": "assets/images/naran/narancl3.jpeg"
       }
     ];
     return GridView.builder(
@@ -1021,22 +1023,22 @@ class Naranpage extends StatelessWidget {
       {
         "name": "Naran Trout House",
         "details": "Famous for its trout dishes and local specialties.",
-        "image": "assets/images/Naran/naran_trout_house.jpg"
+        "image": "assets/images/naran/naranfood1.jpg"
       },
       {
         "name": "Kaghan Valley Restaurant",
         "details": "Popular for fresh trout, chicken kebabs, and traditional Balti cuisine.",
-        "image": "assets/images/Naran/kaghan_valley_restaurant.jpg"
+        "image":"assets/images/naran/naranfood2.jpg"
       },
       {
         "name": "Saif-ul-Malook Restaurant",
         "details": "A lakeside restaurant offering local dishes with a view of the majestic Saif-ul-Malook Lake.",
-        "image": "assets/images/Naran/saif_ul_malook_restaurant.jpg"
+        "image": "assets/images/naran/naranfood3.jpg"
       },
       {
         "name": "Sharan Diner",
         "details": "Serving traditional Balti food and grilled specialties in a cozy ambiance.",
-        "image": "assets/images/Naran/sharan_diner.jpg"
+        "image": "assets/images/naran/naranfood4.jpeg"
       }
     ];
     return GridView.builder(
@@ -1100,22 +1102,22 @@ class Naranpage extends StatelessWidget {
       {
         "name": "Naran Cultural Festival",
         "details": "An annual celebration showcasing local music, dance, and traditional arts.",
-        "image": "assets/images/Naran/naran_cultural_festival.jpg"
+        "image": "assets/images/naran/naranf1.jpg"
       },
       {
         "name": "Kaghan Summer Festival",
         "details": "A vibrant event with folk music, dance performances, and local crafts.",
-        "image": "assets/images/Naran/kaghan_summer_festival.jpg"
+        "image": "assets/images/naran/naranf2.jpg"
       },
       {
         "name": "Saif-ul-Malook Fair",
         "details": "A festival celebrating local legends and folk songs near the lake.",
-        "image": "assets/images/Naran/saif_ul_malook_fair.jpg"
+        "image": "assets/images/naran/naranf3.jpg"
       },
       {
         "name": "Babusar Top Festivities",
         "details": "A local celebration with traditional Balochi music, dance, and cultural exhibitions.",
-        "image": "assets/images/Naran/babusar_top_festivities.jpg"
+        "image": "assets/images/naran/naranf4.jpg"
       }
     ];
     return GridView.builder(
