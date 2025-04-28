@@ -154,23 +154,30 @@ class HotAirBalloonPage extends StatelessWidget {
   Widget _buildCityGrid() {
     final List<Map<String, dynamic>> cities = [
       {
-        'name': 'Cappadocia',
-        'type': 'Turkey Hot Air Ballooning',
-        'spots': 'Göreme National Park',
-        'image': 'assets/images/HotAirBalloon/cappadocia.jpg',
+        'name': 'Skardu',
+        'type': 'Pakistan Hot Air Ballooning',
+        'spots': 'Hunza Valley',
+        'image': 'assets/images/HotAirBalloon/skardu.jpg',
       },
       {
-        'name': 'Bagan',
-        'type': 'Myanmar Hot Air Ballooning',
-        'spots': 'Temples of Bagan',
-        'image': 'assets/images/HotAirBalloon/bagan.jpg',
+        'name': 'Lahore',
+        'type': 'Pakistan Hot Air Ballooning',
+        'spots': 'Badshahi Mosque & Shalimar Gardens',
+        'image': 'assets/images/HotAirBalloon/lahore.jpg',
       },
       {
-        'name': 'Chateau-d\'Oex',
-        'type': 'Switzerland Hot Air Ballooning',
-        'spots': 'Swiss Alps',
-        'image': 'assets/images/HotAirBalloon/chateau.jpg',
+        'name': 'Islamabad',
+        'type': 'Pakistan Hot Air Ballooning',
+        'spots': 'Margalla Hills',
+        'image': 'assets/images/HotAirBalloon/islamabad.jpg',
       },
+      {
+        'name': 'Karachi',
+        'type': 'Pakistan Hot Air Ballooning',
+        'spots': 'Manora Island',
+        'image': 'assets/images/HotAirBalloon/karachi.jpg',
+      },
+
       {
         'name': 'Serengeti',
         'type': 'Tanzania Hot Air Ballooning',
@@ -203,16 +210,16 @@ class HotAirBalloonPage extends StatelessWidget {
   Widget _buildNaturalSpotsGrid() {
     final List<Map<String, dynamic>> spots = [
       {
-        'name': 'Grand Canyon',
-        'location': 'USA',
-        'details': 'A thrilling ride over the world-famous Grand Canyon.',
-        'image': 'assets/images/HotAirBalloon/grandcanyon.jpg',
+        'name': 'Lahore',
+        'location': 'Pakistan',
+        'details': 'Hot air ballooning over the historical landmarks of Lahore.',
+        'image': 'assets/images/HotAirBalloon/lahore.jpg',
       },
       {
-        'name': 'Loire Valley',
-        'location': 'France',
-        'details': 'Hot air ballooning over the beautiful castles of France.',
-        'image': 'assets/images/HotAirBalloon/loirevalley.jpg',
+        'name': 'Islamabad',
+        'location': 'Pakistan',
+        'details': 'Experience the beauty of Margalla Hills from a hot air balloon.',
+        'image': 'assets/images/HotAirBalloon/islamabad.jpg',
       },
     ];
 

@@ -70,7 +70,7 @@ class DesertSafariPage extends StatelessWidget {
           _buildInfoCard(
             title: 'Experience the Thrill of Desert Safari',
             description:
-            'Embark on an exhilarating adventure through the vast desert dunes. Feel the thrill of dune bashing, camel riding, and watching the sun set over the endless sands.',
+            'Embark on an exhilarating adventure through the vast desert dunes.',
           ),
           const SizedBox(height: 24),
           const Padding(
@@ -154,29 +154,30 @@ class DesertSafariPage extends StatelessWidget {
   Widget _buildCityGrid() {
     final List<Map<String, dynamic>> cities = [
       {
-        'name': 'Dubai',
-        'type': 'UAE Desert Safari',
-        'spots': 'Dubai Desert Conservation Reserve',
-        'image': 'assets/images/DesertSafari/dubai.jpg',
+        'name': 'Cholistan',
+        'type': 'Pakistan Desert Safari',
+        'spots': 'Cholistan Desert',
+        'image': 'assets/images/DesertSafari/cholistan.jpg',
       },
       {
-        'name': 'Marrakech',
-        'type': 'Morocco Desert Safari',
-        'spots': 'Sahara Desert',
-        'image': 'assets/images/DesertSafari/marrakech.jpg',
+        'name': 'Tharparkar',
+        'type': 'Pakistan Desert Safari',
+        'spots': 'Thar Desert',
+        'image': 'assets/images/DesertSafari/tharparkar.jpg',
       },
       {
-        'name': 'Wadi Rum',
-        'type': 'Jordan Desert Safari',
-        'spots': 'Wadi Rum Desert',
-        'image': 'assets/images/DesertSafari/wadirum.jpg',
+        'name': 'Rann of Kutch',
+        'type': 'Pakistan Desert Safari',
+        'spots': 'Rann of Kutch Desert',
+        'image': 'assets/images/DesertSafari/rannofkutch.jpg',
       },
       {
-        'name': 'Namib Desert',
-        'type': 'Namibia Desert Safari',
-        'spots': 'Sossusvlei Dunes',
-        'image': 'assets/images/DesertSafari/namib.jpg',
+        'name': 'Karakoram Desert',
+        'type': 'Pakistan Desert Safari',
+        'spots': 'Karakoram Desert',
+        'image': 'assets/images/DesertSafari/karakoram.jpg',
       },
+
     ];
 
     return GridView.builder(
@@ -203,16 +204,16 @@ class DesertSafariPage extends StatelessWidget {
   Widget _buildNaturalSpotsGrid() {
     final List<Map<String, dynamic>> spots = [
       {
-        'name': 'Sahara Desert',
-        'location': 'Africa',
-        'details': 'A vast desert with endless sand dunes and breathtaking beauty.',
-        'image': 'assets/images/DesertSafari/sahara.jpg',
+        'name': 'Rann of Kutch',
+        'type': 'Pakistan Desert Safari',
+        'spots': 'Rann of Kutch Desert',
+        'image': 'assets/images/DesertSafari/rannofkutch.jpg',
       },
       {
-        'name': 'Atacama Desert',
-        'location': 'Chile',
-        'details': 'The driest desert in the world, famous for its salt flats and unique landscapes.',
-        'image': 'assets/images/DesertSafari/atacama.jpg',
+        'name': 'Karakoram Desert',
+        'type': 'Pakistan Desert Safari',
+        'spots': 'Karakoram Desert',
+        'image': 'assets/images/DesertSafari/karakoram.jpg',
       },
     ];
 

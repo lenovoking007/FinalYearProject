@@ -154,29 +154,30 @@ class IceClimbingPage extends StatelessWidget {
   Widget _buildCityGrid() {
     final List<Map<String, dynamic>> cities = [
       {
-        'name': 'Mount McKinley',
-        'type': 'Alaskan Ice Climbing',
-        'spots': 'Denali National Park',
-        'image': 'assets/images/IceClimbing/mckinley.jpg',
+        'name': 'Nanga Parbat',
+        'type': 'Pakistan Ice Climbing',
+        'spots': 'Fairy Meadows, Gilgit-Baltistan',
+        'image': 'assets/images/IceClimbing/nangaparbat.jpg',
       },
       {
-        'name': 'Karakol Valley',
-        'type': 'Kyrgyzstan Ice Climbing',
-        'spots': 'Issyk-Kul Region',
-        'image': 'assets/images/IceClimbing/karakol.jpg',
+        'name': 'K2',
+        'type': 'Pakistan Ice Climbing',
+        'spots': 'Karakoram Range',
+        'image': 'assets/images/IceClimbing/k2.jpg',
       },
       {
-        'name': 'Chamonix Mont-Blanc',
-        'type': 'French Alps Ice Climbing',
-        'spots': 'Chamonix Valley',
-        'image': 'assets/images/IceClimbing/chamonix.jpg',
+        'name': 'Ratti Gali Lake',
+        'type': 'Pakistan Ice Climbing',
+        'spots': 'Azad Kashmir',
+        'image': 'assets/images/IceClimbing/rattigali.jpg',
       },
       {
-        'name': 'Himalayas',
-        'type': 'Nepal Ice Climbing',
-        'spots': 'Everest Region',
-        'image': 'assets/images/IceClimbing/himalayas.jpg',
+        'name': 'Rakaposhi',
+        'type': 'Pakistan Ice Climbing',
+        'spots': 'Hunza Valley',
+        'image': 'assets/images/IceClimbing/rakaposhi.jpg',
       },
+
     ];
 
     return GridView.builder(
@@ -203,19 +204,18 @@ class IceClimbingPage extends StatelessWidget {
   Widget _buildNaturalSpotsGrid() {
     final List<Map<String, dynamic>> spots = [
       {
-        'name': 'Icefall in Chamarel',
-        'location': 'Mauritius',
-        'details': 'Stunning frozen falls ideal for beginner climbers.',
-        'image': 'assets/images/IceClimbing/chamarel.jpg',
+        'name': 'Nanga Parbat',
+        'type': 'Pakistan Ice Climbing',
+        'spots': 'Fairy Meadows, Gilgit-Baltistan',
+        'image': 'assets/images/IceClimbing/nangaparbat.jpg',
       },
       {
-        'name': 'Patagonian Ice',
-        'location': 'Argentina',
-        'details': 'Challenging ice climbing on steep glaciers.',
-        'image': 'assets/images/IceClimbing/patagonia.jpg',
+        'name': 'K2',
+        'type': 'Pakistan Ice Climbing',
+        'spots': 'Karakoram Range',
+        'image': 'assets/images/IceClimbing/k2.jpg',
       },
     ];
-
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),

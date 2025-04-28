@@ -154,29 +154,30 @@ class CamelSafariPage extends StatelessWidget {
   Widget _buildCityGrid() {
     final List<Map<String, dynamic>> cities = [
       {
-        'name': 'Dubai',
-        'type': 'UAE Camel Safari',
-        'spots': 'Dubai Desert Conservation Reserve',
-        'image': 'assets/images/CamelSafari/dubai.jpg',
+        'name': 'Cholistan',
+        'type': 'Pakistan Camel Safari',
+        'spots': 'Cholistan Desert',
+        'image': 'assets/images/CamelSafari/cholistan.jpg',
       },
       {
-        'name': 'Marrakech',
-        'type': 'Morocco Camel Safari',
-        'spots': 'Sahara Desert',
-        'image': 'assets/images/CamelSafari/marrakech.jpg',
-      },
-      {
-        'name': 'Jaisalmer',
-        'type': 'India Camel Safari',
+        'name': 'Tharparkar',
+        'type': 'Pakistan Camel Safari',
         'spots': 'Thar Desert',
-        'image': 'assets/images/CamelSafari/jaisalmer.jpg',
+        'image': 'assets/images/CamelSafari/tharparkar.jpg',
       },
       {
-        'name': 'Wadi Rum',
-        'type': 'Jordan Camel Safari',
-        'spots': 'Wadi Rum Desert',
-        'image': 'assets/images/CamelSafari/wadirum.jpg',
+        'name': 'Rann of Kutch',
+        'type': 'Pakistan Camel Safari',
+        'spots': 'Rann of Kutch Desert',
+        'image': 'assets/images/CamelSafari/rannofkutch.jpg',
       },
+      {
+        'name': 'Karakoram',
+        'type': 'Pakistan Camel Safari',
+        'spots': 'Karakoram Desert',
+        'image': 'assets/images/CamelSafari/karakoram.jpg',
+      },
+
     ];
 
     return GridView.builder(
@@ -203,16 +204,16 @@ class CamelSafariPage extends StatelessWidget {
   Widget _buildNaturalSpotsGrid() {
     final List<Map<String, dynamic>> spots = [
       {
-        'name': 'Sahara Desert',
-        'location': 'Africa',
-        'details': 'A vast desert with endless sand dunes and breathtaking beauty.',
-        'image': 'assets/images/CamelSafari/sahara.jpg',
+        'name': 'Thar Desert',
+        'location': 'Pakistan',
+        'details': 'Famous for its colorful culture, wildlife, and picturesque landscapes.',
+        'image': 'assets/images/CamelSafari/tharparkar.jpg',
       },
       {
-        'name': 'Atacama Desert',
-        'location': 'Chile',
-        'details': 'The driest desert in the world, famous for its salt flats and unique landscapes.',
-        'image': 'assets/images/CamelSafari/atacama.jpg',
+        'name': 'Rann of Kutch',
+        'location': 'Pakistan',
+        'details': 'A unique salt marsh, known for its stunning landscape and seasonal festivals.',
+        'image': 'assets/images/CamelSafari/rannofkutch.jpg',
       },
     ];
 

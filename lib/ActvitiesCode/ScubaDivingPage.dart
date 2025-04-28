@@ -163,29 +163,30 @@ class ScubaDivingPage extends StatelessWidget {
   Widget _buildDestinationGrid() {
     final List<Map<String, dynamic>> destinations = [
       {
-        'name': 'Great Barrier Reef',
-        'location': 'Australia',
-        'image': 'assets/images/ScubaDiving/greatbarrierreef.jpg',
-        'difficulty': 'Moderate',
+        'name': 'Churna Island',
+        'location': 'Karachi, Pakistan',
+        'image': 'assets/images/ScubaDiving/churnaisland.jpg',
+        'difficulty': 'Easy to Moderate',
       },
       {
-        'name': 'Blue Hole',
-        'location': 'Belize',
-        'image': 'assets/images/ScubaDiving/bluehole.jpg',
-        'difficulty': 'Challenging',
-      },
-      {
-        'name': 'Maldives',
-        'location': 'Indian Ocean',
-        'image': 'assets/images/ScubaDiving/maldives.jpg',
+        'name': 'Ormara Beach',
+        'location': 'Balochistan, Pakistan',
+        'image': 'assets/images/ScubaDiving/ormara.jpg',
         'difficulty': 'Easy',
       },
       {
-        'name': 'Raja Ampat',
-        'location': 'Indonesia',
-        'image': 'assets/images/ScubaDiving/rajaampat.jpg',
-        'difficulty': 'Challenging',
+        'name': 'Gwadar Bay',
+        'location': 'Gwadar, Pakistan',
+        'image': 'assets/images/ScubaDiving/gwadar.jpg',
+        'difficulty': 'Moderate',
       },
+      {
+        'name': 'Mubarak Village',
+        'location': 'Karachi, Pakistan',
+        'image': 'assets/images/ScubaDiving/mubarakvillage.jpg',
+        'difficulty': 'Easy',
+      },
+
     ];
 
     return GridView.builder(
@@ -212,29 +213,30 @@ class ScubaDivingPage extends StatelessWidget {
   Widget _buildDivingSpotsGrid() {
     final List<Map<String, dynamic>> spots = [
       {
-        'name': 'Cenotes, Mexico',
-        'location': 'Mexico',
-        'details': 'Explore underwater caves in Mexico\'s famous cenotes.',
-        'image': 'assets/images/ScubaDiving/cenotesmexico.jpg',
+        'name': 'Churna Island',
+        'location': 'Karachi, Pakistan',
+        'details': 'Popular for scuba diving and snorkeling with colorful coral reefs and rich marine life.',
+        'image': 'assets/images/ScubaDiving/churnaisland.jpg',
       },
       {
-        'name': 'Galapagos Islands',
-        'location': 'Ecuador',
-        'details': 'An eco-diver’s dream with incredible marine biodiversity.',
-        'image': 'assets/images/ScubaDiving/galapagos.jpg',
+        'name': 'Ormara Beach',
+        'location': 'Balochistan, Pakistan',
+        'details': 'Crystal-clear waters ideal for beginner to intermediate divers seeking serene underwater views.',
+        'image': 'assets/images/ScubaDiving/ormara.jpg',
       },
       {
-        'name': 'Fiji',
-        'location': 'South Pacific',
-        'details': 'Diving in vibrant coral reefs with clear waters.',
-        'image': 'assets/images/ScubaDiving/fiji.jpg',
+        'name': 'Astola Island',
+        'location': 'Pasni, Balochistan, Pakistan',
+        'details': 'Pakistan’s largest offshore island, offering untouched reefs and exotic marine species.',
+        'image': 'assets/images/ScubaDiving/astola.jpg',
       },
       {
-        'name': 'Sharm El Sheikh',
-        'location': 'Egypt',
-        'details': 'A diving paradise with rich marine life in the Red Sea.',
-        'image': 'assets/images/ScubaDiving/sharmelsheikh.jpg',
+        'name': 'Mubarak Village',
+        'location': 'Karachi, Pakistan',
+        'details': 'A peaceful diving spot close to Karachi with easy access to vibrant sea life.',
+        'image': 'assets/images/ScubaDiving/mubarakvillage.jpg',
       },
+
     ];
 
     return GridView.builder(

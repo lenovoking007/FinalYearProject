@@ -163,29 +163,30 @@ class MountainBikingPage extends StatelessWidget {
   Widget _buildLocationsGrid() {
     final List<Map<String, dynamic>> locations = [
       {
-        'name': 'Whistler Mountain',
-        'country': 'Canada',
-        'image': 'assets/images/MountainBiking/whistler.jpg',
+        'name': 'Shandur Pass',
+        'country': 'Pakistan',
+        'image': 'assets/images/MountainBiking/shandur.jpg',
         'difficulty': 'Intermediate to Advanced',
       },
       {
-        'name': 'Moab',
-        'country': 'USA',
-        'image': 'assets/images/MountainBiking/moab.jpg',
-        'difficulty': 'Advanced',
+        'name': 'Fairy Meadows',
+        'country': 'Pakistan',
+        'image': 'assets/images/MountainBiking/fairymeadows.jpg',
+        'difficulty': 'Intermediate',
       },
       {
-        'name': 'Bansko',
-        'country': 'Bulgaria',
-        'image': 'assets/images/MountainBiking/bansko.jpg',
+        'name': 'Hunza Valley',
+        'country': 'Pakistan',
+        'image': 'assets/images/MountainBiking/hunza.jpg',
         'difficulty': 'Beginner to Intermediate',
       },
       {
-        'name': 'Les Gets',
-        'country': 'France',
-        'image': 'assets/images/MountainBiking/lesgets.jpg',
-        'difficulty': 'Intermediate',
+        'name': 'Murree Hills',
+        'country': 'Pakistan',
+        'image': 'assets/images/MountainBiking/murree.jpg',
+        'difficulty': 'Beginner',
       },
+
     ];
 
     return GridView.builder(

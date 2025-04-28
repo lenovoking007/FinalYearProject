@@ -163,29 +163,30 @@ class RockClimbingPage extends StatelessWidget {
   Widget _buildClimbingSpotsGrid() {
     final List<Map<String, dynamic>> spots = [
       {
-        'name': 'El Capitan',
-        'location': 'Yosemite, USA',
-        'image': 'assets/images/RockClimbing/elcapitan.jpg',
+        'name': 'Margalla Hills',
+        'location': 'Islamabad, Pakistan',
+        'image': 'assets/images/RockClimbing/margallahills.jpg',
+        'difficulty': 'Beginner to Intermediate',
+      },
+      {
+        'name': 'Trango Towers',
+        'location': 'Baltoro Glacier, Pakistan',
+        'image': 'assets/images/RockClimbing/trangotowers.jpg',
         'difficulty': 'Advanced',
       },
       {
-        'name': 'Rocklands',
-        'location': 'South Africa',
-        'image': 'assets/images/RockClimbing/rocklands.jpg',
-        'difficulty': 'Intermediate',
+        'name': 'Passu Cones',
+        'location': 'Hunza Valley, Pakistan',
+        'image': 'assets/images/RockClimbing/passucones.jpg',
+        'difficulty': 'Intermediate to Advanced',
       },
       {
-        'name': 'Mount Rushmore',
-        'location': 'USA',
-        'image': 'assets/images/RockClimbing/mountrushmore.jpg',
+        'name': 'Shimshal Valley',
+        'location': 'Gilgit-Baltistan, Pakistan',
+        'image': 'assets/images/RockClimbing/shimshal.jpg',
         'difficulty': 'Challenging',
       },
-      {
-        'name': 'Joshua Tree',
-        'location': 'California, USA',
-        'image': 'assets/images/RockClimbing/joshuatree.jpg',
-        'difficulty': 'Moderate',
-      },
+
     ];
 
     return GridView.builder(

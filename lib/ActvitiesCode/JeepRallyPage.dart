@@ -154,29 +154,30 @@ class JeepRallyPage extends StatelessWidget {
   Widget _buildCityGrid() {
     final List<Map<String, dynamic>> cities = [
       {
-        'name': 'Thar Desert',
+        'name': 'Cholistan Desert',
         'type': 'Desert Rally',
-        'spots': 'Mithi, Islamkot',
-        'image': 'assets/images/JeepRally/thar.jpg',
+        'spots': 'Derawar Fort, Bahawalpur',
+        'image': 'assets/images/JeepRally/cholistan.jpg',
       },
       {
-        'name': 'Rann of Kutch',
-        'type': 'Salt Marsh Rally',
-        'spots': 'Sindh Border, Rann Desert',
-        'image': 'assets/images/JeepRally/rann.jpg',
-      },
-      {
-        'name': 'Jeep Rally at Hunza',
+        'name': 'Karakoram Highway',
         'type': 'Mountain Rally',
-        'spots': 'Karimabad, Altit Fort',
-        'image': 'assets/images/JeepRally/hunza.jpg',
+        'spots': 'Gilgit, Hunza Valley',
+        'image': 'assets/images/JeepRally/karakoram.jpg',
       },
       {
-        'name': 'Swat Valley',
-        'type': 'Valley Rally',
-        'spots': 'Mingora, Fizagat Park',
-        'image': 'assets/images/JeepRally/swat.jpg',
+        'name': 'Makran Coastal Highway',
+        'type': 'Coastal Rally',
+        'spots': 'Gwadar, Ormara',
+        'image': 'assets/images/JeepRally/makran.jpg',
       },
+      {
+        'name': 'Ziarat Valley',
+        'type': 'Hill Rally',
+        'spots': 'Ziarat, Quetta',
+        'image': 'assets/images/JeepRally/ziarat.jpg',
+      },
+
     ];
 
     return GridView.builder(
