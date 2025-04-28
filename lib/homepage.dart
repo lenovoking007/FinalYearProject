@@ -336,12 +336,11 @@ class _HomePageState extends State<HomePage> {
     return GestureDetector(
       onTap: () {
         if (title == 'Karachi') {
-
           Navigator.push(context, MaterialPageRoute(builder: (context) => Karachipage()));
         } else if (title == 'Lahore') {
           Navigator.push(context, MaterialPageRoute(builder: (context) => LahorePage()));
         } else if (title == 'Islamabad') {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => IslamabadPage()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => Islamabadpage()));
         }
       },
       child: Card(
@@ -431,7 +430,7 @@ class _HomePageState extends State<HomePage> {
         } else if (title == 'Swat') {
           Navigator.push(context, MaterialPageRoute(builder: (context) => Swatpage()));
         } else if (title == 'Hunza') {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => HunzaPage()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => Hunzapage()));
         }
       },
       child: Card(
