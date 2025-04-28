@@ -592,7 +592,7 @@ class Naranpage extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           _buildInfoCard(
-              title: 'About Multan',
+              title: 'About Naran',
               description:
               "Naran, nestled in the Kaghan Valley, is a breathtaking destination famous for its serene lakes, lush green valleys, and snow-capped mountains,"
                   " making it a perfect retreat for nature lovers and adventure enthusiasts."

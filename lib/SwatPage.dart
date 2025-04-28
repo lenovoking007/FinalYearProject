@@ -707,10 +707,10 @@ class Swatpage extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           _buildInfoCard(
-            title: 'SkarduCuisine',
+            title: 'SwatCuisine',
             description:
-            "Skardu is a food lover's paradise, famous for"
-                " its traditional Baltistani dishes, fresh trout"
+            "Swat is a food lover's paradise, famous for"
+                " its traditional  dishes, fresh trout"
                 ", and locally grown fruits like apricots and apples.",),
           const SizedBox(height: 24),
           Padding(

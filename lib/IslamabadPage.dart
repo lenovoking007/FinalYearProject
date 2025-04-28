@@ -6,9 +6,9 @@ import 'package:travelmate/tripprogresspage.dart';
 
 class Islamabadpage extends StatelessWidget {
   final List<String> overviewImages = [
-    'assets/images/Lahore/lahore1.jpg',
-    'assets/images/Lahore/lahore2.jpg',
-    'assets/images/Lahore/lahore3.jpg',
+    'assets/images/islambad/islambad1.jpg',
+    'assets/images/islambad/islambad2.jpg',
+    'assets/images/islambad/islambad3.jpg',
   ];
   final List<String> clothesImages = [
     'assets/images/Lahore/cl1.jpg',
@@ -23,10 +23,10 @@ class Islamabadpage extends StatelessWidget {
     'assets/images/Lahore/food4.jpg',
   ];
   final List<String> festivalImages = [
-    'assets/images/Lahore/f1.jpg',
-    'assets/images/Lahore/f2.jpg',
-    'assets/images/Lahore/f3.jpg',
-    'assets/images/Lahore/f4.jpg',
+    'assets/images/islambad/islambadf1.jpeg',
+    'assets/images/islambad/islambad3.jpg',
+    'assets/images/islambad/islambadf3.jpg',
+    'assets/images/islambad/islambadf4.jpg',
   ];
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -705,9 +705,9 @@ class Islamabadpage extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           _buildInfoCard(
-            title: 'Lahore Cuisine',
+            title: 'Islambad Cuisine',
             description:
-            'Lahore is a food lover\'s paradise, offering a mix of traditional Pakistani dishes and modern culinary delights.',
+            'Islambad is a food lover\'s paradise, offering a mix of traditional Pakistani dishes and modern culinary delights.',
           ),
           const SizedBox(height: 24),
           Padding(
@@ -857,22 +857,22 @@ class Islamabadpage extends StatelessWidget {
       {
         'name': 'Faisal Mosque',
         'address': 'Shah Faisal Avenue, Islamabad',
-        'image': 'assets/images/Islamabad/faisal_mosque.jpg',
+        'image': 'assets/images/islambad/islambad1.jpg',
       },
       {
         'name': 'Pakistan Monument',
         'address': 'Shakarparian Hills, Islamabad',
-        'image': 'assets/images/Islamabad/pakistan_monument.jpg',
+        'image': 'assets/images/islambad/islambad3.jpg',
       },
       {
         'name': 'Daman-e-Koh',
         'address': 'Margalla Hills, Islamabad',
-        'image': 'assets/images/Islamabad/daman_e_koh.jpg',
+        'image': 'assets/images/islambad/islambadr4.jpg',
       },
       {
         'name': 'Centaurus Mall',
-        'address': 'Jinnah Avenue, Islamabad',
-        'image': 'assets/images/Islamabad/centaurus_mall.jpg',
+        'address': 'Jinnah Avenue, Islambad',
+        'image': 'assets/images/islambad/islambad2.jpg',
       },
 
     ];
@@ -935,25 +935,25 @@ class Islamabadpage extends StatelessWidget {
   Widget _buildShoppingGrid() {
     final List<Map<String, dynamic>> shoppingSpots = [
       {
-        'name': 'Packages Mall',
-        'details': 'A modern shopping mall with international brands.',
-        'image': 'assets/images/Lahore/cl1.jpg',
+        "name": "Centaurus Mall",
+        "details": "A modern shopping mall featuring international and local brands, offering a great shopping experience.",
+        "image": "assets/images/islambad/islambadc1.jpg"
       },
       {
-        'name': 'Emporium Mall',
-        'details': 'Luxury shopping experience with fine dining options.',
-        'image': 'assets/images/Lahore/cl2.jpg',
+        "name": "F-6 Markaz",
+        "details": "A popular shopping center known for its variety of local shops, traditional garments, and handicrafts.",
+        "image": "assets/images/islambad/islambadc2.jpg"
       },
       {
-        'name': 'Liberty Market',
-        'details': 'A blend of traditional and modern outfits.',
-        'image': 'assets/images/Lahore/cl3.jpg',
+        "name": "Safa Gold Mall",
+        "details": "A luxury shopping destination with a wide range of fashion and electronic brands.",
+        "image": "assets/images/islambad/islambadc3.jpg"
       },
       {
-        'name': 'Anarkali Bazaar',
-        'details': 'Famous for bridal and formal wear.',
-        'image': 'assets/images/Lahore/cl4.jpg',
-      },
+        "name": "Blue Area Market",
+        "details": "A bustling commercial area with a mix of local and international shopping options, including electronics and clothing.",
+        "image": "assets/images/islambad/islambadc4.jpg"
+      }
     ];
     return GridView.builder(
       shrinkWrap: true,
@@ -1016,22 +1016,22 @@ class Islamabadpage extends StatelessWidget {
     {
       'name': 'Monal Restaurant',
     'details': 'Famous for its breathtaking views and diverse menu.',
-    'image': 'assets/images/Islamabad/monal.jpg',
+    'image': 'assets/images/islambad/islambadfood2.jpg',
   },
     {
     'name': 'Savour Foods',
     'details': 'Popular for their signature pulao and kababs.',
-    'image': 'assets/images/Islamabad/savour_foods.jpg',
+    'image': 'assets/images/islambad/islambadfood5.jpg',
     },
     {
     'name': 'Street 1 Cafe',
     'details': 'Trendy spot for continental and fusion dishes.',
-    'image': 'assets/images/Islamabad/street1_cafe.jpg',
+    'image': 'assets/images/islambad/islambadfood3.jpg',
     },
       {
         'name': 'Chaaye Khana',
         'details': 'Ideal place for breakfast and desi tea lovers.',
-        'image': 'assets/images/Islamabad/cha',
+        'image': 'assets/images/islambad/islambadfood4.jpg',
       }
     ];
     return GridView.builder(
@@ -1095,22 +1095,22 @@ class Islamabadpage extends StatelessWidget {
       {
         'name': 'Pakistan Monument',
         'details': 'Venue for national celebrations and cultural events.',
-        'image': 'assets/images/Islamabad/monument.jpg',
+        'image': 'assets/images/islambad/islambad3.jpg',
       },
       {
         'name': 'Daman-e-Koh',
         'details': 'Scenic spot hosting musical evenings and small festivals.',
-        'image': 'assets/images/Islamabad/daman_e_koh.jpg',
+        'image': 'assets/images/islambad/islambadf4.jpg',
       },
       {
         'name': 'Lok Virsa Museum',
         'details': 'Hosts regular folk festivals and craft exhibitions.',
-        'image': 'assets/images/Islamabad/lok_virsa.jpg',
+        'image': 'assets/images/islambad/islambadf3.jpg',
       },
       {
         'name': 'F9 Park',
         'details': 'Popular for open-air concerts and family festivals.',
-        'image': 'assets/images/Islamabad/f9_park.jpg',
+        'image': 'assets/images/islambad/islambadf1.jpeg',
       },
 
     ];
