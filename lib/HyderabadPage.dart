@@ -6,9 +6,9 @@ import 'package:travelmate/tripprogresspage.dart';
 
 class Hyderabadpage extends StatelessWidget {
   final List<String> overviewImages = [
-    'assets/images/Lahore/lahore1.jpg',
-    'assets/images/Lahore/lahore2.jpg',
-    'assets/images/Lahore/lahore3.jpg',
+    'assets/images/hyderabad/hyderabado1.jpg',
+    'assets/images/hyderabad/hyderabado2.jpg',
+    'assets/images/hyderabad/hyderabado3.jpg',
   ];
   final List<String> clothesImages = [
     'assets/images/Lahore/cl1.jpg',
@@ -23,10 +23,10 @@ class Hyderabadpage extends StatelessWidget {
     'assets/images/Lahore/food4.jpg',
   ];
   final List<String> festivalImages = [
-    'assets/images/Lahore/f1.jpg',
-    'assets/images/Lahore/f2.jpg',
-    'assets/images/Lahore/f3.jpg',
-    'assets/images/Lahore/f4.jpg',
+    'assets/images/hyderabad/hyderabadf1.jpg',
+    'assets/images/hyderabad/hyderabadf2.jpg',
+    'assets/images/hyderabad/hyderabadf3.jpg',
+    'assets/images/hyderabad/hyderabadf4.jpg',
   ];
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -580,7 +580,7 @@ class Hyderabadpage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Discover Lahore",
+                  "Discover Hyderabad",
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -861,22 +861,22 @@ class Hyderabadpage extends StatelessWidget {
       {
         'name': 'Pakka Qila',
         'address': 'Qila Road, Hyderabad',
-        'image': 'assets/images/Hyderabad/hyd1.jpg',
+        'image': 'assets/images/hyderabad/hyderabado1.jpg',
       },
       {
         'name': 'Rani Bagh',
         'address': 'Thandi Sarak, Hyderabad',
-        'image': 'assets/images/Hyderabad/hyd2.jpg',
+        'image': 'assets/images/hyderabad/hyderabado2.jpg',
       },
       {
         'name': 'Sindh Museum',
         'address': 'Jamshoro Road, Hyderabad',
-        'image': 'assets/images/Hyderabad/hyd3.jpg',
+        'image': 'assets/images/hyderabad/hyderabad03.png',
       },
       {
         'name': 'Badshahi Bungalow',
         'address': 'Near Station Road, Hyderabad',
-        'image': 'assets/images/Hyderabad/hyd4.jpg',
+        'image': 'assets/images/hyderabad/hyderabad04.jpg',
       },
     ];
     return GridView.builder(
@@ -940,22 +940,22 @@ class Hyderabadpage extends StatelessWidget {
       {
         'name': 'Boulevard Mall',
         'details': 'Modern shopping mall with a variety of brands.',
-        'image': 'assets/images/Hyderabad/cl1.jpg',
+        'image': 'assets/images/hyderabad/hyderabadcl1.jpg',
       },
       {
         'name': 'Resham Gali',
         'details': 'Traditional market known for fabric, bridal, and casual shopping.',
-        'image': 'assets/images/Hyderabad/cl2.jpg',
+        'image': 'assets/images/hyderabad/hyderabadcl2.jpg',
       },
       {
         'name': 'Cantonment Shopping Area',
         'details': 'Blend of old and new fashion trends.',
-        'image': 'assets/images/Hyderabad/cl3.jpg',
+        'image': 'assets/images/hyderabad/hyderabadcl3.jpg',
       },
       {
         'name': 'Auto Bahn Road Markets',
         'details': 'One-stop for electronics, clothes, and street food.',
-        'image': 'assets/images/Hyderabad/cl4.jpg',
+        'image': 'assets/images/hyderabad/hyderabadcl4.jpg',
       },
     ];
     return GridView.builder(
@@ -1019,22 +1019,22 @@ class Hyderabadpage extends StatelessWidget {
       {
         'name': 'Bombay Bakery',
         'details': 'Iconic bakery famous for its cakes and pastries.',
-        'image': 'assets/images/Hyderabad/food1.jpg',
+        'image': 'assets/images/hyderabad/hyderabadfood1.jpeg',
       },
       {
         'name': 'Al Manzar Restaurant',
         'details': 'Known for traditional Sindhi biryani and BBQ.',
-        'image': 'assets/images/Hyderabad/food2.jpg',
+        'image': 'assets/images/hyderabad/hyderabadfood2.jpg',
       },
       {
         'name': 'Royal Taj Restaurant',
         'details': 'Popular for Mughlai and Pakistani cuisine.',
-        'image': 'assets/images/Hyderabad/food3.jpg',
+        'image': 'assets/images/hyderabad/hyderabadfood3.jpg',
       },
       {
         'name': 'Cafe George',
         'details': 'Great spot for fast food and snacks.',
-        'image': 'assets/images/Hyderabad/food4.jpg',
+        'image': 'assets/images/hyderabad/hyderabadfood4.jpg',
       },
     ];
     return GridView.builder(
@@ -1098,22 +1098,22 @@ class Hyderabadpage extends StatelessWidget {
       {
         'name': 'Sindh Cultural Festival',
         'details': 'Celebration of Sindhi heritage with music, art, and dance.',
-        'image': 'assets/images/Hyderabad/f1.jpg',
+        'image': 'assets/images/hyderabad/hyderabadf1.jpg',
       },
       {
         'name': 'Urs of Lal Shahbaz Qalandar (Sehwan)',
         'details': 'Spiritual gatherings, dhamal, and cultural activities.',
-        'image': 'assets/images/Hyderabad/f2.jpg',
+        'image': 'assets/images/hyderabad/hyderabadf2.jpg',
       },
       {
         'name': 'Literary Festivals',
         'details': 'Events showcasing local literature and arts.',
-        'image': 'assets/images/Hyderabad/f3.jpg',
+        'image': 'assets/images/hyderabad/hyderabadf3.jpg',
       },
       {
         'name': 'Hyderabad Mela',
         'details': 'Annual fair with handicrafts, food stalls, and cultural shows.',
-        'image': 'assets/images/Hyderabad/f4.jpg',
+        'image': 'assets/images/hyderabad/hyderabadf4.jpg',
       },
     ];
     return GridView.builder(

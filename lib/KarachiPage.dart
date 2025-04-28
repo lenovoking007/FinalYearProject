@@ -6,9 +6,9 @@ import 'package:travelmate/tripprogresspage.dart';
 
 class Karachipage extends StatelessWidget {
   final List<String> overviewImages = [
-    'assets/images/Karachi/karachio1.jpg',
-    'assets/images/Karachi/karachio2.jpg',
-    'assets/images/Karachi/karachio3.jpg',
+    'assets/images/Karachii/karachio1.jpg',
+    'assets/images/Karachii/karachio2.jpg',
+    'assets/images/Karachii/karachio3.jpg',
   ];
   final List<String> clothesImages = [
     'assets/images/Lahore/cl1.jpg',
@@ -23,9 +23,9 @@ class Karachipage extends StatelessWidget {
     'assets/images/Lahore/food4.jpg',
   ];
   final List<String> festivalImages = [
-    'assets/images/Karachi/karachifes1.jpg',
-    'assets/images/Karachi/kaarchifes2.jpg',
-    'assets/images/Karachi/karachifes3.jpg',
+    'assets/images/Karachii/karachifes1.jpg',
+    'assets/images/Karachii/kaarchifes2.jpg',
+    'assets/images/Karachii/karachifes3.jpg',
   ];
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -859,22 +859,22 @@ class Karachipage extends StatelessWidget {
       {
         'name': 'Quaid-e-Azam\'s Mausoleum',
         'address': 'M.A Jinnah Road, Karachi',
-        'image': 'assets/images/Karachi/karachio1.jpg',
+        'image': 'assets/images/Karachii/karachio1.jpg',
       },
       {
         'name': 'Clifton Beach',
         'address': 'Clifton, Karachi',
-        'image': 'assets/images/Karachi/karachio2.jpg',
+        'image': 'assets/images/Karachii/karachio2.jpg',
       },
       {
         'name': 'Mohatta Palace',
         'address': 'Clifton, Karachi',
-        'image': 'assets/images/Karachi/karachio3.jpg',
+        'image': 'assets/images/Karachii/karachio3.jpg',
       },
       {
         'name': 'Pakistan Maritime Museum',
         'address': 'Karsaz Road, Karachi',
-        'image': 'assets/images/Karachi/karachio4.jpg',
+        'image': 'assets/images/Karachii/karachio4.jpg',
       },
     ];
     return GridView.builder(
@@ -938,22 +938,22 @@ class Karachipage extends StatelessWidget {
       {
         'name': 'Dolmen Mall Clifton',
         'details': 'A premium mall with international and local brands.',
-        'image': 'assets/images/Karachi/karachicl1.jpg',
+        'image': 'assets/images/Karachii/karachicl1.jpg',
       },
       {
         'name': 'Lucky One Mall',
         'details': 'One of the largest malls with a vast shopping and entertainment experience.',
-        'image': 'assets/images/Karachi/karachicl2.jpg',
+        'image': 'assets/images/Karachii/karachicl2.jpg',
       },
       {
         'name': 'Zainab Market',
         'details': 'Famous for leather goods, handicrafts, and clothing at affordable prices.',
-        'image': 'assets/images/Karachi/karachicl3.jpg',
+        'image': 'assets/images/Karachii/karachicl3.jpg',
       },
       {
         'name': 'Tariq Road',
         'details': 'Popular spot for shopping traditional and modern clothing.',
-        'image': 'assets/images/Karachi/karachicl4.jpg',
+        'image': 'assets/images/Karachii/karachicl4.jpg',
       },
     ];
     return GridView.builder(
@@ -1017,22 +1017,22 @@ class Karachipage extends StatelessWidget {
       {
         'name': 'Do Darya',
         'details': 'Seaside dining with a wide variety of cuisines.',
-        'image': 'assets/images/Karachi/karachifood1.jpg',
+        'image': 'assets/images/Karachii/karachifood1.jpg',
       },
       {
         'name': 'Kolachi Restaurant',
         'details': 'Famous for seafood and grilled dishes by the sea.',
-        'image': 'assets/images/Karachi/karachifood2.jpg',
+        'image': 'assets/images/Karachii/karachifood2.jpg',
       },
       {
         'name': 'Boat Basin',
         'details': 'Popular food street for local and desi delights.',
-        'image': 'assets/images/Karachi/kaarchifood3.jpg',
+        'image': 'assets/images/Karachii/karachifood3.jpg',
       },
       {
         'name': 'Burns Road',
         'details': 'Historic food street known for traditional Pakistani food.',
-        'image': 'assets/images/Karachi/karachifood4.jpg',
+        'image': 'assets/images/Karachii/karachifood4.jpg',
       },
     ];
     return GridView.builder(
@@ -1096,22 +1096,22 @@ class Karachipage extends StatelessWidget {
       {
         'name': 'Clifton Beach',
         'details': 'Hosts beach festivals and cultural gatherings.',
-        'image': 'assets/images/Karachi/karachio2.jpg',
+        'image': 'assets/images/Karachii/karachio2.jpg',
       },
       {
         'name': 'Frere Hall',
         'details': 'Venue for art exhibitions, book fairs, and musical events.',
-        'image': 'assets/images/Karachi/karachifes3.jpg',
+        'image': 'assets/images/Karachii/karachifes3.jpg',
       },
       {
         'name': 'Port Grand',
         'details': 'Famous for food festivals and musical nights.',
-        'image': 'assets/images/Karachi/karachifes1.jpg',
+        'image': 'assets/images/Karachii/karachifes1.jpg',
       },
       {
         'name': 'Karachi Expo Center',
         'details': 'Hosts major exhibitions, cultural expos, and trade fairs.',
-        'image': 'assets/images/Karachi/kaarchifes2.jpg',
+        'image': 'assets/images/Karachii/kaarchifes2.jpg',
       },
     ];
     return GridView.builder(

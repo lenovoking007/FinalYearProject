@@ -82,7 +82,7 @@ class FeaturedCitiesPage extends StatelessWidget {
                 context: context,
                 title: 'Gawadar',
                 description: 'Port city',
-                imagePath: 'assets/images/cities/gawadar.jpg',
+                imagePath: 'assets/images/cities/gwadar.jpg',
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => Gawadarpage()),

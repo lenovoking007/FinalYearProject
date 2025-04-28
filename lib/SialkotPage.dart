@@ -6,9 +6,10 @@ import 'package:travelmate/tripprogresspage.dart';
 
 class Sialkotpage extends StatelessWidget {
   final List<String> overviewImages = [
-    'assets/images/Lahore/lahore1.jpg',
-    'assets/images/Lahore/lahore2.jpg',
-    'assets/images/Lahore/lahore3.jpg',
+    'assets/images/sialkot/sialkoto1.jpg',
+    'assets/images/sialkot/sialkoto2.jpg',
+    'assets/images/sialkot/sialkoto3.jpg',
+
   ];
   final List<String> clothesImages = [
     'assets/images/Lahore/cl1.jpg',
@@ -23,10 +24,10 @@ class Sialkotpage extends StatelessWidget {
     'assets/images/Lahore/food4.jpg',
   ];
   final List<String> festivalImages = [
-    'assets/images/Lahore/f1.jpg',
-    'assets/images/Lahore/f2.jpg',
-    'assets/images/Lahore/f3.jpg',
-    'assets/images/Lahore/f4.jpg',
+    'assets/images/sialkot/sialkotfes1.jpg',
+    'assets/images/sialkot/sialkotfes2.jpg',
+    'assets/images/sialkot/sialkotfes3.jpg',
+    'assets/images/sialkot/sialkotfes4.jpg',
   ];
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -861,22 +862,22 @@ class Sialkotpage extends StatelessWidget {
       {
         "name": "Iqbal Manzil",
         "address": "Sialkot City",
-        "image": "assets/images/Sialkot/spot1.jpg"
+        "image": "assets/images/sialkot/sialkoto1.jpg"
       },
       {
         "name": "Sialkot Fort",
         "address": "Sialkot City",
-        "image": "assets/images/Sialkot/spot2.jpg"
+        "image": "assets/images/sialkot/sialkoto2.jpg"
       },
       {
         "name": "Clock Tower",
         "address": "Sialkot City Center",
-        "image": "assets/images/Sialkot/spot3.jpg"
+        "image": "assets/images/sialkot/sialkoto3.jpg"
       },
       {
         "name": "Bari Amman Shrine",
         "address": "Sialkot",
-        "image": "assets/images/Sialkot/spot4.jpg"
+        "image": "assets/images/sialkot/sialkoto4.jpg"
       }
     ];
     return GridView.builder(
@@ -940,22 +941,22 @@ class Sialkotpage extends StatelessWidget {
       {
         "name": "Sialkot Market",
         "details": "A bustling market offering leather goods, sports equipment, and local crafts.",
-        "image": "assets/images/Sialkot/cl1.jpg"
+        "image": "assets/images/sialkot/sialkotcl1.jpg"
       },
       {
         "name": "Clock Tower Bazaar",
         "details": "Known for its sports goods, leather products, and traditional fabrics.",
-        "image": "assets/images/Sialkot/cl2.jpg"
+        "image": "assets/images/sialkot/sialkotcl2.jpg"
       },
       {
         "name": "Buchha Market",
         "details": "Popular for sports items, electronics, and handicrafts.",
-        "image": "assets/images/Sialkot/cl3.jpg"
+        "image": "assets/images/sialkot/sialkotcl3.jpg"
       },
       {
         "name": "Sialkot Handicrafts Bazaar",
         "details": "Specializes in traditional Sialkoti leather products, including jackets and bags.",
-        "image": "assets/images/Sialkot/cl4.jpg"
+        "image": "assets/images/sialkot/sialkotcl4.jpg"
       }
 
     ];
@@ -1020,22 +1021,22 @@ class Sialkotpage extends StatelessWidget {
       {
         "name": "Sialkot Restaurant",
         "details": "Famous for traditional Punjabi dishes, including Biryani, BBQ, and curries.",
-        "image": "assets/images/Sialkot/food1.jpg"
+        "image": "assets/images/sialkot/sialkotfood1.jpg"
       },
       {
         "name": "Dera Restaurant",
         "details": "Known for local delicacies, including chapli kebabs and naans.",
-        "image": "assets/images/Sialkot/food2.jpg"
+        "image": "assets/images/sialkot/sialkotfood2.jpg"
       },
       {
         "name": "Khaas Restaurant",
         "details": "Offers a variety of local and continental dishes with a cozy ambiance.",
-        "image": "assets/images/Sialkot/food3.jpg"
+        "image": "assets/images/sialkot/sialkotfood3.jpg"
       },
       {
         "name": "Tandoor Restaurant",
         "details": "Specializes in tandoori dishes, grilled meats, and traditional breads.",
-        "image": "assets/images/Sialkot/food4.jpg"
+        "image": "assets/images/sialkot/sialkotfood4.jpg"
       }
 
     ];
@@ -1100,22 +1101,22 @@ class Sialkotpage extends StatelessWidget {
       {
         "name": "Sialkot Food Festival",
         "details": "An annual festival celebrating local and regional cuisines, with a variety of food stalls.",
-        "image": "assets/images/Sialkot/f1.jpg"
+        "image": "assets/images/sialkot/sialkotfes1.jpg"
       },
       {
         "name": "Sialkot Sports Festival",
         "details": "A celebration of Sialkot's sports legacy, featuring local and international competitions.",
-        "image": "assets/images/Sialkot/f2.jpg"
+        "image": "assets/images/sialkot/sialkotfes2.jpg"
       },
       {
         "name": "Iqbal Day Celebrations",
         "details": "A cultural event to commemorate the birth of Allama Iqbal, featuring speeches, music, and cultural performances.",
-        "image": "assets/images/Sialkot/f3.jpg"
+        "image": "assets/images/sialkot/sialkotfes4.jpg"
       },
       {
         "name": "Sialkot International Expo",
         "details": "An event focusing on Sialkot’s industries, including sports, leather, and textiles, with exhibitions and trade shows.",
-        "image": "assets/images/Sialkot/f4.jpg"
+        "image": "assets/images/sialkot/sialkotfes3.jpg"
       }
 
     ];

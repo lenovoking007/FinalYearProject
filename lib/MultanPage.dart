@@ -6,9 +6,9 @@ import 'package:travelmate/tripprogresspage.dart';
 
 class Multanpage extends StatelessWidget {
   final List<String> overviewImages = [
-    'assets/images/Lahore/lahore1.jpg',
-    'assets/images/Lahore/lahore2.jpg',
-    'assets/images/Lahore/lahore3.jpg',
+    'assets/images/multan/multano1.jpg',
+    'assets/images/multan/multano2.jpg',
+    'assets/images/multan/multano3.jpg',
   ];
   final List<String> clothesImages = [
     'assets/images/Lahore/cl1.jpg',
@@ -23,10 +23,10 @@ class Multanpage extends StatelessWidget {
     'assets/images/Lahore/food4.jpg',
   ];
   final List<String> festivalImages = [
-    'assets/images/Lahore/f1.jpg',
-    'assets/images/Lahore/f2.jpg',
-    'assets/images/Lahore/f3.jpg',
-    'assets/images/Lahore/f4.jpg',
+    'assets/images/multan/multanfes3.jpg',
+    'assets/images/multan/multano1.jpg'
+        'assets/images/multan/multano2.jpg',
+    'assets/images/multan/multano3.jpg',
   ];
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -864,22 +864,22 @@ class Multanpage extends StatelessWidget {
       {
         "name": "Multan Fort",
         "address": "Multan",
-        "image": "assets/images/Multan/multan_fort.jpg"
+        "image": 'assets/images/multan/multano1.jpg',
       },
       {
         "name": "Shrine of Bahauddin Zakariya",
         "address": "Multan",
-        "image": "assets/images/Multan/shrine_of_bahauddin_zakariya.jpg"
+        "image": 'assets/images/multan/multano2.jpg',
       },
       {
         "name": "Multan Clock Tower",
         "address": "Multan",
-        "image": "assets/images/Multan/multan_clock_tower.jpg"
+        "image": 'assets/images/multan/multano3.jpg',
       },
       {
         "name": "Sadr Bazar",
         "address": "Multan",
-        "image": "assets/images/Multan/sadr_bazar.jpg"
+        "image": 'assets/images/multan/multan04.jpg',
       }
 
     ];
@@ -944,22 +944,22 @@ class Multanpage extends StatelessWidget {
       {
         "name": "Multan Bazaar",
         "details": "A bustling market offering traditional crafts, textiles, and pottery.",
-        "image": "assets/images/Multan/cl1.jpg"
+        "image": "assets/images/multan/multancl1.jpg"
       },
       {
         "name": "Hussain Agahi Bazaar",
         "details": "Famous for its local handicrafts, embroidered fabrics, and spices.",
-        "image": "assets/images/Multan/cl2.jpg"
+        "image":"assets/images/multan/multancl2.jpg"
       },
       {
         "name": "Chenab Market",
         "details": "A popular shopping destination for home goods, clothes, and accessories.",
-        "image": "assets/images/Multan/cl3.jpg"
+        "image": "assets/images/multan/multancl3.jpg"
       },
       {
         "name": "Shah Rukn-e-Alam Market",
         "details": "Known for its traditional Multani crafts, handwoven shawls, and local art.",
-        "image": "assets/images/Multan/cl4.jpg"
+        "image": "assets/images/multan/multancl4.jpg"
       }
     ];
     return GridView.builder(
@@ -1023,22 +1023,22 @@ class Multanpage extends StatelessWidget {
       {
         "name": "Monal Restaurant",
         "details": "Famous for its breathtaking views and diverse menu.",
-        "image": "assets/images/Multan/monal.jpg"
+        "image": "assets/images/multan/multanfood1.jpg"
       },
       {
         "name": "Savour Foods",
         "details": "Popular for their signature pulao and kababs.",
-        "image": "assets/images/Multan/savour_foods.jpg"
+        "image": "assets/images/multan/multanfood2.jpg"
       },
       {
         "name": "Street 1 Cafe",
         "details": "Trendy spot for continental and fusion dishes.",
-        "image": "assets/images/Multan/street1_cafe.jpg"
+        "image":  "assets/images/multan/multanfood3.jpg"
       },
       {
         "name": "Chaaye Khana",
         "details": "Ideal place for breakfast and desi tea lovers.",
-        "image": "assets/images/Multan/cha.jpg"
+        "image":  "assets/images/multan/multanfood4.jpg"
       }
     ];
     return GridView.builder(
@@ -1102,22 +1102,22 @@ class Multanpage extends StatelessWidget {
       {
         "name": "Multan Fort",
         "details": "A historical fort offering panoramic views of the city and a glimpse into the region's rich heritage.",
-        "image": "assets/images/Multan/multan_fort.jpg"
+        "image":  "assets/images/multan/multano1.jpg"
       },
       {
         "name": "Shrine of Bahauddin Zakariya",
         "details": "A sacred site for spiritual visits and local cultural events, reflecting the region's religious history.",
-        "image": "assets/images/Multan/shrine_bahauddin_zakariya.jpg"
+        "image": "assets/images/multan/multano2.jpg"
       },
       {
         "name": "Multan Museum",
         "details": "Showcases the city's ancient artifacts and rich cultural history.",
-        "image": "assets/images/Multan/multan_museum.jpg"
+        "image": "assets/images/multan/multan04.jpg"
       },
       {
         "name": "Clock Tower",
         "details": "An iconic landmark offering insight into Multan's colonial past and cultural significance.",
-        "image": "assets/images/Multan/clock_tower.jpg"
+        "image": "assets/images/multan/multanfes3.jpg"
       }
     ];
     return GridView.builder(

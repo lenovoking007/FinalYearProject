@@ -6,9 +6,9 @@ import 'package:travelmate/tripprogresspage.dart';
 
 class Gawadarpage extends StatelessWidget {
   final List<String> overviewImages = [
-    'assets/images/Lahore/lahore1.jpg',
-    'assets/images/Lahore/lahore2.jpg',
-    'assets/images/Lahore/lahore3.jpg',
+    'assets/images/gwadar/gao1.jpg',
+    'assets/images/gwadar/gao2.jpg',
+    'assets/images/gwadar/gao3.jpg',
   ];
   final List<String> clothesImages = [
     'assets/images/Lahore/cl1.jpg',
@@ -23,10 +23,10 @@ class Gawadarpage extends StatelessWidget {
     'assets/images/Lahore/food4.jpg',
   ];
   final List<String> festivalImages = [
-    'assets/images/Lahore/f1.jpg',
-    'assets/images/Lahore/f2.jpg',
-    'assets/images/Lahore/f3.jpg',
-    'assets/images/Lahore/f4.jpg',
+    'assets/images/gwadar/gaf1.jpg',
+    'assets/images/gwadar/ga02.jpg',
+    'assets/images/gwadar/gao4.jpg',
+    'assets/images/gwadar/gaf4.jpg',
   ];
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -859,22 +859,22 @@ class Gawadarpage extends StatelessWidget {
       {
         "name": "Gwadar Beach",
         "address": "Gwadar",
-        "image": "assets/images/Gwadar/gwadar_beach.jpg"
+        "image": 'assets/images/gwadar/gao1.jpg',
       },
       {
         "name": "Hammerhead Point",
         "address": "Gwadar",
-        "image": "assets/images/Gwadar/hammerhead_point.jpg"
+        "image": 'assets/images/gwadar/gao2.jpg',
       },
       {
         "name": "Gwadar Marina",
         "address": "Gwadar",
-        "image": "assets/images/Gwadar/gwadar_marina.jpg"
+        "image": 'assets/images/gwadar/gao3.jpg',
       },
       {
         "name": "Balochistan Coastal Highway",
         "address": "Gwadar",
-        "image": "assets/images/Gwadar/coastal_highway.jpg"
+        "image": 'assets/images/gwadar/gao4.jpg',
       }
 
     ];
@@ -939,22 +939,22 @@ class Gawadarpage extends StatelessWidget {
       {
         "name": "Gwadar Bazaar",
         "details": "A local market offering traditional crafts, clothing, and souvenirs.",
-        "image": "assets/images/Gwadar/cl1.jpg"
+        "image": "assets/images/gwadar/gacl1.jpg"
       },
       {
         "name": "Port Grand Market",
         "details": "A shopping center with a mix of local and international brands.",
-        "image": "assets/images/Gwadar/cl2.jpg"
+        "image": "assets/images/gwadar/gacl2.jpg"
       },
       {
         "name": "Marine Drive Market",
         "details": "Known for coastal-themed goods, jewelry, and unique crafts.",
-        "image": "assets/images/Gwadar/cl3.jpg"
+        "image": "assets/images/gwadar/gacl3.jpg"
       },
       {
         "name": "Baloch Market",
         "details": "Famous for Balochi handicrafts, textiles, and local items.",
-        "image": "assets/images/Gwadar/cl4.jpg"
+        "image": "assets/images/gwadar/gacl4.jpg"
       }
     ];
     return GridView.builder(
@@ -1018,22 +1018,22 @@ class Gawadarpage extends StatelessWidget {
       {
         "name": "Ocean View Restaurant",
         "details": "Famous for its stunning views of the sea and a mix of local seafood dishes.",
-        "image": "assets/images/Gwadar/ocean_view.jpg"
+        "image": "assets/images/gwadar/gafood1.jpg"
       },
       {
         "name": "Balochi Darbar",
         "details": "Popular for traditional Balochi dishes, including sajji and kebabs.",
-        "image": "assets/images/Gwadar/balochi_darbar.jpg"
+        "image": "assets/images/gwadar/gafood2.jpg"
       },
       {
         "name": "Coastal Breeze Cafe",
         "details": "Trendy spot offering a fusion of continental and local seafood cuisine.",
-        "image": "assets/images/Gwadar/coastal_breeze.jpg"
+        "image": "assets/images/gwadar/gafood3.jpg"
       },
       {
         "name": "Gwadar Tea House",
         "details": "A cozy spot for breakfast, traditional Balochi tea, and snacks.",
-        "image": "assets/images/Gwadar/gwadar_tea_house.jpg"
+        "image": "assets/images/gwadar/gafood4.jpg"
       }
     ];
     return GridView.builder(
@@ -1097,22 +1097,22 @@ class Gawadarpage extends StatelessWidget {
       {
         "name": "Gwadar Port",
         "details": "A hub for national maritime trade and local cultural events.",
-        "image": "assets/images/Gwadar/gwadar_port.jpg"
+        "image": "assets/images/gwadar/gaf1.jpg"
       },
       {
         "name": "Hammerhead Point",
         "details": "A scenic spot offering breathtaking views and occasional local cultural performances.",
-        "image": "assets/images/Gwadar/hammerhead_point.jpg"
+        "image": "assets/images/gwadar/gao2.jpg"
       },
       {
         "name": "Balochistan Coastal Museum",
         "details": "Hosts exhibitions on the region's maritime history and Balochi culture.",
-        "image": "assets/images/Gwadar/coastal_museum.jpg"
+        "image": "assets/images/gwadar/gao4.jpg"
       },
       {
         "name": "Gwadar Park",
         "details": "Popular for outdoor activities, community events, and local festivals.",
-        "image": "assets/images/Gwadar/gwadar_park.jpg"
+        "image": "assets/images/gwadar/gaf4.jpg"
       }
 
     ];

@@ -91,9 +91,11 @@ flutter:
     - assets/images/Lahore/
     - assets/images/default_avatar.png
     - assets/images/islambad/
-    - assets/images/Karachi/
-
-
+    - assets/images/Karachii/
+    - assets/images/multan/
+    - assets/images/sialkot/
+    - assets/images/hyderabad/
+    - assets/images/gwadar/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 
