@@ -949,12 +949,12 @@ class Faisalabadpage extends StatelessWidget {
       {
         "name": "D Ground Market",
         "details": "Known for clothing, textiles, and traditional items.",
-        "image": "assets/images/faisalbad/fascl2.jpg"
+        "image": "assets/images/faislabad/fascl2.jpg"
       },
       {
         "name": "ChenOne Mall",
         "details": "A modern shopping mall featuring both local and international brands.",
-        "image": "assets/images/faisalbad/fascl3.jpg"
+        "image": "assets/images/faislabad/fascl3.jpg"
       },
       {
         "name": "Kohinoor Market",
@@ -1024,22 +1024,22 @@ class Faisalabadpage extends StatelessWidget {
       {
         "name": "Faisalabad Restaurant",
         "details": "Known for traditional Punjabi dishes, including Biryani and BBQ.",
-        "image": "assets/images/faisalabad/fasfood1.jpg"
+        "image": "assets/images/faislabad/fasfood1.jpg"
       },
       {
         "name": "Dera Restaurant",
         "details": "Famous for local delicacies, including chapli kebabs and naan.",
-        "image": "assets/images/faisalabad/fasfood2.jpg"
+        "image": "assets/images/faislabad/fasfood2.jpg"
       },
       {
         "name": "Tandoor Restaurant",
         "details": "Specializes in traditional tandoori dishes, grilled meats, and naan.",
-        "image": "assets/images/faisalabad/fasfood3.jpg"
+        "image": "assets/images/faislabad/fasfood3.jpg"
       },
       {
         "name": "Khaas Restaurant",
         "details": "Offers a wide variety of local and continental dishes.",
-        "image": "assets/images/faisalabad/fasfood4.jpg"
+        "image": "assets/images/faislabad/fasfood4.jpg"
       }
 
     ];
@@ -1119,7 +1119,7 @@ class Faisalabadpage extends StatelessWidget {
       {
         "name": "Faisalabad Textile Expo",
         "details": "Event highlighting Faisalabad’s textile industry with exhibitions and trade shows.",
-        "image": "assets/images/faislabad/fasf4.jpg"
+        "image": "assets/images/faislabad/fasf4.jpeg"
       }
 
     ];

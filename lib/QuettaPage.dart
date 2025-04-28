@@ -1031,12 +1031,12 @@ class Quettapage extends StatelessWidget {
       {
         "name": "Quetta Grill",
         "details": "Specializes in grilled meats, kebabs, and stews.",
-        "image": "assets/images/Quetta/food3.jpg"
+        "image": "assets/images/quetta/quettafood3.jpg"
       },
       {
         "name": "Balochistan Restaurant",
         "details": "Offers a variety of local Balochi dishes and continental options.",
-        "image": "assets/images/Quetta/food4.jpg"
+        "image": "assets/images/quetta/quettafood4.jpg"
       }
 
     ];
