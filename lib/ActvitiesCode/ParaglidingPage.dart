@@ -3,21 +3,21 @@ import 'package:carousel_slider/carousel_slider.dart';
 
 class ParaglidingPage extends StatelessWidget {
   final List<String> overviewImages = [
-    'assets/images/Paragliding/overview1.jpg',
-    'assets/images/Paragliding/overview2.jpg',
-    'assets/images/Paragliding/overview3.jpg',
+    'assets/images/paragliding/po1.jpg',
+    'assets/images/paragliding/po2.jpg',
+    'assets/images/paragliding/po3.jpg',
   ];
 
   final List<String> naturalSpotsImages = [
-    'assets/images/Paragliding/nature1.jpg',
-    'assets/images/Paragliding/nature2.jpg',
-    'assets/images/Paragliding/nature3.jpg',
+    'assets/images/paragliding/pn1.jpg',
+    'assets/images/paragliding/pn2.jpg',
+    'assets/images/paragliding/pn2.jpg',
   ];
 
   final List<String> safetyImages = [
-    'assets/images/Paragliding/safety1.jpg',
-    'assets/images/Paragliding/safety2.jpg',
-    'assets/images/Paragliding/safety3.jpg',
+    'assets/images/paragliding/ps1.jpg',
+    'assets/images/paragliding/ps2.jpg',
+    'assets/images/paragliding/ps3.jpg',
   ];
 
   ParaglidingPage({super.key});
@@ -111,7 +111,7 @@ class ParaglidingPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   'Top Natural Paragliding Locations',
                   style: TextStyle(
                     fontSize: 20,
@@ -155,27 +155,23 @@ class ParaglidingPage extends StatelessWidget {
     final List<Map<String, dynamic>> cities = [
       {
         'name': 'Islamabad',
-        'type': 'Mountain Paragliding',
         'spots': 'Margalla Hills, Pir Sohawa',
-        'image': 'assets/images/Paragliding/islamabad.jpg',
+        'image': 'assets/images/paragliding/po1.jpg',
       },
       {
         'name': 'Naran',
         'type': 'Valley Paragliding',
-        'spots': 'Saiful Muluk Lake, Naran Valley',
-        'image': 'assets/images/Paragliding/naran.jpg',
+        'image': 'assets/images/paragliding/po2.jpg',
       },
       {
         'name': 'Skardu',
-        'type': 'High Altitude Paragliding',
         'spots': 'Deosai National Park',
-        'image': 'assets/images/Paragliding/skardu.jpg',
+        'image': 'assets/images/paragliding/po3.jpg',
       },
       {
         'name': 'Gilgit',
-        'type': 'Mountain Paragliding',
         'spots': 'Fairy Meadows, Rakaposhi Base Camp',
-        'image': 'assets/images/Paragliding/gilgit.jpg',
+        'image': 'assets/images/paragliding/po4.jpg',
       },
     ];
 
@@ -193,8 +189,8 @@ class ParaglidingPage extends StatelessWidget {
         return _buildSpotCard(
           image: cities[index]['image'],
           title: cities[index]['name'],
-          subtitle: cities[index]['type'],
-          details: cities[index]['spots'],
+          subtitle:cities[index]['type'] ??'',
+
         );
       },
     );
@@ -205,14 +201,12 @@ class ParaglidingPage extends StatelessWidget {
       {
         'name': 'Deosai National Park',
         'location': 'Skardu, Gilgit-Baltistan',
-        'details': 'High-altitude paragliding with breathtaking views.',
-        'image': 'assets/images/Paragliding/deosai.jpg',
+        'image': 'assets/images/paragliding/pn1.jpg',
       },
       {
         'name': 'Margalla Hills',
         'location': 'Islamabad',
-        'details': 'Ideal for a first-time paragliding experience.',
-        'image': 'assets/images/Paragliding/margalla.jpg',
+        'image': 'assets/images/paragliding/pn2.jpg',
       },
     ];
 
@@ -231,7 +225,6 @@ class ParaglidingPage extends StatelessWidget {
           image: spots[index]['image'],
           title: spots[index]['name'],
           subtitle: spots[index]['location'],
-          details: spots[index]['details'],
         );
       },
     );
@@ -306,7 +299,7 @@ class ParaglidingPage extends StatelessWidget {
                 color: Colors.grey.withOpacity(0.5),
                 spreadRadius: 2,
                 blurRadius: 5,
-                offset: Offset(0, 3),
+                offset: const Offset(0, 3),
               ),
             ],
           ),
@@ -353,44 +346,53 @@ class ParaglidingPage extends StatelessWidget {
     required String image,
     required String title,
     required String subtitle,
-    required String details,
   }) {
-    return Card(
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side: BorderSide(color: Colors.grey.shade200),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: Image.asset(image, height: 140, fit: BoxFit.cover),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF0066CC),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(16),
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.asset(image, fit: BoxFit.cover),
+          ),
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Colors.black.withOpacity(0.6), Colors.transparent],
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                ),
               ),
             ),
-            const SizedBox(height: 6),
-            Text(
-              subtitle,
-              style: const TextStyle(fontSize: 14, color: Colors.grey),
+          ),
+          Positioned(
+            left: 12,
+            right: 12,
+            bottom: 12,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  subtitle,
+                  style: const TextStyle(
+                    color: Colors.white70,
+                    fontSize: 14,
+                  ),
+                ),
+                const SizedBox(height: 4),
+              ],
             ),
-            const SizedBox(height: 12),
-            Text(
-              details,
-              style: const TextStyle(fontSize: 14),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

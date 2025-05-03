@@ -157,13 +157,13 @@ class DesertSafariPage extends StatelessWidget {
         'name': 'Cholistan',
         'type': 'Pakistan Desert Safari',
         'spots': 'Cholistan Desert',
-        'image': 'assets/images/DesertSafari/cholistan.jpg',
+        'image': 'assets/images/desert/do1.jpg',
       },
       {
         'name': 'Tharparkar',
         'type': 'Pakistan Desert Safari',
-        'spots': 'Thar Desert',
-        'image': 'assets/images/DesertSafari/tharparkar.jpg',
+        'spots': 'Rann of Kutch Desert',
+        'image': 'assets/images/desert/do2.jpg',
       },
       {
         'name': 'Rann of Kutch',
@@ -177,7 +177,6 @@ class DesertSafariPage extends StatelessWidget {
         'spots': 'Karakoram Desert',
         'image': 'assets/images/DesertSafari/karakoram.jpg',
       },
-
     ];
 
     return GridView.builder(
@@ -194,7 +193,7 @@ class DesertSafariPage extends StatelessWidget {
         return _buildSpotCard(
           image: cities[index]['image'],
           title: cities[index]['name'],
-          subtitle: cities[index]['type'],
+          subtitle: cities[index]['type'] ?? '',
           details: cities[index]['spots'],
         );
       },
@@ -231,8 +230,8 @@ class DesertSafariPage extends StatelessWidget {
         return _buildSpotCard(
           image: spots[index]['image'],
           title: spots[index]['name'],
-          subtitle: spots[index]['location'],
-          details: spots[index]['details'],
+          subtitle: spots[index]['type'],
+          details: spots[index]['spots'],
         );
       },
     );
@@ -367,11 +366,6 @@ class DesertSafariPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: Image.asset(image, height: 140, fit: BoxFit.cover),
-            ),
-            const SizedBox(height: 12),
             Text(
               title,
               style: const TextStyle(
@@ -389,6 +383,11 @@ class DesertSafariPage extends StatelessWidget {
             Text(
               details,
               style: const TextStyle(fontSize: 14),
+            ),
+            const SizedBox(height: 12),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Image.asset(image, height: 140, fit: BoxFit.cover),
             ),
           ],
         ),

@@ -520,7 +520,7 @@ class _HomePageState extends State<HomePage> {
         } else if (title == 'Paragliding') {
           Navigator.push(context, MaterialPageRoute(builder: (context) => ParaglidingPage()));
         } else if (title == 'Zipline') {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => ZiplinePage()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => ParaglidingPage()));
         }
       },
       child: Card(

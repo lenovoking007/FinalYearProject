@@ -880,7 +880,7 @@ class Swatpage extends StatelessWidget {
       {
         "name": "Ushu Forest",
         "address": "Ushu, Swat",
-        "image": "assets/images/swat/swato4.jpg"
+        "image": "assets/images/sawat/sawato4.jpg"
       }
     ];
     return GridView.builder(
@@ -1119,7 +1119,7 @@ class Swatpage extends StatelessWidget {
       {
         "name": "Swat Adventure Festival",
         "details": "Event celebrating outdoor adventures, including trekking, rafting, and exploring the beautiful landscapes of Swat.",
-        "image": "assets/images/sawat/sawatf4.jpg"
+        "image": "assets/images/sawat/sawatf4.png"
       }
 
     ];

@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'ActvitiesCode/CamelSafariPage.dart';
+
 import 'ActvitiesCode/DesertSafariPage.dart';
 import 'ActvitiesCode/HotAirBalloonPage.dart';
-import 'ActvitiesCode/IceClimbingPage.dart';
+
 import 'ActvitiesCode/JeepRallyPage.dart';
 import 'ActvitiesCode/MountainBikingPage.dart';
 import 'ActvitiesCode/RockClimbingPage.dart';
-import 'ActvitiesCode/ScubaDivingPage.dart';
-import 'ActvitiesCode/TrekkingPage.dart';
+
 import 'ActvitiesCode/WhiteWaterRaftingPage.dart';
 
 class FamousActivitiesPage extends StatelessWidget {
@@ -85,26 +84,7 @@ class FamousActivitiesPage extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => DesertSafariPage()),
                 ),
               ),
-              _buildActivityCard(
-                context: context,
-                title: 'High Altitude Trekking',
-                description: 'K2 Base Camp and beyond',
-                imagePath: 'assets/images/activities/trekking.jpg',
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => TrekkingPage()),
-                ),
-              ),
-              _buildActivityCard(
-                context: context,
-                title: 'Scuba Diving',
-                description: 'Explore Gwadar\'s marine life',
-                imagePath: 'assets/images/activities/scuba_diving.jpg',
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ScubaDivingPage()),
-                ),
-              ),
+
               _buildActivityCard(
                 context: context,
                 title: 'Hot Air Ballooning',
@@ -113,26 +93,6 @@ class FamousActivitiesPage extends StatelessWidget {
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => HotAirBalloonPage()),
-                ),
-              ),
-              _buildActivityCard(
-                context: context,
-                title: 'Ice Climbing',
-                description: 'Frozen waterfalls in Gilgit-Baltistan',
-                imagePath: 'assets/images/activities/ice_climbing.jpg',
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => IceClimbingPage()),
-                ),
-              ),
-              _buildActivityCard(
-                context: context,
-                title: 'Camel Safari',
-                description: 'Thar Desert nomadic experience',
-                imagePath: 'assets/images/activities/camel_safari.jpg',
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => CamelSafariPage()),
                 ),
               ),
               _buildActivityCard(

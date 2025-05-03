@@ -3,24 +3,19 @@ import 'package:carousel_slider/carousel_slider.dart';
 
 class SwimmingPage extends StatelessWidget {
   final List<String> overviewImages = [
-    'assets/images/Swimming/swim1.jpg',
-    'assets/images/Swimming/swim2.jpg',
-    'assets/images/Swimming/swim3.jpg',
+    'assets/images/swimming/so1.jpg',
+    'assets/images/swimming/so2.jpg',
+    'assets/images/swimming/so3.jpg',
   ];
   final List<String> naturalSpotsImages = [
-    'assets/images/Swimming/nature1.jpg',
-    'assets/images/Swimming/nature2.jpg',
-    'assets/images/Swimming/nature3.jpg',
-  ];
-  final List<String> poolsImages = [
-    'assets/images/Swimming/pool1.jpg',
-    'assets/images/Swimming/pool2.jpg',
-    'assets/images/Swimming/pool3.jpg',
+    'assets/images/swimming/sn1.jpg',
+    'assets/images/swimming/sn2.jpg',
+    'assets/images/swimming/sn3.jpg',
   ];
   final List<String> safetyImages = [
-    'assets/images/Swimming/safety1.jpg',
-    'assets/images/Swimming/safety2.jpg',
-    'assets/images/Swimming/safety3.jpg',
+    'assets/images/swimming/ss1.jpg',
+    'assets/images/swimming/ss2.jpg',
+    'assets/images/swimming/ss2.jpg',
   ];
 
   SwimmingPage({super.key});
@@ -47,7 +42,6 @@ class SwimmingPage extends StatelessWidget {
             tabs: const [
               Tab(icon: Icon(Icons.water), text: 'Overview'),
               Tab(icon: Icon(Icons.nature), text: 'Natural Spots'),
-              Tab(icon: Icon(Icons.pool), text: 'Swimming Pools'),
               Tab(icon: Icon(Icons.security), text: 'Safety'),
             ],
           ),
@@ -56,7 +50,6 @@ class SwimmingPage extends StatelessWidget {
           children: [
             _buildOverviewTab(),
             _buildNaturalSpotsTab(),
-            _buildPoolsTab(),
             _buildSafetyTab(),
           ],
         ),
@@ -136,39 +129,6 @@ class SwimmingPage extends StatelessWidget {
     ]));
   }
 
-  Widget _buildPoolsTab() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildCarousel(poolsImages),
-          const SizedBox(height: 24),
-          _buildInfoCard(
-            title: 'Best Swimming Pools',
-            description:
-            'For those who prefer controlled environments, Pakistan has excellent swimming pools in major cities. '
-                'Many hotels and sports clubs offer well-maintained pools with professional facilities.',
-          ),
-          const SizedBox(height: 24),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8),
-            child: Text(
-              'Premium Swimming Pools',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF0066CC),
-              ),
-            ),
-          ),
-          const SizedBox(height: 12),
-          _buildPoolsGrid(),
-          const SizedBox(height: 24),
-        ],
-      ),
-    );
-  }
 
   Widget _buildSafetyTab() {
     return SingleChildScrollView(
@@ -198,37 +158,25 @@ class SwimmingPage extends StatelessWidget {
         'name': 'Karachi',
         'type': 'Beaches & Sea',
         'spots': 'Clifton Beach, French Beach, Sandspit',
-        'image': 'assets/images/Swimming/karachi.jpg',
+        'image': 'assets/images/swimming/so1.jpg'
       },
       {
         'name': 'Skardu',
         'type': 'Alpine Lakes',
         'spots': 'Shangrila Lake, Upper Kachura Lake',
-        'image': 'assets/images/Swimming/skardu.jpg',
+        'image': 'assets/images/swimming/so2.jpg'
       },
       {
         'name': 'Murree',
         'type': 'Mountain Streams',
         'spots': 'Patriata, Bhurban',
-        'image': 'assets/images/Swimming/murree.jpg',
+        'image': 'assets/images/swimming/so3.jpg'
       },
       {
         'name': 'Islamabad',
         'type': 'Dams & Pools',
         'spots': 'Rawal Dam, Sports Complex Pool',
-        'image': 'assets/images/Swimming/islamabad.jpg',
-      },
-      {
-        'name': 'Gwadar',
-        'type': 'Coastal Waters',
-        'spots': 'Gwadar Beach, Pishukan Beach',
-        'image': 'assets/images/Swimming/gwadar.jpg',
-      },
-      {
-        'name': 'Muzaffarabad',
-        'type': 'River Swimming',
-        'spots': 'Neelum River, Jhelum River',
-        'image': 'assets/images/Swimming/muzaffarabad.jpg',
+        'image': 'assets/images/swimming/so4.jpg'
       },
     ];
 
@@ -246,8 +194,6 @@ class SwimmingPage extends StatelessWidget {
         return _buildSpotCard(
           image: cities[index]['image'],
           title: cities[index]['name'],
-          subtitle: cities[index]['type'],
-          details: cities[index]['spots'],
         );
       },
     );
@@ -258,38 +204,22 @@ class SwimmingPage extends StatelessWidget {
       {
         'name': 'Manchar Lake',
         'location': 'Near Sehwan, Sindh',
-        'details': 'Largest freshwater lake in Pakistan',
-        'image': 'assets/images/Swimming/manchar.jpg',
+        'image': 'assets/images/swimming/sn1.jpg'
       },
       {
         'name': 'Hanna Lake',
         'location': 'Quetta, Balochistan',
-        'details': 'Picturesque lake surrounded by mountains',
-        'image': 'assets/images/Swimming/hanna.jpg',
+        'image': 'assets/images/swimming/sn2.jpg'
       },
       {
         'name': 'Saiful Muluk',
         'location': 'Naran, KPK',
-        'details': 'High-altitude glacial lake with crystal clear water',
-        'image': 'assets/images/Swimming/saiful.jpg',
+        'image': 'assets/images/swimming/sn3.jpg'
       },
       {
         'name': 'Astola Island',
         'location': 'Arabian Sea, Balochistan',
-        'details': 'Pakistan\'s largest offshore island with pristine beaches',
-        'image': 'assets/images/Swimming/astola.jpg',
-      },
-      {
-        'name': 'Neelum River',
-        'location': 'Azad Kashmir',
-        'details': 'Emerald green waters perfect for swimming',
-        'image': 'assets/images/Swimming/neelum.jpg',
-      },
-      {
-        'name': 'Churna Island',
-        'location': 'Near Karachi',
-        'details': 'Popular spot for snorkeling and swimming',
-        'image': 'assets/images/Swimming/churna.jpg',
+        'image': 'assets/images/swimming/sn4.jpg'
       },
     ];
 
@@ -307,73 +237,12 @@ class SwimmingPage extends StatelessWidget {
         return _buildSpotCard(
           image: spots[index]['image'],
           title: spots[index]['name'],
-          subtitle: spots[index]['location'],
-          details: spots[index]['details'],
         );
       },
     );
   }
 
-  Widget _buildPoolsGrid() {
-    final List<Map<String, dynamic>> pools = [
-      {
-        'name': 'Pearl Continental Pool',
-        'location': 'Lahore',
-        'details': 'Luxury hotel with Olympic-sized pool',
-        'image': 'assets/images/Swimming/pclahore.jpg',
-      },
-      {
-        'name': 'Islamabad Sports Complex',
-        'location': 'Islamabad',
-        'details': 'Olympic standard swimming facility',
-        'image': 'assets/images/Swimming/isbsports.jpg',
-      },
-      {
-        'name': 'Bahria Town Grand Pool',
-        'location': 'Karachi',
-        'details': 'Massive community pool with slides',
-        'image': 'assets/images/Swimming/bahria.jpg',
-      },
-      {
-        'name': 'Serena Hotel Pool',
-        'location': 'Islamabad',
-        'details': 'Elegant pool with mountain views',
-        'image': 'assets/images/Swimming/serena.jpg',
-      },
-      {
-        'name': 'Arena Club',
-        'location': 'Lahore',
-        'details': 'Premium sports club with multiple pools',
-        'image': 'assets/images/Swimming/arena.jpg',
-      },
-      {
-        'name': 'Marriott Hotel Pool',
-        'location': 'Karachi',
-        'details': 'Rooftop pool with city views',
-        'image': 'assets/images/Swimming/marriott.jpg',
-      },
-    ];
 
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 0.8,
-        crossAxisSpacing: 12,
-        mainAxisSpacing: 12,
-      ),
-      itemCount: pools.length,
-      itemBuilder: (context, index) {
-        return _buildSpotCard(
-          image: pools[index]['image'],
-          title: pools[index]['name'],
-          subtitle: pools[index]['location'],
-          details: pools[index]['details'],
-        );
-      },
-    );
-  }
 
   Widget _buildSafetyTipsList() {
     final List<String> tips = [
@@ -433,8 +302,6 @@ class SwimmingPage extends StatelessWidget {
   Widget _buildSpotCard({
     required String image,
     required String title,
-    required String subtitle,
-    required String details,
   }) {
     return Card(
       elevation: 0,
@@ -469,26 +336,7 @@ class SwimmingPage extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  subtitle,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey.shade600,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
                 const SizedBox(height: 8),
-                Text(
-                  details,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Colors.black87,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
               ],
             ),
           ),

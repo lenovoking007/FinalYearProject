@@ -52,7 +52,7 @@ class FeaturedCitiesPage extends StatelessWidget {
                 context: context,
                 title: 'Sialkot',
                 description: 'City of sports goods',
-                imagePath: 'assets/images/cities/sialkot.jpg',
+                imagePath: 'assets/images/sialkot1.jpg',
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => Sialkotpage()),
@@ -62,7 +62,7 @@ class FeaturedCitiesPage extends StatelessWidget {
                 context: context,
                 title: 'Hyderabad',
                 description: 'City of pearls',
-                imagePath: 'assets/images/cities/hyderabad.jpg',
+                imagePath: 'assets/images/hyderabad.jpg',
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => Hyderabadpage()),
@@ -72,7 +72,7 @@ class FeaturedCitiesPage extends StatelessWidget {
                 context: context,
                 title: 'Multan',
                 description: 'City of saints',
-                imagePath: 'assets/images/cities/multan.jpg',
+                imagePath: 'assets/images/multan1.jpg',
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => Multanpage()),
@@ -82,7 +82,7 @@ class FeaturedCitiesPage extends StatelessWidget {
                 context: context,
                 title: 'Gawadar',
                 description: 'Port city',
-                imagePath: 'assets/images/cities/gwadar.jpg',
+                imagePath: 'assets/images/gawadar1.jpg',
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => Gawadarpage()),
@@ -90,20 +90,9 @@ class FeaturedCitiesPage extends StatelessWidget {
               ),
               _buildCityCard(
                 context: context,
-                title: 'Muzaffarabad',
-                description: 'Capital of Azad Kashmir',
-                imagePath: 'assets/images/cities/muzaffarabad.jpg',
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Muzaffarabadpage()),
-
-                ),
-              ),
-              _buildCityCard(
-                context: context,
                 title: 'Skardu',
                 description: 'Gateway to K2',
-                imagePath: 'assets/images/cities/skardu.jpg',
+                imagePath: 'assets/images/skardu1.jpg',
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => Skardupage()),
@@ -113,7 +102,7 @@ class FeaturedCitiesPage extends StatelessWidget {
                 context: context,
                 title: 'Faisalabad',
                 description: 'Manchester of Pakistan',
-                imagePath: 'assets/images/cities/faisalabad.jpg',
+                imagePath: 'assets/images/faislabad2.jpg',
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => Faisalabadpage()),
@@ -122,9 +111,9 @@ class FeaturedCitiesPage extends StatelessWidget {
               ),
               _buildCityCard(
                 context: context,
-                title: 'Quetta',
+                title: 'Quetta1',
                 description: 'Fruit garden of Pakistan',
-                imagePath: 'assets/images/cities/quetta.jpg',
+                imagePath: 'assets/images/quetta1.jpg',
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => Quettapage()),

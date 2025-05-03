@@ -101,8 +101,15 @@ flutter:
     - assets/images/naran/
     - assets/images/sawat/
     - assets/images/hunza/
-    - assets/images/skardu/
-    - assets/images/muzaffarabad/git commit -m "Add new features without conflicts"
+    - assets/images/biking/
+    - assets/images/desert/
+    - assets/images/white/
+    - assets/images/paragliding/
+    - assets/images/rock/
+    - assets/images/swimming/
+    - assets/images/zipline/
+    - assets/images/jeep/
+    - assets/images/ballon/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 

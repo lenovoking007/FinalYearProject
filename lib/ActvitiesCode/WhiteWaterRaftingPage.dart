@@ -12,11 +12,6 @@ class WhiteWaterRaftingPage extends StatelessWidget {
     'assets/images/WhiteWaterRafting/nature2.jpg',
     'assets/images/WhiteWaterRafting/nature3.jpg',
   ];
-  final List<String> raftingLocationsImages = [
-    'assets/images/WhiteWaterRafting/rafting1.jpg',
-    'assets/images/WhiteWaterRafting/rafting2.jpg',
-    'assets/images/WhiteWaterRafting/rafting3.jpg',
-  ];
   final List<String> safetyImages = [
     'assets/images/WhiteWaterRafting/safety1.jpg',
     'assets/images/WhiteWaterRafting/safety2.jpg',
@@ -47,7 +42,6 @@ class WhiteWaterRaftingPage extends StatelessWidget {
             tabs: const [
               Tab(icon: Icon(Icons.airline_seat_flat), text: 'Overview'),
               Tab(icon: Icon(Icons.nature), text: 'Natural Spots'),
-              Tab(icon: Icon(Icons.directions_boat), text: 'Rafting Locations'),
               Tab(icon: Icon(Icons.security), text: 'Safety'),
             ],
           ),
@@ -56,7 +50,6 @@ class WhiteWaterRaftingPage extends StatelessWidget {
           children: [
             _buildOverviewTab(),
             _buildNaturalSpotsTab(),
-            _buildRaftingLocationsTab(),
             _buildSafetyTab(),
           ],
         ),
@@ -134,38 +127,6 @@ class WhiteWaterRaftingPage extends StatelessWidget {
             ]));
   }
 
-  Widget _buildRaftingLocationsTab() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildCarousel(raftingLocationsImages),
-          const SizedBox(height: 24),
-          _buildInfoCard(
-            title: 'Best White Water Rafting Locations',
-            description:
-            'For the ultimate thrill, Pakistan has some of the best white water rafting locations, offering a range of experiences from calm water rafting to high-adrenaline rapids.',
-          ),
-          const SizedBox(height: 24),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8),
-            child: Text(
-              'Premium Rafting Locations',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF0066CC),
-              ),
-            ),
-          ),
-          const SizedBox(height: 12),
-          _buildRaftingLocationsGrid(),
-          const SizedBox(height: 24),
-        ],
-      ),
-    );
-  }
 
   Widget _buildSafetyTab() {
     return SingleChildScrollView(
@@ -213,18 +174,6 @@ class WhiteWaterRaftingPage extends StatelessWidget {
         'type': 'Rapid Class II-III',
         'spots': 'Muzaffarabad, Azad Kashmir',
         'image': 'assets/images/WhiteWaterRafting/jhelum.jpg',
-      },
-      {
-        'name': 'River Kabul',
-        'type': 'Rapid Class III-IV',
-        'spots': 'Peshawar, KPK',
-        'image': 'assets/images/WhiteWaterRafting/kabul.jpg',
-      },
-      {
-        'name': 'River Gilgit',
-        'type': 'Rapid Class IV-V',
-        'spots': 'Gilgit-Baltistan',
-        'image': 'assets/images/WhiteWaterRafting/gilgit.jpg',
       },
     ];
 

@@ -953,11 +953,6 @@ class Sialkotpage extends StatelessWidget {
         "details": "Popular for sports items, electronics, and handicrafts.",
         "image": "assets/images/sialkot/sialkotcl3.jpg"
       },
-      {
-        "name": "Sialkot Handicrafts Bazaar",
-        "details": "Specializes in traditional Sialkoti leather products, including jackets and bags.",
-        "image": "assets/images/sialkot/sialkotcl4.jpg"
-      }
 
     ];
     return GridView.builder(

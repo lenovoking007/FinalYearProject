@@ -879,7 +879,7 @@ class Naranpage extends StatelessWidget {
       {
         "name": "Sharan Forest",
         "address": "Naran, Kaghan Valley",
-        "image": "assets/images/naran/naran.jpg"
+        "image": "assets/images/naran/naran04,h.jpg"
       }
 
     ];
@@ -959,7 +959,7 @@ class Naranpage extends StatelessWidget {
       {
         "name": "Sharan Village Market",
         "details": "Traditional stalls selling local food, crafts, and woolen clothes.",
-        "image": "assets/images/naran/narancl3.jpeg"
+        "image": "assets/images/naran/narancl4.jpeg"
       }
     ];
     return GridView.builder(

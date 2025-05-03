@@ -6,12 +6,13 @@ import 'package:travelmate/tripprogresspage.dart';
 
 class Hunzapage extends StatelessWidget {
   final List<String> overviewImages = [
-    'assets/images/Lahore/lahore1.jpg',
-    'assets/images/Lahore/lahore2.jpg',
-    'assets/images/Lahore/lahore3.jpg',
+    'assets/images/hunza/hunzao1.jpg',
+    'assets/images/hunza/hunzao2.jpg',
+    'assets/images/hunza/hunzao3.jpg',
+    'assets/images/hunza/hunzao4.jpg',
   ];
   final List<String> clothesImages = [
-    'assets/images/Lahore/cl1.jpg',
+    'assets/images/hunza/hunzacl1.jpg',
     'assets/images/Lahore/cl2.jpg',
     'assets/images/Lahore/cl3.jpg',
     'assets/images/Lahore/cl4.jpg',
@@ -23,10 +24,11 @@ class Hunzapage extends StatelessWidget {
     'assets/images/Lahore/food4.jpg',
   ];
   final List<String> festivalImages = [
-    'assets/images/Lahore/f1.jpg',
-    'assets/images/Lahore/f2.jpg',
-    'assets/images/Lahore/f3.jpg',
-    'assets/images/Lahore/f4.jpg',
+    'assets/images/hunza/hunzaf1.jpg',
+    'assets/images/hunza/hunzaf2.jpg',
+    'assets/images/hunza/hunzaf3.jpg',
+    'assets/images/hunza/hunzaf4.jpg',
+
   ];
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -861,22 +863,22 @@ class Hunzapage extends StatelessWidget {
       {
         'name': 'Altit Fort',
         'address': 'Altit, Hunza Valley',
-        'image': 'assets/images/Hunza/hunza1.jpg',
+        'image': 'assets/images/hunza/hunzao1.jpg',
       },
       {
         'name': 'Baltit Fort',
         'address': 'Karimabad, Hunza Valley',
-        'image': 'assets/images/Hunza/hunza2.jpg',
+        'image': 'assets/images/hunza/hunzao2.jpg',
       },
       {
         'name': 'Passu Cones',
         'address': 'Passu, Hunza Valley',
-        'image': 'assets/images/Hunza/hunza3.jpg',
+        'image': 'assets/images/hunza/hunzao3.jpg',
       },
       {
         'name': 'Eagle’s Nest',
         'address': 'Hunza Valley',
-        'image': 'assets/images/Hunza/hunza4.jpg',
+        'image': 'assets/images/hunza/hunzao4.jpg',
       },
 
     ];
@@ -941,22 +943,22 @@ class Hunzapage extends StatelessWidget {
       {
         'name': 'Karimabad Market',
         'details': 'Traditional market offering handicrafts, souvenirs, and local products.',
-        'image': 'assets/images/Hunza/cl1.jpg',
+        'image': 'assets/images/hunza/hunzacl1.jpg',
       },
       {
         'name': 'Aliabad Bazaar',
         'details': 'Known for fresh fruits, local goods, and handicrafts.',
-        'image': 'assets/images/Hunza/cl2.jpg',
+        'image': 'assets/images/hunza/hunzacl2.jpg',
       },
       {
         'name': 'Hunza Viewpoint Souvenir Shop',
         'details': 'Famous for handmade shawls, jewelry, and local artifacts.',
-        'image': 'assets/images/Hunza/cl3.jpg',
+        'image': 'assets/images/hunza/hunzacl3.jpg',
       },
       {
         'name': 'Baltit Fort Souvenir Shop',
         'details': 'Specializes in traditional Hunza crafts, art, and souvenirs.',
-        'image': 'assets/images/Hunza/cl4.jpg',
+        'image': 'assets/images/hunza/hunzacl4.jpg',
       },
 
     ];
@@ -1021,22 +1023,22 @@ class Hunzapage extends StatelessWidget {
       {
         'name': 'Karimabad Restaurant',
         'details': 'Famous for Hunza-style dishes and traditional local food.',
-        'image': 'assets/images/Hunza/food1.jpg',
+        'image': 'assets/images/hunza/hunzafood1.jpg',
       },
       {
         'name': 'Hunza Viewpoint Restaurant',
         'details': 'Known for local delicacies and panoramic views of the valley.',
-        'image': 'assets/images/Hunza/food2.jpg',
+        'image': 'assets/images/hunza/hunzafood2.jpg',
       },
       {
         'name': 'Baltit Fort Cafe',
         'details': 'Specializes in local snacks and beverages with views of the historic fort.',
-        'image': 'assets/images/Hunza/food3.jpg',
+        'image': 'assets/images/hunza/hunzafood3.jpg',
       },
       {
         'name': 'Aliabad Food Corner',
         'details': 'Offers traditional Hunza dishes like Chapshuro and local breads.',
-        'image': 'assets/images/Hunza/food4.jpg',
+        'image': 'assets/images/hunza/hunzafood4.jpg',
       },
 
     ];
@@ -1101,22 +1103,22 @@ class Hunzapage extends StatelessWidget {
       {
         'name': 'Hunza Festival',
         'details': 'Celebration of Hunza culture with music, dance, and traditional arts.',
-        'image': 'assets/images/Hunza/f1.jpg',
+        'image': 'assets/images/hunza/hunzaf1.jpg',
       },
       {
         'name': 'Shandur Polo Festival',
         'details': 'Famous polo tournament held at the Shandur Pass with local festivities.',
-        'image': 'assets/images/Hunza/f2.jpg',
+        'image': 'assets/images/hunza/hunzaf2.jpg',
       },
       {
         'name': 'Gilgit-Baltistan Literary Festival',
         'details': 'Event highlighting local literature, poetry, and traditional arts.',
-        'image': 'assets/images/Hunza/f3.jpg',
+        'image': 'assets/images/hunza/hunzaf3.jpg',
       },
       {
         'name': 'Hunza Mela',
         'details': 'Annual fair with handicrafts, local foods, and cultural performances.',
-        'image': 'assets/images/Hunza/f4.jpg',
+        'image': 'assets/images/hunza/hunzaf4.jpg',
       },
 
     ];

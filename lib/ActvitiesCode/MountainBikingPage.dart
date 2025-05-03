@@ -56,7 +56,6 @@ class MountainBikingPage extends StatelessWidget {
           children: [
             _buildOverviewTab(),
             _buildLocationsTab(),
-            _buildGearTab(),
             _buildSafetyTab(),
           ],
         ),
@@ -112,27 +111,6 @@ class MountainBikingPage extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           _buildLocationsGrid(),
-          const SizedBox(height: 24),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildGearTab() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildCarousel(gearImages),
-          const SizedBox(height: 24),
-          _buildInfoCard(
-            title: 'Essential Mountain Biking Gear',
-            description:
-            'The right gear is essential for a safe and enjoyable mountain biking experience. From the bike to the helmet, each piece of equipment plays a key role.',
-          ),
-          const SizedBox(height: 24),
-          _buildGearList(),
           const SizedBox(height: 24),
         ],
       ),

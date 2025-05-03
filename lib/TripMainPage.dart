@@ -114,7 +114,7 @@ class _TripPageState extends State<TripPage> {
     {
       'title': 'Skardu',
       'description': 'Land of Mountains',
-      'image': 'assets/images/skardu.jpg'
+      'image': 'assets/images/skardu1.jpg'
     },
     {
       'title': 'Naran Kaghan',

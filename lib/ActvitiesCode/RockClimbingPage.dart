@@ -47,7 +47,6 @@ class RockClimbingPage extends StatelessWidget {
             tabs: const [
               Tab(icon: Icon(Icons.explore), text: 'Overview'),
               Tab(icon: Icon(Icons.location_on), text: 'Climbing Spots'),
-              Tab(icon: Icon(Icons.directions_subway), text: 'Gear'),
               Tab(icon: Icon(Icons.security), text: 'Safety'),
             ],
           ),
@@ -56,7 +55,6 @@ class RockClimbingPage extends StatelessWidget {
           children: [
             _buildOverviewTab(),
             _buildClimbingSpotsTab(),
-            _buildGearTab(),
             _buildSafetyTab(),
           ],
         ),
@@ -112,27 +110,6 @@ class RockClimbingPage extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           _buildClimbingSpotsGrid(),
-          const SizedBox(height: 24),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildGearTab() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildCarousel(gearImages),
-          const SizedBox(height: 24),
-          _buildInfoCard(
-            title: 'Essential Climbing Gear',
-            description:
-            'Climbing gear is essential for ensuring safety and success. The right equipment can make the difference between a great climb and an unsafe experience. Here’s a list of the essential climbing gear that every climber should have.',
-          ),
-          const SizedBox(height: 24),
-          _buildGearList(),
           const SizedBox(height: 24),
         ],
       ),
@@ -210,51 +187,7 @@ class RockClimbingPage extends StatelessWidget {
     );
   }
 
-  Widget _buildGearList() {
-    final List<String> gearItems = [
-      'Climbing Shoes',
-      'Chalk Bag',
-      'Harness',
-      'Carabiner',
-      'Belay Device',
-      'Climbing Rope',
-      'Helmet',
-      'Climbing Gloves',
-    ];
 
-    return Card(
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side: BorderSide(color: Colors.grey.shade200),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            const Text(
-              'Essential Climbing Gear',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF228B22),
-              ),
-            ),
-            const SizedBox(height: 12),
-            Column(
-              children: gearItems
-                  .map((gear) => ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: const Icon(Icons.check_circle, color: Color(0xFF228B22)),
-                title: Text(gear),
-              ))
-                  .toList(),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
   Widget _buildSafetyTipsList() {
     final List<String> tips = [
