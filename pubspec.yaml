@@ -49,7 +49,7 @@ dependencies:
   google_maps_flutter: ^2.12.1
   http: ^1.3.0
   google_sign_in: ^6.1.5
-
+  font_awesome_flutter: ^10.0.0
 
 
 
@@ -89,12 +89,27 @@ flutter:
   assets:
     - assets/images/
     - assets/images/Lahore/
-    - assets/images/Karachi/
     - assets/images/default_avatar.png
-
-
-
-
+    - assets/images/islambad/
+    - assets/images/Karachii/
+    - assets/images/multan/
+    - assets/images/sialkot/
+    - assets/images/hyderabad/
+    - assets/images/gwadar/
+    - assets/images/faislabad/
+    - assets/images/quetta/
+    - assets/images/naran/
+    - assets/images/sawat/
+    - assets/images/hunza/
+    - assets/images/biking/
+    - assets/images/desert/
+    - assets/images/white/
+    - assets/images/paragliding/
+    - assets/images/rock/
+    - assets/images/swimming/
+    - assets/images/zipline/
+    - assets/images/jeep/
+    - assets/images/ballon/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 

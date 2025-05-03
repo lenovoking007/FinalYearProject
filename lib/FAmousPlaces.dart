@@ -1,23 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:travelmate/FamousTouristPlacesCode/MohenjoDaroPage.dart';
-
-import 'package:travelmate/FamousTouristPlacesCode/DeosaiPlainsPage.dart';
-
 import 'package:travelmate/FamousTouristPlacesCode/ShandurPassPage.dart';
-
 import 'package:travelmate/FamousTouristPlacesCode/BolanValleyPage.dart';
-
 import 'package:travelmate/HingolNationalParkPage.dart';
-
 import 'package:travelmate/FamousTouristPlacesCode/AttabadLakePage.dart';
-
-
 import 'FamousTouristPlacesCode/BabusarTopPage.dart';
 import 'FamousTouristPlacesCode/ConcordiaPage.dart';
 import 'FamousTouristPlacesCode/FairyMeadowsPage.dart';
-import 'FamousTouristPlacesCode/NeelumValleyPage.dart';
 import 'FamousTouristPlacesCode/RamaMeadowPage.dart';
-import 'FamousTouristPlacesCode/SaifUlMalookPage.dart';
 
 class FamousTouristPlacesPage extends StatelessWidget {
   const FamousTouristPlacesPage({super.key});
@@ -46,7 +35,6 @@ class FamousTouristPlacesPage extends StatelessWidget {
           final isLargeScreen = constraints.maxWidth > 600;
           final crossAxisCount = isLargeScreen ? 2 : 1;
           final childAspectRatio = isLargeScreen ? 1.5 : 1.8;
-
           return GridView.count(
             padding: EdgeInsets.all(isLargeScreen ? 24 : 16),
             crossAxisCount: crossAxisCount,
@@ -54,46 +42,6 @@ class FamousTouristPlacesPage extends StatelessWidget {
             crossAxisSpacing: 16,
             mainAxisSpacing: 16,
             children: [
-              _buildPlaceCard(
-                context: context,
-                title: 'Mohenjo-daro',
-                description: 'Ancient Indus Valley Civilization',
-                imagePath: 'assets/images/places/mohenjo_daro.jpg',
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => MohenjoDaroPage()),
-                ),
-              ),
-              _buildPlaceCard(
-                context: context,
-                title: 'Saif-ul-Malook',
-                description: 'Legendary alpine lake',
-                imagePath: 'assets/images/places/saif_ul_malook.jpg',
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SaifUlMalookPage()),
-                ),
-              ),
-              _buildPlaceCard(
-                context: context,
-                title: 'Deosai Plains',
-                description: 'Land of Giants',
-                imagePath: 'assets/images/places/deosai_plains.jpg',
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => DeosaiPlainsPage()),
-                ),
-              ),
-              _buildPlaceCard(
-                context: context,
-                title: 'Neelum Valley',
-                description: 'Paradise of Kashmir',
-                imagePath: 'assets/images/places/neelum_valley.jpg',
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => NeelumValleyPage()),
-                ),
-              ),
               _buildPlaceCard(
                 context: context,
                 title: 'Shandur Pass',
@@ -141,7 +89,7 @@ class FamousTouristPlacesPage extends StatelessWidget {
                 imagePath: 'assets/images/places/hingol_park.jpg',
                 onTap: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => HingolNationalParkPage()),
+                  MaterialPageRoute(builder: (context) => Hingolnationalparkpage()),
                 ),
               ),
               _buildPlaceCard(

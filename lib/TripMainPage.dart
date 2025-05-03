@@ -2,14 +2,28 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:travelmate/FamousTouristPlacesCode/NeelumValleyPage.dart';
+import 'package:travelmate/FamousTouristPlacesCode/SaifUlMalookPage.dart';
+import 'package:travelmate/FeaturedCities/MurreePage.dart';
 import 'package:travelmate/chat.dart';
 import 'package:travelmate/homepage.dart';
 import 'package:travelmate/settingmenu.dart';
 import 'package:travelmate/tools.dart';
 import 'package:travelmate/tripprogresspage.dart';
+import 'ActvitiesCode/FoodTourPage.dart';
+import 'ActvitiesCode/HikingPage.dart';
+import 'ActvitiesCode/ShoppingPage.dart';
+import 'ActvitiesCode/SightseeingPage.dart';
 import 'AllActivitiesPage.dart';
+import 'FamousTouristPlacesCode/DesosaiPlainsPage.dart';
+import 'FamousTouristPlacesCode/MohenjoDaroPage.dart';
 import 'FeaturedCities.dart';
 import 'FAmousPlaces.dart';
+import 'FeaturedCities/AbbotabadPage.dart';
+import 'FeaturedCities/PeshawarPage.dart';
+import 'FeaturedCities/RawalpindiPage.dart';
+
+
 
 class TripPage extends StatefulWidget {
   const TripPage({Key? key}) : super(key: key);
@@ -31,24 +45,84 @@ class _TripPageState extends State<TripPage> {
   ];
 
   final List<Map<String, dynamic>> recommendedTrips = [
-    {'title': 'Islamabad', 'description': 'Capital of Pakistan', 'image': 'assets/images/islamabad.jpg'},
-    {'title': 'Lahore', 'description': 'Cultural Heart of Pakistan', 'image': 'assets/images/lahore.jpg'},
-    {'title': 'Karachi', 'description': 'City of Lights', 'image': 'assets/images/karachi.jpg'},
-    {'title': 'Murree', 'description': 'Queen of Hills', 'image': 'assets/images/murree.jpg'},
+    {
+      'title': 'Rawalpindi',
+      'description': 'The Twin City',
+      'image': 'assets/images/islamabad.jpg',
+      'page': RawalpindiPage()
+    },
+    {
+      'title': 'Peshawar',
+      'description': 'City of Gardens',
+      'image': 'assets/images/lahore.jpg',
+      'page': PeshawarPage()
+    },
+    {
+      'title': 'Abbotabad',
+      'description': 'The City of Beauty',
+      'image': 'assets/images/karachi.jpg',
+      'page': AbbottabadPage()
+    },
+    {
+      'title': 'Murree',
+      'description': 'Queen of Hills',
+      'image': 'assets/images/murree.jpg',
+      'page': MurreePage()
+    },
   ];
 
   final List<Map<String, dynamic>> famousActivities = [
-    {'title': 'Hiking', 'description': 'Margalla Hills', 'image': 'assets/images/hiking.jpg'},
-    {'title': 'Sightseeing', 'description': 'Badshahi Mosque', 'image': 'assets/images/sightseeing.jpg'},
-    {'title': 'Food Tour', 'description': 'Burns Road', 'image': 'assets/images/food.jpg'},
-    {'title': 'Shopping', 'description': 'Centaurus Mall', 'image': 'assets/images/shopping.jpg'},
+    {
+      'title': 'Hiking',
+      'description': 'Margalla Hills',
+      'image': 'assets/images/hiking.jpg',
+      'page': HikingPage()
+    },
+    {
+      'title': 'Sightseeing',
+      'description': 'Badshahi Mosque',
+      'image': 'assets/images/sightseeing.jpg',
+      'page': SightseeingPage()
+    },
+    {
+      'title': 'Food Tour',
+      'description': 'Burns Road',
+      'image': 'assets/images/food.jpg',
+      'page': FoodTourPage()
+    },
+    {
+      'title': 'Shopping',
+      'description': 'Centaurus Mall',
+      'image': 'assets/images/shopping.jpg',
+      'page': ShoppingPage()
+    },
   ];
 
   final List<Map<String, dynamic>> featuredDestinations = [
-    {'title': 'Hunza Valley', 'description': 'Heaven on Earth', 'image': 'assets/images/hunza.jpg'},
-    {'title': 'Swat Valley', 'description': 'Switzerland of Pakistan', 'image': 'assets/images/swat.jpg'},
-    {'title': 'Skardu', 'description': 'Land of Mountains', 'image': 'assets/images/skardu.jpg'},
-    {'title': 'Naran Kaghan', 'description': 'Beautiful Valleys', 'image': 'assets/images/naran.jpg'},
+    {
+      'title': 'Saif-ul-Malook',
+      'description': 'Legendary Alpine Lake',
+      'image': 'assets/images/hunza.jpg',
+      'page': SaifUlMalookPage()
+    },
+    {
+      'title': 'Mohenjo Daro',
+      'description': 'Anncient Indus Valley Civilization',
+      'image': 'assets/images/swat.jpg',
+      'page': MohenjoDaroPage()
+    },
+    {
+      'title': 'Desosai Plains',
+      'description': 'Lands of Gaints',
+      'image': 'assets/images/skardu.jpg',
+      'page': DesosaiPlainsPage()
+    },
+    {
+      'title': 'Neelum Valley',
+      'description': 'Paradise of Kashmir',
+      'image': 'assets/images/naran.jpg',
+      'page': NeelumValleyPage()
+    },
   ];
 
   void _onItemTapped(int index) {
@@ -57,10 +131,10 @@ class _TripPageState extends State<TripPage> {
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (context) {
-        if (index == 0) return  HomePage();
-        if (index == 1) return  Tools();
-        if (index == 2) return  TripPage();
-        if (index == 3) return  MessagePage();
+        if (index == 0) return HomePage();
+        if (index == 1) return Tools();
+        if (index == 2) return TripPage();
+        if (index == 3) return MessagePage();
         return const HomePage();
       }),
           (route) => false,
@@ -102,80 +176,88 @@ class _TripPageState extends State<TripPage> {
     );
   }
 
-  Widget _buildCard(String title, String description, String imagePath, double cardHeight) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      margin: const EdgeInsets.symmetric(horizontal: 4),
-      child: SizedBox(
-        height: cardHeight,
-        child: Stack(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: Image.asset(
-                imagePath,
-                fit: BoxFit.cover,
-                width: double.infinity,
-                height: cardHeight,
+  Widget _buildCard(String title, String description, String imagePath, double cardHeight, Widget page) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => page),
+        );
+      },
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        margin: const EdgeInsets.symmetric(horizontal: 4),
+        child: SizedBox(
+          height: cardHeight,
+          child: Stack(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.asset(
+                  imagePath,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  height: cardHeight,
+                ),
               ),
-            ),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(12),
-                    bottomRight: Radius.circular(12),
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(12),
+                      bottomRight: Radius.circular(12),
+                    ),
+                    gradient: LinearGradient(
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                      colors: [
+                        Colors.black.withOpacity(0.8),
+                        Colors.transparent,
+                      ],
+                    ),
                   ),
-                  gradient: LinearGradient(
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
-                    colors: [
-                      Colors.black.withOpacity(0.8),
-                      Colors.transparent,
+                  padding: const EdgeInsets.all(12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          shadows: [
+                            Shadow(
+                              blurRadius: 6,
+                              color: Colors.black,
+                              offset: Offset(1, 1),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Text(
+                        description,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.white.withOpacity(0.9),
+                          shadows: [
+                            const Shadow(
+                              blurRadius: 6,
+                              color: Colors.black,
+                              offset: Offset(1, 1),
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
-                padding: const EdgeInsets.all(12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        shadows: [
-                          Shadow(
-                            blurRadius: 6,
-                            color: Colors.black,
-                            offset: Offset(1, 1),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Text(
-                      description,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.white.withOpacity(0.9),
-                        shadows: [
-                          const Shadow(
-                            blurRadius: 6,
-                            color: Colors.black,
-                            offset: Offset(1, 1),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -411,6 +493,7 @@ class _TripPageState extends State<TripPage> {
                             recommendedTrips[index]['description'],
                             recommendedTrips[index]['image'],
                             screenHeight * 0.28,
+                            recommendedTrips[index]['page'],
                           ),
                         );
                       },
@@ -438,6 +521,7 @@ class _TripPageState extends State<TripPage> {
                             famousActivities[index]['description'],
                             famousActivities[index]['image'],
                             screenHeight * 0.2,
+                            famousActivities[index]['page'],
                           ),
                         );
                       },
@@ -465,6 +549,7 @@ class _TripPageState extends State<TripPage> {
                             featuredDestinations[index]['description'],
                             featuredDestinations[index]['image'],
                             screenHeight * 0.26,
+                            featuredDestinations[index]['page'],
                           ),
                         );
                       },
