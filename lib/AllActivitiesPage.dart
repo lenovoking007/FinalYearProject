@@ -46,29 +46,9 @@ class FamousActivitiesPage extends StatelessWidget {
             children: [
               _buildActivityCard(
                 context: context,
-                title: 'Jeep Rally Racing',
-                description: 'Thrilling desert races in Rahim Yar Khan',
-                imagePath: 'assets/images/activities/jeep_rally.jpg',
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => JeepRallyPage()),
-                ),
-              ),
-              _buildActivityCard(
-                context: context,
-                title: 'Rock Climbing',
-                description: 'Scale the cliffs of Hunza Valley',
-                imagePath: 'assets/images/activities/rock_climbing.jpg',
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => RockClimbingPage()),
-                ),
-              ),
-              _buildActivityCard(
-                context: context,
                 title: 'White Water Rafting',
                 description: 'Kunhar River rapids adventure',
-                imagePath: 'assets/images/activities/rafting.jpg',
+                imagePath: 'assets/images/white/wo2.jpg',
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => WhiteWaterRaftingPage()),
@@ -78,7 +58,7 @@ class FamousActivitiesPage extends StatelessWidget {
                 context: context,
                 title: 'Cholistan Desert Safari',
                 description: '4x4 adventures in Pakistan\'s desert',
-                imagePath: 'assets/images/activities/desert_safari.jpg',
+                imagePath: 'assets/images/desert/do3.jpg',
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => DesertSafariPage()),
@@ -89,7 +69,7 @@ class FamousActivitiesPage extends StatelessWidget {
                 context: context,
                 title: 'Hot Air Ballooning',
                 description: 'Float over Punjab\'s countryside',
-                imagePath: 'assets/images/activities/hot_air_balloon.jpg',
+                imagePath: 'assets/images/ballon/ao3.jpg',
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => HotAirBalloonPage()),
@@ -99,7 +79,7 @@ class FamousActivitiesPage extends StatelessWidget {
                 context: context,
                 title: 'Mountain Biking',
                 description: 'Trails through Northern Areas',
-                imagePath: 'assets/images/activities/mountain_biking.jpg',
+                imagePath: 'assets/images/biking/mo2.jpg',
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => MountainBikingPage()),

@@ -3,24 +3,19 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class MountainBikingPage extends StatelessWidget {
   final List<String> overviewImages = [
-    'assets/images/MountainBiking/overview1.jpg',
-    'assets/images/MountainBiking/overview2.jpg',
-    'assets/images/MountainBiking/overview3.jpg',
+    'assets/images/biking/mo1.jpg',
+    'assets/images/biking/mo2.jpg',
+    'assets/images/biking/mo3.jpg',
   ];
   final List<String> locationsImages = [
-    'assets/images/MountainBiking/location1.jpg',
-    'assets/images/MountainBiking/location2.jpg',
-    'assets/images/MountainBiking/location3.jpg',
-  ];
-  final List<String> gearImages = [
-    'assets/images/MountainBiking/gear1.jpg',
-    'assets/images/MountainBiking/gear2.jpg',
-    'assets/images/MountainBiking/gear3.jpg',
+    'assets/images/biking/mo1.jpg',
+    'assets/images/biking/mo2.jpg',
+    'assets/images/biking/mo3.jpg',
   ];
   final List<String> safetyImages = [
-    'assets/images/MountainBiking/safety1.jpg',
-    'assets/images/MountainBiking/safety2.jpg',
-    'assets/images/MountainBiking/safety3.jpg',
+    'assets/images/biking/ms1.jpg',
+    'assets/images/biking/ms2.jpg',
+    'assets/images/biking/ms3.jpg',
   ];
 
   MountainBikingPage({super.key});
@@ -47,7 +42,6 @@ class MountainBikingPage extends StatelessWidget {
             tabs: const [
               Tab(icon: Icon(Icons.explore), text: 'Overview'),
               Tab(icon: Icon(Icons.location_on), text: 'Locations'),
-              Tab(icon: Icon(Icons.directions_bike), text: 'Gear'),
               Tab(icon: Icon(Icons.security), text: 'Safety'),
             ],
           ),
@@ -143,26 +137,26 @@ class MountainBikingPage extends StatelessWidget {
       {
         'name': 'Shandur Pass',
         'country': 'Pakistan',
-        'image': 'assets/images/MountainBiking/shandur.jpg',
-        'difficulty': 'Intermediate to Advanced',
+        'image': 'assets/images/biking/mo1.jpg',
+        'difficulty': '',
       },
       {
         'name': 'Fairy Meadows',
         'country': 'Pakistan',
-        'image': 'assets/images/MountainBiking/fairymeadows.jpg',
-        'difficulty': 'Intermediate',
+        'image': 'assets/images/biking/mo2.jpg',
+        'difficulty': '',
       },
       {
         'name': 'Hunza Valley',
         'country': 'Pakistan',
-        'image': 'assets/images/MountainBiking/hunza.jpg',
-        'difficulty': 'Beginner to Intermediate',
+        'image': 'assets/images/biking/mo3.jpg',
+        'difficulty': '',
       },
       {
         'name': 'Murree Hills',
         'country': 'Pakistan',
-        'image': 'assets/images/MountainBiking/murree.jpg',
-        'difficulty': 'Beginner',
+        'image': 'assets/images/biking/mo4.jpg',
+        'difficulty': '',
       },
 
     ];
@@ -188,50 +182,6 @@ class MountainBikingPage extends StatelessWidget {
     );
   }
 
-  Widget _buildGearList() {
-    final List<String> gearItems = [
-      'Mountain Bike',
-      'Helmet',
-      'Protective Gloves',
-      'Knee and Elbow Pads',
-      'Hydration Pack',
-      'Bike Repair Kit',
-      'Appropriate Footwear',
-    ];
-
-    return Card(
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side: BorderSide(color: Colors.grey.shade200),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            const Text(
-              'Essential Mountain Biking Gear',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF8B4513),
-              ),
-            ),
-            const SizedBox(height: 12),
-            Column(
-              children: gearItems
-                  .map((gear) => ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: const Icon(Icons.check_circle, color: Color(0xFF8B4513)),
-                title: Text(gear),
-              ))
-                  .toList(),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
   Widget _buildSafetyTipsList() {
     final List<String> tips = [
@@ -284,36 +234,51 @@ class MountainBikingPage extends StatelessWidget {
     required String subtitle,
     required String details,
   }) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      elevation: 6,
-      child: Column(
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(16),
+      child: Stack(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(16),
-            child: Image.asset(image, height: 150, width: double.infinity, fit: BoxFit.cover),
+          Positioned.fill(
+            child: Image.asset(image, fit: BoxFit.cover),
           ),
-          const SizedBox(height: 8),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              title,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Colors.black.withOpacity(0.6), Colors.transparent],
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                ),
+              ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text(subtitle, style: TextStyle(color: Colors.grey.shade600)),
-          ),
-          const SizedBox(height: 8),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              details,
-              style: TextStyle(color: Colors.grey.shade800),
+          Positioned(
+            left: 12,
+            right: 12,
+            bottom: 12,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  subtitle,
+                  style: const TextStyle(
+                    color: Colors.white70,
+                    fontSize: 14,
+                  ),
+                ),
+                const SizedBox(height: 4),
+              ],
             ),
           ),
-          const SizedBox(height: 12),
         ],
       ),
     );
@@ -369,3 +334,4 @@ class MountainBikingPage extends StatelessWidget {
     );
   }
 }
+

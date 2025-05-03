@@ -3,21 +3,21 @@ import 'package:carousel_slider/carousel_slider.dart';
 
 class HotAirBalloonPage extends StatelessWidget {
   final List<String> overviewImages = [
-    'assets/images/HotAirBalloon/overview1.jpg',
-    'assets/images/HotAirBalloon/overview2.jpg',
-    'assets/images/HotAirBalloon/overview3.jpg',
+    'assets/images/ballon/ao1.jpg',
+    'assets/images/ballon/ao2.jpg',
+    'assets/images/ballon/ao3.jpg',
   ];
 
   final List<String> naturalSpotsImages = [
-    'assets/images/HotAirBalloon/nature1.jpg',
-    'assets/images/HotAirBalloon/nature2.jpg',
-    'assets/images/HotAirBalloon/nature3.jpg',
+    'assets/images/ballon/ao4.jpg',
+    'assets/images/ballon/ao3.jpg',
+    'assets/images/ballon/ao1.jpg',
   ];
 
   final List<String> safetyImages = [
-    'assets/images/HotAirBalloon/safety1.jpg',
-    'assets/images/HotAirBalloon/safety2.jpg',
-    'assets/images/HotAirBalloon/safety3.jpg',
+    'assets/images/ballon/as2.jpg',
+    'assets/images/ballon/as3.jpg',
+    'assets/images/ballon/as1.jpg',
   ];
 
   HotAirBalloonPage({super.key});
@@ -157,33 +157,27 @@ class HotAirBalloonPage extends StatelessWidget {
         'name': 'Skardu',
         'type': 'Pakistan Hot Air Ballooning',
         'spots': 'Hunza Valley',
-        'image': 'assets/images/HotAirBalloon/skardu.jpg',
+        'image': 'assets/images/ballon/ao1.jpg',
       },
       {
         'name': 'Lahore',
         'type': 'Pakistan Hot Air Ballooning',
-        'spots': 'Badshahi Mosque & Shalimar Gardens',
-        'image': 'assets/images/HotAirBalloon/lahore.jpg',
+        'spots': 'Badshahi Mosque',
+        'image': 'assets/images/ballon/ao2.jpg',
       },
       {
         'name': 'Islamabad',
         'type': 'Pakistan Hot Air Ballooning',
         'spots': 'Margalla Hills',
-        'image': 'assets/images/HotAirBalloon/islamabad.jpg',
+        'image': 'assets/images/ballon/ao3.jpg',
       },
       {
         'name': 'Karachi',
         'type': 'Pakistan Hot Air Ballooning',
         'spots': 'Manora Island',
-        'image': 'assets/images/HotAirBalloon/karachi.jpg',
+        'image': 'assets/images/ballon/ao4.jpg',
       },
 
-      {
-        'name': 'Serengeti',
-        'type': 'Tanzania Hot Air Ballooning',
-        'spots': 'Serengeti National Park',
-        'image': 'assets/images/HotAirBalloon/serengeti.jpg',
-      },
     ];
 
     return GridView.builder(
@@ -212,14 +206,14 @@ class HotAirBalloonPage extends StatelessWidget {
       {
         'name': 'Lahore',
         'location': 'Pakistan',
-        'details': 'Hot air ballooning over the historical landmarks of Lahore.',
-        'image': 'assets/images/HotAirBalloon/lahore.jpg',
+        'details': '',
+        'image': 'assets/images/ballon/ao4.jpg',
       },
       {
         'name': 'Islamabad',
         'location': 'Pakistan',
-        'details': 'Experience the beauty of Margalla Hills from a hot air balloon.',
-        'image': 'assets/images/HotAirBalloon/islamabad.jpg',
+        'details': '',
+        'image': 'assets/images/ballon/ao3.jpg',
       },
     ];
 
@@ -362,42 +356,52 @@ class HotAirBalloonPage extends StatelessWidget {
     required String subtitle,
     required String details,
   }) {
-    return Card(
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side: BorderSide(color: Colors.grey.shade200),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: Image.asset(image, height: 140, fit: BoxFit.cover),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFFFF5733),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(16),
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.asset(image, fit: BoxFit.cover),
+          ),
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Colors.black.withOpacity(0.6), Colors.transparent],
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                ),
               ),
             ),
-            const SizedBox(height: 6),
-            Text(
-              subtitle,
-              style: const TextStyle(fontSize: 14, color: Colors.grey),
+          ),
+          Positioned(
+            left: 12,
+            right: 12,
+            bottom: 12,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  subtitle,
+                  style: const TextStyle(
+                    color: Colors.white70,
+                    fontSize: 14,
+                  ),
+                ),
+                const SizedBox(height: 4),
+              ],
             ),
-            const SizedBox(height: 12),
-            Text(
-              details,
-              style: const TextStyle(fontSize: 14),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

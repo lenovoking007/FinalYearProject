@@ -3,19 +3,19 @@ import 'package:carousel_slider/carousel_slider.dart';
 
 class WhiteWaterRaftingPage extends StatelessWidget {
   final List<String> overviewImages = [
-    'assets/images/WhiteWaterRafting/raft1.jpg',
-    'assets/images/WhiteWaterRafting/raft2.jpg',
-    'assets/images/WhiteWaterRafting/raft3.jpg',
+    'assets/images/white/wo1.jpg',
+    'assets/images/white/wo2.jpg',
+    'assets/images/white/w03.jpg',
   ];
   final List<String> naturalSpotsImages = [
-    'assets/images/WhiteWaterRafting/nature1.jpg',
-    'assets/images/WhiteWaterRafting/nature2.jpg',
-    'assets/images/WhiteWaterRafting/nature3.jpg',
+    'assets/images/white/wn1.jpg',
+    'assets/images/white/wn2.jpg',
+    'assets/images/white/wn3.jpg',
   ];
   final List<String> safetyImages = [
-    'assets/images/WhiteWaterRafting/safety1.jpg',
-    'assets/images/WhiteWaterRafting/safety2.jpg',
-    'assets/images/WhiteWaterRafting/safety3.jpg',
+    'assets/images/white/ws1.jpg',
+    'assets/images/white/ws2.jpg',
+    'assets/images/white/ws3.jpg',
   ];
 
   WhiteWaterRaftingPage({super.key});
@@ -155,25 +155,25 @@ class WhiteWaterRaftingPage extends StatelessWidget {
         'name': 'River Indus',
         'type': 'Rapid Class III-V',
         'spots': 'Kaghan Valley, Naran',
-        'image': 'assets/images/WhiteWaterRafting/indus.jpg',
+        'image': 'assets/images/white/wo1.jpg',
       },
       {
         'name': 'River Swat',
         'type': 'Rapid Class II-III',
         'spots': 'Madyan, Fizagat',
-        'image': 'assets/images/WhiteWaterRafting/swat.jpg',
+        'image': 'assets/images/white/wo2.jpg',
       },
       {
         'name': 'River Neelum',
         'type': 'Rapid Class III-IV',
         'spots': 'Neelum Valley, Azad Kashmir',
-        'image': 'assets/images/WhiteWaterRafting/neelum.jpg',
+        'image': 'assets/images/white/w03.jpg',
       },
       {
         'name': 'River Jhelum',
         'type': 'Rapid Class II-III',
         'spots': 'Muzaffarabad, Azad Kashmir',
-        'image': 'assets/images/WhiteWaterRafting/jhelum.jpg',
+        'image': 'assets/images/white/wo3.jpg',
       },
     ];
 
@@ -204,38 +204,15 @@ class WhiteWaterRaftingPage extends StatelessWidget {
         'name': 'River Indus Rapid',
         'location': 'Kaghan Valley, Naran',
         'details': 'White water rafting with exciting rapids along the Indus River',
-        'image': 'assets/images/WhiteWaterRafting/indusrapid.jpg',
+        'image': 'assets/images/white/wn1.jpg',
       },
       {
         'name': 'Swat River Rapids',
         'location': 'Madyan, Swat Valley',
         'details': 'Enjoy thrilling rapids in the Swat River surrounded by lush green mountains',
-        'image': 'assets/images/WhiteWaterRafting/swatrapid.jpg',
+        'image': 'assets/images/white/wn3.jpg',
       },
-      {
-        'name': 'Neelum River',
-        'location': 'Neelum Valley, Azad Kashmir',
-        'details': 'The fast-flowing Neelum River offers challenging rapids for experienced rafters',
-        'image': 'assets/images/WhiteWaterRafting/neelumrapid.jpg',
-      },
-      {
-        'name': 'Jhelum River',
-        'location': 'Muzaffarabad, Azad Kashmir',
-        'details': 'Rafting through beautiful landscapes of Jhelum River with moderate rapids',
-        'image': 'assets/images/WhiteWaterRafting/jhelumrapid.jpg',
-      },
-      {
-        'name': 'Kabul River',
-        'location': 'Peshawar, KPK',
-        'details': 'Thrilling rafting on the Kabul River with some of the best rapids in the region',
-        'image': 'assets/images/WhiteWaterRafting/kabulriver.jpg',
-      },
-      {
-        'name': 'Gilgit River',
-        'location': 'Gilgit-Baltistan',
-        'details': 'Rafting through the fast and furious rapids of the Gilgit River',
-        'image': 'assets/images/WhiteWaterRafting/gilgitrapid.jpg',
-      },
+
     ];
 
     return GridView.builder(
@@ -353,36 +330,51 @@ class WhiteWaterRaftingPage extends StatelessWidget {
     required String subtitle,
     required String details,
   }) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      elevation: 6,
-      child: Column(
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(16),
+      child: Stack(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(16),
-            child: Image.asset(image, height: 150, width: double.infinity, fit: BoxFit.cover),
+          Positioned.fill(
+            child: Image.asset(image, fit: BoxFit.cover),
           ),
-          const SizedBox(height: 8),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              title,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Colors.black.withOpacity(0.6), Colors.transparent],
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                ),
+              ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text(subtitle, style: TextStyle(color: Colors.grey.shade600)),
-          ),
-          const SizedBox(height: 8),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              details,
-              style: TextStyle(color: Colors.grey.shade800),
+          Positioned(
+            left: 12,
+            right: 12,
+            bottom: 12,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  subtitle,
+                  style: const TextStyle(
+                    color: Colors.white70,
+                    fontSize: 14,
+                  ),
+                ),
+                const SizedBox(height: 4),
+              ],
             ),
           ),
-          const SizedBox(height: 12),
         ],
       ),
     );

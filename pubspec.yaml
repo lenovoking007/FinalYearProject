@@ -110,6 +110,8 @@ flutter:
     - assets/images/zipline/
     - assets/images/jeep/
     - assets/images/ballon/
+    - assets/images/sight/
+    - assets/images/hiking/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 

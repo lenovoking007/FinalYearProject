@@ -3,21 +3,21 @@ import 'package:carousel_slider/carousel_slider.dart';
 
 class JeepRallyPage extends StatelessWidget {
   final List<String> overviewImages = [
-    'assets/images/JeepRally/overview1.jpg',
-    'assets/images/JeepRally/overview2.jpg',
-    'assets/images/JeepRally/overview3.jpg',
+    'assets/images/jeep/cho1.jpg',
+    'assets/images/jeep/cho2.jpg',
+    'assets/images/jeep/cho3.jpg',
   ];
 
   final List<String> naturalSpotsImages = [
-    'assets/images/JeepRally/nature1.jpg',
-    'assets/images/JeepRally/nature2.jpg',
-    'assets/images/JeepRally/nature3.jpg',
+    'assets/images/jeep/chn1.jpg',
+    'assets/images/jeep/chn2.jpg',
+
   ];
 
   final List<String> safetyImages = [
-    'assets/images/JeepRally/safety1.jpg',
-    'assets/images/JeepRally/safety2.jpg',
-    'assets/images/JeepRally/safety3.jpg',
+  'assets/images/jeep/chs1.jpg',
+  'assets/images/jeep/chs2.jpg',
+
   ];
 
   JeepRallyPage({super.key});
@@ -157,25 +157,25 @@ class JeepRallyPage extends StatelessWidget {
         'name': 'Cholistan Desert',
         'type': 'Desert Rally',
         'spots': 'Derawar Fort, Bahawalpur',
-        'image': 'assets/images/JeepRally/cholistan.jpg',
+        'image': 'assets/images/jeep/cho1.jpg',
       },
       {
         'name': 'Karakoram Highway',
         'type': 'Mountain Rally',
         'spots': 'Gilgit, Hunza Valley',
-        'image': 'assets/images/JeepRally/karakoram.jpg',
+        'image': 'assets/images/jeep/cho2.jpg',
       },
       {
         'name': 'Makran Coastal Highway',
         'type': 'Coastal Rally',
         'spots': 'Gwadar, Ormara',
-        'image': 'assets/images/JeepRally/makran.jpg',
+        'image': 'assets/images/jeep/cho3.jpg',
       },
       {
         'name': 'Ziarat Valley',
         'type': 'Hill Rally',
         'spots': 'Ziarat, Quetta',
-        'image': 'assets/images/JeepRally/ziarat.jpg',
+        'image': 'assets/images/jeep/cho4.jpg',
       },
 
     ];
@@ -207,13 +207,13 @@ class JeepRallyPage extends StatelessWidget {
         'name': 'Thar Desert',
         'location': 'Sindh, Pakistan',
         'details': 'Off-road jeep rallies through vast sand dunes.',
-        'image': 'assets/images/JeepRally/thar_rally.jpg',
+        'image': 'assets/images/jeep/chn2.jpg',
       },
       {
         'name': 'Rann of Kutch',
         'location': 'Sindh, Pakistan',
         'details': 'Challenging rally on the salt flats.',
-        'image': 'assets/images/JeepRally/rann_rally.jpg',
+        'image': 'assets/images/jeep/chn1.jpg',
       },
     ];
 
@@ -356,42 +356,52 @@ class JeepRallyPage extends StatelessWidget {
     required String subtitle,
     required String details,
   }) {
-    return Card(
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side: BorderSide(color: Colors.grey.shade200),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: Image.asset(image, height: 140, fit: BoxFit.cover),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF0066CC),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(16),
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.asset(image, fit: BoxFit.cover),
+          ),
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Colors.black.withOpacity(0.6), Colors.transparent],
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                ),
               ),
             ),
-            const SizedBox(height: 6),
-            Text(
-              subtitle,
-              style: const TextStyle(fontSize: 14, color: Colors.grey),
+          ),
+          Positioned(
+            left: 12,
+            right: 12,
+            bottom: 12,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  subtitle,
+                  style: const TextStyle(
+                    color: Colors.white70,
+                    fontSize: 14,
+                  ),
+                ),
+                const SizedBox(height: 4),
+              ],
             ),
-            const SizedBox(height: 12),
-            Text(
-              details,
-              style: const TextStyle(fontSize: 14),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

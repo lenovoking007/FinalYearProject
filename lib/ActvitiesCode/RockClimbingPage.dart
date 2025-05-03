@@ -3,24 +3,20 @@ import 'package:carousel_slider/carousel_slider.dart';
 
 class RockClimbingPage extends StatelessWidget {
   final List<String> overviewImages = [
-    'assets/images/RockClimbing/climbing1.jpg',
-    'assets/images/RockClimbing/climbing2.jpg',
-    'assets/images/RockClimbing/climbing3.jpg',
+    'assets/images/rock/ro1.jpg',
+    'assets/images/rock/ro2.jpg',
+    'assets/images/rock/ro3.jpg',
+
   ];
   final List<String> climbingSpotsImages = [
-    'assets/images/RockClimbing/spot1.jpg',
-    'assets/images/RockClimbing/spot2.jpg',
-    'assets/images/RockClimbing/spot3.jpg',
-  ];
-  final List<String> gearImages = [
-    'assets/images/RockClimbing/gear1.jpg',
-    'assets/images/RockClimbing/gear2.jpg',
-    'assets/images/RockClimbing/gear3.jpg',
+    'assets/images/rock/ro1.jpg',
+  'assets/images/rock/ro2.jpg',
+  'assets/images/rock/ro3.jpg',
   ];
   final List<String> safetyImages = [
-    'assets/images/RockClimbing/safety1.jpg',
-    'assets/images/RockClimbing/safety2.jpg',
-    'assets/images/RockClimbing/safety3.jpg',
+    'assets/images/rock/rs3.jpg',
+    'assets/images/rock/rs1.jpg',
+    'assets/images/rock/rs2.jpg',
   ];
 
   RockClimbingPage({super.key});
@@ -142,25 +138,25 @@ class RockClimbingPage extends StatelessWidget {
       {
         'name': 'Margalla Hills',
         'location': 'Islamabad, Pakistan',
-        'image': 'assets/images/RockClimbing/margallahills.jpg',
+        'image':  'assets/images/rock/ro1.jpg',
         'difficulty': 'Beginner to Intermediate',
       },
       {
         'name': 'Trango Towers',
         'location': 'Baltoro Glacier, Pakistan',
-        'image': 'assets/images/RockClimbing/trangotowers.jpg',
+        'image': 'assets/images/rock/ro2.jpg',
         'difficulty': 'Advanced',
       },
       {
         'name': 'Passu Cones',
         'location': 'Hunza Valley, Pakistan',
-        'image': 'assets/images/RockClimbing/passucones.jpg',
+        'image':  'assets/images/rock/ro3.jpg',
         'difficulty': 'Intermediate to Advanced',
       },
       {
         'name': 'Shimshal Valley',
         'location': 'Gilgit-Baltistan, Pakistan',
-        'image': 'assets/images/RockClimbing/shimshal.jpg',
+        'image':  'assets/images/rock/ro4.jpg',
         'difficulty': 'Challenging',
       },
 
@@ -240,36 +236,51 @@ class RockClimbingPage extends StatelessWidget {
     required String subtitle,
     required String details,
   }) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      elevation: 6,
-      child: Column(
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(16),
+      child: Stack(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(16),
-            child: Image.asset(image, height: 150, width: double.infinity, fit: BoxFit.cover),
+          Positioned.fill(
+            child: Image.asset(image, fit: BoxFit.cover),
           ),
-          const SizedBox(height: 8),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              title,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Colors.black.withOpacity(0.6), Colors.transparent],
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                ),
+              ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text(subtitle, style: TextStyle(color: Colors.grey.shade600)),
-          ),
-          const SizedBox(height: 8),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              details,
-              style: TextStyle(color: Colors.grey.shade800),
+          Positioned(
+            left: 12,
+            right: 12,
+            bottom: 12,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  subtitle,
+                  style: const TextStyle(
+                    color: Colors.white70,
+                    fontSize: 14,
+                  ),
+                ),
+                const SizedBox(height: 4),
+              ],
             ),
           ),
-          const SizedBox(height: 12),
         ],
       ),
     );

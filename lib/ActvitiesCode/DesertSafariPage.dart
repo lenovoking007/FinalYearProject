@@ -3,21 +3,21 @@ import 'package:carousel_slider/carousel_slider.dart';
 
 class DesertSafariPage extends StatelessWidget {
   final List<String> overviewImages = [
-    'assets/images/DesertSafari/overview1.jpg',
-    'assets/images/DesertSafari/overview2.jpg',
-    'assets/images/DesertSafari/overview3.jpg',
+    'assets/images/desert/do1.jpg',
+    'assets/images/desert/do2.jpg',
+    'assets/images/desert/do3.jpg',
   ];
 
   final List<String> naturalSpotsImages = [
-    'assets/images/DesertSafari/nature1.jpg',
-    'assets/images/DesertSafari/nature2.jpg',
-    'assets/images/DesertSafari/nature3.jpg',
+    'assets/images/desert/dn2.jpg',
+    'assets/images/desert/dn1.jpg',
+    'assets/images/desert/dn2.jpg',
   ];
 
   final List<String> safetyImages = [
-    'assets/images/DesertSafari/safety1.jpg',
-    'assets/images/DesertSafari/safety2.jpg',
-    'assets/images/DesertSafari/safety3.jpg',
+    'assets/images/desert/ds2.jpg',
+    'assets/images/desert/ds3.jpg',
+    'assets/images/desert/ds1.jpg',
   ];
 
   DesertSafariPage({super.key});
@@ -169,13 +169,13 @@ class DesertSafariPage extends StatelessWidget {
         'name': 'Rann of Kutch',
         'type': 'Pakistan Desert Safari',
         'spots': 'Rann of Kutch Desert',
-        'image': 'assets/images/DesertSafari/rannofkutch.jpg',
+        'image': 'assets/images/desert/do3.jpg',
       },
       {
         'name': 'Karakoram Desert',
         'type': 'Pakistan Desert Safari',
         'spots': 'Karakoram Desert',
-        'image': 'assets/images/DesertSafari/karakoram.jpg',
+        'image': 'assets/images/desert/do4.jpg',
       },
     ];
 
@@ -205,35 +205,35 @@ class DesertSafariPage extends StatelessWidget {
       {
         'name': 'Rann of Kutch',
         'type': 'Pakistan Desert Safari',
-        'spots': 'Rann of Kutch Desert',
-        'image': 'assets/images/DesertSafari/rannofkutch.jpg',
+        'image': 'assets/images/desert/dn1.jpg',
       },
       {
         'name': 'Karakoram Desert',
         'type': 'Pakistan Desert Safari',
-        'spots': 'Karakoram Desert',
-        'image': 'assets/images/DesertSafari/karakoram.jpg',
+        'image': 'assets/images/desert/dn2.jpg',
       },
     ];
 
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 0.8,
-        crossAxisSpacing: 12,
-        mainAxisSpacing: 12,
+    return SingleChildScrollView(
+      child: GridView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 0.8,
+          crossAxisSpacing: 12,
+          mainAxisSpacing: 12,
+        ),
+        itemCount: spots.length,
+        itemBuilder: (context, index) {
+          return _buildSpotCard(
+            image: spots[index]['image'],
+            title: spots[index]['name'],
+            subtitle: spots[index]['type']??'',
+            details: spots[index]['spots']??'',
+          );
+        },
       ),
-      itemCount: spots.length,
-      itemBuilder: (context, index) {
-        return _buildSpotCard(
-          image: spots[index]['image'],
-          title: spots[index]['name'],
-          subtitle: spots[index]['type'],
-          details: spots[index]['spots'],
-        );
-      },
     );
   }
 
@@ -355,42 +355,52 @@ class DesertSafariPage extends StatelessWidget {
     required String subtitle,
     required String details,
   }) {
-    return Card(
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side: BorderSide(color: Colors.grey.shade200),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFFFD7C00),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(16),
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.asset(image, fit: BoxFit.cover),
+          ),
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Colors.black.withOpacity(0.6), Colors.transparent],
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                ),
               ),
             ),
-            const SizedBox(height: 6),
-            Text(
-              subtitle,
-              style: const TextStyle(fontSize: 14, color: Colors.grey),
+          ),
+          Positioned(
+            left: 12,
+            right: 12,
+            bottom: 12,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  subtitle,
+                  style: const TextStyle(
+                    color: Colors.white70,
+                    fontSize: 14,
+                  ),
+                ),
+                const SizedBox(height: 4),
+              ],
             ),
-            const SizedBox(height: 12),
-            Text(
-              details,
-              style: const TextStyle(fontSize: 14),
-            ),
-            const SizedBox(height: 12),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: Image.asset(image, height: 140, fit: BoxFit.cover),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

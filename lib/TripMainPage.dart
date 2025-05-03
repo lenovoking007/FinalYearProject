@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:travelmate/ActvitiesCode/JeepRallyPage.dart';
+import 'package:travelmate/ActvitiesCode/RockClimbingPage.dart';
 import 'package:travelmate/FamousTouristPlacesCode/NeelumValleyPage.dart';
 import 'package:travelmate/FamousTouristPlacesCode/SaifUlMalookPage.dart';
 import 'package:travelmate/FeaturedCities/MurreePage.dart';
@@ -10,9 +12,7 @@ import 'package:travelmate/homepage.dart';
 import 'package:travelmate/settingmenu.dart';
 import 'package:travelmate/tools.dart';
 import 'package:travelmate/tripprogresspage.dart';
-import 'ActvitiesCode/FoodTourPage.dart';
 import 'ActvitiesCode/HikingPage.dart';
-import 'ActvitiesCode/ShoppingPage.dart';
 import 'ActvitiesCode/SightseeingPage.dart';
 import 'AllActivitiesPage.dart';
 import 'FamousTouristPlacesCode/DesosaiPlainsPage.dart';
@@ -75,26 +75,26 @@ class _TripPageState extends State<TripPage> {
     {
       'title': 'Hiking',
       'description': 'Margalla Hills',
-      'image': 'assets/images/hiking.jpg',
+      'image': 'assets/images/hiking/hi1.jpg',
       'page': HikingPage()
     },
     {
       'title': 'Sightseeing',
       'description': 'Badshahi Mosque',
-      'image': 'assets/images/sightseeing.jpg',
-      'page': SightseeingPage()
+      'image': 'assets/images/sight/si2.jpg',
+      'page':SightseeingTourPage()
     },
     {
-      'title': 'Food Tour',
-      'description': 'Burns Road',
-      'image': 'assets/images/food.jpg',
-      'page': FoodTourPage()
+      'title': 'JeepRally',
+      'description': 'Reallies',
+      'image': 'assets/images/jeep/chn1.jpg',
+      'page': JeepRallyPage()
     },
     {
-      'title': 'Shopping',
-      'description': 'Centaurus Mall',
-      'image': 'assets/images/shopping.jpg',
-      'page': ShoppingPage()
+      'title': 'Rockclimbing',
+      'description': 'Scale the cliffs of Hunza Valley',
+      'image': 'assets/images/rock/ro2.jpg',
+      'page': RockClimbingPage()
     },
   ];
 
