@@ -1,1094 +1,534 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class NeelumValleyPage extends StatelessWidget {
+  // Image paths
   final List<String> overviewImages = [
-    'assets/images/karachi/karachi1.jpg',
-    'assets/images/karachi/karachi1.jpg',
-    'assets/images/karachi/karachi1.jpg',
+    'assets/images/neelum/overview1.jpg',
+    'assets/images/neelum/overview2.jpg',
+    'assets/images/neelum/overview3.jpg',
   ];
-
+  final List<String> seasonImages = [
+    'assets/images/neelum/seasons1.jpg',
+    'assets/images/neelum/seasons2.jpg',
+    'assets/images/neelum/seasons3.jpg',
+  ];
   final List<String> clothesImages = [
-    'assets/images/karachi/karachicl1.jpg',
-    'assets/images/karachi/karachicl1.jpg',
-    'assets/images/karachi/karachicl1.jpg',
-    'assets/images/karachi/karachicl1.jpg',
+    'assets/images/neelum/clothes1.jpg',
+    'assets/images/neelum/clothes2.jpg',
+    'assets/images/neelum/clothes3.jpg',
+  ];
+  final List<String> safetyImages = [
+    'assets/images/neelum/safety1.jpg',
+    'assets/images/neelum/safety2.jpg',
+    'assets/images/neelum/safety3.jpg',
   ];
 
-  final List<String> foodImages = [
-    'assets/images/karachi/karachif1.jpg',
-    'assets/images/karachi/karachif1.jpg',
-    'assets/images/karachi/karachif1.jpg',
-    'assets/images/karachi/karachif1.jpg',
-  ];
+  // Colors (same as original)
+  final Color primaryColor = const Color(0xFF0066CC);
+  final Color secondaryColor = Colors.white;
+  final Color textColor = Colors.black87;
+  final Color accentColor = const Color(0xFF88F2E8);
 
-  final List<String> festivalImages = [
-    'assets/images/Islamabad/f1.jpg',
-    'assets/images/Islamabad/f2.jpg',
-    'assets/images/Islamabad/f3.jpg',
-    'assets/images/Islamabad/f4.jpg',
-  ];
-
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  Future<void> _saveTripPlanToFirebase(Map<String, dynamic> tripPlan) async {
-    try {
-      await _firestore.collection('tripPlans').add(tripPlan);
-    } catch (e) {
-      throw Exception('Failed to save trip plan: $e');
-    }
-  }
-
-  void showTripPlanDialog(BuildContext context) {
-    TextEditingController tripNameController = TextEditingController();
-    TextEditingController peopleCountController = TextEditingController();
-    TextEditingController budgetController = TextEditingController();
-    String? selectedTripType;
-    DateTime startDate = DateTime.now();
-    DateTime endDate = DateTime.now().add(const Duration(days: 3));
-
-    showDialog(
-      context: context,
-      builder: (context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return Dialog(
-              insetPadding: const EdgeInsets.symmetric(horizontal: 16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(24),
-              ),
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          const Icon(Icons.flight_takeoff, color: Color(0XFF0066CC), size: 28),
-                          const SizedBox(width: 12),
-                          Text(
-                            "Plan Your Trip",
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: const Color(0XFF0066CC).withOpacity(0.9),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 24),
-                      _buildEditableTextField("Trip Name", tripNameController, Icons.title),
-                      const SizedBox(height: 16),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: const Color(0XFF88F2E8).withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: const Color(0XFF0066CC).withOpacity(0.5)),
-                        ),
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        child: DropdownButtonFormField<String>(
-                          isExpanded: true,
-                          value: selectedTripType,
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                          ),
-                          hint: const Text('Select Trip Type', style: TextStyle(color: Colors.grey)),
-                          items: ['Adventure', 'Relaxation', 'Cultural', 'Wildlife', 'Business'].map((String type) {
-                            return DropdownMenuItem<String>(
-                              value: type,
-                              child: Text(type, style: const TextStyle(color: Colors.black87)),
-                            );
-                          }).toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              selectedTripType = value;
-                            });
-                          },
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      _buildEditableTextField("Number of People", peopleCountController, Icons.people),
-                      const SizedBox(height: 16),
-                      _buildEditableTextField("Budget (PKR)", budgetController, Icons.account_balance_wallet),
-                      const SizedBox(height: 16),
-                      Text(
-                        "Trip Duration",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: const Color(0XFF0066CC).withOpacity(0.9),
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      LayoutBuilder(
-                        builder: (context, constraints) {
-                          final isSmallScreen = constraints.maxWidth < 400;
-                          return isSmallScreen
-                              ? Column(
-                            children: [
-                              _buildDateSelector(context, "Start Date", startDate, (picked) {
-                                if (picked != null) {
-                                  setState(() {
-                                    startDate = picked;
-                                    if (startDate.isAfter(endDate)) {
-                                      endDate = startDate.add(const Duration(days: 1));
-                                    }
-                                  });
-                                }
-                              }, startDate),
-                              const SizedBox(height: 12),
-                              _buildDateSelector(context, "End Date", endDate, (picked) {
-                                if (picked != null) {
-                                  setState(() {
-                                    endDate = picked;
-                                  });
-                                }
-                              }, startDate),
-                            ],
-                          )
-                              : Row(
-                            children: [
-                              Expanded(
-                                child: _buildDateSelector(context, "Start Date", startDate, (picked) {
-                                  if (picked != null) {
-                                    setState(() {
-                                      startDate = picked;
-                                      if (startDate.isAfter(endDate)) {
-                                        endDate = startDate.add(const Duration(days: 1));
-                                      }
-                                    });
-                                  }
-                                }, startDate),
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: _buildDateSelector(context, "End Date", endDate, (picked) {
-                                  if (picked != null) {
-                                    setState(() {
-                                      endDate = picked;
-                                    });
-                                  }
-                                }, startDate),
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                      const SizedBox(height: 16),
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: Colors.amber.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: Colors.amber.withOpacity(0.3)),
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(Icons.info_outline, color: Colors.amber.shade700),
-                            const SizedBox(width: 8),
-                            Flexible(
-                              child: Text(
-                                "Trip duration: ${endDate.difference(startDate).inDays + 1} days",
-                                style: TextStyle(color: Colors.amber.shade800),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          TextButton(
-                            onPressed: () => Navigator.pop(context),
-                            style: TextButton.styleFrom(
-                              foregroundColor: const Color(0XFF0066CC),
-                            ),
-                            child: const Text("CANCEL"),
-                          ),
-                          const SizedBox(width: 12),
-                          ElevatedButton(
-                            onPressed: () async {
-                              if (tripNameController.text.isEmpty || selectedTripType == null) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Please fill all required fields'),
-                                    backgroundColor: Colors.red,
-                                  ),
-                                );
-                                return;
-                              }
-
-                              try {
-                                final User? user = _auth.currentUser;
-                                if (user == null) throw Exception('User not authenticated');
-
-                                final Map<String, dynamic> tripPlan = {
-                                  'userId': user.uid,
-                                  'tripName': tripNameController.text,
-                                  'tripType': selectedTripType,
-                                  'numberOfPeople': peopleCountController.text,
-                                  'budget': budgetController.text,
-                                  'startDate': Timestamp.fromDate(startDate),
-                                  'endDate': Timestamp.fromDate(endDate),
-                                  'destination': 'Hunza',
-                                  'createdAt': Timestamp.now(),
-                                };
-
-                                await _saveTripPlanToFirebase(tripPlan);
-                                Navigator.pop(context);
-                                _showSuccessDialog(
-                                  context,
-                                  tripNameController.text,
-                                  selectedTripType ?? 'Not specified',
-                                  endDate.difference(startDate).inDays + 1,
-                                );
-                              } catch (e) {
-                                Navigator.pop(context);
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text('Error saving trip: ${e.toString()}'),
-                                    backgroundColor: Colors.red,
-                                  ),
-                                );
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0XFF0066CC),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                            ),
-                            child: const Text(
-                              "SAVE TRIP",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
-
-  Widget _buildDateSelector(
-      BuildContext context,
-      String label,
-      DateTime date,
-      Function(DateTime?) onDateSelected,
-      DateTime minDate,
-      ) {
-    return GestureDetector(
-      onTap: () async {
-        final DateTime? picked = await showDatePicker(
-          context: context,
-          initialDate: date,
-          firstDate: label == "Start Date" ? DateTime.now() : minDate,
-          lastDate: DateTime(DateTime.now().year + 1),
-          builder: (BuildContext context, Widget? child) {
-            return Theme(
-              data: ThemeData.light().copyWith(
-                colorScheme: const ColorScheme.light(
-                  primary: Color(0XFF0066CC),
-                  onPrimary: Colors.white,
-                  surface: Colors.white,
-                  onSurface: Colors.black,
-                ),
-                dialogBackgroundColor: Colors.white,
-              ),
-              child: child!,
-            );
-          },
-        );
-        onDateSelected(picked);
-      },
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: const Color(0XFF88F2E8).withOpacity(0.1),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: const Color(0XFF0066CC).withOpacity(0.5)),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              label,
-              style: const TextStyle(fontSize: 12, color: Colors.grey),
-            ),
-            const SizedBox(height: 4),
-            Row(
-              children: [
-                const Icon(Icons.calendar_today, size: 16, color: Color(0XFF0066CC)),
-                const SizedBox(width: 8),
-                Text(
-                  "${date.day}/${date.month}/${date.year}",
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _showSuccessDialog(BuildContext context, String tripName, String tripType, int duration) {
-    showDialog(
-      context: context,
-      builder: (context) => Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: const Color(0xFFE8F5E9),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.green.withOpacity(0.2),
-                      blurRadius: 10,
-                      spreadRadius: 2,
-                    ),
-                  ],
-                ),
-                child: const Icon(
-                  Icons.check_circle,
-                  color: Colors.green,
-                  size: 48,
-                ),
-              ),
-              const SizedBox(height: 24),
-              Text(
-                "Trip Saved!",
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: const Color(0XFF0066CC).withOpacity(0.9),
-                ),
-              ),
-              const SizedBox(height: 16),
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.grey[50],
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.grey[200]!),
-                ),
-                child: Column(
-                  children: [
-                    _buildSuccessDetailRow("Trip Name:", tripName),
-                    const Divider(height: 16, thickness: 0.5),
-                    _buildSuccessDetailRow("Destination:", "Karachi"),
-                    const Divider(height: 16, thickness: 0.5),
-                    _buildSuccessDetailRow("Trip Type:", tripType),
-                    const Divider(height: 16, thickness: 0.5),
-                    _buildSuccessDetailRow("Duration:", "$duration days"),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 24),
-              const Text(
-                "You can view your trip in the 'My Trips' section",
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 24),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0XFF0066CC),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    elevation: 2,
-                  ),
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text(
-                    "DONE",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSuccessDetailRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: const TextStyle(
-              fontWeight: FontWeight.w600,
-              color: Colors.black87,
-            ),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              value,
-              style: const TextStyle(color: Colors.black87),
-              textAlign: TextAlign.end,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildEditableTextField(String label, TextEditingController controller, IconData icon) {
-    return TextField(
-      controller: controller,
-      decoration: InputDecoration(
-        filled: true,
-        fillColor: const Color(0XFF88F2E8).withOpacity(0.1),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: const Color(0XFF0066CC).withOpacity(0.5)),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0XFF0066CC)),
-        ),
-        labelText: label,
-        labelStyle: const TextStyle(color: Colors.grey),
-        suffixIcon: Icon(icon, color: const Color(0XFF0066CC).withOpacity(0.7)),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-      ),
-    );
-  }
+  NeelumValleyPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 5,
+      length: 4,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: const Color(0XFF0066CC),
+          backgroundColor: primaryColor,
           elevation: 0,
           automaticallyImplyLeading: true,
-          iconTheme: const IconThemeData(color: Colors.white),
-          title: Row(
-            children: [
-              Expanded(
-                child: Container(
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: 'Search in Hunza...',
-                      hintStyle: const TextStyle(color: Colors.white70),
-                      prefixIcon: const Icon(Icons.search, color: Colors.white, size: 20),
-                      border: InputBorder.none,
-                      contentPadding: const EdgeInsets.only(top: 12),
-                      isDense: true,
-                    ),
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 12),
-              const CircleAvatar(
-                radius: 18,
-                backgroundImage: AssetImage('assets/images/pro.jpg'),
-              ),
+          iconTheme: IconThemeData(color: secondaryColor),
+          title: Text(
+            'Neelum Valley',
+            style: TextStyle(color: secondaryColor),
+          ),
+          bottom: TabBar(
+            labelColor: secondaryColor,
+            unselectedLabelColor: secondaryColor.withOpacity(0.7),
+            indicatorColor: secondaryColor,
+            indicatorWeight: 3,
+            tabs: const [
+              Tab(icon: Icon(Icons.info_outline)),
+              Tab(icon: Icon(Icons.calendar_today)),
+              Tab(icon: Icon(Icons.checkroom)),
+              Tab(icon: Icon(Icons.security)),
             ],
           ),
         ),
-        body: Column(
+        body: TabBarView(
           children: [
-            Container(
-              color: const Color(0XFF0066CC),
-              child: TabBar(
-                labelColor: Colors.white,
-                unselectedLabelColor: Colors.white.withOpacity(0.7),
-                indicatorColor: Colors.white,
-                indicatorWeight: 3,
-                tabs: const [
-                  Tab(icon: Icon(Icons.home), text: 'Overview'),
-                  Tab(icon: Icon(Icons.shopping_bag), text: 'Clothes'),
-                  Tab(icon: Icon(Icons.restaurant), text: 'Food'),
-                  Tab(icon: Icon(Icons.celebration), text: 'Festival'),
-                  Tab(icon: Icon(Icons.reviews), text: 'Reviews'),
-                ],
-              ),
-            ),
-            Expanded(
-              child: TabBarView(
-                children: [
-                  _buildOverviewTab(context),
-                  _buildTabContent(
-                    tabName: 'Clothes',
-                    images: clothesImages,
-                    sectionTitle: 'Traditional Attire',
-                    sectionDescription: 'Hunza preserves its unique cultural identity through exquisite handmade textiles and traditional woolen crafts.',
-                    activityTitle: 'Authentic Finds',
-                    activityDescription: '• Altit Fort Craft Shops: Handwoven shawls\n'
-                        '• Karimabad Bazaar: Traditional caps\n'
-                        '• Local Women Cooperatives: Embroidery\n'
-                        '• Passu Village: Woolen pattu fabric',
-                  ),
-                  _buildTabContent(
-                    tabName: 'Food',
-                    images: foodImages,
-                    sectionTitle: 'Hunza Cuisine',
-                    sectionDescription: 'Experience organic mountain flavors and traditional recipes preserved for generations in the Karakoram ranges.',
-                    activityTitle: 'Must-Try Experiences',
-                    activityDescription: '• Chapshuro at Cafe de Hunza\n'
-                        '• Harissa at local home kitchens\n'
-                        '• Apricot dishes in Karimabad\n'
-                        '• Walnut bread with butter tea',
-                  ),
-                  _buildTabContent(
-                    tabName: 'Festival',
-                    images: festivalImages,
-                    sectionTitle: 'Mountain Festivals',
-                    sectionDescription: 'Hunza celebrates ancient cultural traditions with seasonal festivals against breathtaking mountain backdrops.',
-                    activityTitle: 'Key Festivals',
-                    activityDescription: '• Silk Route Festival\n'
-                        '• Nauroz (Persian New Year)\n'
-                        '• Harvest Festivals\n'
-                        '• Traditional Pamiri Music Fest',
-                  ),
-                  _buildReviewFeedbackTab(),
-                ],
-              ),
-            ),
+            _buildOverviewTab(),
+            _buildSeasonsTab(),
+            _buildClothingTab(),
+            _buildSafetyTab(),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildOverviewTab(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildCarousel(overviewImages),
-          const SizedBox(height: 24),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Text(
-              "Discover Hunza",
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: const Color(0XFF0066CC).withOpacity(0.9),
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
-          Card(
-            elevation: 0,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-              side: BorderSide(color: Colors.grey.shade200),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Hunza',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: const Color(0XFF0066CC).withOpacity(0.9),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    'Hunza, Pakistan\'s mountain jewel, is celebrated for its mountainous splendor, '
-                        'ancient cultural heritage, and breathtaking natural beauty. Nestled in the Karakoram Range, '
-                        'it showcases a harmonious combination of traditional villages and dramatic mountain vistas.',
-                    style: TextStyle(fontSize: 15, color: Colors.black87, height: 1.5),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(height: 24),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Text(
-              'Top Attractions',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: const Color(0XFF0066CC).withOpacity(0.9),
-              ),
-            ),
-          ),
-          const SizedBox(height: 12),
-          _buildAttractionsGrid(),
-          const SizedBox(height: 24),
-          Center(
-            child: ElevatedButton.icon(
-              icon: const Icon(Icons.flight, color: Colors.white, size: 20),
-              label: const Text(
-                'Plan Your Trip Now',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
+  // Tab Builders (Same structure, updated content)
+  Widget _buildOverviewTab() {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: constraints.maxHeight),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildImageCarousel(overviewImages),
+                const SizedBox(height: 24),
+                _buildSectionTitle('About Neelum Valley'),
+                _buildInfoCard(
+                  'A picturesque valley in Azad Kashmir, carved by the Neelum River. Known for its emerald forests, cascading waterfalls, and charming villages like Kel and Athmuqam. A paradise for nature lovers and photographers.',
                 ),
-              ),
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                const SizedBox(height: 24),
+                _buildSectionTitle('Key Information'),
+                _buildKeyInfoGrid(),
+                const SizedBox(height: 24),
+                _buildSectionTitle('Legend'),
+                _buildInfoCard(
+                  'Local folklore tells of a mystical serpent guarding the river\'s purity. It is said that the river\'s blue-green hues were gifted by Lord Krishna, who bathed here to cleanse his sins.',
                 ),
-                backgroundColor: const Color(0XFF0066CC),
-                elevation: 2,
-                shadowColor: const Color(0XFF0066CC).withOpacity(0.3),
-              ),
-              onPressed: () => showTripPlanDialog(context),
+                const SizedBox(height: 24),
+                _buildSectionTitle('Nearby Attractions'),
+                _buildAttractionGrid(),
+                const SizedBox(height: 24),
+              ],
             ),
           ),
-          const SizedBox(height: 24),
-        ],
+        );
+      },
+    );
+  }
+
+  // Seasons Tab
+  Widget _buildSeasonsTab() {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: constraints.maxHeight),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildImageCarousel(seasonImages),
+                const SizedBox(height: 24),
+                _buildSectionTitle('Best Time to Visit'),
+                _buildInfoCard(
+                  'May to September for pleasant weather and blooming flora. Winter (Nov-Mar) brings snowfall and colder temperatures, but fewer tourists.',
+                ),
+                const SizedBox(height: 24),
+                _buildSectionTitle('Seasonal Guide'),
+                _buildSeasonalGuide(),
+                const SizedBox(height: 24),
+                _buildSectionTitle('Snowfall Information'),
+                _buildSnowfallInfo(),
+                const SizedBox(height: 24),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  // Clothing Tab
+  Widget _buildClothingTab() {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: constraints.maxHeight),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildImageCarousel(clothesImages),
+                const SizedBox(height: 24),
+                _buildSectionTitle('Clothing Recommendations'),
+                _buildInfoCard(
+                  'Layered clothing is ideal due to variable mountain weather. Prepare for sudden rain showers and chilly evenings.',
+                ),
+                const SizedBox(height: 24),
+                _buildSectionTitle('Seasonal Clothing Guide'),
+                _buildClothingGuide(),
+                const SizedBox(height: 24),
+                _buildSectionTitle('Essential Accessories'),
+                _buildAccessoriesList(),
+                const SizedBox(height: 24),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  // Safety Tab
+  Widget _buildSafetyTab() {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: constraints.maxHeight),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildImageCarousel(safetyImages),
+                const SizedBox(height: 24),
+                _buildSectionTitle('Safety Information'),
+                _buildInfoCard(
+                  'Rugged terrain and unpredictable weather require preparation. Be cautious of landslides, river currents, and limited mobile coverage.',
+                ),
+                const SizedBox(height: 24),
+                _buildSectionTitle('Essential Equipment'),
+                _buildEquipmentList(),
+                const SizedBox(height: 24),
+                _buildSectionTitle('Emergency Contacts'),
+                _buildEmergencyContacts(),
+                const SizedBox(height: 24),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  // Component Builders (Same as original)
+  Widget _buildImageCarousel(List<String> images) {
+    return SizedBox(
+      height: 200,
+      child: CarouselSlider(
+        options: CarouselOptions(
+          height: 200,
+          autoPlay: true,
+          enlargeCenterPage: true,
+          viewportFraction: 0.85,
+          autoPlayInterval: const Duration(seconds: 4),
+        ),
+        items: images.map((image) {
+          return Container(
+            margin: const EdgeInsets.symmetric(horizontal: 4),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 6,
+                  spreadRadius: 2,
+                ),
+              ],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.asset(
+                image,
+                fit: BoxFit.cover,
+                width: double.infinity,
+              ),
+            ),
+          );
+        }).toList(),
       ),
     );
   }
 
-  Widget _buildAttractionsGrid() {
-    final List<Map<String, dynamic>> attractions = [
-      {
-        'name': 'Baltit Fort',
-        'image': 'assets/images/Hunza/hunza1.jpg',
-        'rating': 4.9,
-        'reviews': 1678,
-      },
-      {
-        'name': 'Attabad Lake',
-        'image': 'assets/images/Hunza/hunza2.jpg',
-        'rating': 4.8,
-        'reviews': 1892,
-      },
-      {
-        'name': 'Eagle\'s Nest',
-        'image': 'assets/images/Hunza/hunza3.jpg',
-        'rating': 4.7,
-        'reviews': 1325,
-      },
-      {
-        'name': 'Passu Cones',
-        'image': 'assets/images/Hunza/hunza4.jpg',
-        'rating': 4.6,
-        'reviews': 1143,
-      },
-    ];
+  Widget _buildSectionTitle(String title) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Text(
+        title,
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: primaryColor,
+        ),
+      ),
+    );
+  }
 
+  Widget _buildInfoCard(String content) {
+    return Card(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: Colors.grey.shade300),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Text(
+          content,
+          style: TextStyle(
+            fontSize: 15,
+            height: 1.5,
+            color: textColor,
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Key Info Grid
+  Widget _buildKeyInfoGrid() {
+    final List<Map<String, dynamic>> infoItems = [
+      {'icon': Icons.location_on, 'title': 'Location', 'value': 'Azad Kashmir'},
+      {'icon': Icons.landscape, 'title': 'Elevation', 'value': '1,800 meters'},
+      {'icon': Icons.access_time, 'title': 'Best Season', 'value': 'May - Sept'},
+      {'icon': Icons.directions_car, 'title': 'From Islamabad', 'value': '300 km'},
+    ];
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        childAspectRatio: 0.75,
+        childAspectRatio: 1.4,
+        crossAxisSpacing: 12,
+        mainAxisSpacing: 12,
+      ),
+      itemCount: infoItems.length,
+      itemBuilder: (context, index) {
+        return _buildInfoTile(
+          infoItems[index]['icon'],
+          infoItems[index]['title'],
+          infoItems[index]['value'],
+        );
+      },
+    );
+  }
+
+  Widget _buildInfoTile(IconData icon, String title, String value) {
+    return Card(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: Colors.grey.shade300),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(icon, size: 24, color: primaryColor),
+            const SizedBox(height: 8),
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 13,
+                color: Colors.grey.shade600,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              value,
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+                color: textColor,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Nearby Attractions Grid
+  Widget _buildAttractionGrid() {
+    final List<Map<String, dynamic>> attractions = [
+      {
+        'image': 'assets/images/neelum/attraction1.jpg',
+        'title': 'Ratti Gali Lake',
+        'subtitle': 'High-altitude glacial lake'
+      },
+      {
+        'image': 'assets/images/neelum/attraction2.jpg',
+        'title': 'Krishan Chashma',
+        'subtitle': 'Sacred spring with mythological ties'
+      },
+      {
+        'image': 'assets/images/neelum/attraction3.jpg',
+        'title': 'Kel Valley',
+        'subtitle': 'Lush meadows and pine forests'
+      },
+      {
+        'image': 'assets/images/neelum/attraction4.jpg',
+        'title': 'Kutton Waterfall',
+        'subtitle': 'Majestic cascading waterfall'
+      },
+    ];
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 0.85,
         crossAxisSpacing: 12,
         mainAxisSpacing: 12,
       ),
       itemCount: attractions.length,
       itemBuilder: (context, index) {
-        return Card(
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-            side: BorderSide(color: Colors.grey.shade200),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ClipRRect(
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-                child: Stack(
-                  children: [
-                    Image.asset(
-                      attractions[index]['image'],
-                      height: 120,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                    ),
-                    Positioned(
-                      top: 8,
-                      right: 8,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.6),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.star, color: Colors.amber, size: 14),
-                            const SizedBox(width: 4),
-                            Text(
-                              attractions[index]['rating'].toString(),
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      attractions[index]['name'],
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 6),
-                    Row(
-                      children: [
-                        Icon(Icons.star, color: Colors.amber.shade700, size: 14),
-                        const SizedBox(width: 4),
-                        Text(
-                          attractions[index]['rating'].toString(),
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey.shade700,
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          '(${attractions[index]['reviews']})',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey.shade500,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 6),
-                    SizedBox(
-                      height: 20,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0XFF0066CC).withOpacity(0.1),
-                          foregroundColor: const Color(0XFF0066CC),
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          minimumSize: Size.zero,
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        child: const Text(
-                          'View',
-                          style: TextStyle(fontSize: 12),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
+        return _buildAttractionCard(
+          attractions[index]['image'],
+          attractions[index]['title'],
+          attractions[index]['subtitle'],
         );
       },
     );
   }
 
-  Widget _buildTabContent({
-    required String tabName,
-    required List<String> images,
-    required String sectionTitle,
-    required String sectionDescription,
-    required String activityTitle,
-    required String activityDescription,
-  }) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildCarousel(images),
-          const SizedBox(height: 24),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Text(
-              sectionTitle,
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: const Color(0XFF0066CC).withOpacity(0.9),
+  Widget _buildAttractionCard(String image, String title, String subtitle) {
+    return SizedBox(
+      height: 180,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: Image.asset(
+                image,
+                fit: BoxFit.cover,
               ),
             ),
-          ),
-          const SizedBox(height: 12),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Text(
-              sectionDescription,
-              style: const TextStyle(fontSize: 15, color: Colors.black87, height: 1.5),
-            ),
-          ),
-          const SizedBox(height: 24),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Text(
-              activityTitle,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: const Color(0XFF0066CC).withOpacity(0.9),
-              ),
-            ),
-          ),
-          const SizedBox(height: 12),
-          Card(
-            elevation: 0,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-              side: BorderSide(color: Colors.grey.shade200),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Text(
-                activityDescription,
-                style: const TextStyle(fontSize: 15, color: Colors.black87, height: 1.5),
-              ),
-            ),
-          ),
-          const SizedBox(height: 24),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildReviewFeedbackTab() {
-    int selectedRating = 0;
-    final reviewController = TextEditingController();
-
-    return StatefulBuilder(
-      builder: (context, setState) {
-        return SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Text(
-                  'User Reviews',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: const Color(0XFF0066CC).withOpacity(0.9),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              _buildReviewCard(
-                name: 'Laila Begum',
-                rating: 5,
-                review: 'Baltit Fort at sunrise is magical! The mountain vistas and ancient architecture left me awestruck.',
-                imageUrl: 'assets/images/Hunza/u1.png',
-                date: '3 days ago',
-              ),
-              const SizedBox(height: 16),
-              _buildReviewCard(
-                name: 'Nadir Khan',
-                rating: 4,
-                review: 'Perfect blend of nature and culture. The Attabad Lake boat ride is unforgettable!',
-                imageUrl: 'assets/images/Hunza/u2.png',
-                date: '1 week ago',
-              ),
-              const SizedBox(height: 16),
-              _buildReviewCard(
-                name: 'Emma Wilson',
-                rating: 5,
-                review: 'Loved the serene valleys and apricot orchards. A paradise for nature lovers!',
-                imageUrl: 'assets/images/Hunza/u3.png',
-                date: '2 weeks ago',
-              ),
-              const SizedBox(height: 16),
-              _buildReviewCard(
-                name: 'Wali Ahmed',
-                rating: 4,
-                review: 'Amazing hospitality - must try local chapshuro bread with Hunza tea!',
-                imageUrl: 'assets/images/Hunza/u4.png',
-                date: '1 month ago',
-              ),
-              const SizedBox(height: 24),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Text(
-                  'Add Your Review',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: const Color(0XFF0066CC).withOpacity(0.9),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              Card(
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                  side: BorderSide(color: Colors.grey.shade200),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Your Rating',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black87,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Row(
-                        children: List.generate(5, (index) {
-                          return GestureDetector(
-                            onTap: () => setState(() => selectedRating = index + 1),
-                            child: Icon(
-                              index < selectedRating ? Icons.star : Icons.star_border,
-                              color: Colors.amber,
-                              size: 32,
-                            ),
-                          );
-                        }),
-                      ),
-                      const SizedBox(height: 16),
-                      const Text(
-                        'Your Review',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black87,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      TextField(
-                        controller: reviewController,
-                        maxLines: 4,
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Colors.grey[50],
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(color: Colors.grey.shade200),
-                          ),
-                          hintText: 'Share your experience in Hunza...',
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      Center(
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0XFF0066CC),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
-                            elevation: 2,
-                          ),
-                          onPressed: () {
-                            if (selectedRating == 0) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Please select a rating'),
-                                  backgroundColor: Colors.red,
-                                ),
-                              );
-                              return;
-                            }
-                            // Submit review logic here
-                          },
-                          child: const Text(
-                            'SUBMIT REVIEW',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                      ),
+            Positioned.fill(
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
+                    colors: [
+                      Colors.black.withOpacity(0.7),
+                      Colors.transparent,
                     ],
                   ),
                 ),
               ),
-              const SizedBox(height: 24),
-            ],
-          ),
-        );
-      },
+            ),
+            Positioned(
+              left: 12,
+              right: 12,
+              bottom: 12,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    subtitle,
+                    style: const TextStyle(
+                      color: Colors.white70,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
-  Widget _buildReviewCard({
-    required String name,
-    required int rating,
-    required String review,
-    required String imageUrl,
-    required String date,
-  }) {
+  // Seasonal Guide
+  Widget _buildSeasonalGuide() {
+    return Column(
+      children: [
+        _buildSeasonCard(
+          'Spring (Apr-Jun)',
+          '• Blooming flowers\n• Mild temperatures\n• Occasional rain',
+          Icons.wb_sunny,
+        ),
+        const SizedBox(height: 12),
+        _buildSeasonCard(
+          'Summer (Jul-Sep)',
+          '• Warm days, cool nights\n• Ideal for trekking\n• Clear skies',
+          Icons.beach_access,
+        ),
+        const SizedBox(height: 12),
+        _buildSeasonCard(
+          'Winter (Nov-Feb)',
+          '• Light snowfall\n• Chilly temperatures\n• Serene landscapes',
+          Icons.ac_unit,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSeasonCard(String season, String details, IconData icon) {
     return Card(
       elevation: 0,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side: BorderSide(color: Colors.grey.shade200),
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: Colors.grey.shade300),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: primaryColor.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(icon, size: 24, color: primaryColor),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    season,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: textColor,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    details,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey.shade700,
+                      height: 1.4,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Snowfall Info
+  Widget _buildSnowfallInfo() {
+    return Card(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: Colors.grey.shade300),
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -1097,89 +537,38 @@ class NeelumValleyPage extends StatelessWidget {
           children: [
             Row(
               children: [
-                CircleAvatar(
-                  radius: 24,
-                  backgroundImage: AssetImage(imageUrl),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        name,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Row(
-                        children: [
-                          ...List.generate(5, (index) {
-                            return Icon(
-                              index < rating ? Icons.star : Icons.star_border,
-                              color: Colors.amber,
-                              size: 16,
-                            );
-                          }),
-                          const SizedBox(width: 8),
-                          Text(
-                            date,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey.shade600,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                Icon(Icons.ac_unit, size: 24, color: primaryColor),
+                const SizedBox(width: 8),
+                Text(
+                  'Winter Conditions',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: textColor,
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 12),
-            Text(
-              review,
-              style: const TextStyle(
-                fontSize: 14,
-                color: Colors.black87,
-                height: 1.5,
+            _buildSnowfallItem('First Snow:', 'Late December'),
+            _buildSnowfallItem('Peak Snow:', 'January - February'),
+            _buildSnowfallItem('Snow Depth:', 'Up to 1.5 meters'),
+            _buildSnowfallItem('Road Closure:', 'Rare, except high passes'),
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: accentColor.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(8),
               ),
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.thumb_up, color: Colors.grey.shade600, size: 18),
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
+              child: Text(
+                'Some remote areas become inaccessible in winter. Ensure your vehicle has snow chains.',
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Colors.grey.shade700,
+                  fontStyle: FontStyle.italic,
                 ),
-                const SizedBox(width: 4),
-                Text(
-                  'Helpful',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey.shade600,
-                  ),
-                ),
-                const SizedBox(width: 16),
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.comment, color: Colors.grey.shade600, size: 18),
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                ),
-                const SizedBox(width: 4),
-                Text(
-                  'Comment',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey.shade600,
-                  ),
-                ),
-              ],
+              ),
             ),
           ],
         ),
@@ -1187,40 +576,285 @@ class NeelumValleyPage extends StatelessWidget {
     );
   }
 
-  Widget _buildCarousel(List<String> images) {
-    return CarouselSlider(
-      options: CarouselOptions(
-        height: 200,
-        autoPlay: true,
-        enlargeCenterPage: true,
-        viewportFraction: 0.9,
-        aspectRatio: 16 / 9,
-        autoPlayInterval: const Duration(seconds: 4),
-      ),
-      items: images.map((imagePath) {
-        return Container(
-          margin: const EdgeInsets.symmetric(horizontal: 4),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                blurRadius: 6,
-                spreadRadius: 2,
-              ),
-            ],
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(16),
-            child: Image.asset(
-              imagePath,
-              fit: BoxFit.cover,
-              width: double.infinity,
-              height: 200,
+  Widget _buildSnowfallItem(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: Row(
+        children: [
+          const SizedBox(width: 32),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.grey.shade700,
             ),
           ),
+          const SizedBox(width: 8),
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: textColor,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Clothing Guide
+  Widget _buildClothingGuide() {
+    return Column(
+      children: [
+        _buildClothingSeasonCard(
+          'Spring (Apr-Jun)',
+          '• Waterproof jacket\n• Lightweight sweater\n• Comfortable shoes',
+        ),
+        const SizedBox(height: 12),
+        _buildClothingSeasonCard(
+          'Summer (Jul-Sep)',
+          '• Cotton clothes\n• Rain poncho\n• Sun hat',
+        ),
+        const SizedBox(height: 12),
+        _buildClothingSeasonCard(
+          'Winter (Nov-Feb)',
+          '• Woolen sweaters\n• Thermal layers\n• Waterproof gloves',
+        ),
+      ],
+    );
+  }
+
+  Widget _buildClothingSeasonCard(String season, String items) {
+    return Card(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: Colors.grey.shade300),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              season,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: textColor,
+              ),
+            ),
+            const SizedBox(height: 8),
+            ...items.split('\n').map((item) => Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(Icons.circle, size: 8, color: primaryColor),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      item,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey.shade700,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Accessories List
+  Widget _buildAccessoriesList() {
+    final List<String> accessories = [
+      'Waterproof backpack',
+      'UV-protected sunglasses',
+      'Quick-dry towel',
+      'Insect repellent',
+      'First-aid kit',
+      'Portable charger',
+    ];
+    return Card(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: Colors.grey.shade300),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Must-Have Accessories',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: textColor,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: accessories.map((item) => Chip(
+                backgroundColor: primaryColor.withOpacity(0.1),
+                label: Text(
+                  item,
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: textColor,
+                  ),
+                ),
+              )).toList(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Safety Equipment Grid
+  Widget _buildEquipmentList() {
+    final List<Map<String, dynamic>> equipment = [
+      {'icon': Icons.medical_services, 'item': 'First aid kit'},
+      {'icon': Icons.air, 'item': 'Portable oxygen'},
+      {'icon': Icons.water_drop, 'item': 'Water purifier'},
+      {'icon': Icons.flashlight_on, 'item': 'Torchlight'},
+      {'icon': Icons.battery_charging_full, 'item': 'Power bank'},
+      {'icon': Icons.map, 'item': 'Topographic map'},
+    ];
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 2.3,
+        crossAxisSpacing: 12,
+        mainAxisSpacing: 12,
+      ),
+      itemCount: equipment.length,
+      itemBuilder: (context, index) {
+        return _buildEquipmentItem(
+          equipment[index]['icon'],
+          equipment[index]['item'],
         );
-      }).toList(),
+      },
+    );
+  }
+
+  Widget _buildEquipmentItem(IconData icon, String item) {
+    return Card(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: Colors.grey.shade300),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(icon, size: 24, color: primaryColor),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                item,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: textColor,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.visible,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Emergency Contacts
+  Widget _buildEmergencyContacts() {
+    final List<Map<String, dynamic>> contacts = [
+      {'type': 'Nearest Hospital', 'contact': 'Muzaffarabad GH (50 km)'},
+      {'type': 'Rescue Service', 'contact': '1122 Emergency'},
+      {'type': 'Police Station', 'contact': 'Kel Police'},
+      {'type': 'Tourist Info', 'contact': 'AJK Tourism Office'},
+    ];
+    return Card(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: Colors.grey.shade300),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Important Contacts',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: textColor,
+              ),
+            ),
+            const SizedBox(height: 12),
+            ...contacts.map((contact) => Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: 120,
+                    child: Text(
+                      contact['type'],
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey.shade700,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      contact['contact'],
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: textColor,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )),
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.red.shade50,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(
+                'Note: Mobile coverage is limited in remote areas. Share your itinerary before visiting.',
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Colors.red.shade700,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

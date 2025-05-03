@@ -69,7 +69,7 @@ class FamousTouristPlacesPage extends StatelessWidget {
                 imagePath: 'assets/images/places/bolan_valley.jpg',
                 onTap: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => BolanValleyPage()),
+                  MaterialPageRoute(builder: (context) => BullanValleyPage()),
                 ),
               ),
               _buildPlaceCard(
@@ -99,7 +99,7 @@ class FamousTouristPlacesPage extends StatelessWidget {
                 imagePath: 'assets/images/places/rama_meadow.jpg',
                 onTap: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => RamaMeadowPage()),
+                  MaterialPageRoute(builder: (context) => RamameadowPage()),
                 ),
               ),
               _buildPlaceCard(
