@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travelmate/FamousTouristPlacesCode/ShandurPassPage.dart';
 import 'package:travelmate/FamousTouristPlacesCode/BolanValleyPage.dart';
-import 'package:travelmate/HingolNationalParkPage.dart';
 import 'package:travelmate/FamousTouristPlacesCode/AttabadLakePage.dart';
 import 'FamousTouristPlacesCode/BabusarTopPage.dart';
 import 'FamousTouristPlacesCode/ConcordiaPage.dart';
@@ -80,16 +79,6 @@ class FamousTouristPlacesPage extends StatelessWidget {
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => BabusarTopPage()),
-                ),
-              ),
-              _buildPlaceCard(
-                context: context,
-                title: 'Hingol National Park',
-                description: 'Largest national park',
-                imagePath: 'assets/images/places/hingol_park.jpg',
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Hingolnationalparkpage()),
                 ),
               ),
               _buildPlaceCard(
