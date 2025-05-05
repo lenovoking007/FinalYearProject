@@ -49,19 +49,20 @@ class _TripPageState extends State<TripPage> {
     {
       'title': 'Rawalpindi',
       'description': 'The Twin City',
-      'image': 'assets/images/islamabad.jpg',
+      'image': 'assets/images/raw/ra1.jpg',
+      'image': 'assets/images/raw/ra4.jpg',
       'page': RawalpindiPage()
     },
     {
       'title': 'Peshawar',
       'description': 'City of Gardens',
-      'image': 'assets/images/lahore.jpg',
+      'image': 'assets/images/pesh/po1.jpg',
       'page': PeshawarPage()
     },
     {
       'title': 'Hyderabad',
       'description': 'The City of Beauty',
-      'image': 'assets/images/karachi.jpg',
+      'image': 'assets/images/hyderabad/hyderabad03.png',
       'page': Hyderabadpage()
     },
     {
