@@ -6,27 +6,27 @@ import 'package:travelmate/tripprogresspage.dart';
 
 class MurreePage extends StatelessWidget {
   final List<String> overviewImages = [
-    'assets/images/Murree/murree1.jpg',
-    'assets/images/Murree/murree2.jpg',
-    'assets/images/Murree/murree3.jpg',
+    'assets/images/muree/mo1.jpg',
+    'assets/images/muree/mo2.jpg',
+    'assets/images/muree/m03.jpg',
   ];
   final List<String> clothesImages = [
-    'assets/images/Murree/cl1.jpg',
-    'assets/images/Murree/cl2.jpg',
-    'assets/images/Murree/cl3.jpg',
-    'assets/images/Murree/cl4.jpg',
+    'assets/images/Lahore/cl1.jpg',
+    'assets/images/Lahore/cl2.jpg',
+    'assets/images/Lahore/cl3.jpg',
+    'assets/images/Lahore/cl4.jpg',
   ];
   final List<String> foodImages = [
-    'assets/images/Murree/food1.jpg',
-    'assets/images/Murree/food2.jpg',
-    'assets/images/Murree/food3.jpg',
-    'assets/images/Murree/food4.jpg',
+    'assets/images/Lahore/food1.jpg',
+    'assets/images/Lahore/food2.jpeg',
+    'assets/images/Lahore/food3.jpg',
+    'assets/images/Lahore/food4.jpg',
   ];
   final List<String> festivalImages = [
-    'assets/images/Murree/f1.jpg',
-    'assets/images/Murree/f2.jpg',
-    'assets/images/Murree/f3.jpg',
-    'assets/images/Murree/f4.jpg',
+    'assets/images/muree/mf1.jpg',
+    'assets/images/muree/mf2.jpg',
+    'assets/images/muree/mf3.jpg',
+    'assets/images/muree/mf4.jpg',
   ];
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -865,10 +865,10 @@ class MurreePage extends StatelessWidget {
 
   Widget _buildAttractionsGrid() {
     final List<Map<String, dynamic>> attractions = [
-      {'name': 'Mall Road', 'address': 'In Murree Bazaar', 'image': 'assets/images/Murree/murree1.jpg'},
-      {'name': 'Patriata New Chair Lift', 'address': 'Near Dunga Gali', 'image': 'assets/images/Murree/murree2.jpg'},
-      {'name': 'Pindi Point', 'address': 'Near Nathiagali', 'image': 'assets/images/Murree/murree3.jpg'},
-      {'name': 'Kashmir Point', 'address': 'On Murree Road', 'image': 'assets/images/Murree/murree2.jpg'},
+      {'name': 'Mall Road', 'address': 'In Murree Bazaar', 'image': 'assets/images/muree/mo1.jpg'},
+      {'name': 'Patriata New Chair Lift', 'address': 'Near Dunga Gali', 'image': 'assets/images/muree/mo2.jpg'},
+      {'name': 'Pindi Point', 'address': 'Near Nathiagali', 'image': 'assets/images/muree/m03.jpg'},
+      {'name': 'Kashmir Point', 'address': 'On Murree Road', 'image': 'assets/images/muree/mo4.jpg'},
     ];
     return GridView.builder(
       shrinkWrap: true,
@@ -929,10 +929,10 @@ class MurreePage extends StatelessWidget {
 
   Widget _buildShoppingGrid() {
     final List<Map<String, dynamic>> shoppingSpots = [
-      {'name': 'Bazaar-e-Murree', 'details': 'Traditional market with handcrafted goods.', 'image': 'assets/images/Murree/cl1.jpg'},
-      {'name': 'Gulshan Market', 'details': 'Modern shopping area.', 'image': 'assets/images/Murree/cl2.jpg'},
-      {'name': 'Alpine Plaza', 'details': 'Gifts, winter wear, and souvenirs.', 'image': 'assets/images/Murree/cl3.jpg'},
-      {'name': 'Anwar Mall', 'details': 'Small mall with local brands.', 'image': 'assets/images/Murree/cl4.jpg'},
+      {'name': 'Bazaar-e-Murree', 'details': 'Traditional market with handcrafted goods.', 'image': 'assets/images/muree/mcl1.jpg'},
+      {'name': 'Gulshan Market', 'details': 'Modern shopping area.', 'image': 'assets/images/muree/mcl2.jpg'},
+      {'name': 'Alpine Plaza', 'details': 'Gifts, winter wear, and souvenirs.','image': 'assets/images/muree/mcl2.jpg'},
+      {'name': 'Anwar Mall', 'details': 'Small mall with local brands.', 'image': 'assets/images/muree/mcl4.jpg'},
     ];
     return GridView.builder(
       shrinkWrap: true,
@@ -993,10 +993,10 @@ class MurreePage extends StatelessWidget {
 
   Widget _buildFoodGrid() {
     final List<Map<String, dynamic>> foodLocations = [
-      {'name': 'Dhaba Restaurant', 'details': 'Authentic Punjabi cuisine.', 'image': 'assets/images/Murree/food1.jpg'},
-      {'name': 'Mountain Cafe', 'details': 'Scenic view with good coffee.', 'image': 'assets/images/Murree/food2.jpg'},
-      {'name': 'BBQ Tonight', 'details': 'Great for grilled meals.', 'image': 'assets/images/Murree/food3.jpg'},
-      {'name': 'Chandni Chowk', 'details': 'Street food stalls.', 'image': 'assets/images/Murree/food4.jpg'},
+      {'name': 'Dhaba Restaurant', 'details': 'Authentic Punjabi cuisine.', 'image': 'assets/images/muree/mfo1.jpg'},
+      {'name': 'Mountain Cafe', 'details': 'Scenic view with good coffee.', 'image': 'assets/images/muree/mcfo2.jpg'},
+      {'name': 'BBQ Tonight', 'details': 'Great for grilled meals.', 'image': 'assets/images/muree/mfo3.jpg'},
+      {'name': 'Chandni Chowk', 'details': 'Street food stalls.', 'image': 'assets/images/muree/mfo4.jpg'},
     ];
     return GridView.builder(
       shrinkWrap: true,
@@ -1057,10 +1057,10 @@ class MurreePage extends StatelessWidget {
 
   Widget _buildFestivalGrid() {
     final List<Map<String, dynamic>> festivalLocations = [
-      {'name': 'Winter Carnival', 'details': 'Snow-based fun fair.', 'image': 'assets/images/Murree/f1.jpg'},
-      {'name': 'Snow Festival', 'details': 'Annual snow event.', 'image': 'assets/images/Murree/f2.jpg'},
-      {'name': 'Independence Day', 'details': 'Fireworks and celebrations.', 'image': 'assets/images/Murree/f3.jpg'},
-      {'name': 'Local Fairs', 'details': 'Traditional music and dance.', 'image': 'assets/images/Murree/f4.jpg'},
+      {'name': 'Winter Carnival', 'details': 'Snow-based fun fair.', 'image': 'assets/images/muree/mf1.jpg'},
+      {'name': 'Snow Festival', 'details': 'Annual snow event.', 'image': 'assets/images/muree/mf2.jpg'},
+      {'name': 'Independence Day', 'details': 'Fireworks and celebrations.', 'image': 'assets/images/muree/mf3.jpg'},
+      {'name': 'Local Fairs', 'details': 'Traditional music and dance.', 'image': 'assets/images/muree/mf4.jpg'},
     ];
     return GridView.builder(
       shrinkWrap: true,

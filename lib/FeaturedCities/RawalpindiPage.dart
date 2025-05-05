@@ -6,27 +6,27 @@ import 'package:travelmate/tripprogresspage.dart';
 
 class RawalpindiPage extends StatelessWidget {
   final List<String> overviewImages = [
-    'assets/images/Rawalpindi/rawalpindi1.jpg',
-    'assets/images/Rawalpindi/rawalpindi2.jpg',
-    'assets/images/Rawalpindi/rawalpindi3.jpg',
+    'assets/images/raw/ra1.jpg',
+    'assets/images/raw/ra2.jpg',
+    'assets/images/raw/ra3.jpg',
   ];
   final List<String> clothesImages = [
-    'assets/images/Rawalpindi/cl1.jpg',
-    'assets/images/Rawalpindi/cl2.jpg',
-    'assets/images/Rawalpindi/cl3.jpg',
-    'assets/images/Rawalpindi/cl4.jpg',
+    'assets/images/Lahore/cl1.jpg',
+    'assets/images/Lahore/cl2.jpg',
+    'assets/images/Lahore/cl3.jpg',
+    'assets/images/Lahore/cl4.jpg',
   ];
   final List<String> foodImages = [
-    'assets/images/Rawalpindi/food1.jpg',
-    'assets/images/Rawalpindi/food2.jpg',
-    'assets/images/Rawalpindi/food3.jpg',
-    'assets/images/Rawalpindi/food4.jpg',
+    'assets/images/Lahore/food1.jpg',
+    'assets/images/Lahore/food2.jpeg',
+    'assets/images/Lahore/food3.jpg',
+    'assets/images/Lahore/food4.jpg',
   ];
   final List<String> festivalImages = [
-    'assets/images/Rawalpindi/f1.jpg',
-    'assets/images/Rawalpindi/f2.jpg',
-    'assets/images/Rawalpindi/f3.jpg',
-    'assets/images/Rawalpindi/f4.jpg',
+    'assets/images/raw/rf1.jpg',
+    'assets/images/raw/rf2.jpg',
+    'assets/images/raw/rf3.jpg',
+    'assets/images/raw/rf4.jpg',
   ];
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -925,22 +925,22 @@ class RawalpindiPage extends StatelessWidget {
       {
         'name': 'Ayub National Park',
         'address': 'Near Cantt Railway Station',
-        'image': 'assets/images/Rawalpindi/rawalpindi1.jpg'
+        'image':  'assets/images/raw/ra1.jpg',
       },
       {
         'name': 'Faisal Mosque',
         'address': 'Adjacent to Rawalpindi',
-        'image': 'assets/images/Rawalpindi/rawalpindi2.jpg'
+        'image': 'assets/images/raw/ra2.jpg',
       },
       {
         'name': 'Jinnah Park',
         'address': 'Saidpur Road',
-        'image': 'assets/images/Rawalpindi/rawalpindi3.jpg'
+        'image': 'assets/images/raw/ra3.jpg',
       },
       {
         'name': 'Kallar Kahar',
         'address': 'Chakwal District',
-        'image': 'assets/images/Rawalpindi/rawalpindi2.jpg'
+        'image':'assets/images/raw/ra4.jpg',
       },
     ];
     return GridView.builder(
@@ -1007,22 +1007,22 @@ class RawalpindiPage extends StatelessWidget {
       {
         'name': 'Imperial Market',
         'details': 'Traditional market with local goods.',
-        'image': 'assets/images/Rawalpindi/cl1.jpg'
+        'image': 'assets/images/raw/rcl1.jpg'
       },
       {
         'name': 'Capital Smart City Mall',
         'details': 'Modern mall with international brands.',
-        'image': 'assets/images/Rawalpindi/cl2.jpg'
+        'image': 'assets/images/raw/rcl2.jpg'
       },
       {
         'name': 'Raja Bazaar',
         'details': 'Historic market for daily needs.',
-        'image': 'assets/images/Rawalpindi/cl3.jpg'
+        'image': 'assets/images/raw/rcl3.jpg'
       },
       {
         'name': 'Centaurus Mall',
         'details': 'Luxury shopping and entertainment hub.',
-        'image': 'assets/images/Rawalpindi/cl4.jpg'
+        'image': 'assets/images/raw/rcl4.jpg'
       },
     ];
     return GridView.builder(
@@ -1089,22 +1089,22 @@ class RawalpindiPage extends StatelessWidget {
       {
         'name': 'Al-Farooq Restaurant',
         'details': 'Best for Haleem and Korma.',
-        'image': 'assets/images/Rawalpindi/food1.jpg'
+        'image': 'assets/images/raw/rfood1.jpg'
       },
       {
         'name': 'Biryani House',
         'details': 'Authentic Hyderabadi-style biryani.',
-        'image': 'assets/images/Rawalpindi/food2.jpg'
+        'image': 'assets/images/raw/rfood2.jpg'
       },
       {
         'name': 'KFC Centaurus',
         'details': 'Fast food and fried chicken.',
-        'image': 'assets/images/Rawalpindi/food3.jpg'
+        'image': 'assets/images/raw/rfood3.jpg'
       },
       {
         'name': 'Pizza Inn',
         'details': 'Great for Italian cuisine.',
-        'image': 'assets/images/Rawalpindi/food4.jpg'
+        'image': 'assets/images/raw/rfood4.jpg'
       },
     ];
     return GridView.builder(
@@ -1171,22 +1171,22 @@ class RawalpindiPage extends StatelessWidget {
       {
         'name': 'Pakistan Day Parade',
         'details': 'March 23rd celebration at Ayub Stadium.',
-        'image': 'assets/images/Rawalpindi/f1.jpg'
+        'image':  'assets/images/raw/rf1.jpg',
       },
       {
         'name': 'Independence Day',
         'details': 'August 14th fireworks and shows.',
-        'image': 'assets/images/Rawalpindi/f2.jpg'
+        'image': 'assets/images/raw/rf2.jpg',
       },
       {
         'name': 'Winter Carnival',
         'details': 'Seasonal event at Jinnah Park.',
-        'image': 'assets/images/Rawalpindi/f3.jpg'
+        'image':   'assets/images/raw/rf3.jpg',
       },
       {
         'name': 'Mela Chiraghan',
         'details': 'Festival of lights near Shah Faisal Mosque.',
-        'image': 'assets/images/Rawalpindi/f4.jpg'
+        'image': 'assets/images/raw/rf4.jpg',
       },
     ];
     return GridView.builder(

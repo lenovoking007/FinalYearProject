@@ -112,6 +112,9 @@ flutter:
     - assets/images/ballon/
     - assets/images/sight/
     - assets/images/hiking/
+    - assets/images/muree/
+    - assets/images/raw/
+    - assets/images/pesh/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 

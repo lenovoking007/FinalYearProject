@@ -6,27 +6,27 @@ import 'package:travelmate/tripprogresspage.dart';
 
 class PeshawarPage extends StatelessWidget {
   final List<String> overviewImages = [
-    'assets/images/Peshawar/peshawar1.jpg',
-    'assets/images/Peshawar/peshawar2.jpg',
-    'assets/images/Peshawar/peshawar3.jpg',
+    'assets/images/pesh/po1.jpg',
+    'assets/images/pesh/po2.jpg',
+    'assets/images/pesh/po3.jpg',
   ];
   final List<String> clothesImages = [
-    'assets/images/Peshawar/cl1.jpg',
-    'assets/images/Peshawar/cl2.jpg',
-    'assets/images/Peshawar/cl3.jpg',
-    'assets/images/Peshawar/cl4.jpg',
+    'assets/images/Lahore/cl1.jpg',
+    'assets/images/Lahore/cl4.jpg',
+    'assets/images/Lahore/cl3.jpg',
+    'assets/images/Lahore/cl4.jpg',
   ];
   final List<String> foodImages = [
-    'assets/images/Peshawar/food1.jpg',
-    'assets/images/Peshawar/food2.jpg',
-    'assets/images/Peshawar/food3.jpg',
-    'assets/images/Peshawar/food4.jpg',
+    'assets/images/Lahore/food1.jpg',
+    'assets/images/Lahore/food2.jpeg',
+    'assets/images/Lahore/food3.jpg',
+    'assets/images/Lahore/food4.jpg',
   ];
   final List<String> festivalImages = [
-    'assets/images/Peshawar/f1.jpg',
-    'assets/images/Peshawar/f2.jpg',
-    'assets/images/Peshawar/f3.jpg',
-    'assets/images/Peshawar/f4.jpg',
+    'assets/images/pesh/pf1.jpg',
+    'assets/images/pesh/pf2.jpg',
+    'assets/images/pesh/pf3.jpg',
+    'assets/images/pesh/pf4.jpg',
   ];
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -864,10 +864,10 @@ class PeshawarPage extends StatelessWidget {
 
   Widget _buildAttractionsGrid() {
     final List<Map<String, dynamic>> attractions = [
-      {'name': 'Khyber Pass', 'address': 'Near Peshawar', 'image': 'assets/images/Peshawar/peshawar1.jpg'},
-      {'name': 'Gorkhatri Museum', 'address': 'In Peshawar City', 'image': 'assets/images/Peshawar/peshawar2.jpg'},
-      {'name': 'Mahabat Khan Mosque', 'address': 'Old Town, Peshawar', 'image': 'assets/images/Peshawar/peshawar3.jpg'},
-      {'name': 'Peshawar Museum', 'address': 'In Cantt Area', 'image': 'assets/images/Peshawar/peshawar2.jpg'},
+      {'name': 'Khyber Pass', 'address': 'Near Peshawar', 'image': 'assets/images/pesh/po1.jpg',},
+      {'name': 'Gorkhatri Museum', 'address': 'In Peshawar City', 'image':  'assets/images/pesh/po2.jpg',},
+      {'name': 'Mahabat Khan Mosque', 'address': 'Old Town, Peshawar', 'image':  'assets/images/pesh/po3.jpg',},
+      {'name': 'Peshawar Museum', 'address': 'In Cantt Area', 'image':  'assets/images/pesh/po4.jpg',},
     ];
     return GridView.builder(
       shrinkWrap: true,
@@ -928,10 +928,10 @@ class PeshawarPage extends StatelessWidget {
 
   Widget _buildShoppingGrid() {
     final List<Map<String, dynamic>> shoppingSpots = [
-      {'name': 'Sethi Market', 'details': 'Historic market with traditional shops.', 'image': 'assets/images/Peshawar/cl1.jpg'},
-      {'name': 'City Square Mall', 'details': 'Modern mall with international brands.', 'image': 'assets/images/Peshawar/cl2.jpg'},
-      {'name': 'Qissa Khwani Bazaar', 'details': 'Famous for carpets, spices, and handicrafts.', 'image': 'assets/images/Peshawar/cl3.jpg'},
-      {'name': 'Jamrud Road Market', 'details': 'Great for traditional clothing and jewelry.', 'image': 'assets/images/Peshawar/cl4.jpg'},
+      {'name': 'Sethi Market', 'details': 'Historic market with traditional shops.', 'image': 'assets/images/pesh/pc1.jpg'},
+      {'name': 'City Square Mall', 'details': 'Modern mall with international brands.', 'image': 'assets/images/pesh/pcl4.jpg'},
+      {'name': 'Qissa Khwani Bazaar', 'details': 'Famous for carpets, spices, and handicrafts.', 'image':'assets/images/pesh/pcl3.jpg'},
+      {'name': 'Jamrud Road Market', 'details': 'Great for traditional clothing and jewelry.', 'image':'assets/images/pesh/pcl4.jpg'},
     ];
     return GridView.builder(
       shrinkWrap: true,
@@ -992,10 +992,10 @@ class PeshawarPage extends StatelessWidget {
 
   Widget _buildFoodGrid() {
     final List<Map<String, dynamic>> foodLocations = [
-      {'name': 'Chapli House', 'details': 'Best place for Chapli Kababs.', 'image': 'assets/images/Peshawar/food1.jpg'},
-      {'name': 'Khan Restaurant', 'details': 'Famous for Roghani Naan.', 'image': 'assets/images/Peshawar/food2.jpg'},
-      {'name': 'Tandoor Restaurant', 'details': 'Authentic Pashtun cuisine.', 'image': 'assets/images/Peshawar/food3.jpg'},
-      {'name': 'Mastur Restaurant', 'details': 'Popular for Haleem and other delicacies.', 'image': 'assets/images/Peshawar/food4.jpg'},
+      {'name': 'Chapli House', 'details': 'Best place for Chapli Kababs.', 'image': 'assets/images/pesh/pfo1.jpg'},
+      {'name': 'Khan Restaurant', 'details': 'Famous for Roghani Naan.', 'image': 'assets/images/pesh/pfo2.jpg'},
+      {'name': 'Tandoor Restaurant', 'details': 'Authentic Pashtun cuisine.', 'image': 'assets/images/pesh/pfo3.jpg'},
+      {'name': 'Mastur Restaurant', 'details': 'Popular for Haleem and other delicacies.', 'image': 'assets/images/pesh/pfo4.jpg'},
     ];
     return GridView.builder(
       shrinkWrap: true,
@@ -1056,10 +1056,10 @@ class PeshawarPage extends StatelessWidget {
 
   Widget _buildFestivalGrid() {
     final List<Map<String, dynamic>> festivalLocations = [
-      {'name': 'Shandur Polo Festival', 'details': 'Annual polo tournament in July.', 'image': 'assets/images/Peshawar/f1.jpg'},
-      {'name': 'Jashn-e-Pashto', 'details': 'Celebration of Pashto language and culture.', 'image': 'assets/images/Peshawar/f2.jpg'},
-      {'name': 'Basant Festival', 'details': 'Colorful kite flying event.', 'image': 'assets/images/Peshawar/f3.jpg'},
-      {'name': 'Peshawar Literature Festival', 'details': 'Promotes regional literature.', 'image': 'assets/images/Peshawar/f4.jpg'},
+      {'name': 'Shandur Polo Festival', 'details': 'Annual polo tournament in July.', 'image':  'assets/images/pesh/pf1.jpg',},
+      {'name': 'Jashn-e-Pashto', 'details': 'Celebration of Pashto language and culture.', 'image':    'assets/images/pesh/pf2.jpg',},
+      {'name': 'Basant Festival', 'details': 'Colorful kite flying event.', 'image': 'assets/images/pesh/pf3.jpg',},
+      {'name': 'Peshawar Literature Festival', 'details': 'Promotes regional literature.', 'image':'assets/images/pesh/pf4.jpg',},
     ];
     return GridView.builder(
       shrinkWrap: true,

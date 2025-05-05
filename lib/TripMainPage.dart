@@ -7,6 +7,7 @@ import 'package:travelmate/ActvitiesCode/RockClimbingPage.dart';
 import 'package:travelmate/FamousTouristPlacesCode/NeelumValleyPage.dart';
 import 'package:travelmate/FamousTouristPlacesCode/SaifUlMalookPage.dart';
 import 'package:travelmate/FeaturedCities/MurreePage.dart';
+import 'package:travelmate/HyderabadPage.dart';
 import 'package:travelmate/chat.dart';
 import 'package:travelmate/homepage.dart';
 import 'package:travelmate/settingmenu.dart';
@@ -58,15 +59,15 @@ class _TripPageState extends State<TripPage> {
       'page': PeshawarPage()
     },
     {
-      'title': 'Abbotabad',
+      'title': 'Hyderabad',
       'description': 'The City of Beauty',
       'image': 'assets/images/karachi.jpg',
-      'page': AbbottabadPage()
+      'page': Hyderabadpage()
     },
     {
       'title': 'Murree',
       'description': 'Queen of Hills',
-      'image': 'assets/images/murree.jpg',
+      'image': 'assets/images/muree/mo2.jpg',
       'page': MurreePage()
     },
   ];

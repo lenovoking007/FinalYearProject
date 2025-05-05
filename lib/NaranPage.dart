@@ -13,16 +13,16 @@ class Naranpage extends StatelessWidget {
 
     ];
   final List<String> clothesImages = [
-    'assets/images/Lahore/cl4.jpg',
-    'assets/images/Lahore/c3.jpg',
     'assets/images/Lahore/cl1.jpg',
     'assets/images/Lahore/cl2.jpg',
+    'assets/images/Lahore/cl3.jpg',
+    'assets/images/Lahore/cl4.jpg',
   ];
   final List<String> foodImages = [
-    'assets/images/Lahore/food4.jpg',
-    'assets/images/Lahore/food3.jpeg',
-    'assets/images/Lahore/food2.jpg',
     'assets/images/Lahore/food1.jpg',
+    'assets/images/Lahore/food2.jpeg',
+    'assets/images/Lahore/food3.jpg',
+    'assets/images/Lahore/food4.jpg',
   ];
   final List<String> festivalImages = [
     'assets/images/naran/naranf1.jpg',
