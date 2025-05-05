@@ -104,25 +104,25 @@ class _TripPageState extends State<TripPage> {
     {
       'title': 'Saif-ul-Malook',
       'description': 'Legendary Alpine Lake',
-      'image': 'assets/images/hunza.jpg',
+      'image': 'assets/images/sa1.jpg',
       'page': SaifUlMalookPage()
     },
     {
       'title': 'Mohenjo Daro',
       'description': 'Anncient Indus Valley Civilization',
-      'image': 'assets/images/swat.jpg',
+      'image': 'assets/images/ma1.jpg',
       'page': MonajadaroPage()
     },
     {
       'title': 'Desosai Plains',
       'description': 'Lands of Gaints',
-      'image': 'assets/images/skardu.jpg',
+      'image': 'assets/images/desasoi.jpg',
       'page': DeosaiPage()
     },
     {
       'title': 'Neelum Valley',
       'description': 'Paradise of Kashmir',
-      'image': 'assets/images/naran.jpg',
+      'image': 'assets/images/neelum.jpg',
       'page': NeelumValleyPage()
     },
   ];
