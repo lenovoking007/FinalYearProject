@@ -377,7 +377,7 @@ class _TripStatusPageState extends State<TripStatusPage> {
                                 await _firestore.collection('reviews').add({
                                   'userId': user?.uid,
                                   'tripId': tripId,
-                                  'destination': destination,
+                                  'destination': destination, // Store destination with review
                                   'name': userName,
                                   'rating': selectedRating,
                                   'review': reviewController.text,

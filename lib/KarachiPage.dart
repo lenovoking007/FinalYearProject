@@ -4,14 +4,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:travelmate/tripprogresspage.dart';
 
-class Karachipage extends StatefulWidget {
-  const Karachipage({super.key});
+class KarachiPage extends StatefulWidget {
+  const KarachiPage({super.key});
 
   @override
-  State<Karachipage> createState() => _KarachipageState();
+  State<KarachiPage> createState() => _KarachiPageState();
 }
 
-class _KarachipageState extends State<Karachipage> {
+class _KarachiPageState extends State<KarachiPage> {
   final List<String> overviewImages = [
     'assets/images/Karachii/karachio1.jpg',
     'assets/images/Karachii/karachio2.jpg',
@@ -144,173 +144,150 @@ class _KarachipageState extends State<Karachipage> {
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
               child: SingleChildScrollView(
                 child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            const Icon(Icons.flight_takeoff, color: Color(0xFF0066CC), size: 28),
-                            const SizedBox(width: 12),
-                            Text(
-                              "Plan Your Trip",
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: const Color(0xFF0066CC).withOpacity(0.9),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 24),
-                        Text(
-                          "Trip Name*",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: const Color(0xFF0066CC).withOpacity(0.9),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        _buildEditableTextField(
-                          label: "Enter trip name",
-                          controller: tripNameController,
-                          icon: Icons.title,
-                          validator: validateTripName,
-                          maxLength: 20,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 4),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
+                    padding: const EdgeInsets.all(20),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
                             children: [
+                              const Icon(Icons.flight_takeoff, color: Color(0xFF0066CC), size: 28),
+                              const SizedBox(width: 12),
                               Text(
-                                "${tripNameController.text.length}/20",
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.grey,
+                                "Plan Your Trip",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFF0066CC).withOpacity(0.9),
                                 ),
                               ),
                             ],
                           ),
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          "Trip Type*",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: const Color(0xFF0066CC).withOpacity(0.9),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF88F2E8).withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: const Color(0xFF0066CC).withOpacity(0.5)),
-                          ),
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          child: DropdownButtonFormField<String>(
-                            isExpanded: true,
-                            value: selectedTripType,
-                            decoration: const InputDecoration(
-                              border: InputBorder.none,
-                              contentPadding: EdgeInsets.symmetric(vertical: 12),
+                          const SizedBox(height: 24),
+                          Text(
+                            "Trip Name*",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: const Color(0xFF0066CC).withOpacity(0.9),
                             ),
-                            hint: const Text('Select trip type', style: TextStyle(color: Colors.grey)),
-                            items: ['Adventure', 'Relaxation', 'Cultural', 'Wildlife', 'Business']
-                                .map((String type) {
-                              return DropdownMenuItem<String>(
-                                value: type,
-                                child: Text(type, style: const TextStyle(color: Colors.black87)),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                selectedTripType = value;
-                              });
-                            },
-                            validator: (value) => value == null ? 'Please select a trip type' : null,
                           ),
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          "Number of People*",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: const Color(0xFF0066CC).withOpacity(0.9),
+                          const SizedBox(height: 8),
+                          _buildEditableTextField(
+                            label: "Enter trip name",
+                            controller: tripNameController,
+                            icon: Icons.title,
+                            validator: validateTripName,
+                            maxLength: 20,
                           ),
-                        ),
-                        const SizedBox(height: 8),
-                        _buildEditableTextField(
-                          label: "Enter number of people (1-99)",
-                          controller: peopleCountController,
-                          icon: Icons.people,
-                          validator: validatePeopleCount,
-                          keyboardType: TextInputType.number,
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          "Budget (PKR)*",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: const Color(0xFF0066CC).withOpacity(0.9),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        _buildEditableTextField(
-                          label: "Enter budget amount",
-                          controller: budgetController,
-                          icon: Icons.account_balance_wallet,
-                          validator: validateBudget,
-                          keyboardType: TextInputType.number,
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          "Trip Duration*",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: const Color(0xFF0066CC).withOpacity(0.9),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        LayoutBuilder(
-                          builder: (context, constraints) {
-                            final isSmallScreen = constraints.maxWidth < 400;
-                            return isSmallScreen
-                                ? Column(
+                          Padding(
+                            padding: const EdgeInsets.only(top: 4),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                _buildDateSelector(context, "Start Date", startDate, (picked) {
-                                  if (picked != null) {
-                                    setState(() {
-                                      startDate = picked;
-                                      if (startDate.isAfter(endDate)) {
-                                        endDate = startDate.add(const Duration(days: 1));
-                                      }
-                                    });
-                                  }
-                                }, startDate),
-                                const SizedBox(height: 12),
-                                _buildDateSelector(context, "End Date", endDate, (picked) {
-                                  if (picked != null) {
-                                    setState(() {
-                                      endDate = picked;
-                                    });
-                                  }
-                                }, startDate),
+                                Text(
+                                  "${tripNameController.text.length}/20",
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.grey,
+                                  ),
+                                ),
                               ],
-                            )
-                                : Row(
-                              children: [
-                                Expanded(
-                                  child: _buildDateSelector(context, "Start Date", startDate, (picked) {
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            "Trip Type*",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: const Color(0xFF0066CC).withOpacity(0.9),
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF88F2E8).withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: const Color(0xFF0066CC).withOpacity(0.5)),
+                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            child: DropdownButtonFormField<String>(
+                              isExpanded: true,
+                              value: selectedTripType,
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                                contentPadding: EdgeInsets.symmetric(vertical: 12),
+                              ),
+                              hint: const Text('Select trip type', style: TextStyle(color: Colors.grey)),
+                              items: ['Adventure', 'Relaxation', 'Cultural', 'Wildlife', 'Business']
+                                  .map((String type) {
+                                return DropdownMenuItem<String>(
+                                  value: type,
+                                  child: Text(type, style: const TextStyle(color: Colors.black87)),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedTripType = value;
+                                });
+                              },
+                              validator: (value) => value == null ? 'Please select a trip type' : null,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            "Number of People*",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: const Color(0xFF0066CC).withOpacity(0.9),
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          _buildEditableTextField(
+                            label: "Enter number of people (1-99)",
+                            controller: peopleCountController,
+                            icon: Icons.people,
+                            validator: validatePeopleCount,
+                            keyboardType: TextInputType.number,
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            "Budget (PKR)*",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: const Color(0xFF0066CC).withOpacity(0.9),
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          _buildEditableTextField(
+                            label: "Enter budget amount",
+                            controller: budgetController,
+                            icon: Icons.account_balance_wallet,
+                            validator: validateBudget,
+                            keyboardType: TextInputType.number,
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            "Trip Duration*",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: const Color(0xFF0066CC).withOpacity(0.9),
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          LayoutBuilder(
+                            builder: (context, constraints) {
+                              final isSmallScreen = constraints.maxWidth < 400;
+                              return isSmallScreen
+                                  ? Column(
+                                children: [
+                                  _buildDateSelector(context, "Start Date", startDate, (picked) {
                                     if (picked != null) {
                                       setState(() {
                                         startDate = picked;
@@ -320,137 +297,160 @@ class _KarachipageState extends State<Karachipage> {
                                       });
                                     }
                                   }, startDate),
-                                ),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  child: _buildDateSelector(context, "End Date", endDate, (picked) {
+                                  const SizedBox(height: 12),
+                                  _buildDateSelector(context, "End Date", endDate, (picked) {
                                     if (picked != null) {
                                       setState(() {
                                         endDate = picked;
                                       });
                                     }
                                   }, startDate),
+                                ],
+                              )
+                                  : Row(
+                                children: [
+                                  Expanded(
+                                    child: _buildDateSelector(context, "Start Date", startDate, (picked) {
+                                      if (picked != null) {
+                                        setState(() {
+                                          startDate = picked;
+                                          if (startDate.isAfter(endDate)) {
+                                            endDate = startDate.add(const Duration(days: 1));
+                                          }
+                                        });
+                                      }
+                                    }, startDate),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: _buildDateSelector(context, "End Date", endDate, (picked) {
+                                      if (picked != null) {
+                                        setState(() {
+                                          endDate = picked;
+                                        });
+                                      }
+                                    }, startDate),
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                          if (validateTripDuration(startDate, endDate) != null)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 8),
+                              child: Text(
+                                validateTripDuration(startDate, endDate)!,
+                                style: const TextStyle(color: Colors.red, fontSize: 12),
+                              ),
+                            ),
+                          const SizedBox(height: 16),
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: Colors.amber.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: Colors.amber.withOpacity(0.3)),
+                            ),
+                            child: Row(
+                              children: [
+                                Icon(Icons.info_outline, color: Colors.amber.shade700),
+                                const SizedBox(width: 8),
+                                Flexible(
+                                  child: Text(
+                                    "Trip duration: ${endDate.difference(startDate).inDays + 1} days",
+                                    style: TextStyle(color: Colors.amber.shade800),
+                                  ),
                                 ),
                               ],
-                            );
-                          },
-                        ),
-                        if (validateTripDuration(startDate, endDate) != null)
-                          Padding(
-                            padding: const EdgeInsets.only(top: 8),
-                            child: Text(
-                              validateTripDuration(startDate, endDate)!,
-                              style: const TextStyle(color: Colors.red, fontSize: 12),
                             ),
                           ),
-                        const SizedBox(height: 16),
-                        Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: Colors.amber.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: Colors.amber.withOpacity(0.3)),
-                          ),
-                          child: Row(
+                          const SizedBox(height: 24),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Icon(Icons.info_outline, color: Colors.amber.shade700),
-                              const SizedBox(width: 8),
-                              Flexible(
-                                child: Text(
-                                  "Trip duration: ${endDate.difference(startDate).inDays + 1} days",
-                                  style: TextStyle(color: Colors.amber.shade800),
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                style: TextButton.styleFrom(
+                                  foregroundColor: const Color(0xFF0066CC),
+                                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                                ),
+                                child: const Text(
+                                  "CANCEL",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              ElevatedButton(
+                                onPressed: () async {
+                                  if (!_formKey.currentState!.validate()) {
+                                    return;
+                                  }
+
+                                  final durationError = validateTripDuration(startDate, endDate);
+                                  if (durationError != null) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(durationError),
+                                        backgroundColor: Colors.red,
+                                      ),
+                                    );
+                                    return;
+                                  }
+
+                                  try {
+                                    final User? user = _auth.currentUser;
+                                    if (user == null) throw Exception('User not authenticated');
+                                    final Map<String, dynamic> tripPlan = {
+                                      'userId': user.uid,
+                                      'tripName': tripNameController.text,
+                                      'tripType': selectedTripType,
+                                      'numberOfPeople': int.parse(peopleCountController.text),
+                                      'budget': int.parse(budgetController.text.replaceAll(',', '')),
+                                      'startDate': Timestamp.fromDate(startDate),
+                                      'endDate': Timestamp.fromDate(endDate),
+                                      'destination': 'Karachi',
+                                      'status': 'planned',
+                                      'createdAt': Timestamp.now(),
+                                    };
+                                    await _saveTripPlanToFirebase(tripPlan);
+                                    Navigator.pop(context);
+                                    _showSuccessDialog(
+                                      context,
+                                      tripNameController.text,
+                                      selectedTripType ?? 'Not specified',
+                                      endDate.difference(startDate).inDays + 1,
+                                    );
+                                  } catch (e) {
+                                    Navigator.pop(context);
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text('Error saving trip: ${e.toString()}'),
+                                        backgroundColor: Colors.red,
+                                      ),
+                                    );
+                                  }
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFF0066CC),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                                ),
+                                child: const Text(
+                                  "SAVE TRIP",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
                             ],
                           ),
-                        ),
-                        const SizedBox(height: 24),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            TextButton(
-                              onPressed: () => Navigator.pop(context),
-                              style: TextButton.styleFrom(
-                                foregroundColor: const Color(0xFF0066CC),
-                                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                              ),
-                              child: const Text(
-                                "CANCEL",
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            ElevatedButton(
-                              onPressed: () async {
-                                if (!_formKey.currentState!.validate()) {
-                                  return;
-                                }
-
-                                final durationError = validateTripDuration(startDate, endDate);
-                                if (durationError != null) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(durationError),
-                                      backgroundColor: Colors.red,
-                                    ),
-                                  );
-                                  return;
-                                }
-
-                                try {
-                                  final User? user = _auth.currentUser;
-                                  if (user == null) throw Exception('User not authenticated');
-                                  final Map<String, dynamic> tripPlan = {
-                                    'userId': user.uid,
-                                    'tripName': tripNameController.text,
-                                    'tripType': selectedTripType,
-                                    'numberOfPeople': int.parse(peopleCountController.text),
-                                    'budget': int.parse(budgetController.text.replaceAll(',', '')),
-                                    'startDate': Timestamp.fromDate(startDate),
-                                    'endDate': Timestamp.fromDate(endDate),
-                                    'destination': 'Karachi',
-                                    'status': 'planned',
-                                    'createdAt': Timestamp.now(),
-                                  };
-                                  await _saveTripPlanToFirebase(tripPlan);
-                                  Navigator.pop(context);
-                                  _showSuccessDialog(
-                                    context,
-                                    tripNameController.text,
-                                    selectedTripType ?? 'Not specified',
-                                    endDate.difference(startDate).inDays + 1,
-                                  );
-                                } catch (e) {
-                                  Navigator.pop(context);
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text('Error saving trip: ${e.toString()}'),
-                                      backgroundColor: Colors.red,
-                                    ),
-                                  );
-                                }
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF0066CC),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                              ),
-                              child: const Text(
-                                "SAVE TRIP",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ),
-              ),
+            ),
+            ),
             );
           },
         );
@@ -759,7 +759,7 @@ class _KarachipageState extends State<Karachipage> {
             ],
           ),
         ),
-        body:Column(
+        body: Column(
           children: [
             Container(
               color: const Color(0xFF0066CC),
@@ -1111,32 +1111,32 @@ class _KarachipageState extends State<Karachipage> {
         location['address'].toLowerCase().contains(_searchQuery)).toList();
 
     return SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-            _buildCarousel(festivalImages),
-        const SizedBox(height: 24),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: Text(
-            "Discover Festivals",
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: const Color(0xFF0066CC).withOpacity(0.9),
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildCarousel(festivalImages),
+          const SizedBox(height: 24),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Text(
+              "Discover Festivals",
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: const Color(0xFF0066CC).withOpacity(0.9),
+              ),
             ),
           ),
-        ),
-        const SizedBox(height: 16),
-        _buildInfoCard(
-          title: 'Cultural Festivals',
-          description:
-          'Karachi hosts a wide range of cultural festivals, food events, '
-              'music concerts, and international exhibitions throughout the year.',
-        ),
-        const SizedBox(height: 24),
-        Padding(
+          const SizedBox(height: 16),
+          _buildInfoCard(
+            title: 'Cultural Festivals',
+            description:
+            'Karachi hosts a wide range of cultural festivals, food events, '
+                'music concerts, and international exhibitions throughout the year.',
+          ),
+          const SizedBox(height: 24),
+          Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Text(
               'Popular Festival Locations',
@@ -1146,117 +1146,201 @@ class _KarachipageState extends State<Karachipage> {
                 color: const Color(0xFF0066CC).withOpacity(0.9),
               ),
             ),
-        ),
-            const SizedBox(height: 12),
-            if (filteredFestivalLocations.isEmpty)
-        const Padding(
-    padding: EdgeInsets.symmetric(vertical: 32),
-    child: Center(
-    child: Text(
-    'No festival locations found matching your search',
-    style: TextStyle(color: Colors.grey),
-    ),
-    ),
-    )
-    else
-    _buildFestivalGrid(filteredFestivalLocations),
-    const SizedBox(height: 24),
-    ],
-    ),
+          ),
+          const SizedBox(height: 12),
+          if (filteredFestivalLocations.isEmpty)
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 32),
+              child: Center(
+                child: Text(
+                  'No festival locations found matching your search',
+                  style: TextStyle(color: Colors.grey),
+                ),
+              ),
+            )
+          else
+            _buildFestivalGrid(filteredFestivalLocations),
+          const SizedBox(height: 24),
+        ],
+      ),
     );
   }
 
   Widget _buildReviewFeedbackTab() {
     return StreamBuilder<QuerySnapshot>(
-      stream: _firestore.collection('reviews').snapshots(),
+      stream: _firestore
+          .collection('reviews')
+          .where('destination', isEqualTo: 'Karachi') // Only show Karachi reviews
+          .orderBy('timestamp', descending: true) // Newest first
+          .snapshots(),
       builder: (context, snapshot) {
+        // Handle loading state
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF0066CC))
-          ));
-          }
-              if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          }
-          final reviews = snapshot.data?.docs ?? [];
+          return const Center(
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF0066CC)),
+              ));
+        }
 
-          // Local fixed reviews
-          final List<Map<String, dynamic>> localReviews = [
-            {
-              'name': 'Travel Enthusiast',
-              'rating': 5,
-              'review': 'Karachi is a vibrant city with amazing beaches and delicious food. The people are very welcoming!',
-              'imageUrl': 'assets/images/Karachii/u1.png',
-              'date': '2 months ago'
-            },
-            {
-              'name': 'Food Lover',
-              'rating': 4,
-              'review': 'The food scene in Karachi is incredible. From street food to fine dining, there\'s something for everyone.',
-              'imageUrl': 'assets/images/Karachii/u2.png',
-              'date': '1 month ago'
-            }
-          ];
-
-          return SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
+        // Handle error state
+        if (snapshot.hasError) {
+          return Center(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                const Icon(Icons.error_outline, color: Colors.red, size: 50),
+                const SizedBox(height: 16),
                 Text(
-                  'Local Reviews',
+                  'Failed to load reviews',
                   style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
                     color: const Color(0xFF0066CC).withOpacity(0.9),
                   ),
                 ),
+                const SizedBox(height: 8),
+                Text(
+                  snapshot.error.toString(),
+                  style: const TextStyle(color: Colors.red),
+                  textAlign: TextAlign.center,
+                ),
                 const SizedBox(height: 16),
-                ...localReviews.map((review) => _buildReviewCard(
+                ElevatedButton(
+                  onPressed: () => setState(() {}),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF0066CC),
+                  ),
+                  child: const Text('Retry', style: TextStyle(color: Colors.white)),
+                ),
+              ],
+            ),
+          );
+        }
+
+        // Get reviews from Firestore
+        final List<QueryDocumentSnapshot> reviewDocs = snapshot.data?.docs ?? [];
+        final List<Map<String, dynamic>> firestoreReviews = reviewDocs.map((doc) {
+          final data = doc.data() as Map<String, dynamic>;
+          return {
+            'name': data['name'] ?? 'Anonymous',
+            'rating': data['rating'] ?? 0,
+            'review': data['review'] ?? '',
+            'imageUrl': 'assets/images/Lahore/u${(doc.hashCode % 3) + 1}.png', // Using Lahore review images
+            'date': data['timestamp'] != null
+                ? _formatReviewDate(data['timestamp'].toDate())
+                : 'Recently',
+          };
+        }).toList();
+
+        // Local fixed reviews for Karachi
+        final List<Map<String, dynamic>> localReviews = [
+          {
+            'name': 'Travel Enthusiast',
+            'rating': 5,
+            'review': 'Karachi is a vibrant city with amazing beaches and delicious food. The people are very welcoming!',
+            'imageUrl': 'assets/images/Lahore/u1.png',
+            'date': '2 months ago'
+          },
+          {
+            'name': 'Food Lover',
+            'rating': 4,
+            'review': 'The food scene in Karachi is incredible. From street food to fine dining, there\'s something for everyone.',
+            'imageUrl': 'assets/images/Lahore/u2.png',
+            'date': '1 month ago'
+          }
+        ];
+
+        return SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Local Reviews Section
+              Text(
+                'Local Reviews',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: const Color(0xFF0066CC).withOpacity(0.9),
+                ),
+              ),
+              const SizedBox(height: 16),
+              ...localReviews.map((review) => _buildReviewCard(
+                name: review['name'],
+                rating: review['rating'],
+                review: review['review'],
+                imageUrl: review['imageUrl'],
+                date: review['date'],
+              )).toList(),
+
+              // User Reviews Section
+              const SizedBox(height: 24),
+              Text(
+                'User Reviews',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: const Color(0xFF0066CC).withOpacity(0.9),
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              if (firestoreReviews.isEmpty)
+                _buildNoReviewsPlaceholder()
+              else
+                ...firestoreReviews.map((review) => _buildReviewCard(
                   name: review['name'],
                   rating: review['rating'],
                   review: review['review'],
                   imageUrl: review['imageUrl'],
                   date: review['date'],
                 )).toList(),
-                const SizedBox(height: 24),
-                Text(
-                  'User Reviews',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: const Color(0xFF0066CC).withOpacity(0.9),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                if (reviews.isEmpty)
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 16),
-                    child: Center(
-                      child: Text(
-                        'No user reviews yet. Be the first to review!',
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                    ),
-                  )
-                else
-                  ...reviews.map((reviewDoc) {
-                    final reviewData = reviewDoc.data() as Map<String, dynamic>;
-                    return _buildReviewCard(
-                      name: reviewData['name'] ?? 'Anonymous',
-                      rating: reviewData['rating'] ?? 0,
-                      review: reviewData['review'] ?? 'No review text available',
-                      imageUrl: 'assets/images/Karachii/u1.png',
-                      date: reviewData['timestamp'] != null
-                          ? '${DateTime.now().difference(reviewData['timestamp'].toDate()).inDays} days ago'
-                          : 'Unknown date',
-                    );
-                  }).toList(),
-                const SizedBox(height: 24),
-              ],
+
+              const SizedBox(height: 24),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  // Helper method to format review date
+  String _formatReviewDate(DateTime date) {
+    final now = DateTime.now();
+    final difference = now.difference(date);
+
+    if (difference.inDays > 30) {
+      return '${(difference.inDays / 30).floor()} months ago';
+    } else if (difference.inDays > 0) {
+      return '${difference.inDays} days ago';
+    } else if (difference.inHours > 0) {
+      return '${difference.inHours} hours ago';
+    } else {
+      return 'Just now';
+    }
+  }
+
+  // Widget for no reviews state
+  Widget _buildNoReviewsPlaceholder() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 32),
+      child: Column(
+        children: [
+          Icon(Icons.reviews, size: 50, color: Colors.grey.shade400),
+          const SizedBox(height: 16),
+          const Text(
+            'No user reviews yet',
+            style: TextStyle(fontSize: 16, color: Colors.grey),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Be the first to share your experience!',
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.grey.shade500,
             ),
-          );
-        },
+          ),
+        ],
+      ),
     );
   }
 

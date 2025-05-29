@@ -1168,31 +1168,84 @@ class _LahorePageState extends State<LahorePage> {
 
   Widget _buildReviewFeedbackTab() {
     return StreamBuilder<QuerySnapshot>(
-      stream: _firestore.collection('reviews').snapshots(),
+      stream: _firestore
+          .collection('reviews')
+          .where('destination', isEqualTo: 'Lahore') // Only show Lahore reviews
+          .orderBy('timestamp', descending: true) // Newest first
+          .snapshots(),
       builder: (context, snapshot) {
+        // Handle loading state
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF0066CC))
-          ));
+          return const Center(
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF0066CC)),
+              ));
           }
-              if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          }
-          final reviews = snapshot.data?.docs ?? [];
 
-          // Local fixed reviews
+              // Handle error state
+              if (snapshot.hasError) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.error_outline, color: Colors.red, size: 50),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Failed to load reviews',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: const Color(0xFF0066CC).withOpacity(0.9),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    snapshot.error.toString(),
+                    style: const TextStyle(color: Colors.red),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () => setState(() {}),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF0066CC),
+                    ),
+                    child: const Text('Retry', style: TextStyle(color: Colors.white)),
+                  ),
+                ],
+              ),
+            );
+          }
+
+          // Get reviews from Firestore
+          final List<QueryDocumentSnapshot> reviewDocs = snapshot.data?.docs ?? [];
+          final List<Map<String, dynamic>> firestoreReviews = reviewDocs.map((doc) {
+            final data = doc.data() as Map<String, dynamic>;
+            return {
+              'name': data['name'] ?? 'Anonymous',
+              'rating': data['rating'] ?? 0,
+              'review': data['review'] ?? '',
+              'imageUrl': 'assets/images/Lahore/u${(doc.hashCode % 3) + 1}.png', // Dynamic avatar
+              'date': data['timestamp'] != null
+                  ? _formatReviewDate(data['timestamp'].toDate())
+                  : 'Recently',
+            };
+          }).toList();
+
+          // Local fixed reviews for Lahore
           final List<Map<String, dynamic>> localReviews = [
             {
               'name': 'Travel Enthusiast',
               'rating': 5,
-              'review': 'Lahore is an amazing city with rich culture and history. The food is incredible and the people are very hospitable.',
+              'review': 'Lahore is an amazing city with rich culture and history. '
+                  'The food is incredible and the people are very hospitable.',
               'imageUrl': 'assets/images/Lahore/u1.png',
               'date': '2 months ago'
             },
             {
               'name': 'History Lover',
               'rating': 4,
-              'review': 'The historical sites in Lahore are breathtaking. Badshahi Mosque and Lahore Fort are must-visit places.',
+              'review': 'The historical sites in Lahore are breathtaking. '
+                  'Badshahi Mosque and Lahore Fort are must-visit places.',
               'imageUrl': 'assets/images/Lahore/u2.png',
               'date': '1 month ago'
             }
@@ -1203,6 +1256,7 @@ class _LahorePageState extends State<LahorePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // Local Reviews Section
                 Text(
                   'Local Reviews',
                   style: TextStyle(
@@ -1219,6 +1273,8 @@ class _LahorePageState extends State<LahorePage> {
                   imageUrl: review['imageUrl'],
                   date: review['date'],
                 )).toList(),
+
+                // User Reviews Section
                 const SizedBox(height: 24),
                 Text(
                   'User Reviews',
@@ -1229,34 +1285,64 @@ class _LahorePageState extends State<LahorePage> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                if (reviews.isEmpty)
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 16),
-                    child: Center(
-                      child: Text(
-                        'No user reviews yet. Be the first to review!',
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                    ),
-                  )
+
+                if (firestoreReviews.isEmpty)
+                  _buildNoReviewsPlaceholder()
                 else
-                  ...reviews.map((reviewDoc) {
-                    final reviewData = reviewDoc.data() as Map<String, dynamic>;
-                    return _buildReviewCard(
-                      name: reviewData['name'] ?? 'Anonymous',
-                      rating: reviewData['rating'] ?? 0,
-                      review: reviewData['review'] ?? 'No review text available',
-                      imageUrl: 'assets/images/Lahore/u1.png',
-                      date: reviewData['timestamp'] != null
-                          ? '${DateTime.now().difference(reviewData['timestamp'].toDate()).inDays} days ago'
-                          : 'Unknown date',
-                    );
-                  }).toList(),
+                  ...firestoreReviews.map((review) => _buildReviewCard(
+                    name: review['name'],
+                    rating: review['rating'],
+                    review: review['review'],
+                    imageUrl: review['imageUrl'],
+                    date: review['date'],
+                  )).toList(),
+
                 const SizedBox(height: 24),
               ],
             ),
           );
         },
+    );
+  }
+
+// Helper method to format review date
+  String _formatReviewDate(DateTime date) {
+    final now = DateTime.now();
+    final difference = now.difference(date);
+
+    if (difference.inDays > 30) {
+      return '${(difference.inDays / 30).floor()} months ago';
+    } else if (difference.inDays > 0) {
+      return '${difference.inDays} days ago';
+    } else if (difference.inHours > 0) {
+      return '${difference.inHours} hours ago';
+    } else {
+      return 'Just now';
+    }
+  }
+
+// Widget for no reviews state
+  Widget _buildNoReviewsPlaceholder() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 32),
+      child: Column(
+        children: [
+          Icon(Icons.reviews, size: 50, color: Colors.grey.shade400),
+          const SizedBox(height: 16),
+          const Text(
+            'No user reviews yet',
+            style: TextStyle(fontSize: 16, color: Colors.grey),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Be the first to share your experience!',
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.grey.shade500,
+            ),
+          ),
+        ],
+      ),
     );
   }
 

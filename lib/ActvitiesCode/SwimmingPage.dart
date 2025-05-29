@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class SwimmingPage extends StatelessWidget {
   final List<String> overviewImages = [
@@ -25,32 +24,38 @@ class SwimmingPage extends StatelessWidget {
   }
 
   Future<void> _recordActivityAccess() async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
+    try {
+      // Check if this activity already exists in the collection
       final query = await FirebaseFirestore.instance
           .collection('Activities')
           .where('name', isEqualTo: 'swimming')
-          .where('userId', isEqualTo: user.uid)
           .limit(1)
           .get();
 
+      // Only create if it doesn't exist
       if (query.docs.isEmpty) {
         await FirebaseFirestore.instance.collection('Activities').add({
           'name': 'swimming',
-          'userId': user.uid,
           'createdAt': FieldValue.serverTimestamp(),
         });
       }
+    } catch (e) {
+      debugPrint('Error recording activity access: $e');
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final primaryColor = isDarkMode ? const Color(0xFF1E88E5) : const Color(0xFF0066CC);
+    final cardColor = isDarkMode ? Colors.grey[800]! : Colors.white;
+    final textColor = isDarkMode ? Colors.white : Colors.black87;
+
     return DefaultTabController(
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: const Color(0xFF0066CC),
+          backgroundColor: primaryColor,
           elevation: 0,
           automaticallyImplyLeading: true,
           iconTheme: const IconThemeData(color: Colors.white),
@@ -73,16 +78,16 @@ class SwimmingPage extends StatelessWidget {
         ),
         body: TabBarView(
           children: [
-            _buildOverviewTab(),
-            _buildNaturalSpotsTab(),
-            _buildSafetyTab(),
+            _buildOverviewTab(cardColor, textColor, primaryColor),
+            _buildNaturalSpotsTab(cardColor, textColor, primaryColor),
+            _buildSafetyTab(cardColor, textColor, primaryColor),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildOverviewTab() {
+  Widget _buildOverviewTab(Color cardColor, Color textColor, Color primaryColor) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -94,16 +99,19 @@ class SwimmingPage extends StatelessWidget {
             title: 'Swimming in Pakistan',
             description:
             'Pakistan offers diverse swimming experiences from natural lakes and rivers to modern swimming pools. Enjoy the crystal clear waters of northern lakes, the vast Arabian Sea in the south, or premium hotel pools in major cities.',
+            cardColor: cardColor,
+            textColor: textColor,
+            primaryColor: primaryColor,
           ),
           const SizedBox(height: 24),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Text(
               'Best Swimming Cities',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF0066CC),
+                color: primaryColor,
               ),
             ),
           ),
@@ -115,7 +123,7 @@ class SwimmingPage extends StatelessWidget {
     );
   }
 
-  Widget _buildNaturalSpotsTab() {
+  Widget _buildNaturalSpotsTab(Color cardColor, Color textColor, Color primaryColor) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -127,16 +135,19 @@ class SwimmingPage extends StatelessWidget {
             title: 'Natural Swimming Spots',
             description:
             'Experience swimming in nature\'s pristine waters. From the turquoise lakes of the north to the warm Arabian Sea, Pakistan offers breathtaking natural swimming locations with stunning views.',
+            cardColor: cardColor,
+            textColor: textColor,
+            primaryColor: primaryColor,
           ),
           const SizedBox(height: 24),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Text(
               'Top Natural Swimming Locations',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF0066CC),
+                color: primaryColor,
               ),
             ),
           ),
@@ -148,7 +159,7 @@ class SwimmingPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSafetyTab() {
+  Widget _buildSafetyTab(Color cardColor, Color textColor, Color primaryColor) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -160,9 +171,12 @@ class SwimmingPage extends StatelessWidget {
             title: 'Swimming Safety Tips',
             description:
             'Always prioritize safety when swimming. Be aware of water currents, depth, and weather conditions. Never swim alone in natural water bodies and always follow lifeguard instructions at pools.',
+            cardColor: cardColor,
+            textColor: textColor,
+            primaryColor: primaryColor,
           ),
           const SizedBox(height: 24),
-          _buildSafetyTipsList(),
+          _buildSafetyTipsList(cardColor, textColor, primaryColor),
           const SizedBox(height: 24),
         ],
       ),
@@ -259,7 +273,7 @@ class SwimmingPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSafetyTipsList() {
+  Widget _buildSafetyTipsList(Color cardColor, Color textColor, Color primaryColor) {
     final List<String> tips = [
       'Always check water depth before diving',
       'Never swim alone in natural water bodies',
@@ -273,6 +287,7 @@ class SwimmingPage extends StatelessWidget {
       'Know your limits and don\'t overexert yourself'
     ];
     return Card(
+      color: cardColor,
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
@@ -282,12 +297,12 @@ class SwimmingPage extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            const Text(
+            Text(
               'Essential Safety Tips',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF0066CC),
+                color: primaryColor,
               ),
             ),
             const SizedBox(height: 12),
@@ -296,12 +311,12 @@ class SwimmingPage extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Icon(Icons.brightness_1, size: 8, color: Color(0xFF0066CC)),
+                  Icon(Icons.brightness_1, size: 8, color: primaryColor),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       tip,
-                      style: const TextStyle(fontSize: 14),
+                      style: TextStyle(fontSize: 14, color: textColor),
                     ),
                   ),
                 ],
@@ -367,8 +382,15 @@ class SwimmingPage extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoCard({required String title, required String description}) {
+  Widget _buildInfoCard({
+    required String title,
+    required String description,
+    required Color cardColor,
+    required Color textColor,
+    required Color primaryColor,
+  }) {
     return Card(
+      color: cardColor,
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
@@ -381,16 +403,16 @@ class SwimmingPage extends StatelessWidget {
           children: [
             Text(
               title,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF0066CC),
+                color: primaryColor,
               ),
             ),
             const SizedBox(height: 12),
             Text(
               description,
-              style: const TextStyle(fontSize: 16),
+              style: TextStyle(fontSize: 16, color: textColor),
             ),
           ],
         ),
