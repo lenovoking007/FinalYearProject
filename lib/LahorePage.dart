@@ -3,6 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:travelmate/tripprogresspage.dart';
+import 'package:travelmate/city_planner.dart'; // Add this import
 
 class LahorePage extends StatefulWidget {
   const LahorePage({super.key});
@@ -118,8 +119,12 @@ class _LahorePageState extends State<LahorePage> {
       if (num == null) {
         return 'Please enter a valid number';
       }
-      if (num > 999999999) {
-        return 'Budget cannot exceed 999,999,999';
+      if (num < 5000)
+        {
+          return 'Minimum trip budget is 5000 PKR.';
+        }
+      if (num > 9999999) {
+        return 'Budget cannot exceed 99,99,999';
       }
       return null;
     }
@@ -129,8 +134,8 @@ class _LahorePageState extends State<LahorePage> {
       if (duration < 1) {
         return 'End date must be after start date';
       }
-      if (duration > 60) {
-        return 'Trip cannot exceed 60 days';
+      if (duration > 16) {
+        return 'Trip cannot exceed 15 days';
       }
       return null;
     }
@@ -168,7 +173,7 @@ class _LahorePageState extends State<LahorePage> {
                         ),
                         const SizedBox(height: 24),
                         Text(
-                          "Trip Name*",
+                          "Trip Name",
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -200,7 +205,7 @@ class _LahorePageState extends State<LahorePage> {
                         ),
                         const SizedBox(height: 16),
                         Text(
-                          "Trip Type*",
+                          "Trip Type",
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -240,7 +245,7 @@ class _LahorePageState extends State<LahorePage> {
                         ),
                         const SizedBox(height: 16),
                         Text(
-                          "Number of People*",
+                          "Number of People",
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -257,7 +262,7 @@ class _LahorePageState extends State<LahorePage> {
                         ),
                         const SizedBox(height: 16),
                         Text(
-                          "Budget (PKR)*",
+                          "Budget (PKR)",
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -723,39 +728,39 @@ class _LahorePageState extends State<LahorePage> {
               ),
               const SizedBox(width: 12),
               Align(
-                alignment: Alignment.bottomRight,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => TripStatusPage()),
-                      );
-                    },
-                    borderRadius: BorderRadius.circular(8),
-                    child: Container(
-                      width: 35,
-                      height: 35,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.9),
-                        borderRadius: BorderRadius.circular(8),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 3,
-                            offset: const Offset(0, 1.5),
-                          ),
-                        ],
-                      ),
-                      child: Icon(
-                        Icons.timeline,
-                        color: const Color(0xFF0066CC),
-                        size: 20,
+                  alignment: Alignment.bottomRight,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => TripStatusPage()),
+                        );
+                      },
+                      borderRadius: BorderRadius.circular(8),
+                      child: Container(
+                        width: 35,
+                        height: 35,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.9),
+                          borderRadius: BorderRadius.circular(8),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 3,
+                              offset: const Offset(0, 1.5),
+                            ),
+                          ],
+                        ),
+                        child: Icon(
+                          Icons.timeline,
+                          color: const Color(0xFF0066CC),
+                          size: 20,
+                        ),
                       ),
                     ),
-                  ),
-                ),
+                  )
               )
             ],
           ),
@@ -1170,103 +1175,120 @@ class _LahorePageState extends State<LahorePage> {
     return StreamBuilder<QuerySnapshot>(
       stream: _firestore
           .collection('reviews')
-          .where('destination', isEqualTo: 'Lahore') // Only show Lahore reviews
-          .orderBy('timestamp', descending: true) // Newest first
+          .where('destination', isEqualTo: 'Lahore')
+          .orderBy('timestamp', descending: true)
           .snapshots(),
       builder: (context, snapshot) {
-        // Handle loading state
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
               child: CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF0066CC)),
               ));
-          }
+        }
 
-              // Handle error state
-              if (snapshot.hasError) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.error_outline, color: Colors.red, size: 50),
-                  const SizedBox(height: 16),
-                  Text(
-                    'Failed to load reviews',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: const Color(0xFF0066CC).withOpacity(0.9),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    snapshot.error.toString(),
-                    style: const TextStyle(color: Colors.red),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () => setState(() {}),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF0066CC),
-                    ),
-                    child: const Text('Retry', style: TextStyle(color: Colors.white)),
-                  ),
-                ],
-              ),
-            );
-          }
-
-          // Get reviews from Firestore
-          final List<QueryDocumentSnapshot> reviewDocs = snapshot.data?.docs ?? [];
-          final List<Map<String, dynamic>> firestoreReviews = reviewDocs.map((doc) {
-            final data = doc.data() as Map<String, dynamic>;
-            return {
-              'name': data['name'] ?? 'Anonymous',
-              'rating': data['rating'] ?? 0,
-              'review': data['review'] ?? '',
-              'imageUrl': 'assets/images/Lahore/u${(doc.hashCode % 3) + 1}.png', // Dynamic avatar
-              'date': data['timestamp'] != null
-                  ? _formatReviewDate(data['timestamp'].toDate())
-                  : 'Recently',
-            };
-          }).toList();
-
-          // Local fixed reviews for Lahore
-          final List<Map<String, dynamic>> localReviews = [
-            {
-              'name': 'Travel Enthusiast',
-              'rating': 5,
-              'review': 'Lahore is an amazing city with rich culture and history. '
-                  'The food is incredible and the people are very hospitable.',
-              'imageUrl': 'assets/images/Lahore/u1.png',
-              'date': '2 months ago'
-            },
-            {
-              'name': 'History Lover',
-              'rating': 4,
-              'review': 'The historical sites in Lahore are breathtaking. '
-                  'Badshahi Mosque and Lahore Fort are must-visit places.',
-              'imageUrl': 'assets/images/Lahore/u2.png',
-              'date': '1 month ago'
-            }
-          ];
-
-          return SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
+        if (snapshot.hasError) {
+          return Center(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Local Reviews Section
+                const Icon(Icons.error_outline, color: Colors.red, size: 50),
+                const SizedBox(height: 16),
                 Text(
-                  'Local Reviews',
+                  'Failed to load reviews',
                   style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
                     color: const Color(0xFF0066CC).withOpacity(0.9),
                   ),
                 ),
+                const SizedBox(height: 8),
+                Text(
+                  snapshot.error.toString(),
+                  style: const TextStyle(color: Colors.red),
+                  textAlign: TextAlign.center,
+                ),
                 const SizedBox(height: 16),
-                ...localReviews.map((review) => _buildReviewCard(
+                ElevatedButton(
+                  onPressed: () => setState(() {}),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF0066CC),
+                  ),
+                  child: const Text('Retry', style: TextStyle(color: Colors.white)),
+                ),
+              ],
+            ),
+          );
+        }
+
+        final List<QueryDocumentSnapshot> reviewDocs = snapshot.data?.docs ?? [];
+        final List<Map<String, dynamic>> firestoreReviews = reviewDocs.map((doc) {
+          final data = doc.data() as Map<String, dynamic>;
+          return {
+            'name': data['name'] ?? 'Anonymous',
+            'rating': data['rating'] ?? 0,
+            'review': data['review'] ?? '',
+            'imageUrl': 'assets/images/Lahore/u${(doc.hashCode % 3) + 1}.png',
+            'date': data['timestamp'] != null
+                ? _formatReviewDate(data['timestamp'].toDate())
+                : 'Recently',
+          };
+        }).toList();
+
+        final List<Map<String, dynamic>> localReviews = [
+          {
+            'name': 'Travel Enthusiast',
+            'rating': 5,
+            'review': 'Lahore is an amazing city with rich culture and history. '
+                'The food is incredible and the people are very hospitable.',
+            'imageUrl': 'assets/images/Lahore/u1.png',
+            'date': '2 months ago'
+          },
+          {
+            'name': 'History Lover',
+            'rating': 4,
+            'review': 'The historical sites in Lahore are breathtaking. '
+                'Badshahi Mosque and Lahore Fort are must-visit places.',
+            'imageUrl': 'assets/images/Lahore/u2.png',
+            'date': '1 month ago'
+          }
+        ];
+
+        return SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Local Reviews',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: const Color(0xFF0066CC).withOpacity(0.9),
+                ),
+              ),
+              const SizedBox(height: 16),
+              ...localReviews.map((review) => _buildReviewCard(
+                name: review['name'],
+                rating: review['rating'],
+                review: review['review'],
+                imageUrl: review['imageUrl'],
+                date: review['date'],
+              )).toList(),
+
+              const SizedBox(height: 24),
+              Text(
+                'User Reviews',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: const Color(0xFF0066CC).withOpacity(0.9),
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              if (firestoreReviews.isEmpty)
+                _buildNoReviewsPlaceholder()
+              else
+                ...firestoreReviews.map((review) => _buildReviewCard(
                   name: review['name'],
                   rating: review['rating'],
                   review: review['review'],
@@ -1274,38 +1296,14 @@ class _LahorePageState extends State<LahorePage> {
                   date: review['date'],
                 )).toList(),
 
-                // User Reviews Section
-                const SizedBox(height: 24),
-                Text(
-                  'User Reviews',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: const Color(0xFF0066CC).withOpacity(0.9),
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                if (firestoreReviews.isEmpty)
-                  _buildNoReviewsPlaceholder()
-                else
-                  ...firestoreReviews.map((review) => _buildReviewCard(
-                    name: review['name'],
-                    rating: review['rating'],
-                    review: review['review'],
-                    imageUrl: review['imageUrl'],
-                    date: review['date'],
-                  )).toList(),
-
-                const SizedBox(height: 24),
-              ],
-            ),
-          );
-        },
+              const SizedBox(height: 24),
+            ],
+          ),
+        );
+      },
     );
   }
 
-// Helper method to format review date
   String _formatReviewDate(DateTime date) {
     final now = DateTime.now();
     final difference = now.difference(date);
@@ -1321,7 +1319,6 @@ class _LahorePageState extends State<LahorePage> {
     }
   }
 
-// Widget for no reviews state
   Widget _buildNoReviewsPlaceholder() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 32),

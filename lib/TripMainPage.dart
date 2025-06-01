@@ -60,7 +60,7 @@ class _TripPageState extends State<TripPage> {
       'page': PeshawarPage()
     },
     {
-      'title': 'Hyderabad',
+      'title': 'Muzafarabad',
       'description': 'The City of Beauty',
       'image': 'assets/images/hyderabad/hyderabad03.png',
       'page': Hyderabadpage()

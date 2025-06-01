@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:ui' as ui;
+import 'package:travelmate/city_planner.dart';
 
 // Define app colors
 const Color primaryColor = Color(0xFF0066CC);
@@ -377,7 +378,7 @@ class _TripStatusPageState extends State<TripStatusPage> {
                                 await _firestore.collection('reviews').add({
                                   'userId': user?.uid,
                                   'tripId': tripId,
-                                  'destination': destination, // Store destination with review
+                                  'destination': destination,
                                   'name': userName,
                                   'rating': selectedRating,
                                   'review': reviewController.text,
@@ -489,8 +490,12 @@ class _TripStatusPageState extends State<TripStatusPage> {
       if (num == null) {
         return 'Please enter a valid number';
       }
-      if (num > 999999999) {
-        return 'Budget cannot exceed 999,999,999';
+      if (num < 5000)
+      {
+        return 'Minimum trip budget is 5000 PKR.';
+      }
+      if (num > 9999999) {
+        return 'Budget cannot exceed 99,99,999';
       }
       return null;
     }
@@ -500,8 +505,8 @@ class _TripStatusPageState extends State<TripStatusPage> {
       if (duration < 1) {
         return 'End date must be after start date';
       }
-      if (duration > 60) {
-        return 'Trip cannot exceed 60 days';
+      if (duration > 16) {
+        return 'Trip cannot exceed 15 days';
       }
       return null;
     }
@@ -539,7 +544,7 @@ class _TripStatusPageState extends State<TripStatusPage> {
                         ),
                         const SizedBox(height: 24),
                         Text(
-                          "Trip Name*",
+                          "Trip Name",
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -571,7 +576,7 @@ class _TripStatusPageState extends State<TripStatusPage> {
                         ),
                         const SizedBox(height: 16),
                         Text(
-                          "Trip Type*",
+                          "Trip Type",
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -611,7 +616,7 @@ class _TripStatusPageState extends State<TripStatusPage> {
                         ),
                         const SizedBox(height: 16),
                         Text(
-                          "Number of People*",
+                          "Number of People",
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -628,7 +633,7 @@ class _TripStatusPageState extends State<TripStatusPage> {
                         ),
                         const SizedBox(height: 16),
                         Text(
-                          "Budget (PKR)*",
+                          "Budget (PKR)",
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -645,7 +650,7 @@ class _TripStatusPageState extends State<TripStatusPage> {
                         ),
                         const SizedBox(height: 16),
                         Text(
-                          "Trip Duration*",
+                          "Trip Duration",
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -1137,7 +1142,7 @@ class _TripStatusPageState extends State<TripStatusPage> {
                                     ),
                                     TextButton(
                                       onPressed: () => Navigator.pop(context, true),
-                                      child: const Text('Delete', style: TextStyle(color: Colors.red)),
+                                      child: const Text('Delete', style: TextStyle(color: primaryColor)),
                                     ),
                                   ],
                                 ),
@@ -1305,6 +1310,80 @@ class TripProgressDetailsPage extends StatefulWidget {
 }
 
 class _TripProgressDetailsPageState extends State<TripProgressDetailsPage> {
+  Map<int, List<String>> _dailyPlaces = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _loadDailyPlaces();
+  }
+
+  void _loadDailyPlaces() {
+    final startDate = (widget.tripData['startDate'] as Timestamp).toDate();
+    final endDate = (widget.tripData['endDate'] as Timestamp).toDate();
+    final duration = endDate.difference(startDate).inDays + 1;
+    final destination = widget.tripData['destination'] as String;
+
+    // Get all places for the city
+    final allPlaces = CityPlanner.getPlacesForCity(destination, duration).values.expand((x) => x).toList();
+
+    final Map<int, List<String>> dailyPlaces = {};
+
+    if (duration <= 0) {
+      setState(() {
+        _dailyPlaces = {};
+      });
+      return;
+    }
+
+    if (duration == 1) {
+      // Show top 5 places for 1-day trip
+      dailyPlaces[1] = allPlaces.take(5).toList();
+    } else if (duration >= 2 && duration <= 5) {
+      // 4 places per day for 2-5 days
+      for (int day = 1; day <= duration; day++) {
+        final start = (day - 1) * 4;
+        final end = start + 4;
+        dailyPlaces[day] = allPlaces.sublist(
+            start,
+            end > allPlaces.length ? allPlaces.length : end
+        );
+      }
+    } else if (duration >= 6 && duration <= 9) {
+      // 3 places per day for 6-9 days
+      for (int day = 1; day <= duration; day++) {
+        final start = (day - 1) * 3;
+        final end = start + 3;
+        dailyPlaces[day] = allPlaces.sublist(
+            start,
+            end > allPlaces.length ? allPlaces.length : end
+        );
+      }
+    } else if (duration >= 10 && duration <= 13) {
+      // 2 places per day for 10-13 days
+      for (int day = 1; day <= duration; day++) {
+        final start = (day - 1) * 2;
+        final end = start + 2;
+        dailyPlaces[day] = allPlaces.sublist(
+            start,
+            end > allPlaces.length ? allPlaces.length : end
+        );
+      }
+    } else {
+      // 1 place per day for 14-15 days
+      for (int day = 1; day <= duration; day++) {
+        final index = day - 1;
+        if (index < allPlaces.length) {
+          dailyPlaces[day] = [allPlaces[index]];
+        }
+      }
+    }
+
+    setState(() {
+      _dailyPlaces = dailyPlaces;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final startDate = (widget.tripData['startDate'] as Timestamp).toDate();
@@ -1313,6 +1392,7 @@ class _TripProgressDetailsPageState extends State<TripProgressDetailsPage> {
     final elapsedDays = DateTime.now().difference(startDate).inDays + 1;
     final currentStage = elapsedDays.clamp(1, totalDays);
     final tripName = widget.tripData['tripName'] as String? ?? 'My Trip';
+    final destination = widget.tripData['destination'] as String? ?? 'Unknown';
 
     return Scaffold(
       appBar: AppBar(
@@ -1350,6 +1430,7 @@ class _TripProgressDetailsPageState extends State<TripProgressDetailsPage> {
                   final isCurrentDay = dayNumber == currentStage;
                   final dayDate = startDate.add(Duration(days: index));
                   final formattedDate = DateFormat('EEEE, MMM d').format(dayDate);
+                  final dayPlaces = _dailyPlaces[dayNumber] ?? [];
 
                   return Card(
                     elevation: isCurrentDay ? 4 : 0,
@@ -1361,7 +1442,7 @@ class _TripProgressDetailsPageState extends State<TripProgressDetailsPage> {
                         width: isCurrentDay ? 2 : 1,
                       ),
                     ),
-                    child: ListTile(
+                    child: ExpansionTile(
                       leading: CircleAvatar(
                         backgroundColor: isCurrentDay ? primaryColor : primaryColor.withOpacity(0.1),
                         child: Text(
@@ -1398,6 +1479,50 @@ class _TripProgressDetailsPageState extends State<TripProgressDetailsPage> {
                           : isCurrentDay
                           ? Icon(Icons.location_on, color: primaryColor)
                           : null,
+                      children: [
+                        if (dayPlaces.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Places to Visit:',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: primaryColor,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                ...dayPlaces.map((place) => Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 4),
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.place, size: 16, color: primaryColor),
+                                      const SizedBox(width: 8),
+                                      Expanded(
+                                        child: Text(
+                                          place,
+                                          style: const TextStyle(fontSize: 14),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )).toList(),
+                              ],
+                            ),
+                          )
+                        else
+                          const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 16),
+                            child: Center(
+                              child: Text(
+                                'No places scheduled for this day',
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                            ),
+                          ),
+                      ],
                     ),
                   );
                 },
