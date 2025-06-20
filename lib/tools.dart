@@ -331,7 +331,7 @@ final List<Tool> tools = [
     subtitle: 'Find companions',
     icon: Icons.group,
     iconColor: Colors.green,
-    page: TravelBuddyPage(),
+    page: TravelBuddy(),
   ),
   Tool(
     title: 'Reminders',

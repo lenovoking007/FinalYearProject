@@ -16,11 +16,15 @@ import 'package:travelmate/tripprogresspage.dart';
 import 'ActvitiesCode/HikingPage.dart';
 import 'ActvitiesCode/SightseeingPage.dart';
 import 'AllActivitiesPage.dart';
+import 'CategoriesPages/AdventurePage.dart' show AdventurePage;
+import 'CategoriesPages/BeachPage.dart' show BeachPage;
+import 'CategoriesPages/CulturalPage.dart' show CulturalPage;
+import 'CategoriesPages/FoodPage.dart' show FoodPage;
+import 'CategoriesPages/NaturePage.dart' show NaturePage;
 import 'FamousTouristPlacesCode/DesosaiPlainsPage.dart';
 import 'FamousTouristPlacesCode/MohenjoDaroPage.dart';
 import 'FeaturedCities.dart';
 import 'FAmousPlaces.dart';
-import 'FeaturedCities/AbbotabadPage.dart';
 import 'FeaturedCities/PeshawarPage.dart';
 import 'FeaturedCities/RawalpindiPage.dart';
 
@@ -37,12 +41,36 @@ class _TripPageState extends State<TripPage> {
   int currentIndex = 2; // For bottom nav bar
 
   final List<Map<String, dynamic>> categories = [
-    {'title': 'Adventure', 'icon': Icons.terrain, 'color': Colors.orange},
-    {'title': 'Beach', 'icon': Icons.beach_access, 'color': Colors.blue},
-    {'title': 'Cultural', 'icon': Icons.account_balance, 'color': Colors.purple},
-    {'title': 'Food', 'icon': Icons.restaurant, 'color': Colors.red},
-    {'title': 'History', 'icon': Icons.history, 'color': Colors.brown},
-    {'title': 'Nature', 'icon': Icons.nature, 'color': Colors.green},
+    {
+      'title': 'Adventure',
+      'icon': Icons.terrain,
+      'color': Colors.orange,
+      'page': AdventurePage()
+    },
+    {
+      'title': 'Beach',
+      'icon': Icons.beach_access,
+      'color': Colors.blue,
+      'page': BeachPage()
+    },
+    {
+      'title': 'Cultural',
+      'icon': Icons.account_balance,
+      'color': Colors.purple,
+      'page': CulturalPage()
+    },
+    {
+      'title': 'Food',
+      'icon': Icons.restaurant,
+      'color': Colors.red,
+      'page': FoodPage()
+    },
+    {
+      'title': 'Nature',
+      'icon': Icons.nature,
+      'color': Colors.green,
+      'page': NaturePage()
+    },
   ];
 
   final List<Map<String, dynamic>> recommendedTrips = [
@@ -146,34 +174,42 @@ class _TripPageState extends State<TripPage> {
   Widget _buildCategoryItem(Map<String, dynamic> category) {
     final screenHeight = MediaQuery.of(context).size.height;
 
-    return Container(
-      width: screenHeight * 0.12,
-      margin: EdgeInsets.only(right: screenHeight * 0.015),
-      child: Column(
-        children: [
-          Container(
-            width: screenHeight * 0.08,
-            height: screenHeight * 0.08,
-            decoration: BoxDecoration(
-              color: category['color'].withOpacity(0.2),
-              borderRadius: BorderRadius.circular(20),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => category['page']),
+        );
+      },
+      child: Container(
+        width: screenHeight * 0.12,
+        margin: EdgeInsets.only(right: screenHeight * 0.015),
+        child: Column(
+          children: [
+            Container(
+              width: screenHeight * 0.08,
+              height: screenHeight * 0.08,
+              decoration: BoxDecoration(
+                color: category['color'].withOpacity(0.2),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Icon(
+                category['icon'],
+                size: screenHeight * 0.04,
+                color: category['color'],
+              ),
             ),
-            child: Icon(
-              category['icon'],
-              size: screenHeight * 0.04,
-              color: category['color'],
+            SizedBox(height: screenHeight * 0.008),
+            Text(
+              category['title'],
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: screenHeight * 0.015,
+              ),
             ),
-          ),
-          SizedBox(height: screenHeight * 0.008),
-          Text(
-            category['title'],
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: screenHeight * 0.015,
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -207,6 +243,7 @@ class _TripPageState extends State<TripPage> {
                 left: 0,
                 right: 0,
                 child: Container(
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(12),
@@ -221,7 +258,6 @@ class _TripPageState extends State<TripPage> {
                       ],
                     ),
                   ),
-                  padding: const EdgeInsets.all(12),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -245,8 +281,8 @@ class _TripPageState extends State<TripPage> {
                         style: TextStyle(
                           fontSize: 14,
                           color: Colors.white.withOpacity(0.9),
-                          shadows: [
-                            const Shadow(
+                          shadows: const [
+                            Shadow(
                               blurRadius: 6,
                               color: Colors.black,
                               offset: Offset(1, 1),
@@ -264,6 +300,7 @@ class _TripPageState extends State<TripPage> {
       ),
     );
   }
+
 
   Widget _buildSectionHeader(String title, VoidCallback? onViewAll) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -297,6 +334,7 @@ class _TripPageState extends State<TripPage> {
       ),
     );
   }
+
 
   void _showSmartTripDialog() {
     String? _selectedTripType;
@@ -464,7 +502,7 @@ class _TripPageState extends State<TripPage> {
                   SizedBox(
                     height: screenHeight * 0.12,
                     child: ListView.builder(
-                      padding: EdgeInsets.symmetric(horizontal: screenHeight * 0.02),
+                      padding: EdgeInsets.symmetric(horizontal: screenHeight * 0.03),
                       scrollDirection: Axis.horizontal,
                       itemCount: categories.length,
                       itemBuilder: (context, index) {
