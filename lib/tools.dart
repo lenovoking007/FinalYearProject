@@ -15,7 +15,9 @@ import 'package:travelmate/settingmenu.dart';
 import 'package:travelmate/spacesharing.dart';
 import 'package:travelmate/travelbuddy.dart';
 import 'package:travelmate/TripMainPage.dart';
-import 'package:travelmate/weather.dart';
+
+import 'ToolsCode/weather_app.dart';
+
 
 class Tools extends StatelessWidget {
   @override
@@ -324,7 +326,7 @@ final List<Tool> tools = [
     subtitle: 'Real-time updates',
     icon: Icons.cloud,
     iconColor: Colors.blue,
-    page: WeatherForecastPage(),
+    page: WeatherApp(),
   ),
   Tool(
     title: 'Travel Buddy',
