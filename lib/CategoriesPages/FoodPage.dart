@@ -107,13 +107,13 @@ class FoodPage extends StatelessWidget {
   List<Map<String, dynamic>> _getActivityItems(BuildContext context) {
     return [
       {
-        'title': 'Food Tours',
+        'title': 'Sea View Karachi',
         'description': 'Explore local culinary delights',
         'imagePath': 'assets/images/food_tour.jpg',
         'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
       },
       {
-        'title': 'Local Cuisine Discovery',
+        'title': 'Khanpur Dam',
         'description': 'Authentic food experiences',
         'imagePath': 'assets/images/local_cuisine.jpg',
         'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
