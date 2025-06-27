@@ -368,7 +368,7 @@ class _HomePageState extends State<HomePage> {
           Navigator.push(context, MaterialPageRoute(builder: (context) =>  LahorePage()));
         } else if (title == 'Islamabad') {
 
-          Navigator.push(context, MaterialPageRoute(builder: (context) =>  Islamabadpage()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) =>  IslamabadPage()));
 
 
 

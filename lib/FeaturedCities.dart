@@ -55,7 +55,7 @@ class FeaturedCitiesPage extends StatelessWidget {
                 imagePath: 'assets/images/sialkot1.jpg',
                 onTap: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Sialkotpage()),
+                  MaterialPageRoute(builder: (context) => SialkotPage()),
                 ),
               ),
               _buildCityCard(
