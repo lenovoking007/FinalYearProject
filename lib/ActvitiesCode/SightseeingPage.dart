@@ -20,6 +20,8 @@ class SightseeingTourPage extends StatelessWidget {
     'assets/images/sight/si7.jpg',
   ];
 
+  static const primaryColor = Color(0xFF0066CC);
+
   SightseeingTourPage({super.key});
 
   @override
@@ -28,7 +30,7 @@ class SightseeingTourPage extends StatelessWidget {
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.deepPurple,
+          backgroundColor: primaryColor,
           elevation: 0,
           iconTheme: const IconThemeData(color: Colors.white),
           title: const Text('Sightseeing Tour', style: TextStyle(color: Colors.white)),
@@ -72,7 +74,7 @@ class SightseeingTourPage extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 8),
             child: Text(
               'Must-Visit Spots',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.deepPurple),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: primaryColor),
             ),
           ),
           const SizedBox(height: 12),
@@ -134,7 +136,7 @@ class SightseeingTourPage extends StatelessWidget {
               child: Column(
                 children: tips.map((tip) {
                   return ListTile(
-                    leading: const Icon(Icons.check_circle, color: Colors.deepPurple),
+                    leading: const Icon(Icons.check_circle, color: primaryColor),
                     title: Text(tip),
                   );
                 }).toList(),
@@ -247,7 +249,7 @@ class SightseeingTourPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: primaryColor)),
             const SizedBox(height: 8),
             Text(description, style: const TextStyle(fontSize: 14, color: Colors.grey)),
           ],

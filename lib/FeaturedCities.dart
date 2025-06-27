@@ -105,7 +105,7 @@ class FeaturedCitiesPage extends StatelessWidget {
                 imagePath: 'assets/images/faislabad2.jpg',
                 onTap: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Faisalabadpage()),
+                  MaterialPageRoute(builder: (context) => FaisalabadPage()),
 
                 ),
               ),

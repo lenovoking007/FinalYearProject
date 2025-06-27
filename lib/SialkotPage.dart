@@ -919,7 +919,7 @@ class _SialkotPageState extends State<SialkotPage> {
       {
         "name": "Sports Goods Market",
         "details": "Specialized market for sports equipment and accessories",
-        "image": "assets/images/sialkot/sialkotcl4.jpg"
+        "image": "assets/images/sialkot/sialkotcl1.jpg"
       },
     ];
 

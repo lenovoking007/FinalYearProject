@@ -20,6 +20,8 @@ class DesertSafariPage extends StatelessWidget {
     'assets/images/desert/ds1.jpg',
   ];
 
+  static const primaryColor = Color(0xFF0066CC);
+
   DesertSafariPage({super.key});
 
   @override
@@ -28,7 +30,7 @@ class DesertSafariPage extends StatelessWidget {
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: const Color(0xFFFD7C00),
+          backgroundColor: primaryColor,
           elevation: 0,
           automaticallyImplyLeading: true,
           iconTheme: const IconThemeData(color: Colors.white),
@@ -80,7 +82,7 @@ class DesertSafariPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFFFD7C00),
+                color: primaryColor,
               ),
             ),
           ),
@@ -110,21 +112,21 @@ class DesertSafariPage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: const [
                 Text(
                   'Top Desert Safari Locations',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFFFD7C00),
+                    color: primaryColor,
                   ),
                 ),
-                const SizedBox(height: 12),
-                _buildNaturalSpotsGrid(),
-                const SizedBox(height: 24),
+                SizedBox(height: 12),
               ],
             ),
           ),
+          _buildNaturalSpotsGrid(),
+          const SizedBox(height: 24),
         ],
       ),
     );
@@ -229,8 +231,8 @@ class DesertSafariPage extends StatelessWidget {
           return _buildSpotCard(
             image: spots[index]['image'],
             title: spots[index]['name'],
-            subtitle: spots[index]['type']??'',
-            details: spots[index]['spots']??'',
+            subtitle: spots[index]['type'] ?? '',
+            details: spots[index]['spots'] ?? '',
           );
         },
       ),
@@ -261,7 +263,7 @@ class DesertSafariPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFFFD7C00),
+                color: primaryColor,
               ),
             ),
             const SizedBox(height: 12),
@@ -270,7 +272,7 @@ class DesertSafariPage extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Icon(Icons.brightness_1, size: 8, color: Color(0xFFFD7C00)),
+                  const Icon(Icons.brightness_1, size: 8, color: primaryColor),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
@@ -335,7 +337,7 @@ class DesertSafariPage extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFFFD7C00),
+                color: primaryColor,
               ),
             ),
             const SizedBox(height: 12),

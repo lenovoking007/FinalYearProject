@@ -8,6 +8,8 @@ import 'package:travelmate/FamousTouristPlacesCode/NeelumValleyPage.dart';
 import 'package:travelmate/FamousTouristPlacesCode/SaifUlMalookPage.dart';
 import 'package:travelmate/FeaturedCities/MurreePage.dart';
 import 'package:travelmate/HyderabadPage.dart';
+import 'package:travelmate/Muzafarabad.dart';
+import 'package:travelmate/SialkotPage.dart';
 import 'package:travelmate/chat.dart';
 import 'package:travelmate/homepage.dart';
 import 'package:travelmate/settingmenu.dart';
@@ -79,7 +81,7 @@ class _TripPageState extends State<TripPage> {
       'description': 'The Twin City',
       'image': 'assets/images/raw/ra1.jpg',
       'image': 'assets/images/raw/ra4.jpg',
-      'page': RawalpindiPage()
+      'page': SialkotPage()
     },
     {
       'title': 'Peshawar',
@@ -91,7 +93,7 @@ class _TripPageState extends State<TripPage> {
       'title': 'Muzafarabad',
       'description': 'The City of Beauty',
       'image': 'assets/images/hyderabad/hyderabad03.png',
-      'page': Hyderabadpage()
+      'page': MuzaffarabadPage()
     },
     {
       'title': 'Murree',

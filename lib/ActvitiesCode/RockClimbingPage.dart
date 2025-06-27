@@ -6,28 +6,31 @@ class RockClimbingPage extends StatelessWidget {
     'assets/images/rock/ro1.jpg',
     'assets/images/rock/ro2.jpg',
     'assets/images/rock/ro3.jpg',
-
   ];
+
   final List<String> climbingSpotsImages = [
     'assets/images/rock/ro1.jpg',
-  'assets/images/rock/ro2.jpg',
-  'assets/images/rock/ro3.jpg',
+    'assets/images/rock/ro2.jpg',
+    'assets/images/rock/ro3.jpg',
   ];
+
   final List<String> safetyImages = [
     'assets/images/rock/rs3.jpg',
     'assets/images/rock/rs1.jpg',
     'assets/images/rock/rs2.jpg',
   ];
 
+  static const primaryColor = Color(0xFF0066CC);
+
   RockClimbingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 4,
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: const Color(0xFF228B22),
+          backgroundColor: primaryColor,
           elevation: 0,
           automaticallyImplyLeading: true,
           iconTheme: const IconThemeData(color: Colors.white),
@@ -35,12 +38,12 @@ class RockClimbingPage extends StatelessWidget {
             'Rock Climbing',
             style: TextStyle(color: Colors.white),
           ),
-          bottom: TabBar(
+          bottom: const TabBar(
             labelColor: Colors.white,
-            unselectedLabelColor: Colors.white.withOpacity(0.7),
+            unselectedLabelColor: Colors.white70,
             indicatorColor: Colors.white,
             indicatorWeight: 3,
-            tabs: const [
+            tabs: [
               Tab(icon: Icon(Icons.explore), text: 'Overview'),
               Tab(icon: Icon(Icons.location_on), text: 'Climbing Spots'),
               Tab(icon: Icon(Icons.security), text: 'Safety'),
@@ -79,7 +82,7 @@ class RockClimbingPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF228B22),
+                color: primaryColor,
               ),
             ),
           ),
@@ -138,7 +141,7 @@ class RockClimbingPage extends StatelessWidget {
       {
         'name': 'Margalla Hills',
         'location': 'Islamabad, Pakistan',
-        'image':  'assets/images/rock/ro1.jpg',
+        'image': 'assets/images/rock/ro1.jpg',
         'difficulty': 'Beginner to Intermediate',
       },
       {
@@ -150,16 +153,15 @@ class RockClimbingPage extends StatelessWidget {
       {
         'name': 'Passu Cones',
         'location': 'Hunza Valley, Pakistan',
-        'image':  'assets/images/rock/ro3.jpg',
+        'image': 'assets/images/rock/ro3.jpg',
         'difficulty': 'Intermediate to Advanced',
       },
       {
         'name': 'Shimshal Valley',
         'location': 'Gilgit-Baltistan, Pakistan',
-        'image':  'assets/images/rock/ro4.jpg',
+        'image': 'assets/images/rock/ro4.jpg',
         'difficulty': 'Challenging',
       },
-
     ];
 
     return GridView.builder(
@@ -182,8 +184,6 @@ class RockClimbingPage extends StatelessWidget {
       },
     );
   }
-
-
 
   Widget _buildSafetyTipsList() {
     final List<String> tips = [
@@ -211,7 +211,7 @@ class RockClimbingPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF228B22),
+                color: primaryColor,
               ),
             ),
             const SizedBox(height: 12),
@@ -219,7 +219,7 @@ class RockClimbingPage extends StatelessWidget {
               children: tips
                   .map((tip) => ListTile(
                 contentPadding: EdgeInsets.zero,
-                leading: const Icon(Icons.check_circle, color: Color(0xFF228B22)),
+                leading: const Icon(Icons.check_circle, color: primaryColor),
                 title: Text(tip),
               ))
                   .toList(),
@@ -277,7 +277,6 @@ class RockClimbingPage extends StatelessWidget {
                     fontSize: 14,
                   ),
                 ),
-                const SizedBox(height: 4),
               ],
             ),
           ),
@@ -300,7 +299,11 @@ class RockClimbingPage extends StatelessWidget {
           children: [
             Text(
               title,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: primaryColor,
+              ),
             ),
             const SizedBox(height: 8),
             Text(

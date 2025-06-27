@@ -20,6 +20,8 @@ class HotAirBalloonPage extends StatelessWidget {
     'assets/images/ballon/as1.jpg',
   ];
 
+  static const primaryColor = Color(0xFFFF5733);
+
   HotAirBalloonPage({super.key});
 
   @override
@@ -28,7 +30,7 @@ class HotAirBalloonPage extends StatelessWidget {
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: const Color(0xFFFF5733),
+          backgroundColor: primaryColor,
           elevation: 0,
           automaticallyImplyLeading: true,
           iconTheme: const IconThemeData(color: Colors.white),
@@ -36,12 +38,12 @@ class HotAirBalloonPage extends StatelessWidget {
             'Hot Air Balloon Challenge',
             style: TextStyle(color: Colors.white),
           ),
-          bottom: TabBar(
+          bottom: const TabBar(
             labelColor: Colors.white,
-            unselectedLabelColor: Colors.white.withOpacity(0.7),
+            unselectedLabelColor: Colors.white70,
             indicatorColor: Colors.white,
             indicatorWeight: 3,
-            tabs: const [
+            tabs: [
               Tab(icon: Icon(Icons.air), text: 'Overview'),
               Tab(icon: Icon(Icons.nature), text: 'Natural Spots'),
               Tab(icon: Icon(Icons.security), text: 'Safety'),
@@ -80,7 +82,7 @@ class HotAirBalloonPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFFFF5733),
+                color: primaryColor,
               ),
             ),
           ),
@@ -106,25 +108,20 @@ class HotAirBalloonPage extends StatelessWidget {
             'Explore some of the most scenic hot air ballooning destinations across the world, where the skies are clear and the views are unforgettable.',
           ),
           const SizedBox(height: 24),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Top Ballooning Locations',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFFFF5733),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                _buildNaturalSpotsGrid(),
-                const SizedBox(height: 24),
-              ],
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8),
+            child: Text(
+              'Top Ballooning Locations',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: primaryColor,
+              ),
             ),
           ),
+          const SizedBox(height: 12),
+          _buildNaturalSpotsGrid(),
+          const SizedBox(height: 24),
         ],
       ),
     );
@@ -177,7 +174,6 @@ class HotAirBalloonPage extends StatelessWidget {
         'spots': 'Manora Island',
         'image': 'assets/images/ballon/ao4.jpg',
       },
-
     ];
 
     return GridView.builder(
@@ -262,7 +258,7 @@ class HotAirBalloonPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFFFF5733),
+                color: primaryColor,
               ),
             ),
             const SizedBox(height: 12),
@@ -271,7 +267,7 @@ class HotAirBalloonPage extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Icon(Icons.brightness_1, size: 8, color: Color(0xFFFF5733)),
+                  const Icon(Icons.brightness_1, size: 8, color: primaryColor),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
@@ -307,7 +303,7 @@ class HotAirBalloonPage extends StatelessWidget {
                 color: Colors.grey.withOpacity(0.5),
                 spreadRadius: 2,
                 blurRadius: 5,
-                offset: Offset(0, 3),
+                offset: const Offset(0, 3),
               ),
             ],
           ),
@@ -336,7 +332,7 @@ class HotAirBalloonPage extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFFFF5733),
+                color: primaryColor,
               ),
             ),
             const SizedBox(height: 12),
@@ -397,7 +393,6 @@ class HotAirBalloonPage extends StatelessWidget {
                     fontSize: 14,
                   ),
                 ),
-                const SizedBox(height: 4),
               ],
             ),
           ),

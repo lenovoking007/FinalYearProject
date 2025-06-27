@@ -1,32 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 class MountainBikingPage extends StatelessWidget {
   final List<String> overviewImages = [
     'assets/images/biking/mo1.jpg',
     'assets/images/biking/mo2.jpg',
     'assets/images/biking/mo3.jpg',
   ];
+
   final List<String> locationsImages = [
     'assets/images/biking/mo1.jpg',
     'assets/images/biking/mo2.jpg',
     'assets/images/biking/mo3.jpg',
   ];
+
   final List<String> safetyImages = [
     'assets/images/biking/ms1.jpg',
     'assets/images/biking/ms2.jpg',
     'assets/images/biking/ms3.jpg',
   ];
 
+  static const primaryColor = Color(0xFF8B4513);
+
   MountainBikingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 4,
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: const Color(0xFF8B4513),
+          backgroundColor: primaryColor,
           elevation: 0,
           automaticallyImplyLeading: true,
           iconTheme: const IconThemeData(color: Colors.white),
@@ -34,12 +38,12 @@ class MountainBikingPage extends StatelessWidget {
             'Mountain Biking',
             style: TextStyle(color: Colors.white),
           ),
-          bottom: TabBar(
+          bottom: const TabBar(
             labelColor: Colors.white,
-            unselectedLabelColor: Colors.white.withOpacity(0.7),
+            unselectedLabelColor: Colors.white70,
             indicatorColor: Colors.white,
             indicatorWeight: 3,
-            tabs: const [
+            tabs: [
               Tab(icon: Icon(Icons.explore), text: 'Overview'),
               Tab(icon: Icon(Icons.location_on), text: 'Locations'),
               Tab(icon: Icon(Icons.security), text: 'Safety'),
@@ -78,7 +82,7 @@ class MountainBikingPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF8B4513),
+                color: primaryColor,
               ),
             ),
           ),
@@ -112,6 +116,16 @@ class MountainBikingPage extends StatelessWidget {
   }
 
   Widget _buildSafetyTab() {
+    final List<String> tips = [
+      'Wear a helmet at all times.',
+      'Wear protective gear like gloves and pads.',
+      'Make sure your bike is in good condition.',
+      'Stay hydrated during your ride.',
+      'Always follow the trail signs and markings.',
+      'Ride within your skill level.',
+      'Avoid riding in bad weather conditions.',
+    ];
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -125,7 +139,40 @@ class MountainBikingPage extends StatelessWidget {
             'Safety should always be the priority when mountain biking. These tips help you stay safe while enjoying the sport.',
           ),
           const SizedBox(height: 24),
-          _buildSafetyTipsList(),
+          Card(
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+              side: BorderSide(color: Colors.grey.shade200),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  const Text(
+                    'Mountain Biking Safety Tips',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: primaryColor,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Column(
+                    children: tips
+                        .map(
+                          (tip) => ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        leading: const Icon(Icons.check_circle, color: primaryColor),
+                        title: Text(tip),
+                      ),
+                    )
+                        .toList(),
+                  ),
+                ],
+              ),
+            ),
+          ),
           const SizedBox(height: 24),
         ],
       ),
@@ -158,7 +205,6 @@ class MountainBikingPage extends StatelessWidget {
         'image': 'assets/images/biking/mo4.jpg',
         'difficulty': '',
       },
-
     ];
 
     return GridView.builder(
@@ -179,52 +225,6 @@ class MountainBikingPage extends StatelessWidget {
           details: locations[index]['difficulty'],
         );
       },
-    );
-  }
-
-
-  Widget _buildSafetyTipsList() {
-    final List<String> tips = [
-      'Wear a helmet at all times.',
-      'Wear protective gear like gloves and pads.',
-      'Make sure your bike is in good condition.',
-      'Stay hydrated during your ride.',
-      'Always follow the trail signs and markings.',
-      'Ride within your skill level.',
-      'Avoid riding in bad weather conditions.',
-    ];
-
-    return Card(
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side: BorderSide(color: Colors.grey.shade200),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            const Text(
-              'Mountain Biking Safety Tips',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF8B4513),
-              ),
-            ),
-            const SizedBox(height: 12),
-            Column(
-              children: tips
-                  .map((tip) => ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: const Icon(Icons.check_circle, color: Color(0xFF8B4513)),
-                title: Text(tip),
-              ))
-                  .toList(),
-            ),
-          ],
-        ),
-      ),
     );
   }
 
@@ -275,7 +275,6 @@ class MountainBikingPage extends StatelessWidget {
                     fontSize: 14,
                   ),
                 ),
-                const SizedBox(height: 4),
               ],
             ),
           ),
@@ -298,12 +297,16 @@ class MountainBikingPage extends StatelessWidget {
           children: [
             Text(
               title,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: primaryColor,
+              ),
             ),
             const SizedBox(height: 8),
             Text(
               description,
-              style: const TextStyle(fontSize: 14, color: Colors.grey),
+              style: const TextStyle(fontSize: 14),
             ),
           ],
         ),
@@ -323,10 +326,13 @@ class MountainBikingPage extends StatelessWidget {
       items: imagePaths.map((imagePath) {
         return Builder(
           builder: (BuildContext context) {
-            return Image.asset(
-              imagePath,
-              fit: BoxFit.cover,
-              width: double.infinity,
+            return ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.asset(
+                imagePath,
+                fit: BoxFit.cover,
+                width: double.infinity,
+              ),
             );
           },
         );
@@ -334,4 +340,3 @@ class MountainBikingPage extends StatelessWidget {
     );
   }
 }
-

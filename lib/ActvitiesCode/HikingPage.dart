@@ -20,6 +20,8 @@ class HikingPage extends StatelessWidget {
     'assets/images/hiking/hi7.jpg',
   ];
 
+  static const primaryColor = Color(0xFF0066CC);
+
   HikingPage({super.key});
 
   @override
@@ -28,19 +30,19 @@ class HikingPage extends StatelessWidget {
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: const Color(0xFF228B22),
+          backgroundColor: primaryColor,
           elevation: 0,
           iconTheme: const IconThemeData(color: Colors.white),
           title: const Text(
             'Hiking',
             style: TextStyle(color: Colors.white),
           ),
-          bottom: TabBar(
+          bottom: const TabBar(
             labelColor: Colors.white,
             unselectedLabelColor: Colors.white70,
             indicatorColor: Colors.white,
             indicatorWeight: 3,
-            tabs: const [
+            tabs: [
               Tab(icon: Icon(Icons.explore), text: 'Overview'),
               Tab(icon: Icon(Icons.terrain), text: 'Hiking Spots'),
               Tab(icon: Icon(Icons.security), text: 'Safety'),
@@ -79,7 +81,7 @@ class HikingPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF228B22),
+                color: primaryColor,
               ),
             ),
           ),
@@ -208,7 +210,7 @@ class HikingPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF228B22),
+                color: primaryColor,
               ),
             ),
             const SizedBox(height: 12),
@@ -216,7 +218,7 @@ class HikingPage extends StatelessWidget {
               children: tips
                   .map((tip) => ListTile(
                 contentPadding: EdgeInsets.zero,
-                leading: const Icon(Icons.check_circle, color: Color(0xFF228B22)),
+                leading: const Icon(Icons.check_circle, color: primaryColor),
                 title: Text(tip),
               ))
                   .toList(),
@@ -296,7 +298,11 @@ class HikingPage extends StatelessWidget {
           children: [
             Text(
               title,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: primaryColor,
+              ),
             ),
             const SizedBox(height: 8),
             Text(
