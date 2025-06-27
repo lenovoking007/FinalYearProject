@@ -3,7 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:travelmate/tripprogresspage.dart';
-import 'package:travelmate/city_planner.dart'; // Add this import
+import 'package:travelmate/city_planner.dart';
 
 class MuzaffarabadPage extends StatefulWidget {
   const MuzaffarabadPage({super.key});
@@ -14,28 +14,29 @@ class MuzaffarabadPage extends StatefulWidget {
 
 class _MuzaffarabadPageState extends State<MuzaffarabadPage> {
   final List<String> overviewImages = [
-    'assets/images/Muzaffarabad/muzaffarabad1.jpg',
-    'assets/images/Muzaffarabad/muzaffarabad2.jpg',
-    'assets/images/Muzaffarabad/muzaffarabad3.jpg',
+    'assets/images/muzaffarabad/muzaffarabad1.jpg',
+    'assets/images/muzaffarabad/muzaffarabad2.jpg',
+    'assets/images/muzaffarabad/muzaffarabad3.jpg',
   ];
   final List<String> clothesImages = [
-    'assets/images/Muzaffarabad/cl1.jpg',
-    'assets/images/Muzaffarabad/cl2.jpg',
-    'assets/images/Muzaffarabad/cl3.jpg',
-    'assets/images/Muzaffarabad/cl4.jpg',
+    'assets/images/Lahore/cl1.jpg',
+    'assets/images/Lahore/cl2.jpg',
+    'assets/images/Lahore/cl3.jpg',
+    'assets/images/Lahore/cl4.jpg',
   ];
   final List<String> foodImages = [
-    'assets/images/Muzaffarabad/food1.jpg',
-    'assets/images/Muzaffarabad/food2.jpeg',
-    'assets/images/Muzaffarabad/food3.jpg',
-    'assets/images/Muzaffarabad/food4.jpg',
+    'assets/images/Lahore/food1.jpg',
+    'assets/images/Lahore/food2.jpeg',
+    'assets/images/Lahore/food3.jpg',
+    'assets/images/Lahore/food4.jpg',
   ];
   final List<String> festivalImages = [
-    'assets/images/Muzaffarabad/f1.jpg',
-    'assets/images/Muzaffarabad/f2.jpg',
-    'assets/images/Muzaffarabad/f3.jpg',
-    'assets/images/Muzaffarabad/f4.jpg',
+    'assets/images/muzaffarabad/muzaffarabadfes1.jpg',
+    'assets/images/muzaffarabad/muzaffarabadfes2.jpg',
+    'assets/images/muzaffarabad/muzaffarabadfes3.jpg',
+    'assets/images/muzaffarabad/muzaffarabadfes4.jpg',
   ];
+
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final TextEditingController _searchController = TextEditingController();
@@ -45,23 +46,6 @@ class _MuzaffarabadPageState extends State<MuzaffarabadPage> {
   @override
   void initState() {
     super.initState();
-    _addCityToCollection();
-  }
-
-  Future<void> _addCityToCollection() async {
-    try {
-      final doc = await _firestore.collection('cities').doc('muzaffarabad').get();
-      if (!doc.exists) {
-        await _firestore.collection('cities').doc('muzaffarabad').set({
-          'name': 'Muzaffarabad',
-          'createdAt': FieldValue.serverTimestamp(),
-        });
-      }
-    } catch (e) {
-      setState(() {
-        _errorMessage = 'Failed to initialize city data: ${e.toString()}';
-      });
-    }
   }
 
   Future<void> _saveTripPlanToFirebase(Map<String, dynamic> tripPlan) async {
@@ -119,8 +103,7 @@ class _MuzaffarabadPageState extends State<MuzaffarabadPage> {
       if (num == null) {
         return 'Please enter a valid number';
       }
-      if (num < 5000)
-      {
+      if (num < 5000) {
         return 'Minimum trip budget is 5000 PKR.';
       }
       if (num > 9999999) {
@@ -796,7 +779,6 @@ class _MuzaffarabadPageState extends State<MuzaffarabadPage> {
             ),
           ],
         ),
-
       ),
     );
   }
@@ -804,27 +786,26 @@ class _MuzaffarabadPageState extends State<MuzaffarabadPage> {
   Widget _buildOverviewTab(BuildContext context) {
     final List<Map<String, dynamic>> attractions = [
       {
-        'name': 'Red Fort Muzaffarabad',
-        'address': 'Red Fort Rd, Muzaffarabad, Azad Jammu and Kashmir, Pakistan',
-        'image': 'assets/images/Muzaffarabad/muzaffarabad1.jpg',
+        "name": "Red Fort",
+        "address": "Muzaffarabad City",
+        "image": "assets/images/muzaffarabad/muzaffarabad1.jpg"
       },
       {
-        'name': 'Pir Chinasi',
-        'address': 'Pir Chinasi, Muzaffarabad, Azad Jammu and Kashmir, Pakistan',
-        'image': 'assets/images/Muzaffarabad/muzaffarabad2.jpg',
+        "name": "Pir Chinasi",
+        "address": "Muzaffarabad Hills",
+        "image": "assets/images/muzaffarabad/muzaffarabad2.jpg"
       },
       {
-        'name': 'Neelum Valley',
-        'address': 'Neelum Valley, Muzaffarabad, Azad Jammu and Kashmir, Pakistan',
-        'image': 'assets/images/Muzaffarabad/muzaffarabad3.jpg',
+        "name": "Neelum Valley",
+        "address": "Muzaffarabad District",
+        "image": "assets/images/muzaffarabad/muzaffarabad3.jpg"
       },
       {
-        'name': 'Mangla Dam',
-        'address': 'Mangla Dam, Muzaffarabad, Azad Jammu and Kashmir, Pakistan',
-        'image': 'assets/images/Muzaffarabad/food1.jpg',
-      },
+        "name": "Jhelum Valley",
+        "address": "Muzaffarabad",
+        "image": "assets/images/muzaffarabad/muzaffarabad4.jpg"
+      }
     ];
-
     final filteredAttractions = _searchQuery.isEmpty
         ? attractions
         : attractions.where((attraction) =>
@@ -858,9 +839,10 @@ class _MuzaffarabadPageState extends State<MuzaffarabadPage> {
           _buildInfoCard(
             title: 'About Muzaffarabad',
             description:
-            'Muzaffarabad, the capital of Azad Jammu and Kashmir, is a picturesque city '
-                'nestled in the Himalayas at the confluence of the Jhelum and Neelum rivers. '
-                'Known for its stunning landscapes, historical sites, and warm hospitality.',
+            'Muzaffarabad, the capital of Azad Kashmir, is a picturesque city surrounded by mountains '
+                'and situated at the confluence of the Jhelum and Neelum rivers. Known for its stunning '
+                'natural beauty, the city offers breathtaking views, historical landmarks, and access to '
+                'the famous Neelum Valley.',
           ),
           const SizedBox(height: 24),
           Padding(
@@ -919,24 +901,24 @@ class _MuzaffarabadPageState extends State<MuzaffarabadPage> {
   Widget _buildShoppingTab() {
     final List<Map<String, dynamic>> shoppingSpots = [
       {
-        'name': 'Muzaffarabad Bazaar',
-        'address': 'Main Bazaar, Muzaffarabad, Azad Jammu and Kashmir, Pakistan',
-        'image': 'assets/images/Muzaffarabad/cl1.jpg',
+        "name": "Muzaffarabad Bazaar",
+        "details": "Main market offering Kashmiri shawls, handicrafts, and dry fruits",
+        "image": "assets/images/muzaffarabad/muzaffarabadcl1.jpg"
       },
       {
-        'name': 'Neelum View Market',
-        'address': 'Neelum View Market, Muzaffarabad, Azad Jammu and Kashmir, Pakistan',
-        'image': 'assets/images/Muzaffarabad/cl2.jpg',
+        "name": "Neelum Handicrafts",
+        "details": "Specialized in traditional Kashmiri woodwork and woolen products",
+        "image": "assets/images/muzaffarabad/muzaffarabadcl2.jpg"
       },
       {
-        'name': 'Kashmir Art Emporium',
-        'address': 'Kashmir Art Emporium, Muzaffarabad, Azad Jammu and Kashmir, Pakistan',
-        'image': 'assets/images/Muzaffarabad/cl3.jpg',
+        "name": "Jhelum Market",
+        "details": "Popular for local handicrafts, jewelry, and Kashmiri tea sets",
+        "image": "assets/images/muzaffarabad/muzaffarabadcl3.jpg"
       },
       {
-        'name': 'Jhelum Valley Handicrafts',
-        'address': 'Jhelum Valley Handicrafts, Muzaffarabad, Azad Jammu and Kashmir, Pakistan',
-        'image': 'assets/images/Muzaffarabad/cl4.jpg',
+        "name": "Kashmir Shawl Center",
+        "details": "Specialized market for authentic Pashmina and Kashmiri shawls",
+        "image": "assets/images/muzaffarabad/muzaffarabadcl1.jpg"
       },
     ];
 
@@ -944,7 +926,7 @@ class _MuzaffarabadPageState extends State<MuzaffarabadPage> {
         ? shoppingSpots
         : shoppingSpots.where((spot) =>
     spot['name'].toLowerCase().contains(_searchQuery) ||
-        spot['address'].toLowerCase().contains(_searchQuery)).toList();
+        spot['details'].toLowerCase().contains(_searchQuery)).toList();
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
@@ -966,11 +948,11 @@ class _MuzaffarabadPageState extends State<MuzaffarabadPage> {
           ),
           const SizedBox(height: 16),
           _buildInfoCard(
-            title: 'Traditional Attire',
+            title: 'Shopping in Muzaffarabad',
             description:
-            'Muzaffarabad offers a variety of traditional Kashmiri clothing including '
-                'Pheran (traditional cloak), woolen shawls, and embroidered caps. The markets '
-                'are famous for their handwoven carpets and handcrafted jewelry.',
+            'Muzaffarabad offers unique shopping opportunities with its traditional Kashmiri '
+                'products including Pashmina shawls, handwoven carpets, and exquisite woodwork. '
+                'The local bazaars are filled with colorful handicrafts and delicious dry fruits.',
           ),
           const SizedBox(height: 24),
           Padding(
@@ -1006,32 +988,32 @@ class _MuzaffarabadPageState extends State<MuzaffarabadPage> {
   Widget _buildFoodTab() {
     final List<Map<String, dynamic>> foodLocations = [
       {
-        'name': 'Neelum View Restaurant',
-        'address': 'Neelum View Point, Muzaffarabad, Azad Jammu and Kashmir, Pakistan',
-        'image': 'assets/images/Muzaffarabad/food1.jpg',
+        "name": "Kashmir Food Street",
+        "details": "Famous for traditional Kashmiri dishes, including Rogan Josh and Gushtaba",
+        "image": "assets/images/muzaffarabad/muzaffarabadfood1.jpg"
       },
       {
-        'name': 'Kashmir Food Street',
-        'address': 'Main Bazaar, Muzaffarabad, Azad Jammu and Kashmir, Pakistan',
-        'image': 'assets/images/Muzaffarabad/food2.jpeg',
+        "name": "Neelum View Restaurant",
+        "details": "Known for local delicacies with a panoramic view of the valley",
+        "image": "assets/images/muzaffarabad/muzaffarabadfood2.jpg"
       },
       {
-        'name': 'Pir Chinasi Dhaba',
-        'address': 'Pir Chinasi Road, Muzaffarabad, Azad Jammu and Kashmir, Pakistan',
-        'image': 'assets/images/Muzaffarabad/food3.jpg',
+        "name": "Jhelum Riverside Cafe",
+        "details": "Offers a variety of local and continental dishes by the river",
+        "image": "assets/images/muzaffarabad/muzaffarabadfood3.jpg"
       },
       {
-        'name': 'Jhelum Riverside Cafe',
-        'address': 'Jhelum River Bank, Muzaffarabad, Azad Jammu and Kashmir, Pakistan',
-        'image': 'assets/images/Muzaffarabad/food4.jpg',
-      },
+        "name": "Pir Chinasi Dhaba",
+        "details": "Specializes in traditional Kashmiri breads and kebabs",
+        "image": "assets/images/muzaffarabad/muzaffarabadfood4.jpg"
+      }
     ];
 
     final filteredFoodLocations = _searchQuery.isEmpty
         ? foodLocations
         : foodLocations.where((location) =>
     location['name'].toLowerCase().contains(_searchQuery) ||
-        location['address'].toLowerCase().contains(_searchQuery)).toList();
+        location['details'].toLowerCase().contains(_searchQuery)).toList();
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
@@ -1053,11 +1035,11 @@ class _MuzaffarabadPageState extends State<MuzaffarabadPage> {
           ),
           const SizedBox(height: 16),
           _buildInfoCard(
-            title: 'Kashmiri Cuisine',
+            title: 'Muzaffarabad Cuisine',
             description:
-            'Muzaffarabad offers delicious Kashmiri cuisine including Rogan Josh, Yakhni, '
-                'Gushtaba, and various types of pulao. The city is also known for its traditional '
-                'Kashmiri tea (Kahwa) and fresh trout fish from the Neelum River.',
+            'Muzaffarabad offers a rich culinary experience, known for its delicious Kashmiri cuisine '
+                'including Rogan Josh, Yakhni, and various kebabs. The city is also famous for its '
+                'traditional Kashmiri tea (Kehwa) and fresh trout fish from mountain streams.',
           ),
           const SizedBox(height: 24),
           Padding(
@@ -1093,32 +1075,32 @@ class _MuzaffarabadPageState extends State<MuzaffarabadPage> {
   Widget _buildFestivalTab() {
     final List<Map<String, dynamic>> festivalLocations = [
       {
-        'name': 'Kashmir Cultural Festival',
-        'address': 'Various locations across Muzaffarabad, Azad Jammu and Kashmir, Pakistan',
-        'image': 'assets/images/Muzaffarabad/f1.jpg',
+        "name": "Kashmir Day Celebrations",
+        "details": "Annual event celebrating Kashmiri culture with music and traditional dances",
+        "image": "assets/images/muzaffarabad/muzaffarabadfes1.jpg"
       },
       {
-        'name': 'Neelum Valley Festival',
-        'address': 'Neelum Valley, Muzaffarabad, Azad Jammu and Kashmir, Pakistan',
-        'image': 'assets/images/Muzaffarabad/f2.jpg',
+        "name": "Neelum Festival",
+        "details": "Cultural festival showcasing Kashmiri heritage and handicrafts",
+        "image": "assets/images/muzaffarabad/muzaffarabadfes2.jpg"
       },
       {
-        'name': 'Pir Chinasi Urs',
-        'address': 'Pir Chinasi, Muzaffarabad, Azad Jammu and Kashmir, Pakistan',
-        'image': 'assets/images/Muzaffarabad/f3.jpg',
+        "name": "Jashn-e-Baharan",
+        "details": "Spring festival with flower shows and cultural performances",
+        "image": "assets/images/muzaffarabad/muzaffarabadfes4.jpg"
       },
       {
-        'name': 'Spring Blossom Festival',
-        'address': 'Various locations across Muzaffarabad, Azad Jammu and Kashmir, Pakistan',
-        'image': 'assets/images/Muzaffarabad/f4.jpg',
-      },
+        "name": "Muzaffarabad Food Festival",
+        "details": "Celebration of Kashmiri cuisine with food stalls and cooking competitions",
+        "image": "assets/images/muzaffarabad/muzaffarabadfes3.jpg"
+      }
     ];
 
     final filteredFestivalLocations = _searchQuery.isEmpty
         ? festivalLocations
         : festivalLocations.where((location) =>
     location['name'].toLowerCase().contains(_searchQuery) ||
-        location['address'].toLowerCase().contains(_searchQuery)).toList();
+        location['details'].toLowerCase().contains(_searchQuery)).toList();
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
@@ -1140,11 +1122,11 @@ class _MuzaffarabadPageState extends State<MuzaffarabadPage> {
           ),
           const SizedBox(height: 16),
           _buildInfoCard(
-            title: 'Cultural Festivals',
-            description:
-            'Muzaffarabad hosts vibrant festivals that celebrate Kashmiri culture, traditions, '
-                'and natural beauty. These include spring festivals, cultural shows, and religious '
-                'gatherings that showcase the region\'s rich heritage.',
+              title: 'Cultural Festivals',
+              description:
+              "Muzaffarabad hosts a variety of cultural festivals celebrating Kashmiri heritage, "
+                  "including traditional music performances, dance shows, and craft exhibitions "
+                  "throughout the year."
           ),
           const SizedBox(height: 24),
           Padding(
@@ -1227,12 +1209,12 @@ class _MuzaffarabadPageState extends State<MuzaffarabadPage> {
 
         final List<QueryDocumentSnapshot> reviewDocs = snapshot.data?.docs ?? [];
         final List<Map<String, dynamic>> firestoreReviews = reviewDocs.map((doc) {
-          final data = doc.data() as Map<String, dynamic>;
+          final data = doc.data() as Map<String, dynamic>? ?? {};
           return {
-            'name': data['name'] ?? 'Anonymous',
-            'rating': data['rating'] ?? 0,
-            'review': data['review'] ?? '',
-            'imageUrl': 'assets/images/Muzaffarabad/u${(doc.hashCode % 3) + 1}.png',
+            'name': data['name'] as String? ?? 'Anonymous',
+            'rating': (data['rating'] as int?) ?? 0,
+            'review': data['review'] as String? ?? '',
+            'imageUrl': 'assets/images/Lahore/u${(doc.hashCode % 3) + 1}.png',
             'date': data['timestamp'] != null
                 ? _formatReviewDate(data['timestamp'].toDate())
                 : 'Recently',
@@ -1241,19 +1223,17 @@ class _MuzaffarabadPageState extends State<MuzaffarabadPage> {
 
         final List<Map<String, dynamic>> localReviews = [
           {
-            'name': 'Travel Enthusiast',
+            'name': 'Nature Lover',
             'rating': 5,
-            'review': 'Muzaffarabad is a breathtaking city with stunning landscapes. '
-                'The people are warm and the food is delicious. A must-visit destination!',
-            'imageUrl': 'assets/images/Muzaffarabad/u1.png',
+            'review': 'Muzaffarabad is breathtakingly beautiful with its mountains and rivers. The people are warm and the food is delicious!',
+            'imageUrl': 'assets/images/Lahore/u1.png',
             'date': '2 months ago'
           },
           {
-            'name': 'Nature Lover',
+            'name': 'Adventure Seeker',
             'rating': 4,
-            'review': 'The natural beauty of Muzaffarabad is unmatched. '
-                'Neelum Valley and Pir Chinasi offer spectacular views.',
-            'imageUrl': 'assets/images/Muzaffarabad/u2.png',
+            'review': 'The trekking opportunities around Muzaffarabad are amazing. The views from Pir Chinasi are worth the hike!',
+            'imageUrl': 'assets/images/Lahore/u2.png',
             'date': '1 month ago'
           }
         ];
@@ -1505,7 +1485,7 @@ class _MuzaffarabadPageState extends State<MuzaffarabadPage> {
                           const SizedBox(height: 6),
                           Expanded(
                             child: Text(
-                              shoppingSpots[index]['address'],
+                              shoppingSpots[index]['details'],
                               style: const TextStyle(
                                 fontSize: 12,
                                 color: Colors.grey,
@@ -1577,7 +1557,7 @@ class _MuzaffarabadPageState extends State<MuzaffarabadPage> {
                           const SizedBox(height: 6),
                           Expanded(
                             child: Text(
-                              foodLocations[index]['address'],
+                              foodLocations[index]['details'],
                               style: const TextStyle(
                                 fontSize: 12,
                                 color: Colors.grey,
@@ -1649,7 +1629,7 @@ class _MuzaffarabadPageState extends State<MuzaffarabadPage> {
                           const SizedBox(height: 6),
                           Expanded(
                             child: Text(
-                              festivalLocations[index]['address'],
+                              festivalLocations[index]['details'],
                               style: const TextStyle(
                                 fontSize: 12,
                                 color: Colors.grey,

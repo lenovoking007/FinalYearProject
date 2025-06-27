@@ -3,7 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:travelmate/tripprogresspage.dart';
-import 'package:travelmate/city_planner.dart'; // Add this import
+import 'package:travelmate/city_planner.dart';
 
 class PeshawarPage extends StatefulWidget {
   const PeshawarPage({super.key});
@@ -47,10 +47,7 @@ class _PeshawarPageState extends State<PeshawarPage> {
   @override
   void initState() {
     super.initState();
-
   }
-
-  
 
   Future<void> _saveTripPlanToFirebase(Map<String, dynamic> tripPlan) async {
     try {
@@ -107,8 +104,7 @@ class _PeshawarPageState extends State<PeshawarPage> {
       if (num == null) {
         return 'Please enter a valid number';
       }
-      if (num < 5000)
-      {
+      if (num < 5000) {
         return 'Minimum trip budget is 5000 PKR.';
       }
       if (num > 9999999) {
@@ -784,35 +780,17 @@ class _PeshawarPageState extends State<PeshawarPage> {
             ),
           ],
         ),
-
       ),
     );
   }
 
   Widget _buildOverviewTab(BuildContext context) {
     final List<Map<String, dynamic>> attractions = [
-      {
-        'name': 'Qissa Khwani Bazaar',
-        'address': 'Qissa Khwani Bazaar, Peshawar, Khyber Pakhtunkhwa, Pakistan',
-        'image': 'assets/images/Peshawar/peshawar1.jpg',
-      },
-      {
-        'name': 'Peshawar Museum',
-        'address': 'Museum Rd, Peshawar, Khyber Pakhtunkhwa, Pakistan',
-        'image': 'assets/images/Peshawar/peshawar2.jpg',
-      },
-      {
-        'name': 'Bala Hisar Fort',
-        'address': 'Bala Hisar Fort Rd, Peshawar, Khyber Pakhtunkhwa, Pakistan',
-        'image': 'assets/images/Peshawar/peshawar3.jpg',
-      },
-      {
-        'name': 'Sethi Street',
-        'address': 'Sethi Street, Peshawar, Khyber Pakhtunkhwa, Pakistan',
-        'image': 'assets/images/Peshawar/food1.jpg',
-      },
+      {'name': 'Khyber Pass', 'address': 'Near Peshawar', 'image': 'assets/images/pesh/po1.jpg',},
+      {'name': 'Gorkhatri Museum', 'address': 'In Peshawar City', 'image':  'assets/images/pesh/po2.jpg',},
+      {'name': 'Mahabat Khan Mosque', 'address': 'Old Town, Peshawar', 'image':  'assets/images/pesh/po3.jpg',},
+      {'name': 'Peshawar Museum', 'address': 'In Cantt Area', 'image':  'assets/images/pesh/po4.jpg',},
     ];
-
     final filteredAttractions = _searchQuery.isEmpty
         ? attractions
         : attractions.where((attraction) =>
@@ -846,8 +824,10 @@ class _PeshawarPageState extends State<PeshawarPage> {
           _buildInfoCard(
             title: 'About Peshawar',
             description:
-            'Peshawar, the gateway to the Khyber Pass, is one of the oldest cities in South Asia. '
-                'Known for its rich history, vibrant bazaars, and Pashtun culture, it offers a unique blend of tradition and modernity.',
+            'Peshawar, the capital of Khyber Pakhtunkhwa, is one of the oldest cities in South Asia '
+                'with a history dating back to at least 539 BCE. Known as the "City of Flowers", '
+                'Peshawar is famous for its rich cultural heritage, historical landmarks, '
+                'and vibrant bazaars.',
           ),
           const SizedBox(height: 24),
           Padding(
@@ -916,7 +896,7 @@ class _PeshawarPageState extends State<PeshawarPage> {
         ? shoppingSpots
         : shoppingSpots.where((spot) =>
     spot['name'].toLowerCase().contains(_searchQuery) ||
-        spot['address'].toLowerCase().contains(_searchQuery)).toList();
+        spot['details'].toLowerCase().contains(_searchQuery)).toList();
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
@@ -938,11 +918,11 @@ class _PeshawarPageState extends State<PeshawarPage> {
           ),
           const SizedBox(height: 16),
           _buildInfoCard(
-            title: 'Traditional Attire',
+            title: 'Shopping in Peshawar',
             description:
-            'Peshawar offers a wide range of traditional Pashtun clothing including shalwar kameez, '
-                'waistcoats, and embroidered caps. The bazaars are famous for their handcrafted leather '
-                'sandals and woolen shawls.',
+            'Peshawar offers a unique shopping experience with its historic bazaars '
+                'selling traditional Pashtun clothing, handmade carpets, and exquisite jewelry. '
+                'The city is famous for its Peshawari chappals and embroidered fabrics.',
           ),
           const SizedBox(height: 24),
           Padding(
@@ -981,14 +961,13 @@ class _PeshawarPageState extends State<PeshawarPage> {
       {'name': 'Khan Restaurant', 'details': 'Famous for Roghani Naan.', 'image': 'assets/images/pesh/pfo2.jpg'},
       {'name': 'Tandoor Restaurant', 'details': 'Authentic Pashtun cuisine.', 'image': 'assets/images/pesh/pfo3.jpg'},
       {'name': 'Mastur Restaurant', 'details': 'Popular for Haleem and other delicacies.', 'image': 'assets/images/pesh/pfo4.jpg'},
-
     ];
 
     final filteredFoodLocations = _searchQuery.isEmpty
         ? foodLocations
         : foodLocations.where((location) =>
     location['name'].toLowerCase().contains(_searchQuery) ||
-        location['address'].toLowerCase().contains(_searchQuery)).toList();
+        location['details'].toLowerCase().contains(_searchQuery)).toList();
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
@@ -1010,11 +989,11 @@ class _PeshawarPageState extends State<PeshawarPage> {
           ),
           const SizedBox(height: 16),
           _buildInfoCard(
-            title: 'Peshawari Cuisine',
+            title: 'Peshawar Cuisine',
             description:
-            'Peshawar is famous for its rich, flavorful cuisine including chapli kabab, tikka, '
-                'karahi, and various types of pulao. The city is also known for its traditional '
-                'green tea and desserts like sheer khurma.',
+            'Peshawar offers a rich culinary experience, known for its delicious Chapli Kebabs, '
+                'tikkas, and traditional Pashtun dishes. The city is also famous for its dry fruits '
+                'and unique desserts like Peshawari ice cream.',
           ),
           const SizedBox(height: 24),
           Padding(
@@ -1053,14 +1032,13 @@ class _PeshawarPageState extends State<PeshawarPage> {
       {'name': 'Jashn-e-Pashto', 'details': 'Celebration of Pashto language and culture.', 'image':    'assets/images/pesh/pf2.jpg',},
       {'name': 'Basant Festival', 'details': 'Colorful kite flying event.', 'image': 'assets/images/pesh/pf3.jpg',},
       {'name': 'Peshawar Literature Festival', 'details': 'Promotes regional literature.', 'image':'assets/images/pesh/pf4.jpg',},
-
     ];
 
     final filteredFestivalLocations = _searchQuery.isEmpty
         ? festivalLocations
         : festivalLocations.where((location) =>
     location['name'].toLowerCase().contains(_searchQuery) ||
-        location['address'].toLowerCase().contains(_searchQuery)).toList();
+        location['details'].toLowerCase().contains(_searchQuery)).toList();
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
@@ -1082,10 +1060,11 @@ class _PeshawarPageState extends State<PeshawarPage> {
           ),
           const SizedBox(height: 16),
           _buildInfoCard(
-            title: 'Cultural Festivals',
-            description:
-            'Peshawar hosts vibrant festivals that celebrate Pashtun culture, traditions, and seasons. '
-                'These include spring festivals, cultural shows, and traditional music performances.',
+              title: 'Cultural Festivals',
+              description:
+              "Peshawar hosts a variety of cultural festivals celebrating Pashtun heritage, "
+                  "including traditional music performances, dance shows, and craft exhibitions "
+                  "throughout the year."
           ),
           const SizedBox(height: 24),
           Padding(
@@ -1131,89 +1110,109 @@ class _PeshawarPageState extends State<PeshawarPage> {
               child: CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF0066CC)),
               ));
-          }
+        }
 
-              if (snapshot.hasError) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.error_outline, color: Colors.red, size: 50),
-                  const SizedBox(height: 16),
-                  Text(
-                    'Failed to load reviews',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: const Color(0xFF0066CC).withOpacity(0.9),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    snapshot.error.toString(),
-                    style: const TextStyle(color: Colors.red),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () => setState(() {}),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF0066CC),
-                    ),
-                    child: const Text('Retry', style: TextStyle(color: Colors.white)),
-                  ),
-                ],
-              ),
-            );
-          }
-
-          final List<QueryDocumentSnapshot> reviewDocs = snapshot.data?.docs ?? [];
-          final List<Map<String, dynamic>> firestoreReviews = reviewDocs.map((doc) {
-            final data = doc.data() as Map<String, dynamic>;
-            return {
-              'name': data['name'] ?? 'Anonymous',
-              'rating': data['rating'] ?? 0,
-              'review': data['review'] ?? '',
-              'imageUrl': 'assets/images/Peshawar/u${(doc.hashCode % 3) + 1}.png',
-              'date': data['timestamp'] != null
-                  ? _formatReviewDate(data['timestamp'].toDate())
-                  : 'Recently',
-            };
-          }).toList();
-
-          final List<Map<String, dynamic>> localReviews = [
-            {
-              'name': 'Travel Enthusiast',
-              'rating': 5,
-              'review': 'Peshawar is a city with rich history and vibrant culture. '
-                  'The food is amazing and the people are very hospitable.',
-              'imageUrl': 'assets/images/Peshawar/u1.png',
-              'date': '2 months ago'
-            },
-            {
-              'name': 'History Lover',
-              'rating': 4,
-              'review': 'The historical sites in Peshawar are fascinating. '
-                  'Qissa Khwani Bazaar and Peshawar Museum are must-visit places.',
-              'imageUrl': 'assets/images/Peshawar/u2.png',
-              'date': '1 month ago'
-            }
-          ];
-
-          return SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
+        if (snapshot.hasError) {
+          return Center(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                const Icon(Icons.error_outline, color: Colors.red, size: 50),
+                const SizedBox(height: 16),
                 Text(
-                  'Local Reviews',
+                  'Failed to load reviews',
                   style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
                     color: const Color(0xFF0066CC).withOpacity(0.9),
                   ),
                 ),
+                const SizedBox(height: 8),
+                Text(
+                  snapshot.error.toString(),
+                  style: const TextStyle(color: Colors.red),
+                  textAlign: TextAlign.center,
+                ),
                 const SizedBox(height: 16),
-                ...localReviews.map((review) => _buildReviewCard(
+                ElevatedButton(
+                  onPressed: () => setState(() {}),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF0066CC),
+                  ),
+                  child: const Text('Retry', style: TextStyle(color: Colors.white)),
+                ),
+              ],
+            ),
+          );
+        }
+
+        final List<QueryDocumentSnapshot> reviewDocs = snapshot.data?.docs ?? [];
+        final List<Map<String, dynamic>> firestoreReviews = reviewDocs.map((doc) {
+          final data = doc.data() as Map<String, dynamic>? ?? {};
+          return {
+            'name': data['name'] as String? ?? 'Anonymous',
+            'rating': (data['rating'] as int?) ?? 0,
+            'review': data['review'] as String? ?? '',
+            'imageUrl': 'assets/images/Lahore/u${(doc.hashCode % 3) + 1}.png',
+            'date': data['timestamp'] != null
+                ? _formatReviewDate(data['timestamp'].toDate())
+                : 'Recently',
+          };
+        }).toList();
+
+        final List<Map<String, dynamic>> localReviews = [
+          {
+            'name': 'Travel Enthusiast',
+            'rating': 5,
+            'review': 'Peshawar is a city with rich history and amazing culture. The food here is incredible and people are very hospitable!',
+            'imageUrl': 'assets/images/Lahore/u1.png',
+            'date': '2 months ago'
+          },
+          {
+            'name': 'Food Lover',
+            'rating': 4,
+            'review': 'The Chapli Kebabs and Peshawari ice cream are must-try. The bazaars are full of life and colors.',
+            'imageUrl': 'assets/images/Lahore/u2.png',
+            'date': '1 month ago'
+          }
+        ];
+
+        return SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Local Reviews',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: const Color(0xFF0066CC).withOpacity(0.9),
+                ),
+              ),
+              const SizedBox(height: 16),
+              ...localReviews.map((review) => _buildReviewCard(
+                name: review['name'],
+                rating: review['rating'],
+                review: review['review'],
+                imageUrl: review['imageUrl'],
+                date: review['date'],
+              )).toList(),
+
+              const SizedBox(height: 24),
+              Text(
+                'User Reviews',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: const Color(0xFF0066CC).withOpacity(0.9),
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              if (firestoreReviews.isEmpty)
+                _buildNoReviewsPlaceholder()
+              else
+                ...firestoreReviews.map((review) => _buildReviewCard(
                   name: review['name'],
                   rating: review['rating'],
                   review: review['review'],
@@ -1221,33 +1220,11 @@ class _PeshawarPageState extends State<PeshawarPage> {
                   date: review['date'],
                 )).toList(),
 
-                const SizedBox(height: 24),
-                Text(
-                  'User Reviews',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: const Color(0xFF0066CC).withOpacity(0.9),
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                if (firestoreReviews.isEmpty)
-                  _buildNoReviewsPlaceholder()
-                else
-                  ...firestoreReviews.map((review) => _buildReviewCard(
-                    name: review['name'],
-                    rating: review['rating'],
-                    review: review['review'],
-                    imageUrl: review['imageUrl'],
-                    date: review['date'],
-                  )).toList(),
-
-                const SizedBox(height: 24),
-              ],
-            ),
-          );
-        },
+              const SizedBox(height: 24),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -1446,7 +1423,7 @@ class _PeshawarPageState extends State<PeshawarPage> {
                           const SizedBox(height: 6),
                           Expanded(
                             child: Text(
-                              shoppingSpots[index]['address'],
+                              shoppingSpots[index]['details'],
                               style: const TextStyle(
                                 fontSize: 12,
                                 color: Colors.grey,
@@ -1518,7 +1495,7 @@ class _PeshawarPageState extends State<PeshawarPage> {
                           const SizedBox(height: 6),
                           Expanded(
                             child: Text(
-                              foodLocations[index]['address'],
+                              foodLocations[index]['details'],
                               style: const TextStyle(
                                 fontSize: 12,
                                 color: Colors.grey,
@@ -1590,7 +1567,7 @@ class _PeshawarPageState extends State<PeshawarPage> {
                           const SizedBox(height: 6),
                           Expanded(
                             child: Text(
-                              festivalLocations[index]['address'],
+                              festivalLocations[index]['details'],
                               style: const TextStyle(
                                 fontSize: 12,
                                 color: Colors.grey,

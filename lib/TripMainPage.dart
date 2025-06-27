@@ -81,7 +81,7 @@ class _TripPageState extends State<TripPage> {
       'description': 'The Twin City',
       'image': 'assets/images/raw/ra1.jpg',
       'image': 'assets/images/raw/ra4.jpg',
-      'page': SialkotPage()
+      'page': RawalpindiPage()
     },
     {
       'title': 'Peshawar',
