@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'dart:async'; // Import for Timer
+import 'package:firebase_storage/firebase_storage.dart'; // Import for Firebase Storage
+import 'package:cached_network_image/cached_network_image.dart'; // Import for CachedNetworkImage
 
 enum BuddyStatus {
   buddy,
@@ -20,8 +22,10 @@ class TravelBuddy extends StatefulWidget {
 class _TravelBuddyState extends State<TravelBuddy> with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseStorage _storage = FirebaseStorage.instance; // Added Firebase Storage
   late User _currentUser;
   late TabController _tabController;
+  bool _isInitialPageLoading = true; // State for initial full-page loading
 
   @override
   void initState() {
@@ -30,6 +34,25 @@ class _TravelBuddyState extends State<TravelBuddy> with SingleTickerProviderStat
     _tabController = TabController(length: 3, vsync: this);
     WidgetsBinding.instance.addObserver(this); // Add observer for app lifecycle
     _updateUserPresence(true); // Set user online on app start
+
+    // Listen to the buddies stream to determine when initial data is loaded
+    _firestore
+        .collection('users')
+        .doc(_currentUser.uid)
+        .collection('buddies')
+        .snapshots()
+        .listen((snapshot) {
+      if (_isInitialPageLoading && snapshot.docs.isNotEmpty || snapshot.docs.isEmpty) { // If data is available (even empty) or if it confirms empty
+        setState(() {
+          _isInitialPageLoading = false;
+        });
+      }
+    }, onError: (error) {
+      print("Error listening to initial buddies stream: $error");
+      setState(() {
+        _isInitialPageLoading = false; // Stop loading even on error
+      });
+    });
   }
 
   @override
@@ -59,6 +82,17 @@ class _TravelBuddyState extends State<TravelBuddy> with SingleTickerProviderStat
     WidgetsBinding.instance.removeObserver(this); // Remove observer
     _updateUserPresence(false); // Set user offline on app dispose
     super.dispose();
+  }
+
+  // Function to get user profile image URL
+  Future<String?> _getProfileImageUrl(String userId) async {
+    try {
+      final url = await _storage.ref('profile_images/$userId').getDownloadURL();
+      return url;
+    } catch (e) {
+      // If no profile image exists, return null to indicate default image
+      return null;
+    }
   }
 
   @override
@@ -93,7 +127,13 @@ class _TravelBuddyState extends State<TravelBuddy> with SingleTickerProviderStat
           ],
         ),
       ),
-      body: TabBarView(
+      body: _isInitialPageLoading
+          ? const Center( // Full-page loading indicator
+        child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF0066CC)),
+        ),
+      )
+          : TabBarView(
         controller: _tabController,
         children: [
           _buildBuddiesTab(),
@@ -113,11 +153,17 @@ class _TravelBuddyState extends State<TravelBuddy> with SingleTickerProviderStat
           .orderBy('timestamp', descending: true)
           .snapshots(),
       builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Center(
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          // CircularProgressIndicator for loading the tab's data
+          return const Center(
               child: CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF0066CC)),
               ));
+        }
+        if (snapshot.hasError) {
+          return Center(
+            child: Text('Error loading buddies: ${snapshot.error}', style: const TextStyle(color: Colors.red)),
+          );
         }
 
         final buddies = snapshot.data!.docs;
@@ -162,8 +208,45 @@ class _TravelBuddyState extends State<TravelBuddy> with SingleTickerProviderStat
     return FutureBuilder<Map<String, dynamic>>(
       future: _getBuddyCardData(buddy.id),
       builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return const SizedBox.shrink();
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          // Show a simplified loading state for individual cards while data is being fetched
+          return Card(
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            color: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: BorderSide(color: const Color(0xFF0066CC).withOpacity(0.5)),
+            ),
+            elevation: 4,
+            child: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+              child: Row(
+                children: [
+                  CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF0066CC)), strokeWidth: 2),
+                  SizedBox(width: 16),
+                  Text('Loading buddy info...'),
+                ],
+              ),
+            ),
+          );
+        }
+
+        if (snapshot.hasError) {
+          return Card(
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            color: Colors.red[50], // Light red background for error
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: const BorderSide(color: Colors.red),
+            ),
+            elevation: 4,
+            child: const ListTile(
+              contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              leading: Icon(Icons.error_outline, color: Colors.red),
+              title: Text('Error loading buddy data', style: TextStyle(color: Colors.red)),
+              subtitle: Text('Please try again later.'),
+            ),
+          );
         }
 
         final data = snapshot.data!;
@@ -173,7 +256,7 @@ class _TravelBuddyState extends State<TravelBuddy> with SingleTickerProviderStat
         final lastMessageTime = data['lastMessageTime'] as String;
         final isBlocked = data['isBlocked'] as bool; // Combined blocked status
         final isOnline = userData['isOnline'] ?? false; // Get online status
-        final lastSeen = userData['lastSeen']?.toDate(); // Get last seen timestamp
+        // final lastSeen = userData['lastSeen']?.toDate(); // Get last seen timestamp
 
         return Card(
           margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -187,10 +270,30 @@ class _TravelBuddyState extends State<TravelBuddy> with SingleTickerProviderStat
             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             leading: Stack(
               children: [
-                CircleAvatar(
-                  radius: 24,
-                  backgroundImage: NetworkImage(userData['photoUrl'] ?? ''),
-                  backgroundColor: isBlocked ? Colors.grey[400] : null, // Grey avatar if blocked
+                ClipOval( // Ensures the image is clipped to a circle
+                  child: SizedBox(
+                    width: 48, // 24 radius * 2
+                    height: 48, // 24 radius * 2
+                    child: FutureBuilder<String?>(
+                      future: _getProfileImageUrl(buddy.id), // Fetch profile image URL
+                      builder: (context, avatarSnapshot) {
+                        // CachedNetworkImage handles its own placeholders and error widgets efficiently
+                        return CachedNetworkImage(
+                          imageUrl: avatarSnapshot.data ?? '', // Provide empty string if data is null to let errorWidget handle
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) => const Center(
+                            child: CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF0066CC)),
+                            ),
+                          ),
+                          errorWidget: (context, url, error) => Image.asset(
+                            'assets/images/circleimage.png', // Default image on error
+                            fit: BoxFit.cover,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
                 ),
                 Positioned(
                   bottom: 0,
@@ -376,11 +479,17 @@ class _TravelBuddyState extends State<TravelBuddy> with SingleTickerProviderStat
           .orderBy('timestamp', descending: true)
           .snapshots(),
       builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Center(
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          // CircularProgressIndicator for loading the tab's data
+          return const Center(
             child: CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF0066CC)),
             ),
+          );
+        }
+        if (snapshot.hasError) {
+          return Center(
+            child: Text('Error loading requests: ${snapshot.error}', style: const TextStyle(color: Colors.red)),
           );
         }
 
@@ -426,8 +535,44 @@ class _TravelBuddyState extends State<TravelBuddy> with SingleTickerProviderStat
     return FutureBuilder<DocumentSnapshot>(
       future: _firestore.collection('users').doc(request.id).get(),
       builder: (context, userSnapshot) {
-        if (!userSnapshot.hasData) {
-          return const SizedBox.shrink();
+        if (userSnapshot.connectionState == ConnectionState.waiting) {
+          return Card(
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            color: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: BorderSide(color: const Color(0xFF0066CC).withOpacity(0.5)),
+            ),
+            elevation: 2,
+            child: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+              child: Row(
+                children: [
+                  CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF0066CC)), strokeWidth: 2),
+                  SizedBox(width: 16),
+                  Text('Loading request info...'),
+                ],
+              ),
+            ),
+          );
+        }
+
+        if (userSnapshot.hasError) {
+          return Card(
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            color: Colors.red[50],
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: const BorderSide(color: Colors.red),
+            ),
+            elevation: 2,
+            child: const ListTile(
+              contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              leading: Icon(Icons.error_outline, color: Colors.red),
+              title: Text('Error loading request data', style: TextStyle(color: Colors.red)),
+              subtitle: Text('Please try again later.'),
+            ),
+          );
         }
 
         final userData = userSnapshot.data!.data() as Map<String, dynamic>;
@@ -447,9 +592,29 @@ class _TravelBuddyState extends State<TravelBuddy> with SingleTickerProviderStat
               children: [
                 Row(
                   children: [
-                    CircleAvatar(
-                      radius: 28,
-                      backgroundImage: NetworkImage(userData['photoUrl'] ?? ''),
+                    ClipOval(
+                      child: SizedBox(
+                        width: 56, // 28 radius * 2
+                        height: 56, // 28 radius * 2
+                        child: FutureBuilder<String?>(
+                          future: _getProfileImageUrl(request.id), // Fetch profile image
+                          builder: (context, avatarSnapshot) {
+                            return CachedNetworkImage(
+                              imageUrl: avatarSnapshot.data ?? '',
+                              fit: BoxFit.cover,
+                              placeholder: (context, url) => const Center(
+                                child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF0066CC)),
+                                ),
+                              ),
+                              errorWidget: (context, url, error) => Image.asset(
+                                'assets/images/circleimage.png', // Default image on error
+                                fit: BoxFit.cover,
+                              ),
+                            );
+                          },
+                        ),
+                      ),
                     ),
                     const SizedBox(width: 16),
                     Expanded(
@@ -520,11 +685,17 @@ class _TravelBuddyState extends State<TravelBuddy> with SingleTickerProviderStat
           .orderBy('timestamp', descending: true)
           .snapshots(),
       builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Center(
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          // CircularProgressIndicator for loading the tab's data
+          return const Center(
             child: CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF0066CC)),
             ),
+          );
+        }
+        if (snapshot.hasError) {
+          return Center(
+            child: Text('Error loading blocked users: ${snapshot.error}', style: const TextStyle(color: Colors.red)),
           );
         }
 
@@ -570,8 +741,41 @@ class _TravelBuddyState extends State<TravelBuddy> with SingleTickerProviderStat
     return FutureBuilder<DocumentSnapshot>(
       future: _firestore.collection('users').doc(blockedUser.id).get(),
       builder: (context, userSnapshot) {
-        if (!userSnapshot.hasData) {
-          return const SizedBox.shrink();
+        if (userSnapshot.connectionState == ConnectionState.waiting) {
+          return Card(
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            color: Colors.grey[100],
+            child: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20), // Adjusted padding
+              child: Center(
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF0066CC)),
+                ),
+              ),
+            ),
+          );
+
+        }
+
+        if (userSnapshot.hasError) {
+          return Card(
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            color: Colors.red[50],
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: const BorderSide(color: Colors.red),
+            ),
+            elevation: 0,
+            child: const ListTile(
+              contentPadding: EdgeInsets.all(16),
+              leading: Icon(Icons.error_outline, color: Colors.red),
+              title: Text('Error loading user data', style: TextStyle(color: Colors.red)),
+              subtitle: Text('Please try again later.'),
+            ),
+          );
         }
 
         final userData = userSnapshot.data!.data() as Map<String, dynamic>;
@@ -584,9 +788,29 @@ class _TravelBuddyState extends State<TravelBuddy> with SingleTickerProviderStat
               borderRadius: BorderRadius.circular(12),
             ),
             tileColor: Colors.grey[100],
-            leading: CircleAvatar(
-              radius: 24,
-              backgroundImage: NetworkImage(userData['photoUrl'] ?? ''),
+            leading: ClipOval(
+              child: SizedBox(
+                width: 48, // 24 radius * 2
+                height: 48, // 24 radius * 2
+                child: FutureBuilder<String?>(
+                  future: _getProfileImageUrl(blockedUser.id), // Fetch profile image
+                  builder: (context, avatarSnapshot) {
+                    return CachedNetworkImage(
+                      imageUrl: avatarSnapshot.data ?? '',
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => const Center(
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF0066CC)),
+                        ),
+                      ),
+                      errorWidget: (context, url, error) => Image.asset(
+                        'assets/images/circleimage.png', // Default image on error
+                        fit: BoxFit.cover,
+                      ),
+                    );
+                  },
+                ),
+              ),
             ),
             title: Text(
               userData['name'] ?? 'Unknown',
@@ -1001,13 +1225,16 @@ class _TravelBuddyState extends State<TravelBuddy> with SingleTickerProviderStat
       return;
     }
 
+    // Fetch peer's profile image for chat page
+    final peerAvatarUrl = await _getProfileImageUrl(peerId);
+
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => ChatPage(
           peerId: peerId,
           peerName: userData['name'] ?? 'Unknown',
-          peerAvatar: userData['photoUrl'] ?? '',
+          peerAvatar: peerAvatarUrl ?? 'assets/images/circleimage.png', // Pass fetched URL or default
         ),
       ),
     );
@@ -1022,6 +1249,7 @@ class AddFriendPage extends StatefulWidget {
 class _AddFriendPageState extends State<AddFriendPage> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseStorage _storage = FirebaseStorage.instance; // Added Firebase Storage
   final TextEditingController _searchController = TextEditingController();
   List<DocumentSnapshot> _searchResults = [];
   bool _isSearching = false;
@@ -1032,6 +1260,17 @@ class _AddFriendPageState extends State<AddFriendPage> {
     _searchController.dispose();
     _debounce?.cancel(); // Cancel the timer on dispose
     super.dispose();
+  }
+
+  // Function to get user profile image URL
+  Future<String?> _getProfileImageUrl(String userId) async {
+    try {
+      final url = await _storage.ref('profile_images/$userId').getDownloadURL();
+      return url;
+    } catch (e) {
+      // If no profile image exists, return null to indicate default image
+      return null;
+    }
   }
 
   // --- Duplicated methods from _TravelBuddyState for AddFriendPage functionality ---
@@ -1489,8 +1728,40 @@ class _AddFriendPageState extends State<AddFriendPage> {
     return FutureBuilder<BuddyStatus>(
       future: _isBuddyOrPending(userId),
       builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return const SizedBox.shrink();
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Card(
+            margin: const EdgeInsets.symmetric(vertical: 8),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+              child: Row(
+                children: [
+                  CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF0066CC)), strokeWidth: 2),
+                  SizedBox(width: 16),
+                  Text('Loading user status...'),
+                ],
+              ),
+            ),
+          );
+        }
+
+        if (snapshot.hasError) {
+          return Card(
+            margin: const EdgeInsets.symmetric(vertical: 8),
+            color: Colors.red[50],
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: const BorderSide(color: Colors.red),
+            ),
+            child: const ListTile(
+              contentPadding: EdgeInsets.all(16),
+              leading: Icon(Icons.error_outline, color: Colors.red),
+              title: Text('Error loading user data', style: TextStyle(color: Colors.red)),
+              subtitle: Text('Please try again later.'),
+            ),
+          );
         }
 
         final status = snapshot.data!;
@@ -1502,9 +1773,29 @@ class _AddFriendPageState extends State<AddFriendPage> {
           ),
           child: ListTile(
             contentPadding: const EdgeInsets.all(16),
-            leading: CircleAvatar(
-              radius: 24,
-              backgroundImage: NetworkImage(userData['photoUrl'] ?? ''),
+            leading: ClipOval(
+              child: SizedBox(
+                width: 48, // 24 radius * 2
+                height: 48, // 24 radius * 2
+                child: FutureBuilder<String?>(
+                  future: _getProfileImageUrl(userId), // Fetch profile image
+                  builder: (context, avatarSnapshot) {
+                    return CachedNetworkImage(
+                      imageUrl: avatarSnapshot.data ?? '',
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => const Center(
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF0066CC)),
+                        ),
+                      ),
+                      errorWidget: (context, url, error) => Image.asset(
+                        'assets/images/circleimage.png', // Default image on error
+                        fit: BoxFit.cover,
+                      ),
+                    );
+                  },
+                ),
+              ),
             ),
             title: Text(
               userData['name'] ?? 'Unknown',
@@ -1557,7 +1848,7 @@ class _AddFriendPageState extends State<AddFriendPage> {
 class ChatPage extends StatefulWidget {
   final String peerId;
   final String peerName;
-  final String peerAvatar;
+  final String peerAvatar; // Now this can be a URL or asset path
 
   const ChatPage({
     required this.peerId,
@@ -1835,9 +2126,30 @@ class _ChatScreenState extends State<ChatPage> {
             ? Text('${_selectedMessageIds.length} selected', style: const TextStyle(color: Colors.white))
             : Row( // Use Row to place avatar and name/status
           children: [
-            CircleAvatar(
-              radius: 18,
-              backgroundImage: NetworkImage(widget.peerAvatar),
+            // Use ClipOval and CachedNetworkImage for the peer's avatar in the app bar
+            ClipOval(
+              child: SizedBox(
+                width: 36, // 18 radius * 2
+                height: 36, // 18 radius * 2
+                child: widget.peerAvatar.startsWith('http')
+                    ? CachedNetworkImage(
+                  imageUrl: widget.peerAvatar,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) => const Center(
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white), // White for app bar
+                    ),
+                  ),
+                  errorWidget: (context, url, error) => Image.asset(
+                    'assets/images/circleimage.png', // Default image on error
+                    fit: BoxFit.cover,
+                  ),
+                )
+                    : Image.asset(
+                  widget.peerAvatar, // Assume it's a local asset if not a URL
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
             const SizedBox(width: 10),
             Expanded( // Use Expanded to allow text to take available space

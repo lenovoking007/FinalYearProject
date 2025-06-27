@@ -7,7 +7,6 @@ import 'dart:io';
 import 'package:travelmate/Accountsettingpage.dart';
 import 'package:travelmate/TripMainPage.dart';
 import 'package:travelmate/helppage.dart';
-import 'package:travelmate/languagepage.dart';
 import 'package:travelmate/loginpage.dart';
 import 'package:travelmate/datastoragepage.dart';
 import 'package:travelmate/privacysecuritypage.dart';
@@ -29,8 +28,6 @@ class _SettingsMenuPageState extends State<SettingsMenuPage> {
   final FirebaseStorage _storage = FirebaseStorage.instance;
   final ImagePicker _picker = ImagePicker();
 
-  bool isDarkMode = false;
-  bool isNotificationsEnabled = true;
   bool _isLoggingOut = false;
   bool _isUploading = false;
 
@@ -253,26 +250,6 @@ class _SettingsMenuPageState extends State<SettingsMenuPage> {
                   icon: Icons.person_outline,
                   title: 'Account Settings',
                   onTap: () => _navigateTo(AccountSettingsPage()),
-                ),
-                _buildMenuItem(
-                  icon: Icons.language_outlined,
-                  title: 'Language',
-                  onTap: () => _navigateTo(LanguagesPage()),
-                ),
-
-                const SizedBox(height: 16),
-                _buildSectionHeader('Preferences'),
-                _buildSwitchItem(
-                  icon: Icons.notifications_outlined,
-                  title: 'Notifications',
-                  value: isNotificationsEnabled,
-                  onChanged: (value) => setState(() => isNotificationsEnabled = value),
-                ),
-                _buildSwitchItem(
-                  icon: Icons.dark_mode_outlined,
-                  title: 'Dark Mode',
-                  value: isDarkMode,
-                  onChanged: (value) => setState(() => isDarkMode = value),
                 ),
 
                 const SizedBox(height: 16),

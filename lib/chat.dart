@@ -9,6 +9,7 @@ import 'package:travelmate/homepage.dart';
 import 'package:travelmate/settingmenu.dart';
 import 'package:travelmate/tools.dart';
 import 'package:travelmate/TripMainPage.dart';
+import 'package:cached_network_image/cached_network_image.dart'; // Import for CachedNetworkImage
 
 class MessagePage extends StatefulWidget {
   @override
@@ -18,7 +19,7 @@ class MessagePage extends StatefulWidget {
 class _MessagePageState extends State<MessagePage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseStorage _storage = FirebaseStorage.instance;
+  final FirebaseStorage _storage = FirebaseStorage.instance; // Added Firebase Storage
   late User _currentUser;
   int currentIndex = 3;
   final TextEditingController _searchController = TextEditingController();
@@ -52,6 +53,18 @@ class _MessagePageState extends State<MessagePage> {
       }
     }
   }
+
+  // Function to get user profile image URL (replicated for MessagePage)
+  Future<String?> _getProfileImageUrl(String userId) async {
+    try {
+      final url = await _storage.ref('profile_images/$userId').getDownloadURL();
+      return url;
+    } catch (e) {
+      // If no profile image exists, return null to indicate default image
+      return null;
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -147,8 +160,18 @@ class _MessagePageState extends State<MessagePage> {
                     .orderBy('timestamp', descending: true)
                     .snapshots(),
                 builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return const Center(child: CircularProgressIndicator());
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    // Full-page circular indicator while initial data loads
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Color(0XFF0066CC)),
+                      ),
+                    );
+                  }
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text('Error loading chats: ${snapshot.error}', style: const TextStyle(color: Colors.red)),
+                    );
                   }
 
                   final buddies = snapshot.data!.docs;
@@ -181,8 +204,11 @@ class _MessagePageState extends State<MessagePage> {
                   // Filter buddies based on search query
                   final filteredBuddies = buddies.where((buddy) {
                     if (_searchQuery.isEmpty) return true;
-                    return buddy['name']?.toString().toLowerCase().contains(_searchQuery) ?? false;
+                    // Ensure 'name' field exists and is a String
+                    final buddyName = buddy.data() is Map<String, dynamic> ? (buddy.data() as Map<String, dynamic>)['name']?.toString().toLowerCase() : null;
+                    return buddyName?.contains(_searchQuery) ?? false;
                   }).toList();
+
 
                   if (filteredBuddies.isEmpty) {
                     return Center(
@@ -297,8 +323,42 @@ class _MessagePageState extends State<MessagePage> {
     return FutureBuilder<Map<String, dynamic>>(
       future: _getBuddyCardData(buddyId),
       builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return const SizedBox.shrink();
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          // Show a loading state for individual cards while data is being fetched
+          return Card(
+            margin: const EdgeInsets.symmetric(vertical: 8),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            elevation: 3,
+            child: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+              child: Row(
+                children: [
+                  CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Color(0XFF0066CC)), strokeWidth: 2),
+                  SizedBox(width: 16),
+                  Text('Loading chat info...'),
+                ],
+              ),
+            ),
+          );
+        }
+        if (snapshot.hasError) {
+          return Card(
+            margin: const EdgeInsets.symmetric(vertical: 8),
+            color: Colors.red[50],
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: const BorderSide(color: Colors.red),
+            ),
+            elevation: 3,
+            child: const ListTile(
+              contentPadding: EdgeInsets.all(12),
+              leading: Icon(Icons.error_outline, color: Colors.red),
+              title: Text('Error loading chat data', style: TextStyle(color: Colors.red)),
+              subtitle: Text('Please try again later.'),
+            ),
+          );
         }
 
         final data = snapshot.data!;
@@ -308,6 +368,7 @@ class _MessagePageState extends State<MessagePage> {
         final lastMessageTime = data['lastMessageTime'] as String;
         final isBlocked = data['isBlocked'] as bool;
         final isOnline = userData['isOnline'] ?? false;
+        final peerAvatarUrl = userData['photoUrl']; // Get photoUrl from fetched user data
 
         return Card(
           margin: const EdgeInsets.symmetric(vertical: 8),
@@ -319,10 +380,24 @@ class _MessagePageState extends State<MessagePage> {
             contentPadding: const EdgeInsets.all(12),
             leading: Stack(
               children: [
-                CircleAvatar(
-                  radius: 24,
-                  backgroundImage: NetworkImage(userData['photoUrl'] ?? ''),
-                  backgroundColor: isBlocked ? Colors.grey[400] : null,
+                ClipOval( // Ensure the image is clipped to a circle
+                  child: SizedBox(
+                    width: 48, // 24 radius * 2
+                    height: 48, // 24 radius * 2
+                    child: CachedNetworkImage(
+                      imageUrl: peerAvatarUrl ?? '', // Use the fetched photoUrl
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => const Center(
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(Color(0XFF0066CC)),
+                        ),
+                      ),
+                      errorWidget: (context, url, error) => Image.asset(
+                        'assets/images/circleimage.png', // Default image on error
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
                 ),
                 Positioned(
                   bottom: 0,
@@ -392,7 +467,7 @@ class _MessagePageState extends State<MessagePage> {
                   builder: (context) => _ChatScreen(
                     peerId: buddyId,
                     peerName: userData['name'] ?? 'Unknown',
-                    peerAvatar: userData['photoUrl'] ?? '',
+                    peerAvatar: peerAvatarUrl ?? 'assets/images/circleimage.png', // Pass fetched URL or default
                   ),
                 ),
               );
@@ -410,6 +485,9 @@ class _MessagePageState extends State<MessagePage> {
     // Fetch user data
     final userDoc = await _firestore.collection('users').doc(buddyId).get();
     final userData = userDoc.data() as Map<String, dynamic>;
+    // Add photoUrl to userData if it exists in the user document
+    userData['photoUrl'] = await _getProfileImageUrl(buddyId);
+
 
     // Fetch chat data for last message and time
     final chatDoc = await _firestore.collection('chats').doc(chatId).get();
@@ -512,7 +590,7 @@ class _MessagePageState extends State<MessagePage> {
 class _ChatScreen extends StatefulWidget {
   final String peerId;
   final String peerName;
-  final String peerAvatar;
+  final String peerAvatar; // This can be a URL or asset path
 
   const _ChatScreen({
     required this.peerId,
@@ -539,6 +617,7 @@ class __ChatScreenState extends State<_ChatScreen> {
     super.initState();
     _currentUser = _auth.currentUser!;
     _setupMessageReadListener();
+    _updatePeerLastSeen(); // Keep this for showing peer's online/last seen status
   }
 
   Future<void> _clearChatHistory() async {
@@ -635,6 +714,25 @@ class __ChatScreenState extends State<_ChatScreen> {
       return {'isOnline': false, 'lastSeen': null};
     });
   }
+
+  // Periodically update current user's last seen status (for other users to see)
+  void _updatePeerLastSeen() {
+    // This function updates the CURRENT USER's presence status, not the peer's.
+    // The peer's status is read via _getPeerStatusStream().
+    Timer.periodic(const Duration(seconds: 15), (timer) {
+      if (mounted) {
+        _firestore.collection('users').doc(_currentUser.uid).set({
+          'lastSeen': FieldValue.serverTimestamp(),
+          'isOnline': true, // Keep online status updated
+        }, SetOptions(merge: true)).catchError((e) {
+          print("Error updating user presence: $e");
+        });
+      } else {
+        timer.cancel();
+      }
+    });
+  }
+
 
   String _getChatId() {
     return _currentUser.uid.hashCode <= widget.peerId.hashCode
@@ -869,9 +967,30 @@ class __ChatScreenState extends State<_ChatScreen> {
             ? Text('${_selectedMessageIds.length} selected', style: const TextStyle(color: Colors.white))
             : Row(
           children: [
-            CircleAvatar(
-              radius: 18,
-              backgroundImage: NetworkImage(widget.peerAvatar),
+            // Use ClipOval and CachedNetworkImage for the peer's avatar in the app bar
+            ClipOval(
+              child: SizedBox(
+                width: 36, // 18 radius * 2
+                height: 36, // 18 radius * 2
+                child: widget.peerAvatar.startsWith('http')
+                    ? CachedNetworkImage(
+                  imageUrl: widget.peerAvatar,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) => const Center(
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white), // White for app bar
+                    ),
+                  ),
+                  errorWidget: (context, url, error) => Image.asset(
+                    'assets/images/circleimage.png', // Default image on error
+                    fit: BoxFit.cover,
+                  ),
+                )
+                    : Image.asset(
+                  widget.peerAvatar, // Assume it's a local asset if not a URL
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
             const SizedBox(width: 10),
             Expanded(
@@ -886,6 +1005,19 @@ class __ChatScreenState extends State<_ChatScreen> {
                   StreamBuilder<Map<String, dynamic>>(
                     stream: _getPeerStatusStream(),
                     builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const SizedBox(
+                          height: 12, // Maintain space during loading
+                          width: 50, // Arbitrary width for loading
+                          child: LinearProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white70),
+                            backgroundColor: Colors.transparent,
+                          ),
+                        );
+                      }
+                      if (snapshot.hasError) {
+                        return const Text('Status Error', style: TextStyle(color: Colors.red, fontSize: 10));
+                      }
                       if (snapshot.hasData) {
                         final isOnline = snapshot.data!['isOnline'] ?? false;
                         final lastSeen = snapshot.data!['lastSeen'] as DateTime?;
@@ -1022,6 +1154,37 @@ class __ChatScreenState extends State<_ChatScreen> {
                 );
               },
             ),
+          ),
+          StreamBuilder<DocumentSnapshot>(
+            stream: _firestore.collection('chats').doc(_getChatId()).snapshots(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData || !snapshot.data!.exists) {
+                return const SizedBox.shrink();
+              }
+              final chatData = snapshot.data!.data() as Map<String, dynamic>;
+              final peerLastMessageSeenBy = chatData['lastMessageSeenBy.${widget.peerId}'] as Timestamp?;
+              final myLastSentMessageTimestamp = chatData['lastMessageTime'] as Timestamp?; // This is the timestamp of my last sent message updated in the chat doc
+
+              // Determine if "Seen" status should be displayed
+              // This is a simplified "seen" indicator for the overall chat, not per message.
+              // A more precise per-message "seen" requires tracking each message's seen status more deeply.
+              final bool showOverallSeenStatus = peerLastMessageSeenBy != null &&
+                  myLastSentMessageTimestamp != null &&
+                  peerLastMessageSeenBy.toDate().isAfter(myLastSentMessageTimestamp.toDate());
+
+              return Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+                  child: showOverallSeenStatus
+                      ? Text(
+                    'Seen ${DateFormat('HH:mm').format(peerLastMessageSeenBy!.toDate())}',
+                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  )
+                      : const SizedBox.shrink(),
+                ),
+              );
+            },
           ),
           _buildMessageInput(),
         ],
