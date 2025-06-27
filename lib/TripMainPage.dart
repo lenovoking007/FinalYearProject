@@ -99,7 +99,7 @@ class _TripPageState extends State<TripPage> {
       'title': 'Murree',
       'description': 'Queen of Hills',
       'image': 'assets/images/muree/mo2.jpg',
-      'page': MurreePage()
+      'page': MureePage()
     },
   ];
 

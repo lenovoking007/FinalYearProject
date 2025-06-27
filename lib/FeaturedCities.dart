@@ -65,7 +65,7 @@ class FeaturedCitiesPage extends StatelessWidget {
                 imagePath: 'assets/images/hyderabad.jpg',
                 onTap: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Hyderabadpage()),
+                  MaterialPageRoute(builder: (context) => HyderabadPage()),
                 ),
               ),
               _buildCityCard(
@@ -75,7 +75,7 @@ class FeaturedCitiesPage extends StatelessWidget {
                 imagePath: 'assets/images/multan1.jpg',
                 onTap: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Multanpage()),
+                  MaterialPageRoute(builder: (context) => MultanPage()),
                 ),
               ),
               _buildCityCard(

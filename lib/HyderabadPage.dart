@@ -3,8 +3,16 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:travelmate/tripprogresspage.dart';
+import 'package:travelmate/city_planner.dart';
 
-class Hyderabadpage extends StatelessWidget {
+class HyderabadPage extends StatefulWidget {
+  const HyderabadPage({super.key});
+
+  @override
+  State<HyderabadPage> createState() => _HyderabadPageState();
+}
+
+class _HyderabadPageState extends State<HyderabadPage> {
   final List<String> overviewImages = [
     'assets/images/hyderabad/hyderabado1.jpg',
     'assets/images/hyderabad/hyderabado2.jpg',
@@ -30,20 +38,90 @@ class Hyderabadpage extends StatelessWidget {
   ];
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
+  String? _errorMessage;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   Future<void> _saveTripPlanToFirebase(Map<String, dynamic> tripPlan) async {
     try {
       await _firestore.collection('tripPlans').add(tripPlan);
     } catch (e) {
+      setState(() {
+        _errorMessage = 'Failed to save trip plan: ${e.toString()}';
+      });
       throw Exception('Failed to save trip plan: $e');
     }
   }
+
   void showTripPlanDialog(BuildContext context) {
+    final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
     TextEditingController tripNameController = TextEditingController();
     TextEditingController peopleCountController = TextEditingController();
     TextEditingController budgetController = TextEditingController();
     String? selectedTripType;
     DateTime startDate = DateTime.now();
     DateTime endDate = DateTime.now().add(const Duration(days: 3));
+
+    String? validateTripName(String? value) {
+      if (value == null || value.isEmpty) {
+        return 'Please enter a trip name';
+      }
+      if (value.length > 20) {
+        return 'Trip name must be 20 characters or less';
+      }
+      return null;
+    }
+
+    String? validatePeopleCount(String? value) {
+      if (value == null || value.isEmpty) {
+        return 'Please enter number of people';
+      }
+      final num = int.tryParse(value);
+      if (num == null) {
+        return 'Please enter a valid number';
+      }
+      if (num < 1) {
+        return 'Must be at least 1 person';
+      }
+      if (num > 99) {
+        return 'Cannot exceed 99 people';
+      }
+      return null;
+    }
+
+    String? validateBudget(String? value) {
+      if (value == null || value.isEmpty) {
+        return 'Please enter a budget';
+      }
+      final num = int.tryParse(value.replaceAll(',', ''));
+      if (num == null) {
+        return 'Please enter a valid number';
+      }
+      if (num < 5000) {
+        return 'Minimum trip budget is 5000 PKR.';
+      }
+      if (num > 9999999) {
+        return 'Budget cannot exceed 99,99,999';
+      }
+      return null;
+    }
+
+    String? validateTripDuration(DateTime start, DateTime end) {
+      final duration = end.difference(start).inDays;
+      if (duration < 1) {
+        return 'End date must be after start date';
+      }
+      if (duration > 16) {
+        return 'Trip cannot exceed 15 days';
+      }
+      return null;
+    }
+
     showDialog(
       context: context,
       builder: (context) {
@@ -55,97 +133,149 @@ class Hyderabadpage extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.all(20),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          const Icon(Icons.flight_takeoff, color: Color(0xFF0066CC), size: 28),
-                          const SizedBox(width: 12),
-                          Text(
-                            "Plan Your Trip",
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: const Color(0xFF0066CC).withOpacity(0.9),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            const Icon(Icons.flight_takeoff, color: Color(0xFF0066CC), size: 28),
+                            const SizedBox(width: 12),
+                            Text(
+                              "Plan Your Trip",
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: const Color(0xFF0066CC).withOpacity(0.9),
+                              ),
                             ),
+                          ],
+                        ),
+                        const SizedBox(height: 24),
+                        Text(
+                          "Trip Name",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: const Color(0xFF0066CC).withOpacity(0.9),
                           ),
-                        ],
-                      ),
-                      const SizedBox(height: 24),
-                      _buildEditableTextField("Trip Name", tripNameController, Icons.title),
-                      const SizedBox(height: 16),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF88F2E8).withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: const Color(0xFF0066CC).withOpacity(0.5)),
                         ),
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        child: DropdownButtonFormField<String>(
-                          isExpanded: true,
-                          value: selectedTripType,
-                          decoration: const InputDecoration(border: InputBorder.none),
-                          hint: const Text('Select Trip Type', style: TextStyle(color: Colors.grey)),
-                          items: ['Adventure', 'Relaxation', 'Cultural', 'Wildlife', 'Business']
-                              .map((String type) {
-                            return DropdownMenuItem<String>(
-                              value: type,
-                              child: Text(type, style: const TextStyle(color: Colors.black87)),
-                            );
-                          }).toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              selectedTripType = value;
-                            });
-                          },
+                        const SizedBox(height: 8),
+                        _buildEditableTextField(
+                          label: "Enter trip name",
+                          controller: tripNameController,
+                          icon: Icons.title,
+                          validator: validateTripName,
+                          maxLength: 20,
                         ),
-                      ),
-                      const SizedBox(height: 16),
-                      _buildEditableTextField("Number of People", peopleCountController, Icons.people),
-                      const SizedBox(height: 16),
-                      _buildEditableTextField("Budget (PKR)", budgetController, Icons.account_balance_wallet),
-                      const SizedBox(height: 16),
-                      Text(
-                        "Trip Duration",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: const Color(0xFF0066CC).withOpacity(0.9),
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      LayoutBuilder(
-                        builder: (context, constraints) {
-                          final isSmallScreen = constraints.maxWidth < 400;
-                          return isSmallScreen
-                              ? Column(
+                        Padding(
+                          padding: const EdgeInsets.only(top: 4),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              _buildDateSelector(context, "Start Date", startDate, (picked) {
-                                if (picked != null) {
-                                  setState(() {
-                                    startDate = picked;
-                                    if (startDate.isAfter(endDate)) {
-                                      endDate = startDate.add(const Duration(days: 1));
-                                    }
-                                  });
-                                }
-                              }, startDate),
-                              const SizedBox(height: 12),
-                              _buildDateSelector(context, "End Date", endDate, (picked) {
-                                if (picked != null) {
-                                  setState(() {
-                                    endDate = picked;
-                                  });
-                                }
-                              }, startDate),
+                              Text(
+                                "${tripNameController.text.length}/20",
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey,
+                                ),
+                              ),
                             ],
-                          )
-                              : Row(
-                            children: [
-                              Expanded(
-                                child: _buildDateSelector(context, "Start Date", startDate, (picked) {
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          "Trip Type",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: const Color(0xFF0066CC).withOpacity(0.9),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF88F2E8).withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: const Color(0xFF0066CC).withOpacity(0.5)),
+                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          child: DropdownButtonFormField<String>(
+                            isExpanded: true,
+                            value: selectedTripType,
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              contentPadding: EdgeInsets.symmetric(vertical: 12),
+                            ),
+                            hint: const Text('Select trip type', style: TextStyle(color: Colors.grey)),
+                            items: ['Adventure', 'Relaxation', 'Cultural', 'Wildlife', 'Business']
+                                .map((String type) {
+                              return DropdownMenuItem<String>(
+                                value: type,
+                                child: Text(type, style: const TextStyle(color: Colors.black87)),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                selectedTripType = value;
+                              });
+                            },
+                            validator: (value) => value == null ? 'Please select a trip type' : null,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          "Number of People",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: const Color(0xFF0066CC).withOpacity(0.9),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        _buildEditableTextField(
+                          label: "Enter number of people (1-99)",
+                          controller: peopleCountController,
+                          icon: Icons.people,
+                          validator: validatePeopleCount,
+                          keyboardType: TextInputType.number,
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          "Budget (PKR)",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: const Color(0xFF0066CC).withOpacity(0.9),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        _buildEditableTextField(
+                          label: "Enter budget amount",
+                          controller: budgetController,
+                          icon: Icons.account_balance_wallet,
+                          validator: validateBudget,
+                          keyboardType: TextInputType.number,
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          "Trip Duration*",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: const Color(0xFF0066CC).withOpacity(0.9),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        LayoutBuilder(
+                          builder: (context, constraints) {
+                            final isSmallScreen = constraints.maxWidth < 400;
+                            return isSmallScreen
+                                ? Column(
+                              children: [
+                                _buildDateSelector(context, "Start Date", startDate, (picked) {
                                   if (picked != null) {
                                     setState(() {
                                       startDate = picked;
@@ -155,110 +285,157 @@ class Hyderabadpage extends StatelessWidget {
                                     });
                                   }
                                 }, startDate),
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: _buildDateSelector(context, "End Date", endDate, (picked) {
+                                const SizedBox(height: 12),
+                                _buildDateSelector(context, "End Date", endDate, (picked) {
                                   if (picked != null) {
                                     setState(() {
                                       endDate = picked;
                                     });
                                   }
                                 }, startDate),
+                              ],
+                            )
+                                : Row(
+                              children: [
+                                Expanded(
+                                  child: _buildDateSelector(context, "Start Date", startDate, (picked) {
+                                    if (picked != null) {
+                                      setState(() {
+                                        startDate = picked;
+                                        if (startDate.isAfter(endDate)) {
+                                          endDate = startDate.add(const Duration(days: 1));
+                                        }
+                                      });
+                                    }
+                                  }, startDate),
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: _buildDateSelector(context, "End Date", endDate, (picked) {
+                                    if (picked != null) {
+                                      setState(() {
+                                        endDate = picked;
+                                      });
+                                    }
+                                  }, startDate),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                        if (validateTripDuration(startDate, endDate) != null)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8),
+                            child: Text(
+                              validateTripDuration(startDate, endDate)!,
+                              style: const TextStyle(color: Colors.red, fontSize: 12),
+                            ),
+                          ),
+                        const SizedBox(height: 16),
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Colors.amber.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: Colors.amber.withOpacity(0.3)),
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(Icons.info_outline, color: Colors.amber.shade700),
+                              const SizedBox(width: 8),
+                              Flexible(
+                                child: Text(
+                                  "Trip duration: ${endDate.difference(startDate).inDays + 1} days",
+                                  style: TextStyle(color: Colors.amber.shade800),
+                                ),
                               ),
                             ],
-                          );
-                        },
-                      ),
-                      const SizedBox(height: 16),
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: Colors.amber.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: Colors.amber.withOpacity(0.3)),
+                          ),
                         ),
-                        child: Row(
+                        const SizedBox(height: 24),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Icon(Icons.info_outline, color: Colors.amber.shade700),
-                            const SizedBox(width: 8),
-                            Flexible(
-                              child: Text(
-                                "Trip duration: ${endDate.difference(startDate).inDays + 1} days",
-                                style: TextStyle(color: Colors.amber.shade800),
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              style: TextButton.styleFrom(
+                                foregroundColor: const Color(0xFF0066CC),
+                                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                              ),
+                              child: const Text(
+                                "CANCEL",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            ElevatedButton(
+                              onPressed: () async {
+                                if (!_formKey.currentState!.validate()) {
+                                  return;
+                                }
+
+                                final durationError = validateTripDuration(startDate, endDate);
+                                if (durationError != null) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(durationError),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+                                  return;
+                                }
+
+                                try {
+                                  final User? user = _auth.currentUser;
+                                  if (user == null) throw Exception('User not authenticated');
+                                  final Map<String, dynamic> tripPlan = {
+                                    'userId': user.uid,
+                                    'tripName': tripNameController.text,
+                                    'tripType': selectedTripType,
+                                    'numberOfPeople': int.parse(peopleCountController.text),
+                                    'budget': int.parse(budgetController.text.replaceAll(',', '')),
+                                    'startDate': Timestamp.fromDate(startDate),
+                                    'endDate': Timestamp.fromDate(endDate),
+                                    'destination': 'Hyderabad',
+                                    'status': 'planned',
+                                    'createdAt': Timestamp.now(),
+                                  };
+                                  await _saveTripPlanToFirebase(tripPlan);
+                                  Navigator.pop(context);
+                                  _showSuccessDialog(
+                                    context,
+                                    tripNameController.text,
+                                    selectedTripType ?? 'Not specified',
+                                    endDate.difference(startDate).inDays + 1,
+                                  );
+                                } catch (e) {
+                                  Navigator.pop(context);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text('Error saving trip: ${e.toString()}'),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF0066CC),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                              ),
+                              child: const Text(
+                                "SAVE TRIP",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           ],
                         ),
-                      ),
-                      const SizedBox(height: 24),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          TextButton(
-                            onPressed: () => Navigator.pop(context),
-                            style: TextButton.styleFrom(foregroundColor: const Color(0xFF0066CC)),
-                            child: const Text("CANCEL"),
-                          ),
-                          const SizedBox(width: 12),
-                          ElevatedButton(
-                            onPressed: () async {
-                              if (tripNameController.text.isEmpty || selectedTripType == null) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Please fill all required fields'),
-                                    backgroundColor: Colors.red,
-                                  ),
-                                );
-                                return;
-                              }
-                              try {
-                                final User? user = _auth.currentUser;
-                                if (user == null) throw Exception('User not authenticated');
-                                final Map<String, dynamic> tripPlan = {
-                                  'userId': user.uid,
-                                  'tripName': tripNameController.text,
-                                  'tripType': selectedTripType,
-                                  'numberOfPeople': peopleCountController.text,
-                                  'budget': budgetController.text,
-                                  'startDate': Timestamp.fromDate(startDate),
-                                  'endDate': Timestamp.fromDate(endDate),
-                                  'destination': 'Lahore',
-                                  'status': 'planned',
-                                  'createdAt': Timestamp.now(),
-                                };
-                                await _saveTripPlanToFirebase(tripPlan);
-                                Navigator.pop(context);
-                                _showSuccessDialog(
-                                  context,
-                                  tripNameController.text,
-                                  selectedTripType ?? 'Not specified',
-                                  endDate.difference(startDate).inDays + 1,
-                                );
-                              } catch (e) {
-                                Navigator.pop(context);
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text('Error saving trip: ${e.toString()}'),
-                                    backgroundColor: Colors.red,
-                                  ),
-                                );
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF0066CC),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                            ),
-                            child: const Text(
-                              "SAVE TRIP",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -268,6 +445,41 @@ class Hyderabadpage extends StatelessWidget {
       },
     );
   }
+
+  Widget _buildEditableTextField({
+    required String label,
+    required TextEditingController controller,
+    required IconData icon,
+    required String? Function(String?)? validator,
+    TextInputType? keyboardType,
+    int? maxLength,
+  }) {
+    return TextFormField(
+      controller: controller,
+      keyboardType: keyboardType,
+      maxLength: maxLength,
+      validator: validator,
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: const Color(0xFF88F2E8).withOpacity(0.1),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: const Color(0xFF0066CC).withOpacity(0.5)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Color(0xFF0066CC)),
+        ),
+        labelText: label,
+        labelStyle: const TextStyle(color: Colors.grey),
+        suffixIcon: Icon(icon, color: const Color(0xFF0066CC).withOpacity(0.7)),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        counterText: '',
+        errorStyle: const TextStyle(fontSize: 12),
+      ),
+    );
+  }
+
   Widget _buildDateSelector(
       BuildContext context,
       String label,
@@ -329,6 +541,7 @@ class Hyderabadpage extends StatelessWidget {
       ),
     );
   }
+
   void _showSuccessDialog(BuildContext context, String tripName, String tripType, int duration) {
     showDialog(
       context: context,
@@ -379,7 +592,7 @@ class Hyderabadpage extends StatelessWidget {
                   children: [
                     _buildSuccessDetailRow("Trip Name:", tripName),
                     const Divider(height: 16, thickness: 0.5),
-                    _buildSuccessDetailRow("Destination:", "Lahore"),
+                    _buildSuccessDetailRow("Destination:", "Hyderabad"),
                     const Divider(height: 16, thickness: 0.5),
                     _buildSuccessDetailRow("Trip Type:", tripType),
                     const Divider(height: 16, thickness: 0.5),
@@ -416,6 +629,7 @@ class Hyderabadpage extends StatelessWidget {
       ),
     );
   }
+
   Widget _buildSuccessDetailRow(String label, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
@@ -438,29 +652,26 @@ class Hyderabadpage extends StatelessWidget {
       ),
     );
   }
-  Widget _buildEditableTextField(String label, TextEditingController controller, IconData icon) {
-    return TextField(
-      controller: controller,
-      decoration: InputDecoration(
-        filled: true,
-        fillColor: const Color(0xFF88F2E8).withOpacity(0.1),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: const Color(0xFF0066CC).withOpacity(0.5)),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFF0066CC)),
-        ),
-        labelText: label,
-        labelStyle: const TextStyle(color: Colors.grey),
-        suffixIcon: Icon(icon, color: const Color(0xFF0066CC).withOpacity(0.7)),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-      ),
-    );
-  }
+
   @override
   Widget build(BuildContext context) {
+    if (_errorMessage != null) {
+      return Scaffold(
+        appBar: AppBar(
+          backgroundColor: const Color(0xFF0066CC),
+          title: const Text('Hyderabad', style: TextStyle(color: Colors.white)),
+          iconTheme: const IconThemeData(color: Colors.white),
+        ),
+        body: Center(
+          child: Text(
+            _errorMessage!,
+            style: const TextStyle(color: Colors.red, fontSize: 16),
+            textAlign: TextAlign.center,
+          ),
+        ),
+      );
+    }
+
     return DefaultTabController(
       length: 5,
       child: Scaffold(
@@ -479,6 +690,12 @@ class Hyderabadpage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: TextField(
+                    controller: _searchController,
+                    onChanged: (value) {
+                      setState(() {
+                        _searchQuery = value.toLowerCase();
+                      });
+                    },
                     decoration: InputDecoration(
                       hintText: 'Search in Hyderabad...',
                       hintStyle: const TextStyle(color: Colors.white70),
@@ -493,45 +710,44 @@ class Hyderabadpage extends StatelessWidget {
               ),
               const SizedBox(width: 12),
               Align(
-                alignment: Alignment.bottomRight,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => TripStatusPage()),
-                      );
-                    },
-                    borderRadius: BorderRadius.circular(8), // Smaller corner radius
-                    child: Container(
-                      width: 35,
-                      height: 35,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.9),
-                        borderRadius: BorderRadius.circular(8),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 3,
-                            offset: Offset(0, 1.5),
-                          ),
-                        ],
-                      ),
-                      child: Icon(
-                        Icons.timeline,
-                        color: Color(0xFF0066CC),
-                        size: 20, // Smaller icon
+                  alignment: Alignment.bottomRight,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => TripStatusPage()),
+                        );
+                      },
+                      borderRadius: BorderRadius.circular(8),
+                      child: Container(
+                        width: 35,
+                        height: 35,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.9),
+                          borderRadius: BorderRadius.circular(8),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 3,
+                              offset: const Offset(0, 1.5),
+                            ),
+                          ],
+                        ),
+                        child: Icon(
+                          Icons.timeline,
+                          color: const Color(0xFF0066CC),
+                          size: 20,
+                        ),
                       ),
                     ),
-                  ),
-                ),
+                  )
               )
-
             ],
           ),
         ),
-        body: Column(
+        body:Column(
           children: [
             Container(
               color: const Color(0xFF0066CC),
@@ -562,11 +778,40 @@ class Hyderabadpage extends StatelessWidget {
             ),
           ],
         ),
-
       ),
     );
   }
+
   Widget _buildOverviewTab(BuildContext context) {
+    final List<Map<String, dynamic>> attractions = [
+      {
+        'name': 'Pakka Qila',
+        'address': 'Qila Road, Hyderabad',
+        'image': 'assets/images/hyderabad/hyderabado1.jpg',
+      },
+      {
+        'name': 'Rani Bagh',
+        'address': 'Thandi Sarak, Hyderabad',
+        'image': 'assets/images/hyderabad/hyderabado2.jpg',
+      },
+      {
+        'name': 'Sindh Museum',
+        'address': 'Jamshoro Road, Hyderabad',
+        'image': 'assets/images/hyderabad/hyderabad03.png',
+      },
+      {
+        'name': 'Badshahi Bungalow',
+        'address': 'Near Station Road, Hyderabad',
+        'image': 'assets/images/hyderabad/hyderabad04.jpg',
+      },
+
+    ];
+    final filteredAttractions = _searchQuery.isEmpty
+        ? attractions
+        : attractions.where((attraction) =>
+    attraction['name'].toLowerCase().contains(_searchQuery) ||
+        attraction['address'].toLowerCase().contains(_searchQuery)).toList();
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -592,11 +837,12 @@ class Hyderabadpage extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           _buildInfoCard(
-            title: 'About hyderabad',
+            title: 'About Hyderabad',
             description:
-            'Hyderabad, the historical city by the Godavari River, is a blend of rich culture, heritage, and modern growth.'
-
-            ,
+            'Hyderabad, known as the "City of Pearls," is a historic city in Sindh with rich cultural heritage. '
+                'Famous for its traditional bangles, handicrafts, and delicious Sindhi cuisine, Hyderabad offers '
+                'a blend of history, culture, and vibrant markets. The city sits on the banks of the Indus River '
+                'and is known for its warm hospitality.',
           ),
           const SizedBox(height: 24),
           Padding(
@@ -616,7 +862,18 @@ class Hyderabadpage extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          _buildAttractionsGrid(),
+          if (filteredAttractions.isEmpty)
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 32),
+              child: Center(
+                child: Text(
+                  'No attractions found matching your search',
+                  style: TextStyle(color: Colors.grey),
+                ),
+              ),
+            )
+          else
+            _buildAttractionsGrid(filteredAttractions),
           const SizedBox(height: 24),
           Center(
             child: ElevatedButton.icon(
@@ -640,7 +897,37 @@ class Hyderabadpage extends StatelessWidget {
       ),
     );
   }
+
   Widget _buildShoppingTab() {
+    final List<Map<String, dynamic>> shoppingSpots = [
+      {
+        "name": "Resham Gali",
+        "details": "Famous for traditional bangles, fabrics, and embroidery work.",
+        "image": "assets/images/hyderabad/hyderabadcl1.jpg"
+      },
+      {
+        "name": "Shahi Bazaar",
+        "details": "Known for traditional Sindhi ajrak, handicrafts, and jewelry.",
+        "image": "assets/images/hyderabad/hyderabadcl2.jpg"
+      },
+      {
+        "name": "Sindhi Handicrafts",
+        "details": "Specializes in handmade traditional Sindhi crafts and textiles.",
+        "image": "assets/images/hyderabad/hyderabadcl3.jpg"
+      },
+      {
+        "name": "Pearl Market",
+        "details": "Features Hyderabad's famous pearls and gemstones.",
+        "image": "assets/images/hyderabad/hyderabadcl4.jpg"
+      }
+    ];
+
+    final filteredShoppingSpots = _searchQuery.isEmpty
+        ? shoppingSpots
+        : shoppingSpots.where((spot) =>
+    spot['name'].toLowerCase().contains(_searchQuery) ||
+        spot['details'].toLowerCase().contains(_searchQuery)).toList();
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -663,9 +950,9 @@ class Hyderabadpage extends StatelessWidget {
           _buildInfoCard(
             title: 'Traditional Attire',
             description:
-            'Hyderabad offers a diverse shopping experience, from '
-                'luxurious malls to traditional markets. You can find everything from designer brands to handcrafted goods.'
-            ,
+            'Hyderabad is famous for its traditional Sindhi clothing including ajrak prints, '
+                'embroidered fabrics, and colorful dresses. The city is particularly known '
+                'for its bangles, traditional shawls, and handwoven textiles with intricate designs.',
           ),
           const SizedBox(height: 24),
           Padding(
@@ -680,13 +967,54 @@ class Hyderabadpage extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          _buildShoppingGrid(),
+          if (filteredShoppingSpots.isEmpty)
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 32),
+              child: Center(
+                child: Text(
+                  'No shopping spots found matching your search',
+                  style: TextStyle(color: Colors.grey),
+                ),
+              ),
+            )
+          else
+            _buildShoppingGrid(filteredShoppingSpots),
           const SizedBox(height: 24),
         ],
       ),
     );
   }
+
   Widget _buildFoodTab() {
+    final List<Map<String, dynamic>> foodLocations = [
+      {
+        "name": "Sindh Hotel",
+        "details": "Famous for traditional Sindhi dishes like Sai Bhaji and Sindhi Biryani.",
+        "image": "assets/images/hyderabad/hyderabadfood1.jpg"
+      },
+      {
+        "name": "Hyderabadi Food Street",
+        "details": "Known for its delicious street food and local specialties.",
+        "image": "assets/images/hyderabad/hyderabadfood2.jpg"
+      },
+      {
+        "name": "Palla Fish Restaurant",
+        "details": "Specializes in fresh Indus River fish dishes.",
+        "image": "assets/images/hyderabad/hyderabadfood3.jpg"
+      },
+      {
+        "name": "Traditional Sweets Shop",
+        "details": "Offers local sweets like Mitho Lolo and Khorak.",
+        "image": "assets/images/hyderabad/hyderabadfood4.jpg"
+      }
+    ];
+
+    final filteredFoodLocations = _searchQuery.isEmpty
+        ? foodLocations
+        : foodLocations.where((location) =>
+    location['name'].toLowerCase().contains(_searchQuery) ||
+        location['details'].toLowerCase().contains(_searchQuery)).toList();
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -707,10 +1035,12 @@ class Hyderabadpage extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           _buildInfoCard(
-            title: 'HyderabadCuisine',
+            title: 'Hyderabadi Cuisine',
             description:
-            'Hyderabad is a food lover\'s delight, known for its rich blend of traditional Deccan flavors and contemporary cuisine.'
-
+            'Hyderabad offers a rich culinary tradition with specialties like Sindhi Biryani, '
+                'Sai Bhaji, Palla Fish, and Dal Pakwan. The city is also known for its delicious '
+                'sweets like Mitho Lolo and drinks like Thadal. The flavors are a unique blend of '
+                'spices and traditional cooking methods.',
           ),
           const SizedBox(height: 24),
           Padding(
@@ -725,13 +1055,54 @@ class Hyderabadpage extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          _buildFoodGrid(),
+          if (filteredFoodLocations.isEmpty)
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 32),
+              child: Center(
+                child: Text(
+                  'No food locations found matching your search',
+                  style: TextStyle(color: Colors.grey),
+                ),
+              ),
+            )
+          else
+            _buildFoodGrid(filteredFoodLocations),
           const SizedBox(height: 24),
         ],
       ),
     );
   }
+
   Widget _buildFestivalTab() {
+    final List<Map<String, dynamic>> festivalLocations = [
+      {
+        "name": "Sindh Cultural Festival",
+        "details": "Celebration of Sindhi culture with music, dance, and crafts.",
+        "image": "assets/images/hyderabad/hyderabadf1.jpg"
+      },
+      {
+        "name": "Hyderabad Mela",
+        "details": "Annual fair showcasing local crafts, food, and performances.",
+        "image": "assets/images/hyderabad/hyderabadf2.jpg"
+      },
+      {
+        "name": "Sufi Music Festival",
+        "details": "Showcases traditional Sufi music and Qawwali performances.",
+        "image": "assets/images/hyderabad/hyderabadf3.jpg"
+      },
+      {
+        "name": "Ajrak Day",
+        "details": "Celebration of traditional Sindhi Ajrak prints and culture.",
+        "image": "assets/images/hyderabad/hyderabadf4.jpg"
+      }
+    ];
+
+    final filteredFestivalLocations = _searchQuery.isEmpty
+        ? festivalLocations
+        : festivalLocations.where((location) =>
+    location['name'].toLowerCase().contains(_searchQuery) ||
+        location['details'].toLowerCase().contains(_searchQuery)).toList();
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -754,8 +1125,10 @@ class Hyderabadpage extends StatelessWidget {
           _buildInfoCard(
               title: 'Cultural Festivals',
               description:
-              'Hyderabad hosts a variety of vibrant cultural festivals, '
-                  'food events, art exhibitions, and music concerts throughout the year.'
+              "Hyderabad hosts several festivals celebrating its Sindhi culture and heritage. "
+                  "The Sindh Cultural Festival is the most famous, featuring cultural performances, "
+                  "traditional crafts, and music. The city also celebrates Sufi festivals and "
+                  "traditional craft exhibitions throughout the year."
           ),
           const SizedBox(height: 24),
           Padding(
@@ -770,52 +1143,147 @@ class Hyderabadpage extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          _buildFestivalGrid(),
+          if (filteredFestivalLocations.isEmpty)
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 32),
+              child: Center(
+                child: Text(
+                  'No festival locations found matching your search',
+                  style: TextStyle(color: Colors.grey),
+                ),
+              ),
+            )
+          else
+            _buildFestivalGrid(filteredFestivalLocations),
           const SizedBox(height: 24),
         ],
       ),
     );
   }
+
   Widget _buildReviewFeedbackTab() {
     return StreamBuilder<QuerySnapshot>(
-      stream: _firestore.collection('reviews').snapshots(),
+      stream: _firestore
+          .collection('reviews')
+          .where('destination', isEqualTo: 'Hyderabad')
+          .orderBy('timestamp', descending: true)
+          .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF0066CC)),
+              ));
         }
+
         if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.error_outline, color: Colors.red, size: 50),
+                const SizedBox(height: 16),
+                Text(
+                  'Failed to load reviews',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: const Color(0xFF0066CC).withOpacity(0.9),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  snapshot.error.toString(),
+                  style: const TextStyle(color: Colors.red),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () => setState(() {}),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF0066CC),
+                  ),
+                  child: const Text('Retry', style: TextStyle(color: Colors.white)),
+                ),
+              ],
+            ),
+          );
         }
-        final reviews = snapshot.data?.docs ?? [];
+
+        final List<QueryDocumentSnapshot> reviewDocs = snapshot.data?.docs ?? [];
+        final List<Map<String, dynamic>> firestoreReviews = reviewDocs.map((doc) {
+          final data = doc.data() as Map<String, dynamic>? ?? {};
+          return {
+            'name': data['name'] as String? ?? 'Anonymous',
+            'rating': (data['rating'] as int?) ?? 0,
+            'review': data['review'] as String? ?? '',
+            'imageUrl': 'assets/images/Hyderabad/u${(doc.hashCode % 3) + 1}.png',
+            'date': data['timestamp'] != null
+                ? _formatReviewDate(data['timestamp'].toDate())
+                : 'Recently',
+          };
+        }).toList();
+
+        final List<Map<String, dynamic>> localReviews = [
+          {
+            'name': 'Culture Explorer',
+            'rating': 5,
+            'review': 'Hyderabad is a treasure trove of Sindhi culture! The bazaars and food are amazing.',
+            'imageUrl': 'assets/images/Hyderabad/u1.png',
+            'date': '3 months ago'
+          },
+          {
+            'name': 'History Buff',
+            'rating': 4,
+            'review': 'The historical sites like Pacco Qillo give great insight into Sindh\'s rich history.',
+            'imageUrl': 'assets/images/Hyderabad/u2.png',
+            'date': '2 months ago'
+          }
+        ];
+
         return SingleChildScrollView(
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Text(
-                  'User Reviews',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: const Color(0xFF0066CC).withOpacity(0.9),
-                  ),
+              Text(
+                'Local Reviews',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: const Color(0xFF0066CC).withOpacity(0.9),
                 ),
               ),
               const SizedBox(height: 16),
-              ...reviews.map((reviewDoc) {
-                final reviewData = reviewDoc.data() as Map<String, dynamic>;
-                return _buildReviewCard(
-                  name: reviewData['name'] ?? 'Anonymous',
-                  rating: reviewData['rating'] ?? 0,
-                  review: reviewData['review'] ?? 'No review text available',
-                  imageUrl: 'assets/images/Lahore/u1.png',
-                  date: reviewData['timestamp'] != null
-                      ? '${DateTime.now().difference(reviewData['timestamp'].toDate()).inDays} days ago'
-                      : 'Unknown date',
-                );
-              }).toList(),
+              ...localReviews.map((review) => _buildReviewCard(
+                name: review['name'],
+                rating: review['rating'],
+                review: review['review'],
+                imageUrl: review['imageUrl'],
+                date: review['date'],
+              )).toList(),
+
+              const SizedBox(height: 24),
+              Text(
+                'User Reviews',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: const Color(0xFF0066CC).withOpacity(0.9),
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              if (firestoreReviews.isEmpty)
+                _buildNoReviewsPlaceholder()
+              else
+                ...firestoreReviews.map((review) => _buildReviewCard(
+                  name: review['name'],
+                  rating: review['rating'],
+                  review: review['review'],
+                  imageUrl: review['imageUrl'],
+                  date: review['date'],
+                )).toList(),
+
               const SizedBox(height: 24),
             ],
           ),
@@ -823,6 +1291,46 @@ class Hyderabadpage extends StatelessWidget {
       },
     );
   }
+
+  String _formatReviewDate(DateTime date) {
+    final now = DateTime.now();
+    final difference = now.difference(date);
+
+    if (difference.inDays > 30) {
+      return '${(difference.inDays / 30).floor()} months ago';
+    } else if (difference.inDays > 0) {
+      return '${difference.inDays} days ago';
+    } else if (difference.inHours > 0) {
+      return '${difference.inHours} hours ago';
+    } else {
+      return 'Just now';
+    }
+  }
+
+  Widget _buildNoReviewsPlaceholder() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 32),
+      child: Column(
+        children: [
+          Icon(Icons.reviews, size: 50, color: Colors.grey.shade400),
+          const SizedBox(height: 16),
+          const Text(
+            'No user reviews yet',
+            style: TextStyle(fontSize: 16, color: Colors.grey),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Be the first to share your experience!',
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.grey.shade500,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildInfoCard({
     required String title,
     required String description,
@@ -856,29 +1364,8 @@ class Hyderabadpage extends StatelessWidget {
       ),
     );
   }
-  Widget _buildAttractionsGrid() {
-    final List<Map<String, dynamic>> attractions = [
-      {
-        'name': 'Pakka Qila',
-        'address': 'Qila Road, Hyderabad',
-        'image': 'assets/images/hyderabad/hyderabado1.jpg',
-      },
-      {
-        'name': 'Rani Bagh',
-        'address': 'Thandi Sarak, Hyderabad',
-        'image': 'assets/images/hyderabad/hyderabado2.jpg',
-      },
-      {
-        'name': 'Sindh Museum',
-        'address': 'Jamshoro Road, Hyderabad',
-        'image': 'assets/images/hyderabad/hyderabad03.png',
-      },
-      {
-        'name': 'Badshahi Bungalow',
-        'address': 'Near Station Road, Hyderabad',
-        'image': 'assets/images/hyderabad/hyderabad04.jpg',
-      },
-    ];
+
+  Widget _buildAttractionsGrid(List<Map<String, dynamic>> attractions) {
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -896,68 +1383,61 @@ class Hyderabadpage extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
             side: BorderSide(color: Colors.grey.shade200),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ClipRRect(
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-                child: Image.asset(
-                  attractions[index]['image'],
-                  height: 120,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      attractions[index]['name'],
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ClipRRect(
+                    borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                    child: Image.asset(
+                      attractions[index]['image'],
+                      height: constraints.maxWidth * 0.6,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
                     ),
-                    const SizedBox(height: 6),
-                    Text(
-                      attractions[index]['address'],
-                      style: const TextStyle(fontSize: 12, color: Colors.grey),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            attractions[index]['name'],
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 6),
+                          Expanded(
+                            child: Text(
+                              attractions[index]['address'],
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey,
+                              ),
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ],
-                ),
-              ),
-            ],
+                  ),
+                ],
+              );
+            },
           ),
         );
       },
     );
   }
-  Widget _buildShoppingGrid() {
-    final List<Map<String, dynamic>> shoppingSpots = [
-      {
-        'name': 'Boulevard Mall',
-        'details': 'Modern shopping mall with a variety of brands.',
-        'image': 'assets/images/hyderabad/hyderabadcl1.jpg',
-      },
-      {
-        'name': 'Resham Gali',
-        'details': 'Traditional market known for fabric, bridal, and casual shopping.',
-        'image': 'assets/images/hyderabad/hyderabadcl2.jpg',
-      },
-      {
-        'name': 'Cantonment Shopping Area',
-        'details': 'Blend of old and new fashion trends.',
-        'image': 'assets/images/hyderabad/hyderabadcl3.jpg',
-      },
-      {
-        'name': 'Auto Bahn Road Markets',
-        'details': 'One-stop for electronics, clothes, and street food.',
-        'image': 'assets/images/hyderabad/hyderabadcl4.jpg',
-      },
-    ];
+
+  Widget _buildShoppingGrid(List<Map<String, dynamic>> shoppingSpots) {
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -975,68 +1455,61 @@ class Hyderabadpage extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
             side: BorderSide(color: Colors.grey.shade200),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ClipRRect(
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-                child: Image.asset(
-                  shoppingSpots[index]['image'],
-                  height: 120,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      shoppingSpots[index]['name'],
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ClipRRect(
+                    borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                    child: Image.asset(
+                      shoppingSpots[index]['image'],
+                      height: constraints.maxWidth * 0.6,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
                     ),
-                    const SizedBox(height: 6),
-                    Text(
-                      shoppingSpots[index]['details'],
-                      style: const TextStyle(fontSize: 12, color: Colors.grey),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            shoppingSpots[index]['name'],
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 6),
+                          Expanded(
+                            child: Text(
+                              shoppingSpots[index]['details'],
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey,
+                              ),
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ],
-                ),
-              ),
-            ],
+                  ),
+                ],
+              );
+            },
           ),
         );
       },
     );
   }
-  Widget _buildFoodGrid() {
-    final List<Map<String, dynamic>> foodLocations = [
-      {
-        'name': 'Bombay Bakery',
-        'details': 'Iconic bakery famous for its cakes and pastries.',
-        'image': 'assets/images/hyderabad/hyderabadfood1.jpeg',
-      },
-      {
-        'name': 'Al Manzar Restaurant',
-        'details': 'Known for traditional Sindhi biryani and BBQ.',
-        'image': 'assets/images/hyderabad/hyderabadfood2.jpg',
-      },
-      {
-        'name': 'Royal Taj Restaurant',
-        'details': 'Popular for Mughlai and Pakistani cuisine.',
-        'image': 'assets/images/hyderabad/hyderabadfood3.jpg',
-      },
-      {
-        'name': 'Cafe George',
-        'details': 'Great spot for fast food and snacks.',
-        'image': 'assets/images/hyderabad/hyderabadfood4.jpg',
-      },
-    ];
+
+  Widget _buildFoodGrid(List<Map<String, dynamic>> foodLocations) {
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -1054,68 +1527,61 @@ class Hyderabadpage extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
             side: BorderSide(color: Colors.grey.shade200),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ClipRRect(
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-                child: Image.asset(
-                  foodLocations[index]['image'],
-                  height: 120,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      foodLocations[index]['name'],
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ClipRRect(
+                    borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                    child: Image.asset(
+                      foodLocations[index]['image'],
+                      height: constraints.maxWidth * 0.6,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
                     ),
-                    const SizedBox(height: 6),
-                    Text(
-                      foodLocations[index]['details'],
-                      style: const TextStyle(fontSize: 12, color: Colors.grey),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            foodLocations[index]['name'],
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 6),
+                          Expanded(
+                            child: Text(
+                              foodLocations[index]['details'],
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey,
+                              ),
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ],
-                ),
-              ),
-            ],
+                  ),
+                ],
+              );
+            },
           ),
         );
       },
     );
   }
-  Widget _buildFestivalGrid() {
-    final List<Map<String, dynamic>> festivalLocations = [
-      {
-        'name': 'Sindh Cultural Festival',
-        'details': 'Celebration of Sindhi heritage with music, art, and dance.',
-        'image': 'assets/images/hyderabad/hyderabadf1.jpg',
-      },
-      {
-        'name': 'Urs of Lal Shahbaz Qalandar (Sehwan)',
-        'details': 'Spiritual gatherings, dhamal, and cultural activities.',
-        'image': 'assets/images/hyderabad/hyderabadf2.jpg',
-      },
-      {
-        'name': 'Literary Festivals',
-        'details': 'Events showcasing local literature and arts.',
-        'image': 'assets/images/hyderabad/hyderabadf3.jpg',
-      },
-      {
-        'name': 'Hyderabad Mela',
-        'details': 'Annual fair with handicrafts, food stalls, and cultural shows.',
-        'image': 'assets/images/hyderabad/hyderabadf4.jpg',
-      },
-    ];
+
+  Widget _buildFestivalGrid(List<Map<String, dynamic>> festivalLocations) {
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -1133,40 +1599,54 @@ class Hyderabadpage extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
             side: BorderSide(color: Colors.grey.shade200),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ClipRRect(
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-                child: Image.asset(
-                  festivalLocations[index]['image'],
-                  height: 120,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      festivalLocations[index]['name'],
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ClipRRect(
+                    borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                    child: Image.asset(
+                      festivalLocations[index]['image'],
+                      height: constraints.maxWidth * 0.6,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
                     ),
-                    const SizedBox(height: 6),
-                    Text(
-                      festivalLocations[index]['details'],
-                      style: const TextStyle(fontSize: 12, color: Colors.grey),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            festivalLocations[index]['name'],
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 6),
+                          Expanded(
+                            child: Text(
+                              festivalLocations[index]['details'],
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey,
+                              ),
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ],
-                ),
-              ),
-            ],
+                  ),
+                ],
+              );
+            },
           ),
         );
       },
@@ -1204,7 +1684,10 @@ class Hyderabadpage extends StatelessWidget {
                     children: [
                       Text(
                         name,
-                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
                       ),
                       const SizedBox(height: 4),
                       Row(
@@ -1215,23 +1698,30 @@ class Hyderabadpage extends StatelessWidget {
                               color: Colors.amber,
                               size: 16,
                             );
-                          }),
-                          const SizedBox(width: 8),
-                          Text(
-                            date,
-                            style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
-                          ),
-                        ],
+                          },
+                          )],
                       ),
                     ],
                   ),
                 ),
               ],
             ),
+            const SizedBox(height: 8),
+            Text(
+              date,
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.grey.shade600,
+              ),
+            ),
             const SizedBox(height: 12),
             Text(
               review,
-              style: const TextStyle(fontSize: 14, color: Colors.black87, height: 1.5),
+              style: const TextStyle(
+                fontSize: 14,
+                color: Colors.black87,
+                height: 1.5,
+              ),
             ),
           ],
         ),

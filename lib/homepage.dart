@@ -458,7 +458,7 @@ class _HomePageState extends State<HomePage> {
       onTap: () {
         if (title == 'Naran') {
 
-          Navigator.push(context, MaterialPageRoute(builder: (context) =>  Naranpage()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) =>  NaranPage()));
         } else if (title == 'Swat') {
           Navigator.push(context, MaterialPageRoute(builder: (context) =>  SawatPage()));
         } else if (title == 'Hunza') {
