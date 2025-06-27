@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:travelmate/ToolsCode/JourneyEstimatorPage.dart';
 import 'package:travelmate/ToolsCode/currency_converter.dart';
 import 'package:travelmate/chat.dart';
-
 import 'package:travelmate/gallery.dart';
 import 'package:travelmate/googlemaps.dart';
 import 'package:travelmate/homepage.dart';
@@ -15,11 +15,45 @@ import 'package:travelmate/settingmenu.dart';
 import 'package:travelmate/spacesharing.dart';
 import 'package:travelmate/travelbuddy.dart';
 import 'package:travelmate/TripMainPage.dart';
-
 import 'ToolsCode/weather_app.dart';
 
+class Tools extends StatefulWidget {
+  @override
+  _ToolsState createState() => _ToolsState();
+}
 
-class Tools extends StatelessWidget {
+class _ToolsState extends State<Tools> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseStorage _storage = FirebaseStorage.instance;
+  String? _profileImageUrl;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadProfileImage();
+  }
+
+  Future<void> _loadProfileImage() async {
+    final userId = _auth.currentUser?.uid;
+    if (userId != null) {
+      try {
+        final url = await _storage.ref('profile_images/$userId').getDownloadURL();
+        if (mounted) {
+          setState(() {
+            _profileImageUrl = url;
+          });
+        }
+      } catch (e) {
+        // Use default image if no profile image exists
+        if (mounted) {
+          setState(() {
+            _profileImageUrl = null;
+          });
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -67,13 +101,17 @@ class Tools extends StatelessWidget {
                       MaterialPageRoute(
                         builder: (context) => const SettingsMenuPage(previousIndex: 1),
                       ),
-                    );
+                    ).then((_) {
+                      // Refresh profile image when returning from settings
+                      _loadProfileImage();
+                    });
                   },
                   child: CircleAvatar(
                     radius: 18,
                     backgroundColor: Colors.white24,
-                    backgroundImage: const AssetImage('assets/images/default_avatar.png'),
-                    child: null,
+                    backgroundImage: _profileImageUrl != null
+                        ? NetworkImage(_profileImageUrl!)
+                        : const AssetImage('assets/images/circleimage.png') as ImageProvider,
                   ),
                 ),
               ),
@@ -194,10 +232,10 @@ class Tools extends StatelessWidget {
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (context) {
-                if (index == 0) return  HomePage();
-                if (index == 1) return  Tools();
-                if (index == 2) return  TripPage();
-                if (index == 3) return  MessagePage();
+                if (index == 0) return HomePage();
+                if (index == 1) return Tools();
+                if (index == 2) return TripPage();
+                if (index == 3) return MessagePage();
                 return const HomePage();
               }),
                   (route) => false,
@@ -389,6 +427,6 @@ final List<Tool> tools = [
     subtitle: 'Organized memories',
     icon: Icons.photo,
     iconColor: Colors.pink,
-    page: photogallery(),
+    page: GalleryPage(),
   ),
 ];

@@ -17,7 +17,6 @@ import 'package:travelmate/chat.dart';
 
 class SettingsMenuPage extends StatefulWidget {
   final int previousIndex;
-
   const SettingsMenuPage({Key? key, required this.previousIndex}) : super(key: key);
 
   @override
@@ -37,7 +36,7 @@ class _SettingsMenuPageState extends State<SettingsMenuPage> {
 
   String name = "Loading...";
   String email = "Loading...";
-  String? profileImageUrl;
+  String? _profileImageUrl;
   File? _imageFile;
 
   @override
@@ -51,24 +50,29 @@ class _SettingsMenuPageState extends State<SettingsMenuPage> {
       final user = _auth.currentUser;
       if (user != null) {
         final userDoc = await _firestore.collection('users').doc(user.uid).get();
-        if (mounted) {
+
+        setState(() {
+          name = userDoc.get('name') ?? user.displayName ?? "User";
+          email = userDoc.get('email') ?? user.email ?? "No email provided";
+        });
+
+        try {
+          final url = await _storage.ref('profile_images/${user.uid}').getDownloadURL();
           setState(() {
-            name = userDoc['name'] ?? "User";
-            email = user.email ?? "No email provided";
-            profileImageUrl = userDoc['profileImageUrl'];
+            _profileImageUrl = url;
+          });
+        } catch (e) {
+          setState(() {
+            _profileImageUrl = null;
           });
         }
       }
     } catch (e) {
-      if (mounted) {
-        setState(() {
-          name = "Error loading name";
-          email = "Error loading email";
-        });
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Error loading user data: ${e.toString()}")),
-        );
-      }
+      setState(() {
+        name = "User";
+        email = _auth.currentUser?.email ?? "No email";
+        _profileImageUrl = null;
+      });
     }
   }
 
@@ -87,10 +91,7 @@ class _SettingsMenuPageState extends State<SettingsMenuPage> {
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Failed to pick image: ${e.toString()}"),
-          backgroundColor: Colors.red,
-        ),
+        SnackBar(content: Text("Failed to pick image: ${e.toString()}")),
       );
     }
   }
@@ -101,63 +102,41 @@ class _SettingsMenuPageState extends State<SettingsMenuPage> {
     setState(() => _isUploading = true);
 
     try {
-      // Delete old image if exists
-      try {
-        await _storage.ref('profile_images/${_auth.currentUser!.uid}.jpg').delete();
-      } catch (e) {
-        // Ignore if no previous image exists
-      }
+      final userId = _auth.currentUser!.uid;
+      final ref = _storage.ref('profile_images/$userId');
 
-      // Upload new image
-      final ref = _storage.ref('profile_images/${_auth.currentUser!.uid}.jpg');
-      final uploadTask = ref.putFile(_imageFile!);
+      await ref.putFile(_imageFile!);
+      final url = await ref.getDownloadURL();
 
-      // Show upload progress
-      uploadTask.snapshotEvents.listen((taskSnapshot) {
-        final progress = taskSnapshot.bytesTransferred / taskSnapshot.totalBytes;
-        debugPrint("Upload progress: ${(progress * 100).toStringAsFixed(2)}%");
+      setState(() {
+        _profileImageUrl = url;
+        _isUploading = false;
       });
 
-      // Wait for upload to complete
-      final taskSnapshot = await uploadTask.whenComplete(() {});
-
-      // Get download URL
-      final url = await taskSnapshot.ref.getDownloadURL();
-
-      // Update Firestore
-      await _firestore.collection('users').doc(_auth.currentUser!.uid).update({
-        'profileImageUrl': url,
+      await _firestore.collection('galleryItems').add({
+        'userId': userId,
+        'downloadUrl': url,
+        'storagePath': 'profile_images/$userId',
+        'isPublic': false,
+        'isProfileImage': true,
+        'timestamp': FieldValue.serverTimestamp(),
       });
 
-      if (mounted) {
-        setState(() {
-          profileImageUrl = url;
-          _isUploading = false;
-        });
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Profile picture updated successfully!"),
-            backgroundColor: Colors.green,
-          ),
-        );
-      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Profile picture updated successfully!")),
+      );
     } catch (e) {
-      if (mounted) {
-        setState(() => _isUploading = false);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Failed to upload image: ${e.toString()}"),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
+      setState(() => _isUploading = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Upload failed: ${e.toString()}")),
+      );
     }
   }
 
   ImageProvider _getProfileImage() {
     if (_imageFile != null) return FileImage(_imageFile!);
-    if (profileImageUrl != null) return NetworkImage(profileImageUrl!);
-    return const AssetImage('assets/images/default_avatar.png');
+    if (_profileImageUrl != null) return NetworkImage(_profileImageUrl!);
+    return const AssetImage('assets/images/circleimage.png');
   }
 
   @override
@@ -180,43 +159,20 @@ class _SettingsMenuPageState extends State<SettingsMenuPage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            switch(widget.previousIndex) {
-              case 0:
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) =>  HomePage()),
-                );
-                break;
-              case 1:
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) =>  Tools()),
-                );
-                break;
-              case 2:
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) =>  TripPage()),
-                );
-                break;
-              case 3:
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) =>  MessagePage()),
-                );
-                break;
-              default:
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) =>  HomePage()),
-                );
+            if (widget.previousIndex == 0) {
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
+            } else if (widget.previousIndex == 1) {
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Tools()));
+            } else if (widget.previousIndex == 2) {
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => TripPage()));
+            } else {
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MessagePage()));
             }
           },
         ),
       ),
       body: Column(
         children: [
-          // Profile Header Section
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
@@ -234,14 +190,13 @@ class _SettingsMenuPageState extends State<SettingsMenuPage> {
                         radius: 50,
                         backgroundColor: const Color(0xFF88F2E8).withOpacity(0.3),
                         backgroundImage: _getProfileImage(),
-                        child: _imageFile == null && profileImageUrl == null
+                        child: _imageFile == null && _profileImageUrl == null
                             ? const Icon(Icons.person, size: 40, color: Colors.white)
                             : null,
                       ),
                       if (_isUploading)
                         const CircularProgressIndicator(
                           valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF0066CC)),
-                          strokeWidth: 3,
                         ),
                       Positioned(
                         bottom: 0,
@@ -289,8 +244,6 @@ class _SettingsMenuPageState extends State<SettingsMenuPage> {
               ],
             ),
           ),
-
-          // Settings List
           Expanded(
             child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -299,12 +252,12 @@ class _SettingsMenuPageState extends State<SettingsMenuPage> {
                 _buildMenuItem(
                   icon: Icons.person_outline,
                   title: 'Account Settings',
-                  onTap: () => _navigateTo(const AccountSettingsPage()),
+                  onTap: () => _navigateTo(AccountSettingsPage()),
                 ),
                 _buildMenuItem(
                   icon: Icons.language_outlined,
                   title: 'Language',
-                  onTap: () => _navigateTo(const LanguagesPage()),
+                  onTap: () => _navigateTo(LanguagesPage()),
                 ),
 
                 const SizedBox(height: 16),
@@ -327,12 +280,12 @@ class _SettingsMenuPageState extends State<SettingsMenuPage> {
                 _buildMenuItem(
                   icon: Icons.storage_outlined,
                   title: 'Data Storage',
-                  onTap: () => _navigateTo( DataStoragePage()),
+                  onTap: () => _navigateTo(DataStoragePage()),
                 ),
                 _buildMenuItem(
                   icon: Icons.lock_outline,
                   title: 'Privacy & Security',
-                  onTap: () => _navigateTo( PrivacyAndSecurityPage()),
+                  onTap: () => _navigateTo(PrivacyAndSecurityPage()),
                 ),
 
                 const SizedBox(height: 16),
@@ -340,7 +293,7 @@ class _SettingsMenuPageState extends State<SettingsMenuPage> {
                 _buildMenuItem(
                   icon: Icons.help_outline,
                   title: 'Help & Support',
-                  onTap: () => _navigateTo( HelpAndSupportPage()),
+                  onTap: () => _navigateTo(HelpAndSupportPage()),
                 ),
 
                 const SizedBox(height: 24),
@@ -396,7 +349,6 @@ class _SettingsMenuPageState extends State<SettingsMenuPage> {
         trailing: const Icon(Icons.chevron_right, color: Colors.grey, size: 24),
         onTap: onTap,
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        minLeadingWidth: 24,
       ),
     );
   }
@@ -418,7 +370,6 @@ class _SettingsMenuPageState extends State<SettingsMenuPage> {
         value: value,
         onChanged: onChanged,
         activeColor: const Color(0xFF0066CC),
-        inactiveTrackColor: Colors.grey[300],
         title: Text(
           title,
           style: const TextStyle(
@@ -428,123 +379,77 @@ class _SettingsMenuPageState extends State<SettingsMenuPage> {
           ),
         ),
         secondary: Icon(icon, color: const Color(0xFF0066CC), size: 24),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       ),
     );
   }
 
   Widget _buildLogoutButton() {
-    return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-        onPressed: _isLoggingOut ? null : () => _showLogoutDialog(context),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF0066CC),
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          elevation: 0,
+    return ElevatedButton(
+      onPressed: _isLoggingOut ? null : _showLogoutDialog,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: const Color(0xFF0066CC),
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
         ),
-        child: _isLoggingOut
-            ? const SizedBox(
-          height: 24,
-          width: 24,
-          child: CircularProgressIndicator(
-            strokeWidth: 3,
-            color: Colors.white,
-          ),
-        )
-            : const Text(
-          'Logout',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
+      ),
+      child: _isLoggingOut
+          ? const SizedBox(
+        height: 24,
+        width: 24,
+        child: CircularProgressIndicator(
+          strokeWidth: 3,
+          color: Colors.white,
+        ),
+      )
+          : const Text(
+        'Logout',
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
         ),
       ),
     );
   }
 
   void _navigateTo(Widget page) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => page),
-    );
+    Navigator.push(context, MaterialPageRoute(builder: (context) => page));
   }
 
-  Future<void> _showLogoutDialog(BuildContext context) async {
+  Future<void> _showLogoutDialog() async {
     final result = await showDialog<bool>(
       context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+      builder: (context) => AlertDialog(
+        title: const Text('Logout'),
+        content: const Text('Are you sure you want to logout?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
           ),
-          title: const Text(
-            'Logout',
-            style: TextStyle(
-              color: Colors.black87,
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-            ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Logout', style: TextStyle(color: Colors.red)),
           ),
-          content: const Text(
-            'Are you sure you want to logout?',
-            style: TextStyle(
-              color: Colors.black54,
-              fontSize: 16,
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: const Text(
-                'Cancel',
-                style: TextStyle(
-                  color: Color(0xFF0066CC),
-                  fontSize: 16,
-                ),
-              ),
-            ),
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(true),
-              child: const Text(
-                'Logout',
-                style: TextStyle(
-                  color: Color(0xFF0066CC),
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ],
-        );
-      },
+        ],
+      ),
     );
 
     if (result == true) {
       setState(() => _isLoggingOut = true);
       try {
         await _auth.signOut();
-        if (mounted) {
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => const loginn()),
-                (route) => false,
-          );
-        }
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const loginn()),
+              (route) => false,
+        );
       } catch (e) {
-        if (mounted) {
-          setState(() => _isLoggingOut = false);
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text("Logout failed: ${e.toString()}"),
-              backgroundColor: Colors.red,
-            ),
-          );
-        }
+        setState(() => _isLoggingOut = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Logout failed: ${e.toString()}")),
+        );
       }
     }
   }

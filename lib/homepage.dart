@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:travelmate/ActvitiesCode/ParaglidingPage.dart';
 import 'package:travelmate/KarachiPage.dart';
 import 'package:travelmate/LahorePage.dart';
@@ -27,8 +28,10 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   late String currentGreeting;
   late String currentSubtext;
-  String? profileImageUrl;
   final TextEditingController _searchController = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseStorage _storage = FirebaseStorage.instance;
+  String? _profileImageUrl;
 
   @override
   void initState() {
@@ -38,22 +41,24 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _loadProfileImage() async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      final userDoc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
-      if (mounted) {
-        setState(() {
-          profileImageUrl = userDoc['profileImageUrl'];
-        });
+    final userId = _auth.currentUser?.uid;
+    if (userId != null) {
+      try {
+        final url = await _storage.ref('profile_images/$userId').getDownloadURL();
+        if (mounted) {
+          setState(() {
+            _profileImageUrl = url;
+          });
+        }
+      } catch (e) {
+        // Use default image if no profile image exists
+        if (mounted) {
+          setState(() {
+            _profileImageUrl = null;
+          });
+        }
       }
     }
-  }
-
-  ImageProvider _getProfileImage() {
-    if (profileImageUrl != null) {
-      return NetworkImage(profileImageUrl!);
-    }
-    return const AssetImage('assets/images/default_avatar.png');
   }
 
   void _updateGreetings() {
@@ -165,12 +170,17 @@ class _HomePageState extends State<HomePage> {
                         MaterialPageRoute(
                           builder: (context) => const SettingsMenuPage(previousIndex: 0),
                         ),
-                      );
+                      ).then((_) {
+                        // Refresh profile image when returning from settings
+                        _loadProfileImage();
+                      });
                     },
                     child: CircleAvatar(
                       radius: 18,
                       backgroundColor: Colors.white24,
-                      backgroundImage: const AssetImage('assets/images/default_avatar.png'),
+                      backgroundImage: _profileImageUrl != null
+                          ? NetworkImage(_profileImageUrl!)
+                          : const AssetImage('assets/images/circleimage.png') as ImageProvider,
                     ),
                   ),
                 ),
@@ -359,19 +369,11 @@ class _HomePageState extends State<HomePage> {
     return GestureDetector(
       onTap: () {
         if (title == 'Karachi') {
-
           Navigator.push(context, MaterialPageRoute(builder: (context) =>  KarachiPage()));
-
-
-
         } else if (title == 'Lahore') {
           Navigator.push(context, MaterialPageRoute(builder: (context) =>  LahorePage()));
         } else if (title == 'Islamabad') {
-
           Navigator.push(context, MaterialPageRoute(builder: (context) =>  Islamabadpage()));
-
-
-
         }
       },
       child: Card(
@@ -457,18 +459,15 @@ class _HomePageState extends State<HomePage> {
     return GestureDetector(
       onTap: () {
         if (title == 'Naran') {
-
-          Navigator.push(context, MaterialPageRoute(builder: (context) =>  Naranpage()));
-        } else if (title == 'Swat') {
-          Navigator.push(context, MaterialPageRoute(builder: (context) =>  Swatpage()));
-        } else if (title == 'Hunza') {
-          Navigator.push(context, MaterialPageRoute(builder: (context) =>  Hunzapage()));
-
+          Navigator.push(context, MaterialPageRoute(builder: (context) => Naranpage()));
         } else if (title == 'Swat') {
           Navigator.push(context, MaterialPageRoute(builder: (context) => Swatpage()));
         } else if (title == 'Hunza') {
           Navigator.push(context, MaterialPageRoute(builder: (context) => Hunzapage()));
-
+        } else if (title == 'Swat') {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => Swatpage()));
+        } else if (title == 'Hunza') {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => Hunzapage()));
         }
       },
       child: Card(
@@ -558,10 +557,7 @@ class _HomePageState extends State<HomePage> {
         } else if (title == 'Paragliding') {
           Navigator.push(context, MaterialPageRoute(builder: (context) =>  ParaglidingPage()));
         } else if (title == 'Zipline') {
-
           Navigator.push(context, MaterialPageRoute(builder: (context) =>  ZiplinePage()));
-
-
         }
       },
       child: Card(

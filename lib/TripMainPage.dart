@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:travelmate/ActvitiesCode/JeepRallyPage.dart';
 import 'package:travelmate/ActvitiesCode/RockClimbingPage.dart';
 import 'package:travelmate/FamousTouristPlacesCode/NeelumValleyPage.dart';
@@ -28,8 +29,6 @@ import 'FAmousPlaces.dart';
 import 'FeaturedCities/PeshawarPage.dart';
 import 'FeaturedCities/RawalpindiPage.dart';
 
-
-
 class TripPage extends StatefulWidget {
   const TripPage({Key? key}) : super(key: key);
 
@@ -39,6 +38,9 @@ class TripPage extends StatefulWidget {
 
 class _TripPageState extends State<TripPage> {
   int currentIndex = 2; // For bottom nav bar
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseStorage _storage = FirebaseStorage.instance;
+  String? _profileImageUrl;
 
   final List<Map<String, dynamic>> categories = [
     {
@@ -154,6 +156,33 @@ class _TripPageState extends State<TripPage> {
       'page': NeelumValleyPage()
     },
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadProfileImage();
+  }
+
+  Future<void> _loadProfileImage() async {
+    final userId = _auth.currentUser?.uid;
+    if (userId != null) {
+      try {
+        final url = await _storage.ref('profile_images/$userId').getDownloadURL();
+        if (mounted) {
+          setState(() {
+            _profileImageUrl = url;
+          });
+        }
+      } catch (e) {
+        // Use default image if no profile image exists
+        if (mounted) {
+          setState(() {
+            _profileImageUrl = null;
+          });
+        }
+      }
+    }
+  }
 
   void _onItemTapped(int index) {
     if (index == currentIndex) return;
@@ -301,7 +330,6 @@ class _TripPageState extends State<TripPage> {
     );
   }
 
-
   Widget _buildSectionHeader(String title, VoidCallback? onViewAll) {
     final screenHeight = MediaQuery.of(context).size.height;
 
@@ -334,7 +362,6 @@ class _TripPageState extends State<TripPage> {
       ),
     );
   }
-
 
   void _showSmartTripDialog() {
     String? _selectedTripType;
@@ -477,13 +504,17 @@ class _TripPageState extends State<TripPage> {
                       MaterialPageRoute(
                         builder: (context) => const SettingsMenuPage(previousIndex: 2),
                       ),
-                    );
+                    ).then((_) {
+                      // Refresh profile image when returning from settings
+                      _loadProfileImage();
+                    });
                   },
                   child: CircleAvatar(
                     radius: 18,
                     backgroundColor: Colors.white24,
-                    backgroundImage: const AssetImage('assets/images/default_avatar.png'),
-                    child: null,
+                    backgroundImage: _profileImageUrl != null
+                        ? NetworkImage(_profileImageUrl!)
+                        : const AssetImage('assets/images/circleimage.png') as ImageProvider,
                   ),
                 ),
               ),
