@@ -4,14 +4,14 @@ import 'package:carousel_slider/carousel_slider.dart';
 class RamameadowPage extends StatelessWidget {
   // Image paths
   final List<String> overviewImages = [
-    'assets/images/ramameadow/ro1.jpg',
-    'assets/images/ramameadow/ro2.jpg',
-    'assets/images/ramameadow/ro3.jpg',
+    'assets/images/rama/r1.jpg',
+    'assets/images/rama/r2.jpg',
+    'assets/images/rama/r3.jpg',
   ];
   final List<String> seasonImages = [
-    'assets/images/ramameadow/rs1.jpg',
-    'assets/images/ramameadow/rs2.jpg',
-    'assets/images/ramameadow/rs3.jpg',
+  'assets/images/rama/r5.jpg',
+  'assets/images/rama/r6.jpg',
+  'assets/images/rama/r7.jpg',
   ];
   final List<String> clothesImages = [
     'assets/images/ramameadow/clothes1.jpg',
@@ -19,9 +19,9 @@ class RamameadowPage extends StatelessWidget {
     'assets/images/ramameadow/clothes3.jpg',
   ];
   final List<String> safetyImages = [
-    'assets/images/ramameadow/safety1.jpg',
-    'assets/images/ramameadow/safety2.jpg',
-    'assets/images/ramameadow/safety3.jpg',
+    'assets/images/rama/r3.jpg',
+    'assets/images/rama/r6.jpg',
+    'assets/images/rama/r5.jpg',
   ];
 
   // Colors
@@ -347,22 +347,22 @@ class RamameadowPage extends StatelessWidget {
   Widget _buildAttractionGrid() {
     final List<Map<String, dynamic>> attractions = [
       {
-        'image': 'assets/images/ramameadow/attraction1.jpg',
+        'image': 'assets/images/rama/r4.jpg',
         'title': 'Wildflower Trails',
         'subtitle': 'Vibrant blooms in summer'
       },
       {
-        'image': 'assets/images/ramameadow/attraction2.jpg',
+        'image': 'assets/images/rama/r5.jpg',
         'title': 'Sage Rama Cave',
         'subtitle': 'Ancient meditation site'
       },
       {
-        'image': 'assets/images/ramameadow/attraction3.jpg',
+        'image': 'assets/images/rama/r6.jpg',
         'title': 'Crystal Springs',
         'subtitle': 'Natural mineral springs'
       },
       {
-        'image': 'assets/images/ramameadow/attraction4.jpg',
+        'image': 'assets/images/rama/r7.jpg',
         'title': 'Eagle Peak',
         'subtitle': 'Panoramic mountain views'
       },

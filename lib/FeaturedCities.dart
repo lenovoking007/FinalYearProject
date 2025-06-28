@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-
 import 'package:travelmate/HyderabadPage.dart';
 import 'package:travelmate/MultanPage.dart';
 import 'package:travelmate/GawadarPage.dart';
-import 'package:travelmate/MuzaffarabadPage.dart';
-import 'package:travelmate/SkarduPage.dart';
 import 'package:travelmate/FaisalabadPage.dart';
 import 'package:travelmate/QuettaPage.dart';
 
@@ -85,17 +82,7 @@ class FeaturedCitiesPage extends StatelessWidget {
                 imagePath: 'assets/images/gawadar1.jpg',
                 onTap: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Gawadarpage()),
-                ),
-              ),
-              _buildCityCard(
-                context: context,
-                title: 'Skardu',
-                description: 'Gateway to K2',
-                imagePath: 'assets/images/skardu1.jpg',
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Skardupage()),
+                  MaterialPageRoute(builder: (context) => GwadarPage()),
                 ),
               ),
               _buildCityCard(
@@ -116,7 +103,7 @@ class FeaturedCitiesPage extends StatelessWidget {
                 imagePath: 'assets/images/quetta1.jpg',
                 onTap: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Quettapage()),
+                  MaterialPageRoute(builder: (context) => QuettaPage()),
 
               ),
               ) ],

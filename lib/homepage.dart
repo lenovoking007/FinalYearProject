@@ -462,12 +462,12 @@ class _HomePageState extends State<HomePage> {
         } else if (title == 'Swat') {
           Navigator.push(context, MaterialPageRoute(builder: (context) =>  SawatPage()));
         } else if (title == 'Hunza') {
-          Navigator.push(context, MaterialPageRoute(builder: (context) =>  HunzaPage()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => HunzaPage()));
 
         } else if (title == 'Swat') {
           Navigator.push(context, MaterialPageRoute(builder: (context) => SawatPage()));
         } else if (title == 'Hunza') {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => HunzaPage()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) =>HunzaPage()));
 
         }
       },

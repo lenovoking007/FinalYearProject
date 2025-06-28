@@ -5,24 +5,25 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class SaifUlMalookPage extends StatelessWidget {
   // Image paths
   final List<String> overviewImages = [
-    'assets/images/saifulmalook/so1.jpg',
-    'assets/images/saifulmalook/so2.jpg',
-    'assets/images/saifulmalook/so3.jpg',
+    'assets/images/saif/so1.jpg',
+    'assets/images/saif/so2.jpg',
+    'assets/images/saif/so3.jpg',
   ];
   final List<String> seasonImages = [
-    'assets/images/saifulmalook/ss1.jpg',
-    'assets/images/saifulmalook/ss2.jpg',
-    'assets/images/saifulmalook/ss3.jpg',
+    'assets/images/saif/s11.jpg',
+    'assets/images/saif/s33.jpg',
+    'assets/images/saif/s44.jpg',
   ];
   final List<String> clothesImages = [
-    'assets/images/saifulmalook/clothes1.jpg',
-    'assets/images/saifulmalook/clothes2.jpg',
-    'assets/images/saifulmalook/clothes3.jpg',
+    'assets/images/Lahore/cl1.jpg',
+    'assets/images/Lahore/cl2.jpg',
+    'assets/images/Lahore/cl3.jpg',
+    'assets/images/Lahore/cl4.jpg',
   ];
   final List<String> safetyImages = [
-    'assets/images/saifulmalook/safety1.jpg',
-    'assets/images/saifulmalook/safety2.jpg',
-    'assets/images/saifulmalook/safety3.jpg',
+    'assets/images/saif/ss1.jpg',
+    'assets/images/saif/ss3.jpg',
+    'assets/images/saif/ss2.jpg',
   ];
 
   SaifUlMalookPage({super.key}) {
@@ -397,22 +398,22 @@ class SaifUlMalookPage extends StatelessWidget {
   Widget _buildAttractionGrid() {
     final List<Map<String, dynamic>> attractions = [
       {
-        'image': 'assets/images/saifulmalook/attraction1.jpg',
+        'image': 'assets/images/saif/s11.jpg',
         'title': 'Boat Rides',
         'subtitle': 'Traditional wooden boats on the lake'
       },
       {
-        'image': 'assets/images/saifulmalook/attraction2.jpg',
+        'image': 'assets/images/saif/s33.jpg',
         'title': 'Malika Parbat',
         'subtitle': '"Queen of Mountains" viewpoint'
       },
       {
-        'image': 'assets/images/saifulmalook/attraction3.jpg',
+        'image': 'assets/images/saif/s44.jpg',
         'title': 'Lulusar Lake',
         'subtitle': 'Another beautiful alpine lake'
       },
       {
-        'image': 'assets/images/saifulmalook/attraction4.jpg',
+        'image': 'assets/images/saif/so2.jpg',
         'title': 'Ansoo Lake',
         'subtitle': 'Tear-shaped high-altitude lake'
       },

@@ -4,24 +4,25 @@ import 'package:carousel_slider/carousel_slider.dart';
 class BabusarTopPage extends StatelessWidget {
   // Image paths
   final List<String> overviewImages = [
-    'assets/images/babusartop/bo1.jpg',
-    'assets/images/babusartop/bo2.jpg',
-    'assets/images/babusartop/bo3.jpg',
+    'assets/images/babu/b1.jpg',
+    'assets/images/babu/b2.jpg',
+    'assets/images/babu/b3.jpg',
   ];
   final List<String> seasonImages = [
-    'assets/images/babusartop/bs1.jpg',
-    'assets/images/babusartop/bs2.jpg',
-    'assets/images/babusartop/bs3.jpg',
+    'assets/images/babu/b4.jpg',
+    'assets/images/babu/b5.jpg',
+    'assets/images/babu/b6.jpg',
   ];
   final List<String> clothesImages = [
-    'assets/images/babusartop/clothes1.jpg',
-    'assets/images/babusartop/clothes2.jpg',
-    'assets/images/babusartop/clothes3.jpg',
+    'assets/images/Lahore/cl1.jpg',
+    'assets/images/Lahore/cl2.jpg',
+    'assets/images/Lahore/cl3.jpg',
+    'assets/images/Lahore/cl4.jpg',
   ];
   final List<String> safetyImages = [
-    'assets/images/babusartop/safety1.jpg',
-    'assets/images/babusartop/safety2.jpg',
-    'assets/images/babusartop/safety3.jpg',
+    'assets/images/babu/b2.jpg',
+    'assets/images/babu/b5.jpg',
+    'assets/images/babu/b1.jpg',
   ];
 
   // Colors (same as original)
@@ -347,22 +348,22 @@ class BabusarTopPage extends StatelessWidget {
   Widget _buildAttractionGrid() {
     final List<Map<String, dynamic>> attractions = [
       {
-        'image': 'assets/images/babusartop/attraction1.jpg',
+        'image': 'assets/images/des/do3.jpg',
         'title': 'Lulusar Lake',
         'subtitle': 'Alpine lake en route to Babusar'
       },
       {
-        'image': 'assets/images/babusartop/attraction2.jpg',
+        'image':'assets/images/a/a1.jpg',
         'title': 'Saif-ul-Malook Lake',
         'subtitle': 'Fairy-tale lake in Kaghan Valley'
       },
       {
-        'image': 'assets/images/babusartop/attraction3.jpg',
+        'image': 'assets/images/a/a5.jpg',
         'title': 'Shounter Valley',
         'subtitle': 'Scenic valley near the pass'
       },
       {
-        'image': 'assets/images/babusartop/attraction4.jpg',
+        'image': 'assets/images/babu/b6.jpg',
         'title': 'Kaghan Road',
         'subtitle': 'World-famous winding road'
       },

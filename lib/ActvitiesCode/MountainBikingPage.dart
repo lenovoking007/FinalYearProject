@@ -20,7 +20,7 @@ class MountainBikingPage extends StatelessWidget {
     'assets/images/biking/ms3.jpg',
   ];
 
-  static const primaryColor = Color(0xFF8B4513);
+  static const primaryColor = Color(0xFF0066CC);
 
   MountainBikingPage({super.key});
 
@@ -70,13 +70,14 @@ class MountainBikingPage extends StatelessWidget {
           _buildCarousel(overviewImages),
           const SizedBox(height: 24),
           _buildInfoCard(
-            title: 'Mountain Biking Overview',
-            description:
-            'Mountain biking is an exciting sport that involves riding bicycles off-road, often over rough terrain. It’s an exhilarating way to explore nature, improve your fitness, and enjoy the great outdoors.',
+              title: 'Mountain Biking Overview',
+              description:
+              'Mountain biking is an exciting sport that involves riding bicycles off-road, often over rough terrain. '
+                  'Its an exhilarating way to explore nature, improve your fitness, and enjoy the great outdoors.',
           ),
           const SizedBox(height: 24),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Text(
               'Top Mountain Biking Locations',
               style: TextStyle(
@@ -103,9 +104,9 @@ class MountainBikingPage extends StatelessWidget {
           _buildCarousel(locationsImages),
           const SizedBox(height: 24),
           _buildInfoCard(
-            title: 'Best Mountain Biking Trails',
-            description:
-            'Mountain biking is thrilling on the right trail. Here are some of the world’s best spots for an unforgettable biking experience.',
+              title: 'Best Mountain Biking Trails',
+              description:
+              'Mountain biking is thrilling on the right trail. Here are some of the worlds best spots for an unforgettable biking experience.',
           ),
           const SizedBox(height: 24),
           _buildLocationsGrid(),
@@ -149,7 +150,7 @@ class MountainBikingPage extends StatelessWidget {
               padding: const EdgeInsets.all(16),
               child: Column(
                 children: [
-                  const Text(
+                  Text(
                     'Mountain Biking Safety Tips',
                     style: TextStyle(
                       fontSize: 18,
@@ -163,7 +164,7 @@ class MountainBikingPage extends StatelessWidget {
                         .map(
                           (tip) => ListTile(
                         contentPadding: EdgeInsets.zero,
-                        leading: const Icon(Icons.check_circle, color: primaryColor),
+                        leading: Icon(Icons.check_circle, color: primaryColor),
                         title: Text(tip),
                       ),
                     )
@@ -297,7 +298,7 @@ class MountainBikingPage extends StatelessWidget {
           children: [
             Text(
               title,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
                 color: primaryColor,

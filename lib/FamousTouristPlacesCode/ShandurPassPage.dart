@@ -4,24 +4,25 @@ import 'package:carousel_slider/carousel_slider.dart';
 class ShandurPassPage extends StatelessWidget {
   // Image paths
   final List<String> overviewImages = [
-    'assets/images/shandur/so1.jpg',
-    'assets/images/shandur/so2.jpg',
-    'assets/images/shandur/so3.jpg',
+    'assets/images/shan/shan1.jpg',
+    'assets/images/shan/shan2.jpg',
+    'assets/images/shan/shan3.jpg',
   ];
   final List<String> seasonImages = [
-    'assets/images/shandur/ss1.jpg',
-    'assets/images/shandur/ss2.jpg',
-    'assets/images/shandur/ss3.jpg',
+    'assets/images/shan/shanw1.jpg',
+    'assets/images/shan/shanw3.jpg',
+    'assets/images/shan/shanw2.jpg',
   ];
   final List<String> clothesImages = [
-    'assets/images/shandur/clothes1.jpg',
-    'assets/images/shandur/clothes2.jpg',
-    'assets/images/shandur/clothes3.jpg',
+    'assets/images/Lahore/cl1.jpg',
+    'assets/images/Lahore/cl2.jpg',
+    'assets/images/Lahore/cl3.jpg',
+    'assets/images/Lahore/cl4.jpg',
   ];
   final List<String> safetyImages = [
-    'assets/images/shandur/safety1.jpg',
-    'assets/images/shandur/safety2.jpg',
-    'assets/images/shandur/safety3.jpg',
+    'assets/images/shan/shan3.jpg',
+    'assets/images/shan/shan2.jpg',
+    'assets/images/shan/shan1.jpg',
   ];
 
   // Colors (same as original)
@@ -347,22 +348,22 @@ class ShandurPassPage extends StatelessWidget {
   Widget _buildAttractionGrid() {
     final List<Map<String, dynamic>> attractions = [
       {
-        'image': 'assets/images/shandur/attraction1.jpg',
+        'image': 'assets/images/shan/shan4.jpg',
         'title': 'Shandur Polo Festival',
         'subtitle': 'World’s highest polo ground'
       },
       {
-        'image': 'assets/images/shandur/attraction2.jpg',
+        'image': 'assets/images/shan/shan2.jpg',
         'title': 'Gupis Valley',
         'subtitle': 'Scenic Hunza tributary valley'
       },
       {
-        'image': 'assets/images/shandur/attraction3.jpg',
+        'image': 'assets/images/shan/shan3.jpg',
         'title': 'Laspur Valley',
         'subtitle': 'Wildlife sanctuary & trekking'
       },
       {
-        'image': 'assets/images/shandur/attraction4.jpg',
+        'image': 'assets/images/shan/shan1.jpg',
         'title': 'Shandoor Lake',
         'subtitle': 'Glacial lake near the pass'
       },

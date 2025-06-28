@@ -4,24 +4,25 @@ import 'package:carousel_slider/carousel_slider.dart';
 class AttabadLakePage extends StatelessWidget {
   // Image paths
   final List<String> overviewImages = [
-    'assets/images/attabadlake/al1.jpg',
-    'assets/images/attabadlake/al2.jpg',
-    'assets/images/attabadlake/al3.jpg',
+    'assets/images/a/a1.jpg',
+    'assets/images/a/a2.jpg',
+    'assets/images/a/a3.jpg',
   ];
   final List<String> seasonImages = [
-    'assets/images/attabadlake/as1.jpg',
-    'assets/images/attabadlake/as2.jpg',
-    'assets/images/attabadlake/as3.jpg',
+    'assets/images/a/a4.jpg',
+    'assets/images/a/a5.jpg',
+    'assets/images/a/a6.jpg',
   ];
   final List<String> clothesImages = [
-    'assets/images/attabadlake/clothes1.jpg',
-    'assets/images/attabadlake/clothes2.jpg',
-    'assets/images/attabadlake/clothes3.jpg',
+    'assets/images/Lahore/cl1.jpg',
+    'assets/images/Lahore/cl2.jpg',
+    'assets/images/Lahore/cl3.jpg',
+    'assets/images/Lahore/cl4.jpg',
   ];
   final List<String> safetyImages = [
-    'assets/images/attabadlake/safety1.jpg',
-    'assets/images/attabadlake/safety2.jpg',
-    'assets/images/attabadlake/safety3.jpg',
+    'assets/images/a/a4.jpg',
+    'assets/images/a/a5.jpg',
+    'assets/images/a/a6.jpg',
   ];
 
   // Colors (same as original)
@@ -347,22 +348,22 @@ class AttabadLakePage extends StatelessWidget {
   Widget _buildAttractionGrid() {
     final List<Map<String, dynamic>> attractions = [
       {
-        'image': 'assets/images/attabadlake/attraction1.jpg',
+        'image': 'assets/images/a/a7.jpg',
         'title': 'Passu Cones',
         'subtitle': 'Iconic conical mountain peaks'
       },
       {
-        'image': 'assets/images/attabadlake/attraction2.jpg',
+        'image': 'assets/images/a/a5.jpg',
         'title': 'Karimabad',
         'subtitle': 'Historic village with Baltit Fort'
       },
       {
-        'image': 'assets/images/attabadlake/attraction3.jpg',
+        'image': 'assets/images/a/a3.jpg',
         'title': 'Hussaini Bridge',
         'subtitle': 'Suspension bridge with stunning views'
       },
       {
-        'image': 'assets/images/attabadlake/attraction4.jpg',
+        'image': 'assets/images/a/a4.jpg',
         'title': 'Booni Village',
         'subtitle': 'Scenic village near the lake'
       },

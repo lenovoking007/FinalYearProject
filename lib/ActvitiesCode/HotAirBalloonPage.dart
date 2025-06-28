@@ -20,7 +20,7 @@ class HotAirBalloonPage extends StatelessWidget {
     'assets/images/ballon/as1.jpg',
   ];
 
-  static const primaryColor = Color(0xFFFF5733);
+  static const primaryColor = Color(0xFF0066CC);
 
   HotAirBalloonPage({super.key});
 
@@ -75,8 +75,8 @@ class HotAirBalloonPage extends StatelessWidget {
             'Soar through the skies in a hot air balloon and witness breathtaking views from above. A perfect adventure for thrill-seekers and nature lovers alike.',
           ),
           const SizedBox(height: 24),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Text(
               'Best Hot Air Ballooning Locations',
               style: TextStyle(
@@ -108,8 +108,8 @@ class HotAirBalloonPage extends StatelessWidget {
             'Explore some of the most scenic hot air ballooning destinations across the world, where the skies are clear and the views are unforgettable.',
           ),
           const SizedBox(height: 24),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Text(
               'Top Ballooning Locations',
               style: TextStyle(
@@ -236,51 +236,51 @@ class HotAirBalloonPage extends StatelessWidget {
 
   Widget _buildSafetyTipsList() {
     final List<String> tips = [
-      'Always fly with a certified operator.',
-      'Ensure proper weather conditions before flight.',
-      'Wear comfortable clothing and sturdy shoes.',
-      'Follow the pilot’s instructions during the flight.',
-      'Avoid smoking during the flight for safety reasons.',
+    'Always fly with a certified operator.',
+    'Ensure proper weather conditions before flight.',
+    'Wear comfortable clothing and sturdy shoes.',
+    'Follow the pilots instructions during the flight.',
+    'Avoid smoking during the flight for safety reasons.',
     ];
 
     return Card(
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side: BorderSide(color: Colors.grey.shade200),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            const Text(
-              'Essential Hot Air Ballooning Safety Tips',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: primaryColor,
-              ),
-            ),
-            const SizedBox(height: 12),
-            ...tips.map((tip) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 6),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Icon(Icons.brightness_1, size: 8, color: primaryColor),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      tip,
-                      style: const TextStyle(fontSize: 14),
-                    ),
-                  ),
-                ],
-              ),
-            )),
-          ],
-        ),
-      ),
+    elevation: 0,
+    shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(16),
+    side: BorderSide(color: Colors.grey.shade200),
+    ),
+    child: Padding(
+    padding: const EdgeInsets.all(16),
+    child: Column(
+    children: [
+    Text(
+    'Essential Hot Air Ballooning Safety Tips',
+    style: TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.bold,
+    color: primaryColor,
+    ),
+    ),
+    const SizedBox(height: 12),
+    ...tips.map((tip) => Padding(
+    padding: const EdgeInsets.symmetric(vertical: 6),
+    child: Row(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+    Icon(Icons.brightness_1, size: 8, color: primaryColor),
+    const SizedBox(width: 8),
+    Expanded(
+    child: Text(
+    tip,
+    style: const TextStyle(fontSize: 14),
+    ),
+    ),
+    ],
+    ),
+    )),
+    ],
+    ),
+    ),
     );
   }
 
@@ -329,7 +329,7 @@ class HotAirBalloonPage extends StatelessWidget {
           children: [
             Text(
               title,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
                 color: primaryColor,

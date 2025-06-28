@@ -4,24 +4,25 @@ import 'package:carousel_slider/carousel_slider.dart';
 class BullanValleyPage extends StatelessWidget {
   // Image paths
   final List<String> overviewImages = [
-    'assets/images/bullanvalley/bo1.jpg',
-    'assets/images/bullanvalley/bo2.jpg',
-    'assets/images/bullanvalley/bo3.jpg',
+    'assets/images/bul/bul1.jpg',
+    'assets/images/bul/bul2.jpg',
+    'assets/images/bul/bul3.jpg',
   ];
   final List<String> seasonImages = [
-    'assets/images/bullanvalley/bs1.jpg',
-    'assets/images/bullanvalley/bs2.jpg',
-    'assets/images/bullanvalley/bs3.jpg',
+    'assets/images/bul/bul3.jpg',
+    'assets/images/bul/bul4.jpg',
+    'assets/images/bul/bul5.jpg',
   ];
   final List<String> clothesImages = [
-    'assets/images/bullanvalley/clothes1.jpg',
-    'assets/images/bullanvalley/clothes2.jpg',
-    'assets/images/bullanvalley/clothes3.jpg',
+    'assets/images/Lahore/cl1.jpg',
+    'assets/images/Lahore/cl2.jpg',
+    'assets/images/Lahore/cl3.jpg',
+    'assets/images/Lahore/cl4.jpg',
   ];
   final List<String> safetyImages = [
-    'assets/images/bullanvalley/safety1.jpg',
-    'assets/images/bullanvalley/safety2.jpg',
-    'assets/images/bullanvalley/safety3.jpg',
+    'assets/images/bul/bul1.jpg',
+    'assets/images/bul/bul4.jpg',
+    'assets/images/bul/bul6.jpg',
   ];
 
   // Colors (same as original)
@@ -347,22 +348,22 @@ class BullanValleyPage extends StatelessWidget {
   Widget _buildAttractionGrid() {
     final List<Map<String, dynamic>> attractions = [
       {
-        'image': 'assets/images/bullanvalley/attraction1.jpg',
+        'image': 'assets/images/bul/bul1.jpg',
         'title': 'Ziarat Residency',
         'subtitle': 'British colonial-era building'
       },
       {
-        'image': 'assets/images/bullanvalley/attraction2.jpg',
+        'image': 'assets/images/bul/bul2.jpg',
         'title': 'Juniper Forest',
         'subtitle': 'Ancient juniper trees'
       },
       {
-        'image': 'assets/images/bullanvalley/attraction3.jpg',
+        'image': 'assets/images/bul/bul6.jpg',
         'title': 'Koh-i-Maran',
         'subtitle': 'Highest peak in Ziarat'
       },
       {
-        'image': 'assets/images/bullanvalley/attraction4.jpg',
+        'image': 'assets/images/bul/bul4.jpg',
         'title': 'Rock Carvings',
         'subtitle': 'Prehistoric tribal art'
       },
