@@ -1,5 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:travelmate/LahorePage.dart'; // Make sure this import exists
+import 'package:travelmate/ActvitiesCode/HikingPage.dart';
+import 'package:travelmate/ActvitiesCode/SightseeingPage.dart';
+import 'package:travelmate/ActvitiesCode/WhiteWaterRaftingPage.dart';
+import 'package:travelmate/FamousTouristPlacesCode/BabusarTopPage.dart';
+import 'package:travelmate/FamousTouristPlacesCode/BolanValleyPage.dart';
+import 'package:travelmate/FamousTouristPlacesCode/DesosaiPlainsPage.dart';
+import 'package:travelmate/FamousTouristPlacesCode/FairyMeadowsPage.dart';
+import 'package:travelmate/FamousTouristPlacesCode/NeelumValleyPage.dart';
+import 'package:travelmate/FamousTouristPlacesCode/RamaMeadowPage.dart';
+import 'package:travelmate/FamousTouristPlacesCode/SaifUlMalookPage.dart';
+import 'package:travelmate/FeaturedCities/MurreePage.dart';
+import 'package:travelmate/GawadarPage.dart';
+import 'package:travelmate/HunzaPage.dart';
+import 'package:travelmate/IslamabadPage.dart';
+import 'package:travelmate/LahorePage.dart';
+import 'package:travelmate/MultanPage.dart';
+import 'package:travelmate/NaranPage.dart';
+import 'package:travelmate/QuettaPage.dart';
+import 'package:travelmate/SwatPage.dart'; // Make sure this import exists
 
 class NaturePage extends StatelessWidget {
   const NaturePage({super.key});
@@ -55,62 +73,52 @@ class NaturePage extends StatelessWidget {
       {
         'title': 'Islamabad',
         'description': 'Margalla Hills, Daman-e-Koh',
-        'imagePath': 'assets/images/islamabad.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath':'assets/images/islambad/islambad1.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const IslamabadPage())),
       },
       {
         'title': 'Murree',
         'description': 'Forests, scenic viewpoints',
-        'imagePath': 'assets/images/murree.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath': 'assets/images/muree/mo1.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const MureePage())),
       },
-      {
-        'title': 'Muzafarabad',
-        'description': 'Neelum River, natural surroundings',
-        'imagePath': 'assets/images/muzafarabad.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
-      },
+
       {
         'title': 'Swat',
         'description': 'Lush valleys, rivers',
-        'imagePath': 'assets/images/swat.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath': 'assets/images/sawat/sawato1.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const SawatPage())),
       },
       {
         'title': 'Hunza',
         'description': 'Karakoram range, valleys',
-        'imagePath': 'assets/images/hunza.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath': 'assets/images/hunza/hunzao3.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => HunzaPage())),
       },
-      {
-        'title': 'Skardu',
-        'description': 'Lakes, mountains',
-        'imagePath': 'assets/images/skardu.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
-      },
+
       {
         'title': 'Naran',
         'description': 'Saif-ul-Malook, riverbanks',
-        'imagePath': 'assets/images/naran.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath': 'assets/images/naran/narano2.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const NaranPage())),
       },
       {
         'title': 'Quetta',
         'description': 'Orchards, hills',
-        'imagePath': 'assets/images/quetta.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath': 'assets/images/quetta/quettao1.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const QuettaPage())),
       },
       {
         'title': 'Gawadar',
         'description': 'Coastal cliffs',
-        'imagePath': 'assets/images/gawadar.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath': 'assets/images/gwadar/gao1.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const GwadarPage())),
       },
       {
         'title': 'Multan',
         'description': 'Desert-nature mix',
-        'imagePath': 'assets/images/multan.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath': 'assets/images/multan/multano1.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const MultanPage())),
       },
     ];
   }
@@ -120,26 +128,20 @@ class NaturePage extends StatelessWidget {
       {
         'title': 'Hiking',
         'description': 'Explore nature trails',
-        'imagePath': 'assets/images/hiking.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath': 'assets/images/hiking/hi4.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) =>  HikingPage())),
       },
       {
         'title': 'Sightseeing',
         'description': 'Discover scenic landscapes',
         'imagePath': 'assets/images/sightseeing.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) =>  SightseeingTourPage())),
       },
       {
         'title': 'White Water Rafting',
         'description': 'Thrilling river adventures',
-        'imagePath': 'assets/images/rafting.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
-      },
-      {
-        'title': 'Hot Air Ballooning',
-        'description': 'Aerial views of landscapes',
-        'imagePath': 'assets/images/ballooning.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath': 'assets/images/water/wo1.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => WhiteWaterRaftingPage())),
       },
     ];
   }
@@ -149,62 +151,52 @@ class NaturePage extends StatelessWidget {
       {
         'title': 'Saif-ul-Malook',
         'description': 'Legendary alpine lake',
-        'imagePath': 'assets/images/saif.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath': 'assets/images/saif/so1.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => SaifUlMalookPage())),
       },
       {
         'title': 'Fairy Meadows',
         'description': 'Grassland with Nanga Parbat view',
-        'imagePath': 'assets/images/fairy.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath': 'assets/images/fai/f1.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => FairyMeadowsPage())),
       },
       {
         'title': 'Neelum Valley',
         'description': 'Azure river through mountains',
-        'imagePath': 'assets/images/neelum.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath': 'assets/images/nel/no5.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => NeelumValleyPage())),
       },
-      {
-        'title': 'Shandur Pass',
-        'description': 'Roof of the world',
-        'imagePath': 'assets/images/shandur.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
-      },
+
       {
         'title': 'Deosai Plains',
         'description': 'Land of giants',
-        'imagePath': 'assets/images/deosai.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath': 'assets/images/des/do1.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => DeosaiPage())),
       },
       {
         'title': 'Babusar Top',
         'description': 'High mountain pass',
-        'imagePath': 'assets/images/babusar.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath': 'assets/images/babu/b3.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => BabusarTopPage())),
       },
       {
         'title': 'Rama Meadow',
         'description': 'Alpine pasture',
-        'imagePath': 'assets/images/rama.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath': 'assets/images/rama/r4.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => RamameadowPage())),
       },
-      {
-        'title': 'Concordia',
-        'description': 'Throne room of mountain gods',
-        'imagePath': 'assets/images/concordia.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
-      },
+
       {
         'title': 'Attabad Lake',
         'description': 'Turquoise wonder',
-        'imagePath': 'assets/images/attabad.jpg',
+        'imagePath': 'assets/images/a/a4.jpg',
         'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
       },
       {
         'title': 'Bolan Valley',
         'description': 'Historic mountain pass',
-        'imagePath': 'assets/images/bolan.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath': 'assets/images/bul/bul3.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => BullanValleyPage())),
       },
     ];
   }

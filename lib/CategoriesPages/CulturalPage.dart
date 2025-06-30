@@ -1,5 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:travelmate/LahorePage.dart'; // Make sure this import exists
+import 'package:travelmate/ActvitiesCode/DesertSafariPage.dart';
+import 'package:travelmate/ActvitiesCode/HotAirBalloonPage.dart';
+import 'package:travelmate/ActvitiesCode/SightseeingPage.dart';
+import 'package:travelmate/FaisalabadPage.dart';
+import 'package:travelmate/FamousTouristPlacesCode/BolanValleyPage.dart';
+import 'package:travelmate/FamousTouristPlacesCode/MohenjoDaroPage.dart';
+import 'package:travelmate/FamousTouristPlacesCode/NeelumValleyPage.dart';
+import 'package:travelmate/FeaturedCities/PeshawarPage.dart';
+import 'package:travelmate/FeaturedCities/RawalpindiPage.dart';
+import 'package:travelmate/HyderabadPage.dart';
+import 'package:travelmate/IslamabadPage.dart';
+import 'package:travelmate/KarachiPage.dart';
+import 'package:travelmate/LahorePage.dart';
+import 'package:travelmate/MultanPage.dart';
+import 'package:travelmate/QuettaPage.dart';
+import 'package:travelmate/SialkotPage.dart'; // Make sure this import exists
 
 class CulturalPage extends StatelessWidget {
   const CulturalPage({super.key});
@@ -55,69 +70,64 @@ class CulturalPage extends StatelessWidget {
       {
         'title': 'Karachi',
         'description': 'Quaid\'s Mausoleum, museums',
-        'imagePath': 'assets/images/karachi_culture.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath':'assets/images/Karachii/karachio1.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const KarachiPage())),
       },
       {
         'title': 'Lahore',
         'description': 'Badshahi Mosque, Lahore Fort, Mughal heritage',
-        'imagePath': 'assets/images/lahore_culture.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath': 'assets/images/Lahore/lahore3.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => LahorePage())),
       },
       {
         'title': 'Islamabad',
         'description': 'Faisal Mosque, Lok Virsa Museum',
-        'imagePath': 'assets/images/islamabad_culture.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath': 'assets/images/islambad/islambad1.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const IslamabadPage())),
       },
       {
         'title': 'Rawalpindi',
         'description': 'Raja Bazaar, old city',
-        'imagePath': 'assets/images/rawalpindi_culture.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath': 'assets/images/raw/ra1.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const RawalpindiPage())),
       },
       {
         'title': 'Peshawar',
         'description': 'Qissa Khawani Bazaar, historical gates',
-        'imagePath': 'assets/images/peshawar_culture.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath': 'assets/images/pesh/po3.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const PeshawarPage())),
       },
       {
         'title': 'Multan',
         'description': 'Shrines, blue pottery',
-        'imagePath': 'assets/images/multan_culture.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath': 'assets/images/multan/multan04.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const MultanPage())),
       },
       {
         'title': 'Hyderabad',
         'description': 'Sindhi culture',
-        'imagePath': 'assets/images/hyderabad_culture.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath': 'assets/images/hyderabad/hyderabado1.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const HyderabadPage())),
       },
       {
         'title': 'Quetta',
         'description': 'Baloch traditions',
-        'imagePath': 'assets/images/quetta_culture.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath': 'assets/images/quetta/quettao1.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const QuettaPage())),
       },
       {
         'title': 'Faisalabad',
         'description': 'Colonial architecture',
-        'imagePath': 'assets/images/faisalabad_culture.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath': 'assets/images/faislabad/fas02.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const FaisalabadPage())),
       },
       {
         'title': 'Sialkot',
         'description': 'Iqbal Manzil, industrial legacy',
-        'imagePath': 'assets/images/sialkot_culture.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath': 'assets/images/sialkot/sialkoto2.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const SialkotPage())),
       },
-      {
-        'title': 'Muzafarabad',
-        'description': 'Kashmiri cultural elements',
-        'imagePath': 'assets/images/muzafarabad_culture.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
-      },
+
     ];
   }
 
@@ -126,20 +136,20 @@ class CulturalPage extends StatelessWidget {
       {
         'title': 'Cholistan Desert Safari',
         'description': 'Heritage-rich desert experience',
-        'imagePath': 'assets/images/cholistan_safari.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath': 'assets/images/des/d04.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) =>  DesertSafariPage())),
       },
       {
         'title': 'Sightseeing',
         'description': 'Monuments and landmarks',
-        'imagePath': 'assets/images/cultural_sightseeing.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath': 'assets/images/sight/si1.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => SightseeingTourPage())),
       },
       {
         'title': 'Hot Air Ballooning',
         'description': 'City views from above',
-        'imagePath': 'assets/images/ballooning_culture.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath': 'assets/images/ballon/ao1.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => HotAirBalloonPage())),
       },
     ];
   }
@@ -149,20 +159,20 @@ class CulturalPage extends StatelessWidget {
       {
         'title': 'Mohenjo Daro',
         'description': 'Ancient Indus Valley civilization',
-        'imagePath': 'assets/images/mohenjo_daro.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath': 'assets/images/man/mo1.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => MonajadaroPage())),
       },
       {
         'title': 'Bolan Valley',
         'description': 'Historic mountain pass',
-        'imagePath': 'assets/images/bolan_valley.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath': 'assets/images/bul/bul2.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => BullanValleyPage())),
       },
       {
         'title': 'Neelum Valley',
         'description': 'Scenic cultural landscape',
-        'imagePath': 'assets/images/neelum_valley.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath': 'assets/images/nel/no1.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) =>NeelumValleyPage())),
       },
     ];
   }

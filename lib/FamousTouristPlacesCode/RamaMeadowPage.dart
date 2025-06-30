@@ -14,9 +14,10 @@ class RamameadowPage extends StatelessWidget {
   'assets/images/rama/r7.jpg',
   ];
   final List<String> clothesImages = [
-    'assets/images/ramameadow/clothes1.jpg',
-    'assets/images/ramameadow/clothes2.jpg',
-    'assets/images/ramameadow/clothes3.jpg',
+    'assets/images/Lahore/cl1.jpg',
+    'assets/images/Lahore/cl2.jpg',
+    'assets/images/Lahore/cl3.jpg',
+    'assets/images/Lahore/cl4.jpg',
   ];
   final List<String> safetyImages = [
     'assets/images/rama/r3.jpg',

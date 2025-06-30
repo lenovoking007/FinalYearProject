@@ -1,4 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:travelmate/ActvitiesCode/HotAirBalloonPage.dart';
+import 'package:travelmate/ActvitiesCode/ParaglidingPage.dart';
+import 'package:travelmate/ActvitiesCode/SightseeingPage.dart';
+import 'package:travelmate/ActvitiesCode/SwimmingPage.dart';
+import 'package:travelmate/FamousTouristPlacesCode/AttabadLakePage.dart';
+import 'package:travelmate/GawadarPage.dart';
+import 'package:travelmate/HyderabadPage.dart';
+import 'package:travelmate/KarachiPage.dart';
 import 'package:travelmate/LahorePage.dart'; // Make sure this import exists
 
 class BeachPage extends StatelessWidget {
@@ -55,20 +63,20 @@ class BeachPage extends StatelessWidget {
       {
         'title': 'Karachi',
         'description': 'Sea View, Hawksbay, French Beach',
-        'imagePath': 'assets/images/karachi_beach.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath': 'assets/images/Karachii/karachio1.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const KarachiPage() )),
       },
       {
         'title': 'Gawadar',
         'description': 'Pristine beaches, marine sports',
-        'imagePath': 'assets/images/gawadar_beach.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath': 'assets/images/gwadar/gao3.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const GwadarPage())),
       },
       {
         'title': 'Hyderabad',
         'description': 'Indus River edge',
-        'imagePath': 'assets/images/hyderabad_river.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath': 'assets/images/hyderabad/hyderabado1.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const HyderabadPage())),
       },
     ];
   }
@@ -78,26 +86,26 @@ class BeachPage extends StatelessWidget {
       {
         'title': 'Swimming',
         'description': 'Enjoy coastal waters',
-        'imagePath': 'assets/images/beach_swimming.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath': 'assets/images/swimming/so2.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) =>  SwimmingPage())),
       },
       {
         'title': 'Paragliding',
         'description': 'Coastal aerial adventures',
-        'imagePath': 'assets/images/coastal_paragliding.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath': 'assets/images/paragliding/po3.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => ParaglidingPage())),
       },
       {
         'title': 'Sightseeing',
         'description': 'Coastal landmarks',
-        'imagePath': 'assets/images/coastal_sightseeing.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath': 'assets/images/sight/si1.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => SightseeingTourPage())),
       },
       {
         'title': 'Hot Air Ballooning',
         'description': 'Coastal views from above',
-        'imagePath': 'assets/images/coastal_ballooning.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath': 'assets/images/ballon/ao1.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => HotAirBalloonPage())),
       },
     ];
   }
@@ -107,14 +115,14 @@ class BeachPage extends StatelessWidget {
       {
         'title': 'Attabad Lake',
         'description': 'Water edge experience',
-        'imagePath': 'assets/images/attabad_lake.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath': 'assets/images/a/a1.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => AttabadLakePage())),
       },
       {
         'title': 'Gawadar',
         'description': 'Prime beach destination',
-        'imagePath': 'assets/images/gawadar_destination.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath': 'assets/images/gwadar/gao2.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => GwadarPage())),
       },
     ];
   }

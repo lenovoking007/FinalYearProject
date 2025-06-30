@@ -1,5 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:travelmate/LahorePage.dart'; // Make sure this import exists
+import 'package:travelmate/FaisalabadPage.dart';
+import 'package:travelmate/FamousTouristPlacesCode/AttabadLakePage.dart';
+import 'package:travelmate/FeaturedCities/PeshawarPage.dart';
+import 'package:travelmate/FeaturedCities/RawalpindiPage.dart';
+import 'package:travelmate/HyderabadPage.dart';
+import 'package:travelmate/IslamabadPage.dart';
+import 'package:travelmate/KarachiPage.dart';
+import 'package:travelmate/LahorePage.dart';
+import 'package:travelmate/MultanPage.dart';
+import 'package:travelmate/SialkotPage.dart'; // Make sure this import exists
 
 class FoodPage extends StatelessWidget {
   const FoodPage({super.key});
@@ -50,56 +59,57 @@ class FoodPage extends StatelessWidget {
       {
         'title': 'Karachi',
         'description': 'Diverse restaurants and street food',
-        'imagePath': 'assets/images/karachi_food.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath': 'assets/images/Karachii/karachio1.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const KarachiPage())),
       },
       {
         'title': 'Lahore',
         'description': 'Street food capital, variety',
-        'imagePath': 'assets/images/lahore_food.jpg',
+        'imagePath': 'assets/images/Lahore/lahore2.jpg',
         'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
       },
       {
         'title': 'Islamabad',
         'description': 'Cafés and eateries',
-        'imagePath': 'assets/images/islamabad_food.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath':'assets/images/islambad/islambad1.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const IslamabadPage())),
       },
       {
         'title': 'Rawalpindi',
         'description': 'Local street food',
-        'imagePath': 'assets/images/rawalpindi_food.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath': 'assets/images/raw/ra2.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const RawalpindiPage())),
       },
       {
         'title': 'Peshawar',
         'description': 'Kebabs, Chapli kebab, traditional cuisine',
-        'imagePath': 'assets/images/peshawar_food.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath': 'assets/images/pesh/po3.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const PeshawarPage())),
       },
       {
         'title': 'Multan',
         'description': 'Mangoes, Multani Sohan Halwa',
-        'imagePath': 'assets/images/multan_food.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath': 'assets/images/multan/multan04.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const MultanPage())),
       },
-      {
-        'title': 'Faisalabad',
-        'description': 'Punjabi street food',
-        'imagePath': 'assets/images/faisalabad_food.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
-      },
+
       {
         'title': 'Hyderabad',
-        'description': 'Sindhi food',
-        'imagePath': 'assets/images/hyderabad_food.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'description': 'Sindhi culture',
+        'imagePath': 'assets/images/hyderabad/hyderabado1.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const HyderabadPage())),
       },
+    {
+    'title': 'Faisalabad',
+    'description': 'Colonial architecture',
+    'imagePath': 'assets/images/faislabad/fas02.jpg',
+    'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const FaisalabadPage())),
+    },
       {
         'title': 'Sialkot',
         'description': 'Sweets, desi food',
-        'imagePath': 'assets/images/sialkot_food.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath':   'assets/images/sialkot/sialkoto3.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const SialkotPage())),
       },
     ];
   }
@@ -109,20 +119,15 @@ class FoodPage extends StatelessWidget {
       {
         'title': 'Sea View Karachi',
         'description': 'Explore local culinary delights',
-        'imagePath': 'assets/images/food_tour.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath': 'assets/images/Karachii/karachio1.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const KarachiPage())),
       },
-      {
-        'title': 'Khanpur Dam',
-        'description': 'Authentic food experiences',
-        'imagePath': 'assets/images/local_cuisine.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
-      },
+
       {
         'title': 'Attabad Lake',
         'description': 'Food stalls and cafes built around tourism',
-        'imagePath': 'assets/images/attabad_food.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LahorePage())),
+        'imagePath': 'assets/images/a/a1.jpg',
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) =>  AttabadLakePage())),
       },
     ];
   }

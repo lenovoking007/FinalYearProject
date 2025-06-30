@@ -45,7 +45,7 @@ class FamousTouristPlacesPage extends StatelessWidget {
                 context: context,
                 title: 'Shandur Pass',
                 description: 'Roof of the World',
-                imagePath: 'assets/images/places/shandur_pass.jpg',
+                imagePath: 'assets/images/shan/shan3.jpg',
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => ShandurPassPage()),
@@ -55,7 +55,7 @@ class FamousTouristPlacesPage extends StatelessWidget {
                 context: context,
                 title: 'Fairy Meadows',
                 description: 'Heaven on Earth',
-                imagePath: 'assets/images/places/fairy_meadows.jpg',
+                imagePath: 'assets/images/fai/f1.jpg',
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => FairyMeadowsPage()),
@@ -65,7 +65,7 @@ class FamousTouristPlacesPage extends StatelessWidget {
                 context: context,
                 title: 'Bolan Valley',
                 description: 'Historic mountain pass',
-                imagePath: 'assets/images/places/bolan_valley.jpg',
+                imagePath: 'assets/images/bul/bul3.jpg',
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => BullanValleyPage()),
@@ -75,7 +75,7 @@ class FamousTouristPlacesPage extends StatelessWidget {
                 context: context,
                 title: 'Babusar Top',
                 description: 'Highest point of KKH',
-                imagePath: 'assets/images/places/babusar_top.jpg',
+                imagePath: 'assets/images/babu/b4.jpg',
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => BabusarTopPage()),
@@ -85,7 +85,7 @@ class FamousTouristPlacesPage extends StatelessWidget {
                 context: context,
                 title: 'Rama Meadow',
                 description: 'Gateway to Nanga Parbat',
-                imagePath: 'assets/images/places/rama_meadow.jpg',
+                imagePath: 'assets/images/rama/r3.jpg',
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => RamameadowPage()),
@@ -95,20 +95,10 @@ class FamousTouristPlacesPage extends StatelessWidget {
                 context: context,
                 title: 'Attabad Lake',
                 description: 'Turquoise wonder',
-                imagePath: 'assets/images/places/attabad_lake.jpg',
+                imagePath: 'assets/images/a/a4.jpg',
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => AttabadLakePage()),
-                ),
-              ),
-              _buildPlaceCard(
-                context: context,
-                title: 'Concordia',
-                description: 'Throne Room of Mountain Gods',
-                imagePath: 'assets/images/places/concordia.jpg',
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ConcordiaPage()),
                 ),
               ),
             ],

@@ -8,9 +8,9 @@ class ZiplinePage extends StatelessWidget {
     'assets/images/zipline/zo3.jpg',
   ];
   final List<String> naturalSpotsImages = [
-    'assets/images/zipline/zn1.jpg',
-    'assets/images/zipline/zn2.jpg',
-    'assets/images/zipline/zn3.jpg',
+    'assets/images/zipline/zo3.jpg',
+    'assets/images/zipline/zo4.jpg',
+    'assets/images/zipline/zo1.jpg',
   ];
   final List<String> safetyImages = [
     'assets/images/zipline/zs1.jpg',
@@ -192,12 +192,12 @@ class ZiplinePage extends StatelessWidget {
       {
         'name': 'Babusar Top',
         'location': 'Kaghan Valley',
-        'image': 'assets/images/zipline/zn1.jpg',
+        'image': 'assets/images/zipline/zo3.jpg',
       },
       {
         'name': 'Saiful Malook Lake',
         'location': 'Kaghan Valley',
-        'image': 'assets/images/zipline/zn2.jpg',
+        'image': 'assets/images/zipline/zo4.jpg',
       },
     ];
     return GridView.builder(

@@ -4,24 +4,25 @@ import 'package:carousel_slider/carousel_slider.dart';
 class FairyMeadowsPage extends StatelessWidget {
   // Image paths
   final List<String> overviewImages = [
-    'assets/images/fairymeadows/fo1.jpg',
-    'assets/images/fairymeadows/fo2.jpg',
-    'assets/images/fairymeadows/fo3.jpg',
+    'assets/images/fai/f1.jpg',
+    'assets/images/fai/f2.jpg',
+    'assets/images/fai/f3.jpg',
   ];
   final List<String> seasonImages = [
-    'assets/images/fairymeadows/fs1.jpg',
-    'assets/images/fairymeadows/fs2.jpg',
-    'assets/images/fairymeadows/fs3.jpg',
+    'assets/images/fai/f4.jpg',
+    'assets/images/fai/f5.jpg',
+    'assets/images/fai/f6.jpg',
   ];
   final List<String> clothesImages = [
-    'assets/images/fairymeadows/clothes1.jpg',
-    'assets/images/fairymeadows/clothes2.jpg',
-    'assets/images/fairymeadows/clothes3.jpg',
+    'assets/images/Lahore/cl1.jpg',
+    'assets/images/Lahore/cl2.jpg',
+    'assets/images/Lahore/cl3.jpg',
+    'assets/images/Lahore/cl4.jpg',
   ];
   final List<String> safetyImages = [
-    'assets/images/fairymeadows/safety1.jpg',
-    'assets/images/fairymeadows/safety2.jpg',
-    'assets/images/fairymeadows/safety3.jpg',
+    'assets/images/fai/f7.jpg',
+    'assets/images/fai/f2.jpg',
+    'assets/images/fai/f3.jpg',
   ];
 
   // Colors (same as original)
@@ -347,22 +348,22 @@ class FairyMeadowsPage extends StatelessWidget {
   Widget _buildAttractionGrid() {
     final List<Map<String, dynamic>> attractions = [
       {
-        'image': 'assets/images/fairymeadows/attraction1.jpg',
+        'image': 'assets/images/fai/f1.jpg',
         'title': 'Nanga Parbat Base Camp',
         'subtitle': 'Start of the trek to the "Killer Mountain"'
       },
       {
-        'image': 'assets/images/fairymeadows/attraction2.jpg',
+        'image': 'assets/images/fai/f3.jpg',
         'title': 'Mini Switzerland',
         'subtitle': 'Scenic viewpoint of meadows'
       },
       {
-        'image': 'assets/images/fairymeadows/attraction3.jpg',
+        'image': 'assets/images/fai/f4.jpg',
         'title': 'Shounter Lake',
         'subtitle': 'Alpine lake en route to Nanga Parbat'
       },
       {
-        'image': 'assets/images/fairymeadows/attraction4.jpg',
+        'image': 'assets/images/fai/f2.jpg',
         'title': 'Jalkhandi Village',
         'subtitle': 'Local village with cultural heritage'
       },

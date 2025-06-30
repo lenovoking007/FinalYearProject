@@ -4,24 +4,25 @@ import 'package:carousel_slider/carousel_slider.dart';
 class NeelumValleyPage extends StatelessWidget {
   // Image paths
   final List<String> overviewImages = [
-    'assets/images/neelum/overview1.jpg',
-    'assets/images/neelum/overview2.jpg',
-    'assets/images/neelum/overview3.jpg',
+    'assets/images/nel/no1.jpg',
+    'assets/images/nel/no2.jpg',
+    'assets/images/nel/no3.jpg',
   ];
   final List<String> seasonImages = [
-    'assets/images/neelum/seasons1.jpg',
-    'assets/images/neelum/seasons2.jpg',
-    'assets/images/neelum/seasons3.jpg',
+    'assets/images/nel/ns1.jpg',
+    'assets/images/nel/ns2.jpg',
+    'assets/images/nel/no4.jpg',
   ];
   final List<String> clothesImages = [
-    'assets/images/neelum/clothes1.jpg',
-    'assets/images/neelum/clothes2.jpg',
-    'assets/images/neelum/clothes3.jpg',
+    'assets/images/Lahore/cl1.jpg',
+    'assets/images/Lahore/cl2.jpg',
+    'assets/images/Lahore/cl3.jpg',
+    'assets/images/Lahore/cl4.jpg',
   ];
   final List<String> safetyImages = [
-    'assets/images/neelum/safety1.jpg',
-    'assets/images/neelum/safety2.jpg',
-    'assets/images/neelum/safety3.jpg',
+    'assets/images/nel/no5.jpg',
+    'assets/images/nel/ns2.jpg',
+    'assets/images/nel/no4.jpg',
   ];
 
   // Colors (same as original)
@@ -347,22 +348,22 @@ class NeelumValleyPage extends StatelessWidget {
   Widget _buildAttractionGrid() {
     final List<Map<String, dynamic>> attractions = [
       {
-        'image': 'assets/images/neelum/attraction1.jpg',
+        'image': 'assets/images/nel/no2.jpg',
         'title': 'Ratti Gali Lake',
         'subtitle': 'High-altitude glacial lake'
       },
       {
-        'image': 'assets/images/neelum/attraction2.jpg',
+        'image': 'assets/images/nel/no3.jpg',
         'title': 'Krishan Chashma',
         'subtitle': 'Sacred spring with mythological ties'
       },
       {
-        'image': 'assets/images/neelum/attraction3.jpg',
+        'image': 'assets/images/nel/no4.jpg',
         'title': 'Kel Valley',
         'subtitle': 'Lush meadows and pine forests'
       },
       {
-        'image': 'assets/images/neelum/attraction4.jpg',
+        'image': 'assets/images/nel/no5.jpg',
         'title': 'Kutton Waterfall',
         'subtitle': 'Majestic cascading waterfall'
       },

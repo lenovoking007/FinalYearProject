@@ -990,7 +990,7 @@ class _HyderabadPageState extends State<HyderabadPage> {
       {
         "name": "Sindh Hotel",
         "details": "Famous for traditional Sindhi dishes like Sai Bhaji and Sindhi Biryani.",
-        "image": "assets/images/hyderabad/hyderabadfood1.jpg"
+        "image": "assets/images/hyderabad/hyderabadfood1.jpeg"
       },
       {
         "name": "Hyderabadi Food Street",

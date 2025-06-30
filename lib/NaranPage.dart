@@ -16,8 +16,8 @@ class _NaranPageState extends State<NaranPage> {
   final List<String> overviewImages = [
     'assets/images/naran/narano1.jpg',
     'assets/images/naran/narano2.jpg',
-    'assets/images/naran/narano3.jpg',
-    'assets/images/naran/narano4.jpg',
+    'assets/images/naran/naran03.jpg',
+    'assets/images/naran/naran04.jpg',
   ];
   final List<String> clothesImages = [
     'assets/images/Lahore/cl1.jpg',

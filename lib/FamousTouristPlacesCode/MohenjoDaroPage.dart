@@ -4,24 +4,25 @@ import 'package:carousel_slider/carousel_slider.dart';
 class MonajadaroPage extends StatelessWidget {
   // Image paths
   final List<String> overviewImages = [
-    'assets/images/monajadaro/mo1.jpg',
-    'assets/images/monajadaro/mo2.jpg',
-    'assets/images/monajadaro/mo3.jpg',
+    'assets/images/man/mo1.jpg',
+    'assets/images/man/mo2.jpg',
+    'assets/images/man/mo3.jpg',
   ];
   final List<String> seasonImages = [
-    'assets/images/monajadaro/ms1.jpg',
-    'assets/images/monajadaro/ms2.jpg',
-    'assets/images/monajadaro/ms3.jpg',
+    'assets/images/man/mo3.jpg',
+    'assets/images/man/m02.jpg',
+    'assets/images/man/m01.jpg',
   ];
   final List<String> clothesImages = [
-    'assets/images/monajadaro/clothes1.jpg',
-    'assets/images/monajadaro/clothes2.jpg',
-    'assets/images/monajadaro/clothes3.jpg',
+    'assets/images/Lahore/cl1.jpg',
+    'assets/images/Lahore/cl2.jpg',
+    'assets/images/Lahore/cl3.jpg',
+    'assets/images/Lahore/cl4.jpg',
   ];
   final List<String> safetyImages = [
-    'assets/images/monajadaro/safety1.jpg',
-    'assets/images/monajadaro/safety2.jpg',
-    'assets/images/monajadaro/safety3.jpg',
+    'assets/images/man/mo2.jpg',
+    'assets/images/man/ms2.jpg',
+    'assets/images/man/ms3.jpg',
   ];
 
   // Colors (same as original)
@@ -347,24 +348,19 @@ class MonajadaroPage extends StatelessWidget {
   Widget _buildAttractionGrid() {
     final List<Map<String, dynamic>> attractions = [
       {
-        'image': 'assets/images/monajadaro/attraction1.jpg',
+        'image': 'assets/images/man/mo2.jpg',
         'title': 'Great Bath',
         'subtitle': 'Largest public bath of the Indus Valley'
       },
       {
-        'image': 'assets/images/monajadaro/attraction2.jpg',
+        'image': 'assets/images/man/mo3.jpg',
         'title': 'Granary Complex',
         'subtitle': 'Ancient grain storage facility'
       },
       {
-        'image': 'assets/images/monajadaro/attraction3.jpg',
+        'image':'assets/images/man/mo1.jpg' ,
         'title': 'Museum',
         'subtitle': 'Artifacts from the excavation site'
-      },
-      {
-        'image': 'assets/images/monajadaro/attraction4.jpg',
-        'title': 'Stupa of Buddha',
-        'subtitle': 'Ancient Buddhist monument'
       },
     ];
     return GridView.builder(

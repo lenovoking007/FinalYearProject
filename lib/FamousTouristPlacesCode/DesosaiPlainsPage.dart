@@ -4,24 +4,25 @@ import 'package:carousel_slider/carousel_slider.dart';
 class DeosaiPage extends StatelessWidget {
   // Image paths
   final List<String> overviewImages = [
-    'assets/images/deosai/do1.jpg',
-    'assets/images/deosai/do2.jpg',
-    'assets/images/deosai/do3.jpg',
+    'assets/images/des/do1.jpg',
+    'assets/images/des/do2.jpg',
+    'assets/images/des/do3.jpg',
   ];
   final List<String> seasonImages = [
-    'assets/images/deosai/ds1.jpg',
-    'assets/images/deosai/ds2.jpg',
-    'assets/images/deosai/ds3.jpg',
+    'assets/images/des/d04.jpg',
+    'assets/images/des/do5.jpg',
+    'assets/images/des/do3.jpg',
   ];
   final List<String> clothesImages = [
-    'assets/images/deosai/clothes1.jpg',
-    'assets/images/deosai/clothes2.jpg',
-    'assets/images/deosai/clothes3.jpg',
+    'assets/images/Lahore/cl1.jpg',
+    'assets/images/Lahore/cl2.jpg',
+    'assets/images/Lahore/cl3.jpg',
+    'assets/images/Lahore/cl4.jpg',
   ];
   final List<String> safetyImages = [
-    'assets/images/deosai/safety1.jpg',
-    'assets/images/deosai/safety2.jpg',
-    'assets/images/deosai/safety3.jpg',
+    'assets/images/des/do2.jpg',
+    'assets/images/des/d04.jpg',
+    'assets/images/des/do1.jpg',
   ];
 
   // Colors (same as original)
@@ -347,22 +348,22 @@ class DeosaiPage extends StatelessWidget {
   Widget _buildAttractionGrid() {
     final List<Map<String, dynamic>> attractions = [
       {
-        'image': 'assets/images/deosai/attraction1.jpg',
+        'image': 'assets/images/des/do1.jpg',
         'title': 'Sheosar Lake',
         'subtitle': 'Alpine lake with turquoise waters'
       },
       {
-        'image': 'assets/images/deosai/attraction2.jpg',
+        'image':  'assets/images/des/do5.jpg',
         'title': 'Chandrani Meadows',
         'subtitle': 'Wildflower-filled valleys'
       },
       {
-        'image': 'assets/images/deosai/attraction3.jpg',
+        'image':  'assets/images/des/d04.jpg',
         'title': 'Brown Bear Conservation Center',
         'subtitle': 'Protected Himalayan brown bears'
       },
       {
-        'image': 'assets/images/deosai/attraction4.jpg',
+        'image':  'assets/images/des/do2.jpg',
         'title': 'Usho Valley',
         'subtitle': 'Scenic valley with nomadic camps'
       },
