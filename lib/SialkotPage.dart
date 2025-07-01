@@ -17,19 +17,18 @@ class _SialkotPageState extends State<SialkotPage> {
     'assets/images/sialkot/sialkoto1.jpg',
     'assets/images/sialkot/sialkoto2.jpg',
     'assets/images/sialkot/sialkoto3.jpg',
-
   ];
   final List<String> clothesImages = [
-    'assets/images/Lahore/cl1.jpg',
-    'assets/images/Lahore/cl2.jpg',
-    'assets/images/Lahore/cl3.jpg',
-    'assets/images/Lahore/cl4.jpg',
+    'assets/images/sialkot/sialkotcl1.jpg', // Updated to Sialkot specific image
+    'assets/images/sialkot/sialkotcl2.jpg', // Updated to Sialkot specific image
+    'assets/images/sialkot/sialkotcl3.jpg', // Updated to Sialkot specific image
+    'assets/images/sialkot/sialkotcl4.jpg', // Updated to Sialkot specific image
   ];
   final List<String> foodImages = [
-    'assets/images/Lahore/food1.jpg',
-    'assets/images/Lahore/food2.jpeg',
-    'assets/images/Lahore/food3.jpg',
-    'assets/images/Lahore/food4.jpg',
+    'assets/images/sialkot/sialkotfood1.jpg', // Updated to Sialkot specific image
+    'assets/images/sialkot/sialkotfood2.jpg', // Updated to Sialkot specific image
+    'assets/images/sialkot/sialkotfood3.jpg', // Updated to Sialkot specific image
+    'assets/images/sialkot/sialkotfood4.jpg', // Updated to Sialkot specific image
   ];
   final List<String> festivalImages = [
     'assets/images/sialkot/sialkotfes1.jpg',
@@ -47,6 +46,24 @@ class _SialkotPageState extends State<SialkotPage> {
   @override
   void initState() {
     super.initState();
+    _addCityToCollection(); // Call the method to add Sialkot to Firestore
+  }
+
+  // Method to add Sialkot to the 'cities' collection if it doesn't exist
+  Future<void> _addCityToCollection() async {
+    try {
+      final doc = await _firestore.collection('cities').doc('sialkot').get();
+      if (!doc.exists) {
+        await _firestore.collection('cities').doc('sialkot').set({
+          'name': 'Sialkot',
+          'createdAt': FieldValue.serverTimestamp(),
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Failed to initialize city data: ${e.toString()}';
+      });
+    }
   }
 
   Future<void> _saveTripPlanToFirebase(Map<String, dynamic> tripPlan) async {
@@ -399,7 +416,7 @@ class _SialkotPageState extends State<SialkotPage> {
                                     'budget': int.parse(budgetController.text.replaceAll(',', '')),
                                     'startDate': Timestamp.fromDate(startDate),
                                     'endDate': Timestamp.fromDate(endDate),
-                                    'destination': 'Sialkot',
+                                    'destination': 'Sialkot', // Set destination to Sialkot
                                     'status': 'planned',
                                     'createdAt': Timestamp.now(),
                                   };
@@ -551,81 +568,83 @@ class _SialkotPageState extends State<SialkotPage> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         child: Padding(
           padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: const Color(0xFFE8F5E9),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.green.withOpacity(0.2),
-                      blurRadius: 10,
-                      spreadRadius: 2,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: const Color(0xFFE8F5E9),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.green.withOpacity(0.2),
+                        blurRadius: 10,
+                        spreadRadius: 2,
+                      ),
+                    ],
+                  ),
+                  child: const Icon(
+                    Icons.check_circle,
+                    color: Colors.green,
+                    size: 48,
+                  ),
+                ),
+                const SizedBox(height: 24),
+                Text(
+                  "Trip Saved!",
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: const Color(0xFF0066CC).withOpacity(0.9),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[50],
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.grey[200]!),
+                  ),
+                  child: Column(
+                    children: [
+                      _buildSuccessDetailRow("Trip Name:", tripName),
+                      const Divider(height: 16, thickness: 0.5),
+                      _buildSuccessDetailRow("Destination:", "Sialkot"), // Display Sialkot as destination
+                      const Divider(height: 16, thickness: 0.5),
+                      _buildSuccessDetailRow("Trip Type:", tripType),
+                      const Divider(height: 16, thickness: 0.5),
+                      _buildSuccessDetailRow("Duration:", "$duration days"),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 24),
+                const Text(
+                  "You can view your trip in the 'My Trips' section",
+                  style: TextStyle(fontSize: 14, color: Colors.grey),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 24),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF0066CC),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      elevation: 2,
                     ),
-                  ],
-                ),
-                child: const Icon(
-                  Icons.check_circle,
-                  color: Colors.green,
-                  size: 48,
-                ),
-              ),
-              const SizedBox(height: 24),
-              Text(
-                "Trip Saved!",
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: const Color(0xFF0066CC).withOpacity(0.9),
-                ),
-              ),
-              const SizedBox(height: 16),
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.grey[50],
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.grey[200]!),
-                ),
-                child: Column(
-                  children: [
-                    _buildSuccessDetailRow("Trip Name:", tripName),
-                    const Divider(height: 16, thickness: 0.5),
-                    _buildSuccessDetailRow("Destination:", "Sialkot"),
-                    const Divider(height: 16, thickness: 0.5),
-                    _buildSuccessDetailRow("Trip Type:", tripType),
-                    const Divider(height: 16, thickness: 0.5),
-                    _buildSuccessDetailRow("Duration:", "$duration days"),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 24),
-              const Text(
-                "You can view your trip in the 'My Trips' section",
-                style: TextStyle(fontSize: 14, color: Colors.grey),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 24),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF0066CC),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    elevation: 2,
-                  ),
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text(
-                    "DONE",
-                    style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text(
+                      "DONE",
+                      style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -1162,7 +1181,7 @@ class _SialkotPageState extends State<SialkotPage> {
     return StreamBuilder<QuerySnapshot>(
       stream: _firestore
           .collection('reviews')
-          .where('destination', isEqualTo: 'Sialkot')
+          .where('destination', isEqualTo: 'Sialkot') // Filter reviews for Sialkot
           .orderBy('timestamp', descending: true)
           .snapshots(),
       builder: (context, snapshot) {
@@ -1213,7 +1232,7 @@ class _SialkotPageState extends State<SialkotPage> {
             'name': data['name'] as String? ?? 'Anonymous',
             'rating': (data['rating'] as int?) ?? 0,
             'review': data['review'] as String? ?? '',
-            'imageUrl': 'assets/images/Lahore/u${(doc.hashCode % 3) + 1}.png',
+            'imageUrl': 'assets/images/Lahore/u${(doc.hashCode % 3) + 1}.png', // Keep generic user images
             'date': data['timestamp'] != null
                 ? _formatReviewDate(data['timestamp'].toDate())
                 : 'Recently',

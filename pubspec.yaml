@@ -63,8 +63,6 @@ dependencies:
 
 
 
-
-
   # Update to the latest version if necessary
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -80,6 +78,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^4.0.0
+  flutter_launcher_icons: ^0.14.4
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -121,24 +121,14 @@ flutter:
     - assets/images/swimming/
     - assets/images/zipline/
     - assets/images/jeep/
-    - assets/images/bul/
-    - assets/images/babu/
-    - assets/images/rama/
-    - assets/images/saif/
-    - assets/images/a/
-    - assets/images/fai/
-    - assets/images/man/
-    - assets/images/nel/
-    - assets/images/raw/
-    - assets/images/shan/
-    - assets/images/des/
     - assets/images/ballon/
     - assets/images/sight/
     - assets/images/hiking/
     - assets/images/muree/
     - assets/images/raw/
     - assets/images/pesh/
-    - assets/images/circleimage.png
+
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 
@@ -164,3 +154,8 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: assets/images/ic_launcher.png
