@@ -127,6 +127,23 @@ flutter:
     - assets/images/muree/
     - assets/images/raw/
     - assets/images/pesh/
+    - assets/images/a/
+    - assets/images/babu/
+    - assets/images/rock/
+    - assets/images/bul/
+    - assets/images/des/
+    - assets/images/fai/
+    - assets/images/man/
+    - assets/images/nel/
+    - assets/images/saif/
+    - assets/images/quetta/
+    - assets/images/rama/
+    - assets/images/raw/
+    - assets/images/shan/
+    - assets/images/sight/
+    - assets/images/swimming/
+    - assets/images/white/
+    - assets/images/zipline/
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
