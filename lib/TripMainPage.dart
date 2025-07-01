@@ -516,29 +516,31 @@ class _TripPageState extends State<TripPage> {
                       builder: (context) => const FamousActivitiesPage()),
                 );
               }),
-              SizedBox(
-                height: screenHeight * 0.22,
-                child: ListView.builder(
-                  padding:
-                  EdgeInsets.symmetric(horizontal: screenHeight * 0.02),
+              CarouselSlider.builder(
+                itemCount: famousActivities.length,
+                itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 6.0),
+                    child: _buildCard(
+                      famousActivities[itemIndex]['title'],
+                      famousActivities[itemIndex]['description'],
+                      famousActivities[itemIndex]['image'],
+                      screenHeight * 0.2,
+                      famousActivities[itemIndex]['page'],
+                    ),
+                  );
+                },
+                options: CarouselOptions(
+                  height: screenHeight * 0.22,
+                  autoPlay: true,
+                  reverse: true,
+                  viewportFraction: 0.55, // Slightly less than half screen for 2 cards visible
+                  autoPlayInterval: const Duration(seconds: 1),
+                  autoPlayAnimationDuration: const Duration(milliseconds: 600),
+                  autoPlayCurve: Curves.fastOutSlowIn,
+                  enlargeCenterPage: false,
+                  enableInfiniteScroll: true,
                   scrollDirection: Axis.horizontal,
-                  itemCount: famousActivities.length,
-                  itemBuilder: (context, index) {
-                    // Added a wrapper with specific width for each item
-                    return SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.45, // Example: allows two cards + spacing
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 6.0), // Adjust spacing between cards
-                        child: _buildCard(
-                          famousActivities[index]['title'],
-                          famousActivities[index]['description'],
-                          famousActivities[index]['image'],
-                          screenHeight * 0.2,
-                          famousActivities[index]['page'],
-                        ),
-                      ),
-                    );
-                  },
                 ),
               ),
               SizedBox(height: screenHeight * 0.02),
@@ -574,6 +576,7 @@ class _TripPageState extends State<TripPage> {
                   autoPlayAnimationDuration: const Duration(milliseconds: 600),
                   autoPlayCurve: Curves.fastOutSlowIn,
                   scrollDirection: Axis.horizontal,
+                  reverse: true,
                 ),
               ),
               SizedBox(height: screenHeight * 0.02), // Add padding at the bottom
