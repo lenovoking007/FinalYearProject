@@ -358,99 +358,6 @@ class _TripPageState extends State<TripPage> {
     );
   }
 
-  void _showSmartTripDialog() {
-    String? _selectedTripType;
-    TextEditingController budgetController = TextEditingController();
-    TextEditingController numberOfPeopleController = TextEditingController();
-
-    showDialog(
-      context: context,
-      builder: (context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text(
-                  "Smart Trip Planner",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0XFF0066CC),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                DropdownButtonFormField<String>(
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.grey[100],
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                  value: _selectedTripType,
-                  hint: const Text('Select Trip Type'),
-                  items: ['Adventure', 'Relaxation', 'Cultural', 'Wildlife'].map((String type) {
-                    return DropdownMenuItem<String>(
-                      value: type,
-                      child: Text(type),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedTripType = value;
-                    });
-                  },
-                ),
-                const SizedBox(height: 14),
-                _buildEditableTextField("Budget", budgetController, Icons.monetization_on),
-                const SizedBox(height: 14),
-                _buildEditableTextField("Number of People", numberOfPeopleController, Icons.people),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: const Text(
-                        "Cancel",
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("Calculating best options...")),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0XFF0066CC),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      child: const Text(
-                        "Calculate",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -621,51 +528,6 @@ class _TripPageState extends State<TripPage> {
                       },
                     ),
                   ),
-
-                  // Action Buttons
-                  Padding(
-                    padding: EdgeInsets.all(screenHeight * 0.02),
-                    child: Column(
-                      children: [
-                        ElevatedButton.icon(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0XFF0066CC),
-                            minimumSize: Size(double.infinity, screenHeight * 0.06),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                          onPressed: _showSmartTripDialog,
-                          icon: const Icon(Icons.calculate, color: Colors.white),
-                          label: const Text(
-                            'Smart Trip Planner',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                        SizedBox(height: screenHeight * 0.015),
-                        ElevatedButton.icon(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0XFF0066CC),
-                            minimumSize: Size(double.infinity, screenHeight * 0.06),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const TripStatusPage()),
-                            );
-                          },
-                          icon: const Icon(Icons.timeline, color: Colors.white),
-                          label: const Text(
-                            'Trip Status',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
                 ],
               ),
             );
@@ -750,23 +612,6 @@ class _TripPageState extends State<TripPage> {
         child: Icon(activeIcon, color: const Color(0XFF0066CC)),
       ),
       label: label,
-    );
-  }
-
-  Widget _buildEditableTextField(String label, TextEditingController controller, IconData icon) {
-    return TextField(
-      controller: controller,
-      decoration: InputDecoration(
-        filled: true,
-        fillColor: Colors.grey[100],
-        hintText: label,
-        prefixIcon: Icon(icon, color: const Color(0XFF0066CC)),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
-        ),
-        contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-      ),
     );
   }
 }
