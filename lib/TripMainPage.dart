@@ -82,7 +82,7 @@ class _TripPageState extends State<TripPage> {
     {
       'title': 'Rawalpindi',
       'description': 'The Twin City',
-      'image': 'assets/images/raw/ra1.jpg',
+      'image': 'assets/images/raw/ra3.jpg',
       'page': RawalpindiPage()
     },
     {
@@ -100,7 +100,7 @@ class _TripPageState extends State<TripPage> {
     {
       'title': 'Skardu',
       'description': 'Gateway to the mighty mountains',
-      'image': 'assets/images/skardu/s2.jpg',
+      'image': 'assets/images/skardu/sk2.jpg',
       'page': SkarduPage()
     },
   ];

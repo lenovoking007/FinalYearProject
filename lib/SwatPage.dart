@@ -36,7 +36,7 @@ class _SawatPageState extends State<SawatPage> {
     'assets/images/sawat/sawatf1.jpg',
     'assets/images/sawat/sawatf4.jpg',
     'assets/images/sawat/sawatf3.jpg',
-    'assets/images/sawat/sawatf4.png',
+
   ];
 
 

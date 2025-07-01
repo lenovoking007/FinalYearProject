@@ -164,6 +164,7 @@ flutter:
     - assets/images/swimming/
     - assets/images/white/
     - assets/images/zipline/
+    - assets/images/skardu/
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

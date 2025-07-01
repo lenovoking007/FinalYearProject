@@ -16,27 +16,27 @@ class _SkarduPageState extends State<SkarduPage> {
   // Using Lahore images for now as requested by the user.
   // These should be replaced with Skardu specific images later.
   final List<String> overviewImages = [
-    'assets/images/Lahore/lahore1.jpg',
-    'assets/images/Lahore/lahore2.jpg',
-    'assets/images/Lahore/lahore3.jpg',
+    'assets/images/skardu/sk1.jpg',
+    'assets/images/skardu/sk2.jpg',
+    'assets/images/skardu/sk3.jpg',
   ];
   final List<String> clothesImages = [
-    'assets/images/Lahore/cl1.jpg',
-    'assets/images/Lahore/cl2.jpg',
-    'assets/images/Lahore/cl3.jpg',
     'assets/images/Lahore/cl4.jpg',
+    'assets/images/Lahore/cl2.jpg',
+    'assets/images/Lahore/cl1.jpg',
+    'assets/images/Lahore/cl3.jpg',
   ];
   final List<String> foodImages = [
-    'assets/images/Lahore/food1.jpg',
-    'assets/images/Lahore/food2.jpeg',
     'assets/images/Lahore/food3.jpg',
+    'assets/images/Lahore/food2.jpeg',
+    'assets/images/Lahore/food1.jpg',
     'assets/images/Lahore/food4.jpg',
   ];
   final List<String> festivalImages = [
-    'assets/images/Lahore/f1.jpg',
-    'assets/images/Lahore/f2.jpg',
-    'assets/images/Lahore/f3.jpg',
-    'assets/images/Lahore/f4.jpg',
+    'assets/images/skardu/sfe1.jpg',
+    'assets/images/skardu/sfe2.jpg',
+    'assets/images/skardu/sfe3.jpg',
+    'assets/images/skardu/sfe4.jpg',
   ];
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -822,22 +822,22 @@ class _SkarduPageState extends State<SkarduPage> {
       {
         'name': 'Shangrila Resort (Lower Kachura Lake)',
         'address': 'Skardu, Gilgit-Baltistan, Pakistan',
-        'image': 'assets/images/Lahore/lahore1.jpg', // Placeholder
+        'image':  'assets/images/skardu/sk4.jpg', // Placeholder
       },
       {
         'name': 'Satpara Lake',
         'address': 'Skardu, Gilgit-Baltistan, Pakistan',
-        'image': 'assets/images/Lahore/lahore2.jpg', // Placeholder
+        'image': 'assets/images/skardu/sk5.jpg', // Placeholder
       },
       {
         'name': 'Manthoka Waterfall',
         'address': 'Manthoka, Kharmang, Gilgit-Baltistan, Pakistan',
-        'image': 'assets/images/Lahore/lahore3.jpg', // Placeholder
+        'image':  'assets/images/skardu/sk6.jpg', // Placeholder
       },
       {
         'name': 'Deosai National Park',
         'address': 'Skardu, Gilgit-Baltistan, Pakistan',
-        'image': 'assets/images/Lahore/food1.jpg', // Placeholder
+        'image':  'assets/images/skardu/sk7.jpg',// Placeholder
       },
     ];
 
@@ -937,22 +937,22 @@ class _SkarduPageState extends State<SkarduPage> {
       {
         'name': 'Skardu Bazaar',
         'address': 'Main Bazaar, Skardu, Gilgit-Baltistan, Pakistan',
-        'image': 'assets/images/Lahore/cl1.jpg', // Placeholder
+        'image': 'assets/images/skardu/scl1.jpg',  // Placeholder
       },
       {
         'name': 'K2 Base Camp Shop',
         'address': 'Near K2 Museum, Skardu, Gilgit-Baltistan, Pakistan',
-        'image': 'assets/images/Lahore/cl2.jpg', // Placeholder
+        'image':  'assets/images/skardu/sc12.jpg', // Placeholder
       },
       {
         'name': 'Local Handicraft Shops',
         'address': 'Various locations in Skardu City, Gilgit-Baltistan, Pakistan',
-        'image': 'assets/images/Lahore/cl3.jpg', // Placeholder
+        'image': 'assets/images/skardu/scl3.jpg',
       },
       {
         'name': 'Baltistan Arts & Crafts',
         'address': 'Skardu Road, Skardu, Gilgit-Baltistan, Pakistan',
-        'image': 'assets/images/Lahore/cl4.jpg', // Placeholder
+        'image': 'assets/images/skardu/scl4.jpg',  // Placeholder
       },
     ];
 
@@ -1024,22 +1024,22 @@ class _SkarduPageState extends State<SkarduPage> {
       {
         'name': 'Skardu City Restaurants',
         'address': 'Various locations in Skardu City, Gilgit-Baltistan, Pakistan',
-        'image': 'assets/images/Lahore/food1.jpg', // Placeholder
+        'image': 'assets/images/skardu/sf1.jpg', // Placeholder
       },
       {
         'name': 'Shangrila Resort Restaurant',
         'address': 'Shangrila Resort, Skardu, Gilgit-Baltistan, Pakistan',
-        'image': 'assets/images/Lahore/food2.jpeg', // Placeholder
+        'image': 'assets/images/skardu/sf2.jpg',// Placeholder
       },
       {
         'name': 'K2 Cafe',
         'address': 'Skardu Bazaar, Skardu, Gilgit-Baltistan, Pakistan',
-        'image': 'assets/images/Lahore/food3.jpg', // Placeholder
+        'image': 'assets/images/skardu/sf3.jpg', // Placeholder
       },
       {
         'name': 'Local Eateries',
         'address': 'Around Satpara Lake and other tourist spots',
-        'image': 'assets/images/Lahore/food4.jpg', // Placeholder
+        'image': 'assets/images/skardu/sf4.jpg', // Placeholder
       },
     ];
 
@@ -1111,22 +1111,22 @@ class _SkarduPageState extends State<SkarduPage> {
       {
         'name': 'Shandur Polo Festival',
         'address': 'Shandur Pass, Gilgit-Baltistan, Pakistan (near Skardu)',
-        'image': 'assets/images/Lahore/f1.jpg', // Placeholder
+        'image': 'assets/images/skardu/sfe1.jpg', // Placeholder
       },
       {
         'name': 'Harvest Festivals (e.g., Apricot Blossom)',
         'address': 'Various villages and valleys around Skardu, Gilgit-Baltistan, Pakistan',
-        'image': 'assets/images/Lahore/f2.jpg', // Placeholder
+        'image': 'assets/images/skardu/sfe2.jpg',  // Placeholder
       },
       {
         'name': 'Cultural Events at Skardu Fort',
         'address': 'Kharpocho Fort, Skardu, Gilgit-Baltistan, Pakistan',
-        'image': 'assets/images/Lahore/f3.jpg', // Placeholder
+        'image': 'assets/images/skardu/sfe3.jpg',  // Placeholder
       },
       {
         'name': 'Local Sports Events',
         'address': 'Various grounds in Skardu, Gilgit-Baltistan, Pakistan',
-        'image': 'assets/images/Lahore/f4.jpg', // Placeholder
+        'image':'assets/images/skardu/sfe4.jpg', // Placeholder
       },
     ];
 

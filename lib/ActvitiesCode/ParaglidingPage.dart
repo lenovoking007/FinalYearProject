@@ -245,6 +245,16 @@ class ParaglidingPage extends StatelessWidget {
         'location': 'Islamabad',
         'image': 'assets/images/paragliding/pn2.jpg',
       },
+      {
+        'name': 'Fairy Meadows',
+        'location': 'Diamer District, Gilgit-Baltistan',
+        'image': 'assets/images/paragliding/po3.jpg',
+      },
+      {
+        'name': 'Hunza Valley',
+        'location': 'Hunza, Gilgit-Baltistan',
+        'image': 'assets/images/paragliding/po4.jpg',
+      },
     ];
     return GridView.builder(
       shrinkWrap: true,

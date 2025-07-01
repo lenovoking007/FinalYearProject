@@ -205,6 +205,11 @@ class ZiplinePage extends StatelessWidget {
         'spots': 'Kalam, Mingora',
         'image': 'assets/images/zipline/zo3.jpg',
       },
+      {
+        'name': 'Malam Jabba',
+        'location': 'Swat Valley, Khyber Pakhtunkhwa',
+        'image': 'assets/images/zipline/zo4.jpg',
+      },
     ];
     return GridView.builder(
       shrinkWrap: true,
@@ -238,6 +243,17 @@ class ZiplinePage extends StatelessWidget {
         'location': 'Kaghan Valley',
         'image': 'assets/images/zipline/zo4.jpg',
       },
+      {
+        'name': 'Ayubia National Park',
+        'location': 'Murree Hills, Khyber Pakhtunkhwa',
+        'image': 'assets/images/zipline/zo1.jpg',
+      },
+      {
+        'name': 'Malam Jabba',
+        'location': 'Swat Valley, Khyber Pakhtunkhwa',
+        'image': 'assets/images/zipline/zo2.jpg',
+      },
+
     ];
     return GridView.builder(
       shrinkWrap: true,
