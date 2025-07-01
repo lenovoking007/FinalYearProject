@@ -1,12 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
+import 'package:carousel_slider/carousel_slider.dart'; // Ensure this is imported
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:travelmate/ActvitiesCode/JeepRallyPage.dart';
 import 'package:travelmate/ActvitiesCode/RockClimbingPage.dart';
 import 'package:travelmate/FamousTouristPlacesCode/NeelumValleyPage.dart';
 import 'package:travelmate/FamousTouristPlacesCode/SaifUlMalookPage.dart';
+import 'package:travelmate/FamousTouristPlacesCode/RamaMeadowPage.dart'; // Import RamaMeadowPage
 import 'package:travelmate/FeaturedCities/MurreePage.dart';
 import 'package:travelmate/HyderabadPage.dart';
 import 'package:travelmate/SialkotPage.dart';
@@ -97,10 +98,10 @@ class _TripPageState extends State<TripPage> {
       'page': MureePage()
     },
     {
-      'title': 'Skardu', // <--- NEW CARD TITLE
-      'description': 'Gateway to the mighty mountains', // <--- NEW CARD DESCRIPTION
-      'image': 'assets/images/pesh/po1.jpg', // <--- USING PESHAWAR IMAGE AS REQUESTED
-      'page': SkarduPage() // <--- REFERENCING SkarduPage
+      'title': 'Skardu',
+      'description': 'Gateway to the mighty mountains',
+      'image': 'assets/images/skardu/s2.jpg',
+      'page': SkarduPage()
     },
   ];
 
@@ -119,7 +120,7 @@ class _TripPageState extends State<TripPage> {
     },
     {
       'title': 'JeepRally',
-      'description': 'Reallies',
+      'description': 'Rallies',
       'image': 'assets/images/jeep/chn1.jpg',
       'page': JeepRallyPage()
     },
@@ -140,13 +141,13 @@ class _TripPageState extends State<TripPage> {
     },
     {
       'title': 'Mohenjo Daro',
-      'description': 'Anncient Indus Valley Civilization',
+      'description': 'Ancient Indus Valley Civilization',
       'image': 'assets/images/ma1.jpg',
       'page':MohenjoDaroPage()
     },
     {
       'title': 'Desosai Plains',
-      'description': 'Lands of Gaints',
+      'description': 'Lands of Giants',
       'image': 'assets/images/desasoi.jpg',
       'page': DeosaiPage()
     },
@@ -155,6 +156,12 @@ class _TripPageState extends State<TripPage> {
       'description': 'Paradise of Kashmir',
       'image': 'assets/images/neelum.jpg',
       'page': NeelumValleyPage()
+    },
+    {
+      'title': 'Rama Meadow',
+      'description': 'Beautiful Lush Green Meadow',
+      'image': 'assets/images/rama/r1.jpg',
+      'page': RamameadowPage()
     },
   ];
 
@@ -255,8 +262,13 @@ class _TripPageState extends State<TripPage> {
       },
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        margin: const EdgeInsets.symmetric(horizontal: 4),
+        // The margin is now handled by the CarouselSlider's options or internal padding.
+        // For ListView.builder, the horizontal padding in the parent SizedBox below is enough.
+        margin: const EdgeInsets.symmetric(horizontal: 4), // Kept for Famous Activities ListView
+        clipBehavior: Clip.antiAlias, // Ensures content is clipped to card's rounded corners
         child: SizedBox(
+          // Removed 'width: double.infinity' here. The parent widget (SizedBox in ListView,
+          // or CarouselSlider's viewportFraction) will correctly provide the width.
           height: cardHeight,
           child: Stack(
             children: [
@@ -264,9 +276,18 @@ class _TripPageState extends State<TripPage> {
                 borderRadius: BorderRadius.circular(12),
                 child: Image.asset(
                   imagePath,
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  height: cardHeight,
+                  fit: BoxFit.cover, // Ensures image covers the space
+                  width: double.infinity, // Ensures image fills width of ClipRRect
+                  height: double.infinity, // Ensures image fills height of ClipRRect
+                  errorBuilder: (context, error, stackTrace) {
+                    return Center(
+                      child: Icon(
+                        Icons.broken_image,
+                        size: 50,
+                        color: Colors.grey[400],
+                      ),
+                    );
+                  },
                 ),
               ),
               Positioned(
@@ -369,7 +390,7 @@ class _TripPageState extends State<TripPage> {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
+    // final screenWidth = MediaQuery.of(context).size.width; // Not directly used in sizing items anymore with CarouselSlider's viewportFraction
 
     return Scaffold(
       appBar: AppBar(
@@ -452,7 +473,7 @@ class _TripPageState extends State<TripPage> {
               ),
               SizedBox(height: screenHeight * 0.02),
 
-              // 2. Recommended Trips Section
+              // 2. Featured Cities Section (Using CarouselSlider for 'no half image' effect)
               _buildSectionHeader("Featured Cities", () {
                 Navigator.push(
                   context,
@@ -460,29 +481,34 @@ class _TripPageState extends State<TripPage> {
                       builder: (context) => const FeaturedCitiesPage()),
                 );
               }),
-              SizedBox(
-                height: screenHeight * 0.3,
-                child: ListView.builder(
-                  padding:
-                  EdgeInsets.symmetric(horizontal: screenHeight * 0.02),
+              CarouselSlider.builder(
+                itemCount: recommendedTrips.length,
+                itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) {
+                  return _buildCard(
+                    recommendedTrips[itemIndex]['title'],
+                    recommendedTrips[itemIndex]['description'],
+                    recommendedTrips[itemIndex]['image'],
+                    screenHeight * 0.28, // Height for the card content
+                    recommendedTrips[itemIndex]['page'],
+                  );
+                },
+                options: CarouselOptions(
+                  height: screenHeight * 0.3, // Overall height of the carousel area
+                  autoPlay: true,
+                  enlargeCenterPage: false, // Set to false for full-width items
+                  viewportFraction: 1.0, // <-- Changed to 1.0 for full-width items
+                  aspectRatio: 16/9, // Optional: maintains aspect ratio
+                  initialPage: 0,
+                  enableInfiniteScroll: true,
+                  autoPlayInterval: const Duration(seconds: 4),
+                  autoPlayAnimationDuration: const Duration(milliseconds: 800),
+                  autoPlayCurve: Curves.fastOutSlowIn,
                   scrollDirection: Axis.horizontal,
-                  itemCount: recommendedTrips.length,
-                  itemBuilder: (context, index) {
-                    return SizedBox(
-                      width: screenWidth * 0.8,
-                      child: _buildCard(
-                        recommendedTrips[index]['title'],
-                        recommendedTrips[index]['description'],
-                        recommendedTrips[index]['image'],
-                        screenHeight * 0.28,
-                        recommendedTrips[index]['page'],
-                      ),
-                    );
-                  },
                 ),
               ),
+              SizedBox(height: screenHeight * 0.02),
 
-              // 3. Famous Activities Section
+              // 3. Famous Activities Section (Kept as ListView.builder, showing multiple smaller cards)
               _buildSectionHeader("Famous Activities", () {
                 Navigator.push(
                   context,
@@ -498,21 +524,26 @@ class _TripPageState extends State<TripPage> {
                   scrollDirection: Axis.horizontal,
                   itemCount: famousActivities.length,
                   itemBuilder: (context, index) {
+                    // Added a wrapper with specific width for each item
                     return SizedBox(
-                      width: screenWidth * 0.4,
-                      child: _buildCard(
-                        famousActivities[index]['title'],
-                        famousActivities[index]['description'],
-                        famousActivities[index]['image'],
-                        screenHeight * 0.2,
-                        famousActivities[index]['page'],
+                      width: MediaQuery.of(context).size.width * 0.45, // Example: allows two cards + spacing
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 6.0), // Adjust spacing between cards
+                        child: _buildCard(
+                          famousActivities[index]['title'],
+                          famousActivities[index]['description'],
+                          famousActivities[index]['image'],
+                          screenHeight * 0.2,
+                          famousActivities[index]['page'],
+                        ),
                       ),
                     );
                   },
                 ),
               ),
+              SizedBox(height: screenHeight * 0.02),
 
-              // 4. Featured Destinations Section
+              // 4. Featured Destinations Section (Using CarouselSlider for 'no half image' effect)
               _buildSectionHeader("Famous Tourists Places", () {
                 Navigator.push(
                   context,
@@ -520,27 +551,32 @@ class _TripPageState extends State<TripPage> {
                       builder: (context) => const FamousTouristPlacesPage()),
                 );
               }),
-              SizedBox(
-                height: screenHeight * 0.28,
-                child: ListView.builder(
-                  padding:
-                  EdgeInsets.symmetric(horizontal: screenHeight * 0.02),
+              CarouselSlider.builder(
+                itemCount: featuredDestinations.length,
+                itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) {
+                  return _buildCard(
+                    featuredDestinations[itemIndex]['title'],
+                    featuredDestinations[itemIndex]['description'],
+                    featuredDestinations[itemIndex]['image'],
+                    screenHeight * 0.26, // Height for the card content
+                    featuredDestinations[itemIndex]['page'],
+                  );
+                },
+                options: CarouselOptions(
+                  height: screenHeight * 0.28, // Overall height of the carousel area
+                  autoPlay: true,
+                  enlargeCenterPage: false, // Set to false for full-width items
+                  viewportFraction: 1.0, // <-- Changed to 1.0 for full-width items
+                  aspectRatio: 16/9, // Optional: maintains aspect ratio
+                  initialPage: 0,
+                  enableInfiniteScroll: true,
+                  autoPlayInterval: const Duration(seconds: 5),
+                  autoPlayAnimationDuration: const Duration(milliseconds: 800),
+                  autoPlayCurve: Curves.fastOutSlowIn,
                   scrollDirection: Axis.horizontal,
-                  itemCount: featuredDestinations.length,
-                  itemBuilder: (context, index) {
-                    return SizedBox(
-                      width: screenWidth * 0.8,
-                      child: _buildCard(
-                        featuredDestinations[index]['title'],
-                        featuredDestinations[index]['description'],
-                        featuredDestinations[index]['image'],
-                        screenHeight * 0.26,
-                        featuredDestinations[index]['page'],
-                      ),
-                    );
-                  },
                 ),
               ),
+              SizedBox(height: screenHeight * 0.02), // Add padding at the bottom
             ],
           ),
         );
