@@ -34,11 +34,10 @@ class _SawatPageState extends State<SawatPage> {
   ];
   final List<String> festivalImages = [
     'assets/images/sawat/sawatf1.jpg',
-    'assets/images/sawat/sawatf4.jpg',
+    'assets/images/sawat/sawatf4.png',
     'assets/images/sawat/sawatf3.jpg',
 
   ];
-
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
