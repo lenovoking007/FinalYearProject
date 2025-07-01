@@ -669,7 +669,4 @@ class _HomePageState extends State<HomePage> {
       label: label,
     );
   }
-}git add .
-git commit -m "Initial commit for renamed project"
-git branch -M main
-git push -u origin main
+}
