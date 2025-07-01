@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart'; // Import for Firestore
 
-class MonajadaroPage extends StatelessWidget {
+class MohenjoDaroPage extends StatelessWidget {
   // Image paths
   final List<String> overviewImages = [
     'assets/images/man/mo1.jpg',
@@ -31,7 +32,35 @@ class MonajadaroPage extends StatelessWidget {
   final Color textColor = Colors.black87;
   final Color accentColor = const Color(0xFF88F2E8);
 
-  MonajadaroPage({super.key});
+  // Constructor now calls the method to record access
+  MohenjoDaroPage({super.key}) {
+    _recordTouristPlaceAccess();
+  }
+
+  /// Records the access of the Mohenjo-daro page in Firestore.
+  ///
+  /// This method checks if a document for "Mohenjo-daro" already exists
+  /// in the 'touristsPlaces' collection. If it doesn't, a new document
+  /// is created with the name "Mohenjo-daro" and a timestamp.
+  Future<void> _recordTouristPlaceAccess() async {
+    try {
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('touristsPlaces')
+          .where('name', isEqualTo: 'Mohenjo-daro')
+          .limit(1)
+          .get();
+
+      if (querySnapshot.docs.isEmpty) {
+        // If no document exists, add a new one
+        await FirebaseFirestore.instance.collection('touristsPlaces').add({
+          'name': 'Mohenjo-daro',
+          'createdAt': FieldValue.serverTimestamp(), // Timestamp for when it was added
+        });
+      }
+    } catch (e) {
+      debugPrint('Error recording tourist place access for Mohenjo-daro: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

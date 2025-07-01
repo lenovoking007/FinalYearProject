@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart'; // Import for Firestore
 
 class AttabadLakePage extends StatelessWidget {
   // Image paths
@@ -31,7 +32,36 @@ class AttabadLakePage extends StatelessWidget {
   final Color textColor = Colors.black87;
   final Color accentColor = const Color(0xFF88F2E8);
 
-  AttabadLakePage({super.key});
+  // Constructor now calls the method to record access
+  AttabadLakePage({super.key}) {
+    _recordTouristPlaceAccess();
+  }
+
+  /// Records the access of the Attabad Lake page in Firestore.
+  ///
+  /// This method checks if a document for "Attabad Lake" already exists
+  /// in the 'touristsPlaces' collection. If it doesn't, a new document
+  /// is created with the name "Attabad Lake" and a timestamp.
+  Future<void> _recordTouristPlaceAccess() async {
+    try {
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('touristsPlaces')
+          .where('name', isEqualTo: 'Attabad Lake')
+          .limit(1)
+          .get();
+
+      if (querySnapshot.docs.isEmpty) {
+        // If no document exists, add a new one
+        await FirebaseFirestore.instance.collection('touristsPlaces').add({
+          'name': 'Attabad Lake',
+          'createdAt': FieldValue.serverTimestamp(), // Timestamp for when it was added
+        });
+      }
+    } catch (e) {
+      debugPrint('Error recording tourist place access for Attabad Lake: $e');
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -215,7 +245,7 @@ class AttabadLakePage extends StatelessWidget {
           autoPlay: true,
           enlargeCenterPage: true,
           viewportFraction: 0.85,
-          autoPlayInterval: Duration(seconds: 4),
+          autoPlayInterval: const Duration(seconds: 4), // Changed to const
         ),
         items: images.map((image) {
           return Container(

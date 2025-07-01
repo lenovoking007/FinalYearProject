@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ShandurPassPage extends StatelessWidget {
   // Image paths
@@ -31,7 +32,31 @@ class ShandurPassPage extends StatelessWidget {
   final Color textColor = Colors.black87;
   final Color accentColor = const Color(0xFF88F2E8);
 
-  ShandurPassPage({super.key});
+  ShandurPassPage({super.key}) {
+    _recordTouristPlaceAccess(); // Call the activity recording method
+  }
+
+  // Method to record tourist place access in Firestore, similar to SaifUlMalookPage
+  Future<void> _recordTouristPlaceAccess() async {
+    try {
+      // Check if this place already exists in the collection
+      final query = await FirebaseFirestore.instance
+          .collection('touristsPlaces')
+          .where('name', isEqualTo: 'Shandur Pass') // Tourist place name
+          .limit(1)
+          .get();
+
+      // Only create if it doesn't exist
+      if (query.docs.isEmpty) {
+        await FirebaseFirestore.instance.collection('touristsPlaces').add({
+          'name': 'Shandur Pass', // Tourist place name
+          'createdAt': FieldValue.serverTimestamp(),
+        });
+      }
+    } catch (e) {
+      debugPrint('Error recording tourist place access: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

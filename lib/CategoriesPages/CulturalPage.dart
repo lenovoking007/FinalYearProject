@@ -160,7 +160,7 @@ class CulturalPage extends StatelessWidget {
         'title': 'Mohenjo Daro',
         'description': 'Ancient Indus Valley civilization',
         'imagePath': 'assets/images/man/mo1.jpg',
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => MonajadaroPage())),
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => MohenjoDaroPage())),
       },
       {
         'title': 'Bolan Valley',

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart'; // Import added for Firestore
 
 class WhiteWaterRaftingPage extends StatelessWidget {
   final List<String> overviewImages = [
@@ -18,15 +19,45 @@ class WhiteWaterRaftingPage extends StatelessWidget {
     'assets/images/white/ws3.jpg',
   ];
 
-  WhiteWaterRaftingPage({super.key});
+  WhiteWaterRaftingPage({super.key}) {
+    _recordActivityAccess(); // Call the activity recording method
+  }
+
+  // Method to record activity access in Firestore, copied from SwimmingPage
+  Future<void> _recordActivityAccess() async {
+    try {
+      // Check if this activity already exists in the collection
+      final query = await FirebaseFirestore.instance
+          .collection('Activities')
+          .where('name', isEqualTo: 'white water rafting')
+          .limit(1)
+          .get();
+
+      // Only create if it doesn't exist
+      if (query.docs.isEmpty) {
+        await FirebaseFirestore.instance.collection('Activities').add({
+          'name': 'white water rafting',
+          'createdAt': FieldValue.serverTimestamp(),
+        });
+      }
+    } catch (e) {
+      debugPrint('Error recording activity access: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    // Determine if dark mode is enabled and set colors accordingly
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final primaryColor = isDarkMode ? const Color(0xFF1E88E5) : const Color(0xFF0066CC);
+    final cardColor = isDarkMode ? Colors.grey[800]! : Colors.white;
+    final textColor = isDarkMode ? Colors.white : Colors.black87;
+
     return DefaultTabController(
-      length: 4,
+      length: 3, // Changed from 4 to 3 as there are only 3 tabs
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: const Color(0xFF0066CC),
+          backgroundColor: primaryColor, // Use dynamic primaryColor
           elevation: 0,
           automaticallyImplyLeading: true,
           iconTheme: const IconThemeData(color: Colors.white),
@@ -34,6 +65,7 @@ class WhiteWaterRaftingPage extends StatelessWidget {
             'White Water Rafting Spots',
             style: TextStyle(color: Colors.white),
           ),
+          centerTitle: true, // Center title as in SwimmingPage
           bottom: TabBar(
             labelColor: Colors.white,
             unselectedLabelColor: Colors.white.withOpacity(0.7),
@@ -48,16 +80,16 @@ class WhiteWaterRaftingPage extends StatelessWidget {
         ),
         body: TabBarView(
           children: [
-            _buildOverviewTab(),
-            _buildNaturalSpotsTab(),
-            _buildSafetyTab(),
+            _buildOverviewTab(cardColor, textColor, primaryColor), // Pass colors
+            _buildNaturalSpotsTab(cardColor, textColor, primaryColor), // Pass colors
+            _buildSafetyTab(cardColor, textColor, primaryColor), // Pass colors
           ],
         ),
       ),
     );
   }
 
-  Widget _buildOverviewTab() {
+  Widget _buildOverviewTab(Color cardColor, Color textColor, Color primaryColor) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -69,16 +101,19 @@ class WhiteWaterRaftingPage extends StatelessWidget {
             title: 'White Water Rafting in Pakistan',
             description:
             'Pakistan offers thrilling white water rafting experiences on its rivers, offering adventurers a chance to experience the power of nature while navigating some of the most scenic routes.',
+            cardColor: cardColor, // Pass cardColor
+            textColor: textColor, // Pass textColor
+            primaryColor: primaryColor, // Pass primaryColor
           ),
           const SizedBox(height: 24),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8),
-            child: Text(
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Text( // Use Text widget with dynamic color
               'Best White Water Rafting Destinations',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF0066CC),
+                color: primaryColor, // Use dynamic primaryColor
               ),
             ),
           ),
@@ -90,7 +125,7 @@ class WhiteWaterRaftingPage extends StatelessWidget {
     );
   }
 
-  Widget _buildNaturalSpotsTab() {
+  Widget _buildNaturalSpotsTab(Color cardColor, Color textColor, Color primaryColor) {
     return SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -102,6 +137,9 @@ class WhiteWaterRaftingPage extends StatelessWidget {
                 title: 'Natural White Water Rafting Spots',
                 description:
                 'Explore some of the most pristine and untamed locations for white water rafting. From river valleys to steep gorges, these spots offer an unparalleled adventure experience.',
+                cardColor: cardColor, // Pass cardColor
+                textColor: textColor, // Pass textColor
+                primaryColor: primaryColor, // Pass primaryColor
               ),
               const SizedBox(height: 24),
               Padding(
@@ -109,12 +147,12 @@ class WhiteWaterRaftingPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    Text( // Use Text widget with dynamic color
                       'Top Natural Rafting Locations',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF0066CC),
+                        color: primaryColor, // Use dynamic primaryColor
                       ),
                     ),
                     const SizedBox(height: 12),
@@ -123,12 +161,10 @@ class WhiteWaterRaftingPage extends StatelessWidget {
                   ],
                 ),
               ),
-
             ]));
   }
 
-
-  Widget _buildSafetyTab() {
+  Widget _buildSafetyTab(Color cardColor, Color textColor, Color primaryColor) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -140,9 +176,12 @@ class WhiteWaterRaftingPage extends StatelessWidget {
             title: 'White Water Rafting Safety Tips',
             description:
             'Safety is the top priority when it comes to white water rafting. Ensure that you’re properly prepared and follow all safety guidelines for a safe and enjoyable experience.',
+            cardColor: cardColor, // Pass cardColor
+            textColor: textColor, // Pass textColor
+            primaryColor: primaryColor, // Pass primaryColor
           ),
           const SizedBox(height: 24),
-          _buildSafetyTipsList(),
+          _buildSafetyTipsList(cardColor, textColor, primaryColor), // Pass colors
           const SizedBox(height: 24),
         ],
       ),
@@ -192,7 +231,7 @@ class WhiteWaterRaftingPage extends StatelessWidget {
           image: destinations[index]['image'],
           title: destinations[index]['name'],
           subtitle: destinations[index]['type'],
-          details: destinations[index]['spots'],
+          // Removed the 'details' parameter from _buildSpotCard as it's not used in the original SwimmingPage example
         );
       },
     );
@@ -212,7 +251,6 @@ class WhiteWaterRaftingPage extends StatelessWidget {
         'details': 'Enjoy thrilling rapids in the Swat River surrounded by lush green mountains',
         'image': 'assets/images/white/wn3.jpg',
       },
-
     ];
 
     return GridView.builder(
@@ -230,56 +268,14 @@ class WhiteWaterRaftingPage extends StatelessWidget {
           image: spots[index]['image'],
           title: spots[index]['name'],
           subtitle: spots[index]['location'],
-          details: spots[index]['details'],
+          // Removed the 'details' parameter from _buildSpotCard as it's not used in the original SwimmingPage example
         );
       },
     );
   }
 
-  Widget _buildRaftingLocationsGrid() {
-    final List<Map<String, dynamic>> locations = [
-      {
-        'name': 'Kaghan Valley',
-        'location': 'Naran, KPK',
-        'details': 'Rafting in one of the most scenic locations in Pakistan',
-        'image': 'assets/images/WhiteWaterRafting/kaghan.jpg',
-      },
-      {
-        'name': 'Swat Valley',
-        'location': 'Madyan, Swat',
-        'details': 'Exciting white water rafting with stunning views',
-        'image': 'assets/images/WhiteWaterRafting/swatvalley.jpg',
-      },
-      {
-        'name': 'Azad Kashmir',
-        'location': 'Muzaffarabad, Kashmir',
-        'details': 'Rapid-filled rivers in the heart of Azad Kashmir',
-        'image': 'assets/images/WhiteWaterRafting/azadkashmir.jpg',
-      },
-    ];
 
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 0.8,
-        crossAxisSpacing: 12,
-        mainAxisSpacing: 12,
-      ),
-      itemCount: locations.length,
-      itemBuilder: (context, index) {
-        return _buildSpotCard(
-          image: locations[index]['image'],
-          title: locations[index]['name'],
-          subtitle: locations[index]['location'],
-          details: locations[index]['details'],
-        );
-      },
-    );
-  }
-
-  Widget _buildSafetyTipsList() {
+  Widget _buildSafetyTipsList(Color cardColor, Color textColor, Color primaryColor) {
     final List<String> tips = [
       'Always wear a life jacket and helmet while rafting',
       'Ensure your raft is properly inflated before going on the water',
@@ -291,6 +287,7 @@ class WhiteWaterRaftingPage extends StatelessWidget {
     ];
 
     return Card(
+      color: cardColor, // Use dynamic cardColor
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
@@ -300,21 +297,32 @@ class WhiteWaterRaftingPage extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            const Text(
+            Text( // Use Text widget with dynamic color
               'Essential Rafting Safety Tips',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF0066CC),
+                color: primaryColor, // Use dynamic primaryColor
               ),
             ),
             const SizedBox(height: 12),
             Column(
               children: tips
-                  .map((tip) => ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: const Icon(Icons.check_circle, color: Color(0xFF0066CC)),
-                title: Text(tip),
+                  .map((tip) => Padding( // Use Padding and Row for bullet points as in SwimmingPage
+                padding: const EdgeInsets.symmetric(vertical: 6),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Icon(Icons.brightness_1, size: 8, color: primaryColor), // Use dynamic primaryColor
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        tip,
+                        style: TextStyle(fontSize: 14, color: textColor), // Use dynamic textColor
+                      ),
+                    ),
+                  ],
+                ),
               ))
                   .toList(),
             ),
@@ -327,8 +335,8 @@ class WhiteWaterRaftingPage extends StatelessWidget {
   Widget _buildSpotCard({
     required String image,
     required String title,
-    required String subtitle,
-    required String details,
+    String subtitle = '', // Made subtitle optional as in the SwimmingPage example
+    // Removed details from here as it's not in the original _buildSpotCard of SwimmingPage
   }) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(16),
@@ -363,15 +371,16 @@ class WhiteWaterRaftingPage extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  subtitle,
-                  style: const TextStyle(
-                    color: Colors.white70,
-                    fontSize: 14,
+                // Removed const SizedBox(height: 4) from here to match SwimmingPage's _buildSpotCard
+                if (subtitle.isNotEmpty) // Added conditional check for subtitle
+                  Text(
+                    subtitle,
+                    style: const TextStyle(
+                      color: Colors.white70,
+                      fontSize: 14,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 4),
+                // Removed const SizedBox(height: 4) from here to match SwimmingPage's _buildSpotCard
               ],
             ),
           ),
@@ -380,8 +389,15 @@ class WhiteWaterRaftingPage extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoCard({required String title, required String description}) {
+  Widget _buildInfoCard({
+    required String title,
+    required String description,
+    required Color cardColor, // Added required cardColor
+    required Color textColor, // Added required textColor
+    required Color primaryColor, // Added required primaryColor
+  }) {
     return Card(
+      color: cardColor, // Use dynamic cardColor
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
@@ -390,16 +406,20 @@ class WhiteWaterRaftingPage extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start, // Align to start as in SwimmingPage
           children: [
             Text(
               title,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle( // Use TextStyle with dynamic color
+                fontSize: 20, // Changed from 18 to 20
+                fontWeight: FontWeight.bold,
+                color: primaryColor, // Use dynamic primaryColor
+              ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 12), // Changed from 8 to 12 as in SwimmingPage example
             Text(
               description,
-              style: const TextStyle(fontSize: 14, color: Colors.grey),
+              style: TextStyle(fontSize: 16, color: textColor), // Changed font size from 14 to 16 and added textColor
             ),
           ],
         ),
@@ -410,21 +430,36 @@ class WhiteWaterRaftingPage extends StatelessWidget {
   Widget _buildCarousel(List<String> imagePaths) {
     return CarouselSlider(
       options: CarouselOptions(
-        height: 200.0,
+        height: 200, // Changed from 200.0 to 200
         enlargeCenterPage: true,
         autoPlay: true,
         aspectRatio: 16 / 9,
-        viewportFraction: 0.8,
+        viewportFraction: 0.9, // Changed from 0.8 to 0.9
+        autoPlayInterval: const Duration(seconds: 4), // Added autoPlayInterval as in SwimmingPage example
       ),
       items: imagePaths.map((imagePath) {
-        return Builder(
-          builder: (BuildContext context) {
-            return Image.asset(
+        return Container( // Use Container with BoxDecoration for shadow and border radius as in SwimmingPage
+          margin: const EdgeInsets.symmetric(horizontal: 5),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 2,
+                blurRadius: 5,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          child: ClipRRect( // Use ClipRRect for rounded corners as in SwimmingPage
+            borderRadius: BorderRadius.circular(8),
+            child: Image.asset(
               imagePath,
               fit: BoxFit.cover,
               width: double.infinity,
-            );
-          },
+              height: 200, // Added height as in SwimmingPage example
+            ),
+          ),
         );
       }).toList(),
     );

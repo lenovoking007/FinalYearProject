@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart'; // Added for Firestore
 
 class RamameadowPage extends StatelessWidget {
   // Image paths
@@ -9,9 +10,9 @@ class RamameadowPage extends StatelessWidget {
     'assets/images/rama/r3.jpg',
   ];
   final List<String> seasonImages = [
-  'assets/images/rama/r5.jpg',
-  'assets/images/rama/r6.jpg',
-  'assets/images/rama/r7.jpg',
+    'assets/images/rama/r5.jpg',
+    'assets/images/rama/r6.jpg',
+    'assets/images/rama/r7.jpg',
   ];
   final List<String> clothesImages = [
     'assets/images/Lahore/cl1.jpg',
@@ -31,7 +32,31 @@ class RamameadowPage extends StatelessWidget {
   final Color textColor = Colors.black87;
   final Color accentColor = const Color(0xFF88F2E8);
 
-  RamameadowPage({super.key});
+  RamameadowPage({super.key}) {
+    _recordTouristPlaceAccess(); // Call the activity recording method
+  }
+
+  // Method to record tourist place access in Firestore
+  Future<void> _recordTouristPlaceAccess() async {
+    try {
+      // Check if this place already exists in the collection
+      final query = await FirebaseFirestore.instance
+          .collection('touristsPlaces')
+          .where('name', isEqualTo: 'Rama Meadow') // Tourist place name
+          .limit(1)
+          .get();
+
+      // Only create if it doesn't exist
+      if (query.docs.isEmpty) {
+        await FirebaseFirestore.instance.collection('touristsPlaces').add({
+          'name': 'Rama Meadow', // Tourist place name
+          'createdAt': FieldValue.serverTimestamp(),
+        });
+      }
+    } catch (e) {
+      debugPrint('Error recording tourist place access: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

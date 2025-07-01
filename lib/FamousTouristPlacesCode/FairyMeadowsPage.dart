@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart'; // Import for Firestore
 
 class FairyMeadowsPage extends StatelessWidget {
   // Image paths
@@ -31,7 +32,35 @@ class FairyMeadowsPage extends StatelessWidget {
   final Color textColor = Colors.black87;
   final Color accentColor = const Color(0xFF88F2E8);
 
-  FairyMeadowsPage({super.key});
+  // Constructor now calls the method to record access
+  FairyMeadowsPage({super.key}) {
+    _recordTouristPlaceAccess();
+  }
+
+  /// Records the access of the Fairy Meadows page in Firestore.
+  ///
+  /// This method checks if a document for "Fairy Meadows" already exists
+  /// in the 'touristsPlaces' collection. If it doesn't, a new document
+  /// is created with the name "Fairy Meadows" and a timestamp.
+  Future<void> _recordTouristPlaceAccess() async {
+    try {
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('touristsPlaces')
+          .where('name', isEqualTo: 'Fairy Meadows')
+          .limit(1)
+          .get();
+
+      if (querySnapshot.docs.isEmpty) {
+        // If no document exists, add a new one
+        await FirebaseFirestore.instance.collection('touristsPlaces').add({
+          'name': 'Fairy Meadows',
+          'createdAt': FieldValue.serverTimestamp(), // Timestamp for when it was added
+        });
+      }
+    } catch (e) {
+      debugPrint('Error recording tourist place access for Fairy Meadows: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -371,7 +400,7 @@ class FairyMeadowsPage extends StatelessWidget {
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount( // Corrected typo here
         crossAxisCount: 2,
         childAspectRatio: 0.85,
         crossAxisSpacing: 12,
@@ -528,52 +557,52 @@ class FairyMeadowsPage extends StatelessWidget {
     return Card(
         elevation: 0,
         shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-    side: BorderSide(color: Colors.grey.shade300),
-    ),
-    child: Padding(
-    padding: const EdgeInsets.all(16),
-    child: Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-    Row(
-    children: [
-    Icon(Icons.ac_unit, size: 24, color: primaryColor),
-    const SizedBox(width: 8),
-    Text(
-    'Winter Conditions',
-    style: TextStyle(
-    fontSize: 16,
-    fontWeight: FontWeight.w600,
-    color: textColor,
-    ),
-    ),
-    ],
-    ),
-    const SizedBox(height: 12),
-    _buildSnowfallItem('First Snow:', 'Late October'),
-    _buildSnowfallItem('Peak Snow:', 'December - February'),
-    _buildSnowfallItem('Snow Depth:', 'Up to 4 meters'),
-    _buildSnowfallItem('Trail Closure:', 'Nov - Apr'),
-    const SizedBox(height: 12),
-    Container(
-    padding: const EdgeInsets.all(12),
-    decoration: BoxDecoration(
-    color: accentColor.withOpacity(0.1),
-    borderRadius: BorderRadius.circular(8),
-    ),
-    child: Text(
-    'The trail becomes inaccessible during snowfall. Guided tours are required for winter visits.',
-    style: TextStyle(
-    fontSize: 13,
-    color: Colors.grey.shade700,
-    fontStyle: FontStyle.italic,
-    ),
-    ),
-    ),
-    ],
-    ),
-    ));
+          borderRadius: BorderRadius.circular(12),
+          side: BorderSide(color: Colors.grey.shade300),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(Icons.ac_unit, size: 24, color: primaryColor),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Winter Conditions',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: textColor,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              _buildSnowfallItem('First Snow:', 'Late October'),
+              _buildSnowfallItem('Peak Snow:', 'December - February'),
+              _buildSnowfallItem('Snow Depth:', 'Up to 4 meters'),
+              _buildSnowfallItem('Trail Closure:', 'Nov - Apr'),
+              const SizedBox(height: 12),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: accentColor.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  'The trail becomes inaccessible during snowfall. Guided tours are required for winter visits.',
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.grey.shade700,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ));
   }
 
   Widget _buildSnowfallItem(String label, String value) {

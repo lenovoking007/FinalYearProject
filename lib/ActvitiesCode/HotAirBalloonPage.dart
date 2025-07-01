@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart'; // Import added for Firestore
 
 class HotAirBalloonPage extends StatelessWidget {
   final List<String> overviewImages = [
@@ -20,17 +21,47 @@ class HotAirBalloonPage extends StatelessWidget {
     'assets/images/ballon/as1.jpg',
   ];
 
-  static const primaryColor = Color(0xFF0066CC);
+  // static const primaryColor = Color(0xFF0066CC); // Commented out for dynamic theming
 
-  HotAirBalloonPage({super.key});
+  HotAirBalloonPage({super.key}) {
+    _recordActivityAccess(); // Call the activity recording method
+  }
+
+  // Method to record activity access in Firestore, copied from SwimmingPage
+  Future<void> _recordActivityAccess() async {
+    try {
+      // Check if this activity already exists in the collection
+      final query = await FirebaseFirestore.instance
+          .collection('Activities')
+          .where('name', isEqualTo: 'hot air ballooning') // activity name for hot air ballooning
+          .limit(1)
+          .get();
+
+      // Only create if it doesn't exist
+      if (query.docs.isEmpty) {
+        await FirebaseFirestore.instance.collection('Activities').add({
+          'name': 'hot air ballooning', // activity name for hot air ballooning
+          'createdAt': FieldValue.serverTimestamp(),
+        });
+      }
+    } catch (e) {
+      debugPrint('Error recording activity access: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    // Determine if dark mode is enabled and set colors accordingly
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final primaryColor = isDarkMode ? const Color(0xFF1E88E5) : const Color(0xFF0066CC);
+    final cardColor = isDarkMode ? Colors.grey[800]! : Colors.white;
+    final textColor = isDarkMode ? Colors.white : Colors.black87;
+
     return DefaultTabController(
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: primaryColor,
+          backgroundColor: primaryColor, // Use dynamic primaryColor
           elevation: 0,
           automaticallyImplyLeading: true,
           iconTheme: const IconThemeData(color: Colors.white),
@@ -38,12 +69,13 @@ class HotAirBalloonPage extends StatelessWidget {
             'Hot Air Balloon Challenge',
             style: TextStyle(color: Colors.white),
           ),
-          bottom: const TabBar(
+          centerTitle: true, // Center title as in SwimmingPage
+          bottom: TabBar( // Removed const from TabBar for dynamic labelColor/unselectedLabelColor
             labelColor: Colors.white,
-            unselectedLabelColor: Colors.white70,
+            unselectedLabelColor: Colors.white.withOpacity(0.7), // Use .withOpacity
             indicatorColor: Colors.white,
             indicatorWeight: 3,
-            tabs: [
+            tabs: const [
               Tab(icon: Icon(Icons.air), text: 'Overview'),
               Tab(icon: Icon(Icons.nature), text: 'Natural Spots'),
               Tab(icon: Icon(Icons.security), text: 'Safety'),
@@ -52,16 +84,16 @@ class HotAirBalloonPage extends StatelessWidget {
         ),
         body: TabBarView(
           children: [
-            _buildOverviewTab(),
-            _buildNaturalSpotsTab(),
-            _buildSafetyTab(),
+            _buildOverviewTab(cardColor, textColor, primaryColor), // Pass colors
+            _buildNaturalSpotsTab(cardColor, textColor, primaryColor), // Pass colors
+            _buildSafetyTab(cardColor, textColor, primaryColor), // Pass colors
           ],
         ),
       ),
     );
   }
 
-  Widget _buildOverviewTab() {
+  Widget _buildOverviewTab(Color cardColor, Color textColor, Color primaryColor) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -73,16 +105,19 @@ class HotAirBalloonPage extends StatelessWidget {
             title: 'Experience the Thrill of Hot Air Ballooning',
             description:
             'Soar through the skies in a hot air balloon and witness breathtaking views from above. A perfect adventure for thrill-seekers and nature lovers alike.',
+            cardColor: cardColor, // Pass cardColor
+            textColor: textColor, // Pass textColor
+            primaryColor: primaryColor, // Pass primaryColor
           ),
           const SizedBox(height: 24),
-          Padding(
+          Padding( // Removed const from Padding for dynamic color in Text
             padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Text(
+            child: Text( // Use Text widget with dynamic color
               'Best Hot Air Ballooning Locations',
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 20, // Changed from 18 to 20 to match SwimmingPage
                 fontWeight: FontWeight.bold,
-                color: primaryColor,
+                color: primaryColor, // Use dynamic primaryColor
               ),
             ),
           ),
@@ -94,7 +129,7 @@ class HotAirBalloonPage extends StatelessWidget {
     );
   }
 
-  Widget _buildNaturalSpotsTab() {
+  Widget _buildNaturalSpotsTab(Color cardColor, Color textColor, Color primaryColor) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -106,16 +141,19 @@ class HotAirBalloonPage extends StatelessWidget {
             title: 'Top Locations for Hot Air Ballooning',
             description:
             'Explore some of the most scenic hot air ballooning destinations across the world, where the skies are clear and the views are unforgettable.',
+            cardColor: cardColor, // Pass cardColor
+            textColor: textColor, // Pass textColor
+            primaryColor: primaryColor, // Pass primaryColor
           ),
           const SizedBox(height: 24),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Text(
+            child: Text( // Use Text widget with dynamic color
               'Top Ballooning Locations',
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 20, // Changed from 18 to 20 to match SwimmingPage
                 fontWeight: FontWeight.bold,
-                color: primaryColor,
+                color: primaryColor, // Use dynamic primaryColor
               ),
             ),
           ),
@@ -127,7 +165,7 @@ class HotAirBalloonPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSafetyTab() {
+  Widget _buildSafetyTab(Color cardColor, Color textColor, Color primaryColor) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -139,9 +177,12 @@ class HotAirBalloonPage extends StatelessWidget {
             title: 'Hot Air Ballooning Safety Tips',
             description:
             'Safety is our priority during every hot air balloon flight. Here are some essential safety tips to ensure a smooth and secure adventure.',
+            cardColor: cardColor, // Pass cardColor
+            textColor: textColor, // Pass textColor
+            primaryColor: primaryColor, // Pass primaryColor
           ),
           const SizedBox(height: 24),
-          _buildSafetyTipsList(),
+          _buildSafetyTipsList(cardColor, textColor, primaryColor), // Pass colors
           const SizedBox(height: 24),
         ],
       ),
@@ -191,7 +232,8 @@ class HotAirBalloonPage extends StatelessWidget {
           image: cities[index]['image'],
           title: cities[index]['name'],
           subtitle: cities[index]['type'],
-          details: cities[index]['spots'],
+          // Removed 'details' to match SwimmingPage's _buildSpotCard signature
+          // details: cities[index]['spots'],
         );
       },
     );
@@ -228,59 +270,61 @@ class HotAirBalloonPage extends StatelessWidget {
           image: spots[index]['image'],
           title: spots[index]['name'],
           subtitle: spots[index]['location'],
-          details: spots[index]['details'],
+          // Removed 'details' to match SwimmingPage's _buildSpotCard signature
+          // details: spots[index]['details'],
         );
       },
     );
   }
 
-  Widget _buildSafetyTipsList() {
+  Widget _buildSafetyTipsList(Color cardColor, Color textColor, Color primaryColor) {
     final List<String> tips = [
-    'Always fly with a certified operator.',
-    'Ensure proper weather conditions before flight.',
-    'Wear comfortable clothing and sturdy shoes.',
-    'Follow the pilots instructions during the flight.',
-    'Avoid smoking during the flight for safety reasons.',
+      'Always fly with a certified operator.',
+      'Ensure proper weather conditions before flight.',
+      'Wear comfortable clothing and sturdy shoes.',
+      'Follow the pilots instructions during the flight.',
+      'Avoid smoking during the flight for safety reasons.',
     ];
 
     return Card(
-    elevation: 0,
-    shape: RoundedRectangleBorder(
-    borderRadius: BorderRadius.circular(16),
-    side: BorderSide(color: Colors.grey.shade200),
-    ),
-    child: Padding(
-    padding: const EdgeInsets.all(16),
-    child: Column(
-    children: [
-    Text(
-    'Essential Hot Air Ballooning Safety Tips',
-    style: TextStyle(
-    fontSize: 18,
-    fontWeight: FontWeight.bold,
-    color: primaryColor,
-    ),
-    ),
-    const SizedBox(height: 12),
-    ...tips.map((tip) => Padding(
-    padding: const EdgeInsets.symmetric(vertical: 6),
-    child: Row(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-    Icon(Icons.brightness_1, size: 8, color: primaryColor),
-    const SizedBox(width: 8),
-    Expanded(
-    child: Text(
-    tip,
-    style: const TextStyle(fontSize: 14),
-    ),
-    ),
-    ],
-    ),
-    )),
-    ],
-    ),
-    ),
+      color: cardColor, // Use dynamic cardColor
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: BorderSide(color: Colors.grey.shade200),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Text( // Use Text widget with dynamic color
+              'Essential Hot Air Ballooning Safety Tips',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: primaryColor, // Use dynamic primaryColor
+              ),
+            ),
+            const SizedBox(height: 12),
+            ...tips.map((tip) => Padding( // Use Padding and Row for bullet points as in SwimmingPage
+              padding: const EdgeInsets.symmetric(vertical: 6),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(Icons.brightness_1, size: 8, color: primaryColor), // Use dynamic primaryColor
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      tip,
+                      style: TextStyle(fontSize: 14, color: textColor), // Use dynamic textColor
+                    ),
+                  ),
+                ],
+              ),
+            )),
+          ],
+        ),
+      ),
     );
   }
 
@@ -291,10 +335,11 @@ class HotAirBalloonPage extends StatelessWidget {
         autoPlay: true,
         enlargeCenterPage: true,
         aspectRatio: 16 / 9,
-        viewportFraction: 0.8,
+        viewportFraction: 0.9, // Changed from 0.8 to 0.9 as in SwimmingPage
+        autoPlayInterval: const Duration(seconds: 4), // Added autoPlayInterval as in SwimmingPage example
       ),
       items: images.map((image) {
-        return Container(
+        return Container( // Use Container with BoxDecoration for shadow and border radius as in SwimmingPage
           margin: const EdgeInsets.symmetric(horizontal: 5),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
@@ -303,21 +348,28 @@ class HotAirBalloonPage extends StatelessWidget {
                 color: Colors.grey.withOpacity(0.5),
                 spreadRadius: 2,
                 blurRadius: 5,
-                offset: const Offset(0, 3),
+                offset: const Offset(0, 3), // Added const
               ),
             ],
           ),
-          child: ClipRRect(
+          child: ClipRRect( // Use ClipRRect for rounded corners as in SwimmingPage
             borderRadius: BorderRadius.circular(8),
-            child: Image.asset(image, fit: BoxFit.cover),
+            child: Image.asset(image, fit: BoxFit.cover, width: double.infinity, height: 200), // Added width and height
           ),
         );
       }).toList(),
     );
   }
 
-  Widget _buildInfoCard({required String title, required String description}) {
+  Widget _buildInfoCard({
+    required String title,
+    required String description,
+    required Color cardColor, // Added required cardColor
+    required Color textColor, // Added required textColor
+    required Color primaryColor, // Added required primaryColor
+  }) {
     return Card(
+      color: cardColor, // Use dynamic cardColor
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
@@ -326,19 +378,20 @@ class HotAirBalloonPage extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start, // Align to start as in SwimmingPage
           children: [
             Text(
               title,
-              style: TextStyle(
-                fontSize: 20,
+              style: TextStyle( // Use TextStyle with dynamic color
+                fontSize: 20, // Changed from 18 to 20 to match SwimmingPage
                 fontWeight: FontWeight.bold,
-                color: primaryColor,
+                color: primaryColor, // Use dynamic primaryColor
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 12), // Changed from 8 to 12 as in SwimmingPage example
             Text(
               description,
-              style: const TextStyle(fontSize: 16),
+              style: TextStyle(fontSize: 16, color: textColor), // Changed font size from 14 to 16 and added textColor
             ),
           ],
         ),
@@ -349,8 +402,8 @@ class HotAirBalloonPage extends StatelessWidget {
   Widget _buildSpotCard({
     required String image,
     required String title,
-    required String subtitle,
-    required String details,
+    String subtitle = '', // Made subtitle optional and defaulted to empty string as in SwimmingPage
+    // Removed 'required String details;' to match SwimmingPage's _buildSpotCard signature
   }) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(16),
@@ -385,14 +438,16 @@ class HotAirBalloonPage extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  subtitle,
-                  style: const TextStyle(
-                    color: Colors.white70,
-                    fontSize: 14,
+                const SizedBox(height: 4), // Kept this SizedBox as it's present in the original
+                if (subtitle.isNotEmpty) // Conditionally show subtitle
+                  Text(
+                    subtitle,
+                    style: const TextStyle(
+                      color: Colors.white70,
+                      fontSize: 14,
+                    ),
                   ),
-                ),
+                // Removed const SizedBox(height: 4), // This was removed in other consistent updates
               ],
             ),
           ),

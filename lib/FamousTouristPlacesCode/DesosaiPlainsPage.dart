@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart'; // Import for Firestore
 
 class DeosaiPage extends StatelessWidget {
   // Image paths
@@ -31,7 +32,35 @@ class DeosaiPage extends StatelessWidget {
   final Color textColor = Colors.black87;
   final Color accentColor = const Color(0xFF88F2E8);
 
-  DeosaiPage({super.key});
+  // Constructor now calls the method to record access
+  DeosaiPage({super.key}) {
+    _recordTouristPlaceAccess();
+  }
+
+  /// Records the access of the Deosai National Park page in Firestore.
+  ///
+  /// This method checks if a document for "Deosai National Park" already exists
+  /// in the 'touristsPlaces' collection. If it doesn't, a new document
+  /// is created with the name "Deosai National Park" and a timestamp.
+  Future<void> _recordTouristPlaceAccess() async {
+    try {
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('touristsPlaces')
+          .where('name', isEqualTo: 'Deosai National Park')
+          .limit(1)
+          .get();
+
+      if (querySnapshot.docs.isEmpty) {
+        // If no document exists, add a new one
+        await FirebaseFirestore.instance.collection('touristsPlaces').add({
+          'name': 'Deosai National Park',
+          'createdAt': FieldValue.serverTimestamp(), // Timestamp for when it was added
+        });
+      }
+    } catch (e) {
+      debugPrint('Error recording tourist place access for Deosai National Park: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

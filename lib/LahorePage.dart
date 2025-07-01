@@ -536,25 +536,27 @@ class _LahorePageState extends State<LahorePage> {
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: const Color(0xFF0066CC).withOpacity(0.5)),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              label,
-              style: const TextStyle(fontSize: 12, color: Colors.grey),
-            ),
-            const SizedBox(height: 4),
-            Row(
-              children: [
-                const Icon(Icons.calendar_today, size: 16, color: Color(0xFF0066CC)),
-                const SizedBox(width: 8),
-                Text(
-                  "${date.day}/${date.month}/${date.year}",
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: const TextStyle(fontSize: 12, color: Colors.grey),
+              ),
+              const SizedBox(height: 4),
+              Row(
+                children: [
+                  const Icon(Icons.calendar_today, size: 16, color: Color(0xFF0066CC)),
+                  const SizedBox(width: 8),
+                  Text(
+                    "${date.day}/${date.month}/${date.year}",
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

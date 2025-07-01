@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart'; // Import for Firestore
 
 class BabusarTopPage extends StatelessWidget {
   // Image paths
@@ -31,7 +32,35 @@ class BabusarTopPage extends StatelessWidget {
   final Color textColor = Colors.black87;
   final Color accentColor = const Color(0xFF88F2E8);
 
-  BabusarTopPage({super.key});
+  // Constructor now calls the method to record access
+  BabusarTopPage({super.key}) {
+    _recordTouristPlaceAccess();
+  }
+
+  /// Records the access of the Babusar Top page in Firestore.
+  ///
+  /// This method checks if a document for "Babusar Top" already exists
+  /// in the 'touristsPlaces' collection. If it doesn't, a new document
+  /// is created with the name "Babusar Top" and a timestamp.
+  Future<void> _recordTouristPlaceAccess() async {
+    try {
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('touristsPlaces')
+          .where('name', isEqualTo: 'Babusar Top')
+          .limit(1)
+          .get();
+
+      if (querySnapshot.docs.isEmpty) {
+        // If no document exists, add a new one
+        await FirebaseFirestore.instance.collection('touristsPlaces').add({
+          'name': 'Babusar Top',
+          'createdAt': FieldValue.serverTimestamp(), // Timestamp for when it was added
+        });
+      }
+    } catch (e) {
+      debugPrint('Error recording tourist place access for Babusar Top: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -98,7 +98,7 @@ class FeaturedCitiesPage extends StatelessWidget {
               ),
               _buildCityCard(
                 context: context,
-                title: 'Quetta1',
+                title: 'Quetta',
                 description: 'Fruit garden of Pakistan',
                 imagePath: 'assets/images/quetta1.jpg',
                 onTap: () => Navigator.push(

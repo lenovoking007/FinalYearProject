@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart'; // Added for Firestore integration
 
 class NeelumValleyPage extends StatelessWidget {
   // Image paths
@@ -31,7 +32,35 @@ class NeelumValleyPage extends StatelessWidget {
   final Color textColor = Colors.black87;
   final Color accentColor = const Color(0xFF88F2E8);
 
-  NeelumValleyPage({super.key});
+  // Constructor now calls the method to record access
+  NeelumValleyPage({super.key}) {
+    _recordTouristPlaceAccess();
+  }
+
+  /// Records the access of the Neelum Valley page in Firestore.
+  ///
+  /// This method checks if a document for "Neelum Valley" already exists
+  /// in the 'touristsPlaces' collection. If it doesn't, a new document
+  /// is created with the name "Neelum Valley" and a timestamp.
+  Future<void> _recordTouristPlaceAccess() async {
+    try {
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('touristsPlaces')
+          .where('name', isEqualTo: 'Neelum Valley')
+          .limit(1)
+          .get();
+
+      if (querySnapshot.docs.isEmpty) {
+        // If no document exists, add a new one
+        await FirebaseFirestore.instance.collection('touristsPlaces').add({
+          'name': 'Neelum Valley',
+          'createdAt': FieldValue.serverTimestamp(), // Timestamp for when it was added
+        });
+      }
+    } catch (e) {
+      debugPrint('Error recording tourist place access for Neelum Valley: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

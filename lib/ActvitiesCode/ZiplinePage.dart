@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ZiplinePage extends StatelessWidget {
   final List<String> overviewImages = [
@@ -18,15 +19,43 @@ class ZiplinePage extends StatelessWidget {
     'assets/images/zipline/zs3.jpg',
   ];
 
-  ZiplinePage({super.key});
+  ZiplinePage({super.key}) {
+    _recordActivityAccess();
+  }
+
+  Future<void> _recordActivityAccess() async {
+    try {
+      // Check if this activity already exists in the collection
+      final query = await FirebaseFirestore.instance
+          .collection('Activities')
+          .where('name', isEqualTo: 'zipline')
+          .limit(1)
+          .get();
+
+      // Only create if it doesn't exist
+      if (query.docs.isEmpty) {
+        await FirebaseFirestore.instance.collection('Activities').add({
+          'name': 'zipline',
+          'createdAt': FieldValue.serverTimestamp(),
+        });
+      }
+    } catch (e) {
+      debugPrint('Error recording activity access: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final primaryColor = isDarkMode ? const Color(0xFF1E88E5) : const Color(0xFF0066CC);
+    final cardColor = isDarkMode ? Colors.grey[800]! : Colors.white;
+    final textColor = isDarkMode ? Colors.white : Colors.black87;
+
     return DefaultTabController(
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: const Color(0xFF0066CC),
+          backgroundColor: primaryColor,
           elevation: 0,
           automaticallyImplyLeading: true,
           iconTheme: const IconThemeData(color: Colors.white),
@@ -34,6 +63,7 @@ class ZiplinePage extends StatelessWidget {
             'Zipline Adventures',
             style: TextStyle(color: Colors.white),
           ),
+          centerTitle: true,
           bottom: TabBar(
             labelColor: Colors.white,
             unselectedLabelColor: Colors.white.withOpacity(0.7),
@@ -48,16 +78,16 @@ class ZiplinePage extends StatelessWidget {
         ),
         body: TabBarView(
           children: [
-            _buildOverviewTab(),
-            _buildNaturalSpotsTab(),
-            _buildSafetyTab(),
+            _buildOverviewTab(cardColor, textColor, primaryColor),
+            _buildNaturalSpotsTab(cardColor, textColor, primaryColor),
+            _buildSafetyTab(cardColor, textColor, primaryColor),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildOverviewTab() {
+  Widget _buildOverviewTab(Color cardColor, Color textColor, Color primaryColor) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -69,16 +99,19 @@ class ZiplinePage extends StatelessWidget {
             title: 'Ziplining in Pakistan',
             description:
             'Experience the thrill of ziplining across breathtaking valleys and scenic landscapes in Pakistan. It’s an adrenaline-packed adventure suitable for all ages.',
+            cardColor: cardColor,
+            textColor: textColor,
+            primaryColor: primaryColor,
           ),
           const SizedBox(height: 24),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Text(
               'Best Zipline Locations',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF0066CC),
+                color: primaryColor,
               ),
             ),
           ),
@@ -90,7 +123,7 @@ class ZiplinePage extends StatelessWidget {
     );
   }
 
-  Widget _buildNaturalSpotsTab() {
+  Widget _buildNaturalSpotsTab(Color cardColor, Color textColor, Color primaryColor) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -102,6 +135,9 @@ class ZiplinePage extends StatelessWidget {
             title: 'Top Zipline Destinations',
             description:
             'From lush green hills to rugged mountain ranges, Pakistan offers some of the most stunning zipline routes in South Asia.',
+            cardColor: cardColor,
+            textColor: textColor,
+            primaryColor: primaryColor,
           ),
           const SizedBox(height: 24),
           Padding(
@@ -109,12 +145,12 @@ class ZiplinePage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'Popular Zipline Areas',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF0066CC),
+                    color: primaryColor,
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -128,7 +164,7 @@ class ZiplinePage extends StatelessWidget {
     );
   }
 
-  Widget _buildSafetyTab() {
+  Widget _buildSafetyTab(Color cardColor, Color textColor, Color primaryColor) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -140,9 +176,12 @@ class ZiplinePage extends StatelessWidget {
             title: 'Zipline Safety Guidelines',
             description:
             'Ensure your zipline experience is safe and enjoyable by following proper guidelines and checking equipment before every ride.',
+            cardColor: cardColor,
+            textColor: textColor,
+            primaryColor: primaryColor,
           ),
           const SizedBox(height: 24),
-          _buildSafetyTipsList(),
+          _buildSafetyTipsList(cardColor, textColor, primaryColor),
           const SizedBox(height: 24),
         ],
       ),
@@ -220,7 +259,7 @@ class ZiplinePage extends StatelessWidget {
     );
   }
 
-  Widget _buildSafetyTipsList() {
+  Widget _buildSafetyTipsList(Color cardColor, Color textColor, Color primaryColor) {
     final List<String> tips = [
       'Always double-check harnesses and safety gear before riding.',
       'Follow instructions from trained staff or guides.',
@@ -229,6 +268,7 @@ class ZiplinePage extends StatelessWidget {
       'Do not exceed the maximum weight limit specified for the line.',
     ];
     return Card(
+      color: cardColor,
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
@@ -238,12 +278,12 @@ class ZiplinePage extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            const Text(
+            Text(
               'Essential Zipline Safety Tips',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF0066CC),
+                color: primaryColor,
               ),
             ),
             const SizedBox(height: 12),
@@ -252,12 +292,12 @@ class ZiplinePage extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Icon(Icons.brightness_1, size: 8, color: Color(0xFF0066CC)),
+                  Icon(Icons.brightness_1, size: 8, color: primaryColor),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       tip,
-                      style: const TextStyle(fontSize: 14),
+                      style: TextStyle(fontSize: 14, color: textColor),
                     ),
                   ),
                 ],
@@ -275,10 +315,11 @@ class ZiplinePage extends StatelessWidget {
         height: 200,
         autoPlay: true,
         enlargeCenterPage: true,
+        viewportFraction: 0.9,
         aspectRatio: 16 / 9,
-        viewportFraction: 0.8,
+        autoPlayInterval: const Duration(seconds: 4),
       ),
-      items: images.map((image) {
+      items: images.map((imagePath) {
         return Container(
           margin: const EdgeInsets.symmetric(horizontal: 5),
           decoration: BoxDecoration(
@@ -294,15 +335,27 @@ class ZiplinePage extends StatelessWidget {
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(8),
-            child: Image.asset(image, fit: BoxFit.cover),
+            child: Image.asset(
+              imagePath,
+              fit: BoxFit.cover,
+              width: double.infinity,
+              height: 200,
+            ),
           ),
         );
       }).toList(),
     );
   }
 
-  Widget _buildInfoCard({required String title, required String description}) {
+  Widget _buildInfoCard({
+    required String title,
+    required String description,
+    required Color cardColor,
+    required Color textColor,
+    required Color primaryColor,
+  }) {
     return Card(
+      color: cardColor,
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
@@ -311,19 +364,20 @@ class ZiplinePage extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               title,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF0066CC),
+                color: primaryColor,
               ),
             ),
             const SizedBox(height: 12),
             Text(
               description,
-              style: const TextStyle(fontSize: 16),
+              style: TextStyle(fontSize: 16, color: textColor),
             ),
           ],
         ),
@@ -334,7 +388,7 @@ class ZiplinePage extends StatelessWidget {
   Widget _buildSpotCard({
     required String image,
     required String title,
-    required String subtitle,
+    String subtitle = '',
   }) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(16),
@@ -369,15 +423,14 @@ class ZiplinePage extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  subtitle,
-                  style: const TextStyle(
-                    color: Colors.white70,
-                    fontSize: 14,
+                if (subtitle.isNotEmpty)
+                  Text(
+                    subtitle,
+                    style: const TextStyle(
+                      color: Colors.white70,
+                      fontSize: 14,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 4),
               ],
             ),
           ),

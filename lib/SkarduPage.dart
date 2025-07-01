@@ -3,37 +3,40 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:travelmate/tripprogresspage.dart';
-import 'package:travelmate/city_planner.dart';
+import 'package:travelmate/city_planner.dart'; // Add this import
 
-class KarachiPage extends StatefulWidget {
-  const KarachiPage({super.key});
+class SkarduPage extends StatefulWidget {
+  const SkarduPage({super.key});
 
   @override
-  State<KarachiPage> createState() => _KarachiPageState();
+  State<SkarduPage> createState() => _SkarduPageState();
 }
 
-class _KarachiPageState extends State<KarachiPage> {
+class _SkarduPageState extends State<SkarduPage> {
+  // Using Lahore images for now as requested by the user.
+  // These should be replaced with Skardu specific images later.
   final List<String> overviewImages = [
-    'assets/images/Karachii/karachio1.jpg',
-    'assets/images/Karachii/karachio2.jpg',
-    'assets/images/Karachii/karachio3.jpg',
+    'assets/images/Lahore/lahore1.jpg',
+    'assets/images/Lahore/lahore2.jpg',
+    'assets/images/Lahore/lahore3.jpg',
   ];
   final List<String> clothesImages = [
-    'assets/images/Karachii/karachicl1.jpg',
-    'assets/images/Karachii/karachicl2.jpg',
-    'assets/images/Karachii/karachicl3.jpg',
-    'assets/images/Karachii/karachicl4.jpg',
+    'assets/images/Lahore/cl1.jpg',
+    'assets/images/Lahore/cl2.jpg',
+    'assets/images/Lahore/cl3.jpg',
+    'assets/images/Lahore/cl4.jpg',
   ];
   final List<String> foodImages = [
-    'assets/images/Karachii/karachifood1.jpg',
-    'assets/images/Karachii/karachifood2.jpg',
-    'assets/images/Karachii/karachifood3.jpg',
-    'assets/images/Karachii/karachifood4.jpg',
+    'assets/images/Lahore/food1.jpg',
+    'assets/images/Lahore/food2.jpeg',
+    'assets/images/Lahore/food3.jpg',
+    'assets/images/Lahore/food4.jpg',
   ];
   final List<String> festivalImages = [
-    'assets/images/Karachii/karachifes1.jpg',
-    'assets/images/Karachii/kaarchifes2.jpg',
-    'assets/images/Karachii/karachifes3.jpg',
+    'assets/images/Lahore/f1.jpg',
+    'assets/images/Lahore/f2.jpg',
+    'assets/images/Lahore/f3.jpg',
+    'assets/images/Lahore/f4.jpg',
   ];
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -47,12 +50,13 @@ class _KarachiPageState extends State<KarachiPage> {
     _addCityToCollection();
   }
 
+  // Adds 'Skardu' to the 'cities' collection in Firestore if it doesn't exist.
   Future<void> _addCityToCollection() async {
     try {
-      final doc = await _firestore.collection('cities').doc('karachi').get();
+      final doc = await _firestore.collection('cities').doc('skardu').get();
       if (!doc.exists) {
-        await _firestore.collection('cities').doc('karachi').set({
-          'name': 'Karachi',
+        await _firestore.collection('cities').doc('skardu').set({
+          'name': 'Skardu',
           'createdAt': FieldValue.serverTimestamp(),
         });
       }
@@ -63,6 +67,7 @@ class _KarachiPageState extends State<KarachiPage> {
     }
   }
 
+  // Saves the trip plan to the 'tripPlans' collection in Firestore.
   Future<void> _saveTripPlanToFirebase(Map<String, dynamic> tripPlan) async {
     try {
       await _firestore.collection('tripPlans').add(tripPlan);
@@ -74,6 +79,7 @@ class _KarachiPageState extends State<KarachiPage> {
     }
   }
 
+  // Displays a dialog for planning a trip.
   void showTripPlanDialog(BuildContext context) {
     final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
     TextEditingController tripNameController = TextEditingController();
@@ -83,6 +89,7 @@ class _KarachiPageState extends State<KarachiPage> {
     DateTime startDate = DateTime.now();
     DateTime endDate = DateTime.now().add(const Duration(days: 3));
 
+    // Validator for trip name text field.
     String? validateTripName(String? value) {
       if (value == null || value.isEmpty) {
         return 'Please enter a trip name';
@@ -93,6 +100,7 @@ class _KarachiPageState extends State<KarachiPage> {
       return null;
     }
 
+    // Validator for number of people text field.
     String? validatePeopleCount(String? value) {
       if (value == null || value.isEmpty) {
         return 'Please enter number of people';
@@ -110,6 +118,7 @@ class _KarachiPageState extends State<KarachiPage> {
       return null;
     }
 
+    // Validator for budget text field.
     String? validateBudget(String? value) {
       if (value == null || value.isEmpty) {
         return 'Please enter a budget';
@@ -128,6 +137,7 @@ class _KarachiPageState extends State<KarachiPage> {
       return null;
     }
 
+    // Validator for trip duration (start and end dates).
     String? validateTripDuration(DateTime start, DateTime end) {
       final duration = end.difference(start).inDays;
       if (duration < 1) {
@@ -414,7 +424,7 @@ class _KarachiPageState extends State<KarachiPage> {
                                     'budget': int.parse(budgetController.text.replaceAll(',', '')),
                                     'startDate': Timestamp.fromDate(startDate),
                                     'endDate': Timestamp.fromDate(endDate),
-                                    'destination': 'Karachi',
+                                    'destination': 'Skardu', // Changed from Lahore to Skardu
                                     'status': 'planned',
                                     'createdAt': Timestamp.now(),
                                   };
@@ -463,6 +473,7 @@ class _KarachiPageState extends State<KarachiPage> {
     );
   }
 
+  // Helper widget to build an editable text field.
   Widget _buildEditableTextField({
     required String label,
     required TextEditingController controller,
@@ -497,6 +508,7 @@ class _KarachiPageState extends State<KarachiPage> {
     );
   }
 
+  // Helper widget to build a date selector.
   Widget _buildDateSelector(
       BuildContext context,
       String label,
@@ -559,6 +571,7 @@ class _KarachiPageState extends State<KarachiPage> {
     );
   }
 
+  // Shows a success dialog after saving a trip.
   void _showSuccessDialog(BuildContext context, String tripName, String tripType, int duration) {
     showDialog(
       context: context,
@@ -610,7 +623,7 @@ class _KarachiPageState extends State<KarachiPage> {
                     children: [
                       _buildSuccessDetailRow("Trip Name:", tripName),
                       const Divider(height: 16, thickness: 0.5),
-                      _buildSuccessDetailRow("Destination:", "Karachi"),
+                      _buildSuccessDetailRow("Destination:", "Skardu"), // Changed from Lahore to Skardu
                       const Divider(height: 16, thickness: 0.5),
                       _buildSuccessDetailRow("Trip Type:", tripType),
                       const Divider(height: 16, thickness: 0.5),
@@ -649,6 +662,7 @@ class _KarachiPageState extends State<KarachiPage> {
     );
   }
 
+  // Helper widget to build a row for success dialog details.
   Widget _buildSuccessDetailRow(String label, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
@@ -678,7 +692,7 @@ class _KarachiPageState extends State<KarachiPage> {
       return Scaffold(
         appBar: AppBar(
           backgroundColor: const Color(0xFF0066CC),
-          title: const Text('Karachi', style: TextStyle(color: Colors.white)),
+          title: const Text('Skardu', style: TextStyle(color: Colors.white)), // Changed from Lahore to Skardu
           iconTheme: const IconThemeData(color: Colors.white),
         ),
         body: Center(
@@ -716,7 +730,7 @@ class _KarachiPageState extends State<KarachiPage> {
                       });
                     },
                     decoration: InputDecoration(
-                      hintText: 'Search in Karachi...',
+                      hintText: 'Search in Skardu...', // Changed from Lahore to Skardu
                       hintStyle: const TextStyle(color: Colors.white70),
                       prefixIcon: const Icon(Icons.search, color: Colors.white, size: 20),
                       border: InputBorder.none,
@@ -797,31 +811,33 @@ class _KarachiPageState extends State<KarachiPage> {
             ),
           ],
         ),
+
       ),
     );
   }
 
+  // Builds the Overview tab content for Skardu.
   Widget _buildOverviewTab(BuildContext context) {
     final List<Map<String, dynamic>> attractions = [
       {
-        'name': 'Quaid-e-Azam\'s Mausoleum',
-        'address': 'M.A Jinnah Road, Karachi',
-        'image': 'assets/images/Karachii/karachio1.jpg',
+        'name': 'Shangrila Resort (Lower Kachura Lake)',
+        'address': 'Skardu, Gilgit-Baltistan, Pakistan',
+        'image': 'assets/images/Lahore/lahore1.jpg', // Placeholder
       },
       {
-        'name': 'Clifton Beach',
-        'address': 'Clifton, Karachi',
-        'image': 'assets/images/Karachii/karachio2.jpg',
+        'name': 'Satpara Lake',
+        'address': 'Skardu, Gilgit-Baltistan, Pakistan',
+        'image': 'assets/images/Lahore/lahore2.jpg', // Placeholder
       },
       {
-        'name': 'Mohatta Palace',
-        'address': 'Clifton, Karachi',
-        'image': 'assets/images/Karachii/karachio3.jpg',
+        'name': 'Manthoka Waterfall',
+        'address': 'Manthoka, Kharmang, Gilgit-Baltistan, Pakistan',
+        'image': 'assets/images/Lahore/lahore3.jpg', // Placeholder
       },
       {
-        'name': 'Pakistan Maritime Museum',
-        'address': 'Karsaz Road, Karachi',
-        'image': 'assets/images/Karachii/karachio4.jpg',
+        'name': 'Deosai National Park',
+        'address': 'Skardu, Gilgit-Baltistan, Pakistan',
+        'image': 'assets/images/Lahore/food1.jpg', // Placeholder
       },
     ];
 
@@ -844,7 +860,7 @@ class _KarachiPageState extends State<KarachiPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Discover Karachi",
+                  "Discover Skardu", // Changed from Lahore to Skardu
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -856,10 +872,10 @@ class _KarachiPageState extends State<KarachiPage> {
           ),
           const SizedBox(height: 16),
           _buildInfoCard(
-            title: 'About Karachi',
+            title: 'About Skardu',
             description:
-            'Karachi, the bustling metropolis by the Arabian Sea, is Pakistan\'s '
-                'largest city. It offers a unique blend of modernity, history, and vibrant coastal life.',
+            'Skardu, the capital of Baltistan, is a breathtaking valley in Gilgit-Baltistan, Pakistan. '
+                'It is known for its majestic mountains, serene lakes, and rich cultural heritage, serving as a gateway to some of the world\'s highest peaks.',
           ),
           const SizedBox(height: 24),
           Padding(
@@ -915,27 +931,28 @@ class _KarachiPageState extends State<KarachiPage> {
     );
   }
 
+  // Builds the Shopping tab content for Skardu.
   Widget _buildShoppingTab() {
     final List<Map<String, dynamic>> shoppingSpots = [
       {
-        'name': 'Dolmen Mall Clifton',
-        'address': 'A premium mall with international and local brands',
-        'image': 'assets/images/Karachii/karachicl1.jpg',
+        'name': 'Skardu Bazaar',
+        'address': 'Main Bazaar, Skardu, Gilgit-Baltistan, Pakistan',
+        'image': 'assets/images/Lahore/cl1.jpg', // Placeholder
       },
       {
-        'name': 'Lucky One Mall',
-        'address': 'One of the largest malls in Pakistan',
-        'image': 'assets/images/Karachii/karachicl2.jpg',
+        'name': 'K2 Base Camp Shop',
+        'address': 'Near K2 Museum, Skardu, Gilgit-Baltistan, Pakistan',
+        'image': 'assets/images/Lahore/cl2.jpg', // Placeholder
       },
       {
-        'name': 'Zainab Market',
-        'address': 'Famous for leather goods and handicrafts',
-        'image': 'assets/images/Karachii/karachicl3.jpg',
+        'name': 'Local Handicraft Shops',
+        'address': 'Various locations in Skardu City, Gilgit-Baltistan, Pakistan',
+        'image': 'assets/images/Lahore/cl3.jpg', // Placeholder
       },
       {
-        'name': 'Tariq Road',
-        'address': 'Popular shopping area for clothing and accessories',
-        'image': 'assets/images/Karachii/karachicl4.jpg',
+        'name': 'Baltistan Arts & Crafts',
+        'address': 'Skardu Road, Skardu, Gilgit-Baltistan, Pakistan',
+        'image': 'assets/images/Lahore/cl4.jpg', // Placeholder
       },
     ];
 
@@ -955,7 +972,7 @@ class _KarachiPageState extends State<KarachiPage> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Text(
-              "Discover Clothes",
+              "Discover Clothes & Souvenirs", // Updated title for Skardu context
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -965,10 +982,10 @@ class _KarachiPageState extends State<KarachiPage> {
           ),
           const SizedBox(height: 16),
           _buildInfoCard(
-            title: 'Shopping in Karachi',
+            title: 'Local Attire & Crafts',
             description:
-            'Karachi offers a diverse shopping experience, from luxurious malls to '
-                'traditional markets. You can find everything from designer brands to handcrafted goods.',
+            'Skardu offers unique traditional clothing, woolen products, and exquisite handicrafts made by local artisans. '
+                'You can find traditional Balti caps, shawls, and wooden carvings.',
           ),
           const SizedBox(height: 24),
           Padding(
@@ -1001,27 +1018,28 @@ class _KarachiPageState extends State<KarachiPage> {
     );
   }
 
+  // Builds the Food tab content for Skardu.
   Widget _buildFoodTab() {
     final List<Map<String, dynamic>> foodLocations = [
       {
-        'name': 'Do Darya',
-        'address': 'Seaside dining with a wide variety of cuisines',
-        'image': 'assets/images/Karachii/karachifood1.jpg',
+        'name': 'Skardu City Restaurants',
+        'address': 'Various locations in Skardu City, Gilgit-Baltistan, Pakistan',
+        'image': 'assets/images/Lahore/food1.jpg', // Placeholder
       },
       {
-        'name': 'Kolachi Restaurant',
-        'address': 'Famous for seafood and grilled dishes by the sea',
-        'image': 'assets/images/Karachii/karachifood2.jpg',
+        'name': 'Shangrila Resort Restaurant',
+        'address': 'Shangrila Resort, Skardu, Gilgit-Baltistan, Pakistan',
+        'image': 'assets/images/Lahore/food2.jpeg', // Placeholder
       },
       {
-        'name': 'Boat Basin',
-        'address': 'Popular food street for local and desi delights',
-        'image': 'assets/images/Karachii/karachifood3.jpg',
+        'name': 'K2 Cafe',
+        'address': 'Skardu Bazaar, Skardu, Gilgit-Baltistan, Pakistan',
+        'image': 'assets/images/Lahore/food3.jpg', // Placeholder
       },
       {
-        'name': 'Burns Road',
-        'address': 'Historic food street known for traditional Pakistani food',
-        'image': 'assets/images/Karachii/karachifood4.jpg',
+        'name': 'Local Eateries',
+        'address': 'Around Satpara Lake and other tourist spots',
+        'image': 'assets/images/Lahore/food4.jpg', // Placeholder
       },
     ];
 
@@ -1041,7 +1059,7 @@ class _KarachiPageState extends State<KarachiPage> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Text(
-              "Discover Food",
+              "Discover Food in Skardu", // Changed from Lahore to Skardu
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -1051,10 +1069,10 @@ class _KarachiPageState extends State<KarachiPage> {
           ),
           const SizedBox(height: 16),
           _buildInfoCard(
-            title: 'Karachi Cuisine',
+            title: 'Skardu Cuisine',
             description:
-            'Karachi is a food lover\'s paradise, offering everything from '
-                'street food to fine dining. The city is famous for its biryani, seafood, and diverse culinary scene.',
+            'Skardu offers a unique blend of Balti and Pakistani cuisine. '
+                'Enjoy local specialties like Gyaling, Balay, and various dried fruit dishes, along with traditional Pakistani food.',
           ),
           const SizedBox(height: 24),
           Padding(
@@ -1087,27 +1105,28 @@ class _KarachiPageState extends State<KarachiPage> {
     );
   }
 
+  // Builds the Festival tab content for Skardu.
   Widget _buildFestivalTab() {
     final List<Map<String, dynamic>> festivalLocations = [
       {
-        'name': 'Clifton Beach',
-        'address': 'Hosts beach festivals and cultural gatherings',
-        'image': 'assets/images/Karachii/karachio2.jpg',
+        'name': 'Shandur Polo Festival',
+        'address': 'Shandur Pass, Gilgit-Baltistan, Pakistan (near Skardu)',
+        'image': 'assets/images/Lahore/f1.jpg', // Placeholder
       },
       {
-        'name': 'Frere Hall',
-        'address': 'Venue for art exhibitions and musical events',
-        'image': 'assets/images/Karachii/karachifes3.jpg',
+        'name': 'Harvest Festivals (e.g., Apricot Blossom)',
+        'address': 'Various villages and valleys around Skardu, Gilgit-Baltistan, Pakistan',
+        'image': 'assets/images/Lahore/f2.jpg', // Placeholder
       },
       {
-        'name': 'Port Grand',
-        'address': 'Famous for food festivals and musical nights',
-        'image': 'assets/images/Karachii/karachifes1.jpg',
+        'name': 'Cultural Events at Skardu Fort',
+        'address': 'Kharpocho Fort, Skardu, Gilgit-Baltistan, Pakistan',
+        'image': 'assets/images/Lahore/f3.jpg', // Placeholder
       },
       {
-        'name': 'Karachi Expo Center',
-        'address': 'Hosts major exhibitions and cultural expos',
-        'image': 'assets/images/Karachii/kaarchifes2.jpg',
+        'name': 'Local Sports Events',
+        'address': 'Various grounds in Skardu, Gilgit-Baltistan, Pakistan',
+        'image': 'assets/images/Lahore/f4.jpg', // Placeholder
       },
     ];
 
@@ -1127,7 +1146,7 @@ class _KarachiPageState extends State<KarachiPage> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Text(
-              "Discover Festivals",
+              "Discover Festivals in Skardu", // Changed from Lahore to Skardu
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -1139,8 +1158,7 @@ class _KarachiPageState extends State<KarachiPage> {
           _buildInfoCard(
             title: 'Cultural Festivals',
             description:
-            'Karachi hosts a wide range of cultural festivals, food events, '
-                'music concerts, and international exhibitions throughout the year.',
+            'Skardu is home to vibrant cultural festivals, often centered around traditional sports like polo and seasonal celebrations, showcasing the rich Balti heritage.',
           ),
           const SizedBox(height: 24),
           Padding(
@@ -1173,11 +1191,12 @@ class _KarachiPageState extends State<KarachiPage> {
     );
   }
 
+  // Builds the Review/Feedback tab content for Skardu.
   Widget _buildReviewFeedbackTab() {
     return StreamBuilder<QuerySnapshot>(
       stream: _firestore
           .collection('reviews')
-          .where('destination', isEqualTo: 'Karachi')
+          .where('destination', isEqualTo: 'Skardu') // Changed from Lahore to Skardu
           .orderBy('timestamp', descending: true)
           .snapshots(),
       builder: (context, snapshot) {
@@ -1228,7 +1247,7 @@ class _KarachiPageState extends State<KarachiPage> {
             'name': data['name'] ?? 'Anonymous',
             'rating': data['rating'] ?? 0,
             'review': data['review'] ?? '',
-            'imageUrl': 'assets/images/Lahore/u${(doc.hashCode % 3) + 1}.png',
+            'imageUrl': 'assets/images/Lahore/u${(doc.hashCode % 3) + 1}.png', // Placeholder
             'date': data['timestamp'] != null
                 ? _formatReviewDate(data['timestamp'].toDate())
                 : 'Recently',
@@ -1237,18 +1256,20 @@ class _KarachiPageState extends State<KarachiPage> {
 
         final List<Map<String, dynamic>> localReviews = [
           {
-            'name': 'Travel Enthusiast',
+            'name': 'Mountain Explorer',
             'rating': 5,
-            'review': 'Karachi is a vibrant city with amazing beaches and delicious food. The people are very welcoming!',
-            'imageUrl': 'assets/images/Lahore/u1.png',
-            'date': '2 months ago'
+            'review': 'Skardu is a paradise for nature lovers and adventurers. '
+                'The landscapes are breathtaking and the trekking opportunities are endless.',
+            'imageUrl': 'assets/images/Lahore/u1.png', // Placeholder
+            'date': '3 months ago'
           },
           {
-            'name': 'Food Lover',
+            'name': 'Peace Seeker',
             'rating': 4,
-            'review': 'The food scene in Karachi is incredible. From street food to fine dining, there\'s something for everyone.',
-            'imageUrl': 'assets/images/Lahore/u2.png',
-            'date': '1 month ago'
+            'review': 'The tranquility of Satpara Lake and Shangrila Resort is unmatched. '
+                'A perfect place for relaxation and unwinding.',
+            'imageUrl': 'assets/images/Lahore/u2.png', // Placeholder
+            'date': '2 months ago'
           }
         ];
 
@@ -1304,6 +1325,7 @@ class _KarachiPageState extends State<KarachiPage> {
     );
   }
 
+  // Formats the date for review display.
   String _formatReviewDate(DateTime date) {
     final now = DateTime.now();
     final difference = now.difference(date);
@@ -1319,6 +1341,7 @@ class _KarachiPageState extends State<KarachiPage> {
     }
   }
 
+  // Placeholder for when there are no reviews.
   Widget _buildNoReviewsPlaceholder() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 32),
@@ -1343,6 +1366,7 @@ class _KarachiPageState extends State<KarachiPage> {
     );
   }
 
+  // Helper widget to build an information card.
   Widget _buildInfoCard({
     required String title,
     required String description,
@@ -1377,6 +1401,7 @@ class _KarachiPageState extends State<KarachiPage> {
     );
   }
 
+  // Helper widget to build a grid of attractions.
   Widget _buildAttractionsGrid(List<Map<String, dynamic>> attractions) {
     return GridView.builder(
       shrinkWrap: true,
@@ -1449,6 +1474,7 @@ class _KarachiPageState extends State<KarachiPage> {
     );
   }
 
+  // Helper widget to build a grid of shopping spots.
   Widget _buildShoppingGrid(List<Map<String, dynamic>> shoppingSpots) {
     return GridView.builder(
       shrinkWrap: true,
@@ -1521,6 +1547,7 @@ class _KarachiPageState extends State<KarachiPage> {
     );
   }
 
+  // Helper widget to build a grid of food locations.
   Widget _buildFoodGrid(List<Map<String, dynamic>> foodLocations) {
     return GridView.builder(
       shrinkWrap: true,
@@ -1593,6 +1620,7 @@ class _KarachiPageState extends State<KarachiPage> {
     );
   }
 
+  // Helper widget to build a grid of festival locations.
   Widget _buildFestivalGrid(List<Map<String, dynamic>> festivalLocations) {
     return GridView.builder(
       shrinkWrap: true,
@@ -1665,6 +1693,7 @@ class _KarachiPageState extends State<KarachiPage> {
     );
   }
 
+  // Helper widget to build a review card.
   Widget _buildReviewCard({
     required String name,
     required int rating,
@@ -1741,6 +1770,7 @@ class _KarachiPageState extends State<KarachiPage> {
     );
   }
 
+  // Helper widget to build a carousel of images.
   Widget _buildCarousel(List<String> images) {
     return CarouselSlider(
       options: CarouselOptions(

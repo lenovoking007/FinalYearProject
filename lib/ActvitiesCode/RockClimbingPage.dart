@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart'; // Import added for Firestore
 
 class RockClimbingPage extends StatelessWidget {
   final List<String> overviewImages = [
@@ -20,17 +21,47 @@ class RockClimbingPage extends StatelessWidget {
     'assets/images/rock/rs2.jpg',
   ];
 
-  static const primaryColor = Color(0xFF0066CC);
+  // static const primaryColor = Color(0xFF0066CC); // This line is commented out to allow for dynamic color based on theme
 
-  RockClimbingPage({super.key});
+  RockClimbingPage({super.key}) {
+    _recordActivityAccess(); // Call the activity recording method
+  }
+
+  // Method to record activity access in Firestore, copied from SwimmingPage
+  Future<void> _recordActivityAccess() async {
+    try {
+      // Check if this activity already exists in the collection
+      final query = await FirebaseFirestore.instance
+          .collection('Activities')
+          .where('name', isEqualTo: 'rock climbing') // activity name for rock climbing
+          .limit(1)
+          .get();
+
+      // Only create if it doesn't exist
+      if (query.docs.isEmpty) {
+        await FirebaseFirestore.instance.collection('Activities').add({
+          'name': 'rock climbing', // activity name for rock climbing
+          'createdAt': FieldValue.serverTimestamp(),
+        });
+      }
+    } catch (e) {
+      debugPrint('Error recording activity access: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    // Determine if dark mode is enabled and set colors accordingly
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final primaryColor = isDarkMode ? const Color(0xFF1E88E5) : const Color(0xFF0066CC);
+    final cardColor = isDarkMode ? Colors.grey[800]! : Colors.white;
+    final textColor = isDarkMode ? Colors.white : Colors.black87;
+
     return DefaultTabController(
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: primaryColor,
+          backgroundColor: primaryColor, // Use dynamic primaryColor
           elevation: 0,
           automaticallyImplyLeading: true,
           iconTheme: const IconThemeData(color: Colors.white),
@@ -38,12 +69,13 @@ class RockClimbingPage extends StatelessWidget {
             'Rock Climbing',
             style: TextStyle(color: Colors.white),
           ),
-          bottom: const TabBar(
+          centerTitle: true, // Center title as in SwimmingPage
+          bottom: TabBar( // Removed const from TabBar for dynamic labelColor/unselectedLabelColor
             labelColor: Colors.white,
-            unselectedLabelColor: Colors.white70,
+            unselectedLabelColor: Colors.white.withOpacity(0.7), // Use .withOpacity as in SwimmingPage
             indicatorColor: Colors.white,
             indicatorWeight: 3,
-            tabs: [
+            tabs: const [
               Tab(icon: Icon(Icons.explore), text: 'Overview'),
               Tab(icon: Icon(Icons.location_on), text: 'Climbing Spots'),
               Tab(icon: Icon(Icons.security), text: 'Safety'),
@@ -52,16 +84,16 @@ class RockClimbingPage extends StatelessWidget {
         ),
         body: TabBarView(
           children: [
-            _buildOverviewTab(),
-            _buildClimbingSpotsTab(),
-            _buildSafetyTab(),
+            _buildOverviewTab(cardColor, textColor, primaryColor), // Pass colors
+            _buildClimbingSpotsTab(cardColor, textColor, primaryColor), // Pass colors
+            _buildSafetyTab(cardColor, textColor, primaryColor), // Pass colors
           ],
         ),
       ),
     );
   }
 
-  Widget _buildOverviewTab() {
+  Widget _buildOverviewTab(Color cardColor, Color textColor, Color primaryColor) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -73,16 +105,19 @@ class RockClimbingPage extends StatelessWidget {
             title: 'Rock Climbing Overview',
             description:
             'Rock climbing is a physically demanding sport that involves climbing up, down, or across natural rock formations or artificial rock walls. It’s a thrilling challenge that pushes your strength, endurance, and mental focus to the limit.',
+            cardColor: cardColor, // Pass cardColor
+            textColor: textColor, // Pass textColor
+            primaryColor: primaryColor, // Pass primaryColor
           ),
           const SizedBox(height: 24),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8),
-            child: Text(
+          Padding( // Removed const from Padding for dynamic color in Text
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Text( // Use Text widget with dynamic color
               'Popular Climbing Destinations',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: primaryColor,
+                color: primaryColor, // Use dynamic primaryColor
               ),
             ),
           ),
@@ -94,7 +129,7 @@ class RockClimbingPage extends StatelessWidget {
     );
   }
 
-  Widget _buildClimbingSpotsTab() {
+  Widget _buildClimbingSpotsTab(Color cardColor, Color textColor, Color primaryColor) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -106,6 +141,9 @@ class RockClimbingPage extends StatelessWidget {
             title: 'Famous Climbing Spots',
             description:
             'Rock climbing can be done on natural rock formations in outdoor environments, or indoors at climbing gyms. Some of the best climbing spots in the world are located in areas with dramatic rock formations and challenging routes.',
+            cardColor: cardColor, // Pass cardColor
+            textColor: textColor, // Pass textColor
+            primaryColor: primaryColor, // Pass primaryColor
           ),
           const SizedBox(height: 24),
           _buildClimbingSpotsGrid(),
@@ -115,7 +153,7 @@ class RockClimbingPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSafetyTab() {
+  Widget _buildSafetyTab(Color cardColor, Color textColor, Color primaryColor) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -127,9 +165,12 @@ class RockClimbingPage extends StatelessWidget {
             title: 'Rock Climbing Safety Tips',
             description:
             'Climbing can be dangerous without the proper training and equipment. Follow these safety tips to stay protected while enjoying your climb.',
+            cardColor: cardColor, // Pass cardColor
+            textColor: textColor, // Pass textColor
+            primaryColor: primaryColor, // Pass primaryColor
           ),
           const SizedBox(height: 24),
-          _buildSafetyTipsList(),
+          _buildSafetyTipsList(cardColor, textColor, primaryColor), // Pass colors
           const SizedBox(height: 24),
         ],
       ),
@@ -179,13 +220,13 @@ class RockClimbingPage extends StatelessWidget {
           image: spots[index]['image'],
           title: spots[index]['name'],
           subtitle: spots[index]['location'],
-          details: spots[index]['difficulty'],
+          // Removed 'details' from here as it's not in the SwimmingPage's _buildSpotCard signature
         );
       },
     );
   }
 
-  Widget _buildSafetyTipsList() {
+  Widget _buildSafetyTipsList(Color cardColor, Color textColor, Color primaryColor) {
     final List<String> tips = [
       'Always double-check your harness and rope before climbing.',
       'Use a helmet to protect yourself from falling debris.',
@@ -197,6 +238,7 @@ class RockClimbingPage extends StatelessWidget {
     ];
 
     return Card(
+      color: cardColor, // Use dynamic cardColor
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
@@ -206,21 +248,32 @@ class RockClimbingPage extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            const Text(
+            Text( // Use Text widget with dynamic color
               'Rock Climbing Safety Tips',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: primaryColor,
+                color: primaryColor, // Use dynamic primaryColor
               ),
             ),
             const SizedBox(height: 12),
             Column(
               children: tips
-                  .map((tip) => ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: const Icon(Icons.check_circle, color: primaryColor),
-                title: Text(tip),
+                  .map((tip) => Padding( // Use Padding and Row for bullet points as in SwimmingPage
+                padding: const EdgeInsets.symmetric(vertical: 6),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Icon(Icons.brightness_1, size: 8, color: primaryColor), // Use dynamic primaryColor
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        tip,
+                        style: TextStyle(fontSize: 14, color: textColor), // Use dynamic textColor
+                      ),
+                    ),
+                  ],
+                ),
               ))
                   .toList(),
             ),
@@ -233,8 +286,8 @@ class RockClimbingPage extends StatelessWidget {
   Widget _buildSpotCard({
     required String image,
     required String title,
-    required String subtitle,
-    required String details,
+    String subtitle = '', // Made subtitle optional and defaulted to empty string as in SwimmingPage
+    // Removed required String details; as it's not in SwimmingPage's _buildSpotCard signature
   }) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(16),
@@ -269,14 +322,16 @@ class RockClimbingPage extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  subtitle,
-                  style: const TextStyle(
-                    color: Colors.white70,
-                    fontSize: 14,
+                // Removed const SizedBox(height: 4), // Add SizedBox to match SwimmingPage example if needed, but not explicitly there
+                if (subtitle.isNotEmpty) // Conditionally show subtitle
+                  Text(
+                    subtitle,
+                    style: const TextStyle(
+                      color: Colors.white70,
+                      fontSize: 14,
+                    ),
                   ),
-                ),
+                // Removed const SizedBox(height: 4), // Add SizedBox to match SwimmingPage example if needed
               ],
             ),
           ),
@@ -285,8 +340,15 @@ class RockClimbingPage extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoCard({required String title, required String description}) {
+  Widget _buildInfoCard({
+    required String title,
+    required String description,
+    required Color cardColor, // Added required cardColor
+    required Color textColor, // Added required textColor
+    required Color primaryColor, // Added required primaryColor
+  }) {
     return Card(
+      color: cardColor, // Use dynamic cardColor
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
@@ -295,20 +357,20 @@ class RockClimbingPage extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start, // Align to start as in SwimmingPage
           children: [
             Text(
               title,
-              style: const TextStyle(
-                fontSize: 18,
+              style: TextStyle( // Use TextStyle with dynamic color
+                fontSize: 20, // Changed from 18 to 20
                 fontWeight: FontWeight.bold,
-                color: primaryColor,
+                color: primaryColor, // Use dynamic primaryColor
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 12), // Changed from 8 to 12 as in SwimmingPage example
             Text(
               description,
-              style: const TextStyle(fontSize: 14, color: Colors.grey),
+              style: TextStyle(fontSize: 16, color: textColor), // Changed font size from 14 to 16 and added textColor
             ),
           ],
         ),
@@ -319,21 +381,36 @@ class RockClimbingPage extends StatelessWidget {
   Widget _buildCarousel(List<String> imagePaths) {
     return CarouselSlider(
       options: CarouselOptions(
-        height: 200.0,
+        height: 200, // Changed from 200.0 to 200
         enlargeCenterPage: true,
         autoPlay: true,
         aspectRatio: 16 / 9,
-        viewportFraction: 0.8,
+        viewportFraction: 0.9, // Changed from 0.8 to 0.9
+        autoPlayInterval: const Duration(seconds: 4), // Added autoPlayInterval as in SwimmingPage example
       ),
       items: imagePaths.map((imagePath) {
-        return Builder(
-          builder: (BuildContext context) {
-            return Image.asset(
+        return Container( // Use Container with BoxDecoration for shadow and border radius as in SwimmingPage
+          margin: const EdgeInsets.symmetric(horizontal: 5),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 2,
+                blurRadius: 5,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          child: ClipRRect( // Use ClipRRect for rounded corners as in SwimmingPage
+            borderRadius: BorderRadius.circular(8),
+            child: Image.asset(
               imagePath,
               fit: BoxFit.cover,
               width: double.infinity,
-            );
-          },
+              height: 200, // Added height as in SwimmingPage example
+            ),
+          ),
         );
       }).toList(),
     );
