@@ -26,12 +26,6 @@ class AttabadLakePage extends StatelessWidget {
     'assets/images/a/a6.jpg',
   ];
 
-  // Colors (same as original)
-  final Color primaryColor = const Color(0xFF0066CC);
-  final Color secondaryColor = Colors.white;
-  final Color textColor = Colors.black87;
-  final Color accentColor = const Color(0xFF88F2E8);
-
   // Constructor now calls the method to record access
   AttabadLakePage({super.key}) {
     _recordTouristPlaceAccess();
@@ -62,25 +56,32 @@ class AttabadLakePage extends StatelessWidget {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
+    // Adopt dynamic color logic based on theme brightness
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final primaryColor = isDarkMode ? const Color(0xFF1E88E5) : const Color(0xFF0066CC); // Lighter blue for dark mode
+    final cardColor = isDarkMode ? Colors.grey[800]! : Colors.white; // Darker card for dark mode
+    final textColor = isDarkMode ? Colors.white : Colors.black87; // White text for dark mode
+    final accentColor = isDarkMode ? const Color(0xFF64B5F6) : const Color(0xFF88F2E8); // Consistent accent
+
     return DefaultTabController(
       length: 4,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: primaryColor,
+          backgroundColor: primaryColor, // Dynamic primary color
           elevation: 0,
           automaticallyImplyLeading: true,
-          iconTheme: IconThemeData(color: secondaryColor),
+          iconTheme: const IconThemeData(color: Colors.white), // Icons always white on primary
           title: Text(
             'Attabad Lake',
-            style: TextStyle(color: secondaryColor),
+            style: const TextStyle(color: Colors.white), // Title always white on primary
           ),
+          centerTitle: true, // Consistent with other pages
           bottom: TabBar(
-            labelColor: secondaryColor,
-            unselectedLabelColor: secondaryColor.withOpacity(0.7),
-            indicatorColor: secondaryColor,
+            labelColor: Colors.white, // Labels always white
+            unselectedLabelColor: Colors.white.withOpacity(0.7), // Unselected labels also white
+            indicatorColor: Colors.white, // Indicator white
             indicatorWeight: 3,
             tabs: const [
               Tab(icon: Icon(Icons.info_outline)),
@@ -92,18 +93,19 @@ class AttabadLakePage extends StatelessWidget {
         ),
         body: TabBarView(
           children: [
-            _buildOverviewTab(),
-            _buildSeasonsTab(),
-            _buildClothingTab(),
-            _buildSafetyTab(),
+            _buildOverviewTab(isDarkMode, cardColor, textColor, primaryColor, accentColor),
+            _buildSeasonsTab(isDarkMode, cardColor, textColor, primaryColor, accentColor),
+            _buildClothingTab(isDarkMode, cardColor, textColor, primaryColor, accentColor),
+            _buildSafetyTab(isDarkMode, cardColor, textColor, primaryColor, accentColor),
           ],
         ),
       ),
     );
   }
 
-  // Tab Builders (Same structure, updated content)
-  Widget _buildOverviewTab() {
+  // --- Tab Builders (Updated to pass color parameters) ---
+
+  Widget _buildOverviewTab(bool isDarkMode, Color cardColor, Color textColor, Color primaryColor, Color accentColor) {
     return LayoutBuilder(
       builder: (context, constraints) {
         return SingleChildScrollView(
@@ -115,21 +117,25 @@ class AttabadLakePage extends StatelessWidget {
               children: [
                 _buildImageCarousel(overviewImages),
                 const SizedBox(height: 24),
-                _buildSectionTitle('About Attabad Lake'),
+                _buildSectionTitle('About Attabad Lake', primaryColor),
                 _buildInfoCard(
                   'A turquoise glacial lake in Hunza Valley, Gilgit-Baltistan, formed by a massive landslide in January 2010. Surrounded by rugged mountains, it offers breathtaking views and boat rides across its serene waters.',
+                  cardColor,
+                  textColor,
                 ),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Key Information'),
-                _buildKeyInfoGrid(),
+                _buildSectionTitle('Key Information', primaryColor),
+                _buildKeyInfoGrid(primaryColor, textColor, cardColor),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Legend'),
+                _buildSectionTitle('Legend', primaryColor),
                 _buildInfoCard(
                   'The lake was created when a massive landslide blocked the Hunza River, displacing nearby villages. Locals believe the water holds memories of the lost land and warns travelers of nature’s power.',
+                  cardColor,
+                  textColor,
                 ),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Nearby Attractions'),
-                _buildAttractionGrid(),
+                _buildSectionTitle('Nearby Attractions', primaryColor),
+                _buildAttractionGrid(), // This widget doesn't need color params
                 const SizedBox(height: 24),
               ],
             ),
@@ -140,7 +146,7 @@ class AttabadLakePage extends StatelessWidget {
   }
 
   // Seasons Tab
-  Widget _buildSeasonsTab() {
+  Widget _buildSeasonsTab(bool isDarkMode, Color cardColor, Color textColor, Color primaryColor, Color accentColor) {
     return LayoutBuilder(
       builder: (context, constraints) {
         return SingleChildScrollView(
@@ -152,16 +158,18 @@ class AttabadLakePage extends StatelessWidget {
               children: [
                 _buildImageCarousel(seasonImages),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Best Time to Visit'),
+                _buildSectionTitle('Best Time to Visit', primaryColor),
                 _buildInfoCard(
                   'May to October for clear skies and accessible roads. Winter (Nov-Mar) brings occasional snow but the lake remains open year-round.',
+                  cardColor,
+                  textColor,
                 ),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Seasonal Guide'),
-                _buildSeasonalGuide(),
+                _buildSectionTitle('Seasonal Guide', primaryColor),
+                _buildSeasonalGuide(cardColor, textColor, primaryColor),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Weather Advisory'),
-                _buildWeatherAdvisoryInfo(),
+                _buildSectionTitle('Weather Advisory', primaryColor),
+                _buildWeatherAdvisoryInfo(cardColor, textColor, accentColor, primaryColor),
                 const SizedBox(height: 24),
               ],
             ),
@@ -172,7 +180,7 @@ class AttabadLakePage extends StatelessWidget {
   }
 
   // Clothing Tab
-  Widget _buildClothingTab() {
+  Widget _buildClothingTab(bool isDarkMode, Color cardColor, Color textColor, Color primaryColor, Color accentColor) {
     return LayoutBuilder(
       builder: (context, constraints) {
         return SingleChildScrollView(
@@ -184,16 +192,18 @@ class AttabadLakePage extends StatelessWidget {
               children: [
                 _buildImageCarousel(clothesImages),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Clothing Recommendations'),
+                _buildSectionTitle('Clothing Recommendations', primaryColor),
                 _buildInfoCard(
                   'Layered clothing for unpredictable mountain weather. Prepare for sudden rain showers and chilly evenings even in summer.',
+                  cardColor,
+                  textColor,
                 ),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Seasonal Clothing Guide'),
-                _buildClothingGuide(),
+                _buildSectionTitle('Seasonal Clothing Guide', primaryColor),
+                _buildClothingGuide(cardColor, textColor, primaryColor),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Essential Accessories'),
-                _buildAccessoriesList(),
+                _buildSectionTitle('Essential Accessories', primaryColor),
+                _buildAccessoriesList(cardColor, textColor, primaryColor),
                 const SizedBox(height: 24),
               ],
             ),
@@ -204,7 +214,7 @@ class AttabadLakePage extends StatelessWidget {
   }
 
   // Safety Tab
-  Widget _buildSafetyTab() {
+  Widget _buildSafetyTab(bool isDarkMode, Color cardColor, Color textColor, Color primaryColor, Color accentColor) {
     return LayoutBuilder(
       builder: (context, constraints) {
         return SingleChildScrollView(
@@ -216,16 +226,18 @@ class AttabadLakePage extends StatelessWidget {
               children: [
                 _buildImageCarousel(safetyImages),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Safety Information'),
+                _buildSectionTitle('Safety Information', primaryColor),
                 _buildInfoCard(
                   'Remote location and landslide-prone terrain require caution. Avoid restricted zones and monitor weather updates during monsoon (Jul-Sep).',
+                  cardColor,
+                  textColor,
                 ),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Essential Equipment'),
-                _buildEquipmentList(),
+                _buildSectionTitle('Essential Equipment', primaryColor),
+                _buildEquipmentList(cardColor, textColor, primaryColor),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Emergency Contacts'),
-                _buildEmergencyContacts(),
+                _buildSectionTitle('Emergency Contacts', primaryColor),
+                _buildEmergencyContacts(cardColor, textColor, primaryColor),
                 const SizedBox(height: 24),
               ],
             ),
@@ -235,7 +247,8 @@ class AttabadLakePage extends StatelessWidget {
     );
   }
 
-  // Component Builders (Same as original)
+  // --- Component Builders (Updated to accept color parameters and use them) ---
+
   Widget _buildImageCarousel(List<String> images) {
     return SizedBox(
       height: 200,
@@ -245,7 +258,7 @@ class AttabadLakePage extends StatelessWidget {
           autoPlay: true,
           enlargeCenterPage: true,
           viewportFraction: 0.85,
-          autoPlayInterval: const Duration(seconds: 4), // Changed to const
+          autoPlayInterval: const Duration(seconds: 4),
         ),
         items: images.map((image) {
           return Container(
@@ -274,7 +287,7 @@ class AttabadLakePage extends StatelessWidget {
     );
   }
 
-  Widget _buildSectionTitle(String title) {
+  Widget _buildSectionTitle(String title, Color primaryColor) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Text(
@@ -282,14 +295,15 @@ class AttabadLakePage extends StatelessWidget {
         style: TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.bold,
-          color: primaryColor,
+          color: primaryColor, // Uses passed primaryColor
         ),
       ),
     );
   }
 
-  Widget _buildInfoCard(String content) {
+  Widget _buildInfoCard(String content, Color cardColor, Color textColor) {
     return Card(
+      color: cardColor, // Uses passed cardColor
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -297,12 +311,15 @@ class AttabadLakePage extends StatelessWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
-        child: Text(
-          content,
-          style: TextStyle(
-            fontSize: 15,
-            height: 1.5,
-            color: textColor,
+        child: SizedBox(
+          width: double.infinity, // Ensures card takes full width
+          child: Text(
+            content,
+            style: TextStyle(
+              fontSize: 15,
+              height: 1.5,
+              color: textColor, // Uses passed textColor
+            ),
           ),
         ),
       ),
@@ -310,7 +327,7 @@ class AttabadLakePage extends StatelessWidget {
   }
 
   // Key Info Grid
-  Widget _buildKeyInfoGrid() {
+  Widget _buildKeyInfoGrid(Color primaryColor, Color textColor, Color cardColor) {
     final List<Map<String, dynamic>> infoItems = [
       {'icon': Icons.location_on, 'title': 'Location', 'value': 'Hunza Valley, GB'},
       {'icon': Icons.landscape, 'title': 'Elevation', 'value': '2,438 meters'},
@@ -332,13 +349,17 @@ class AttabadLakePage extends StatelessWidget {
           infoItems[index]['icon'],
           infoItems[index]['title'],
           infoItems[index]['value'],
+          primaryColor,
+          textColor,
+          cardColor,
         );
       },
     );
   }
 
-  Widget _buildInfoTile(IconData icon, String title, String value) {
+  Widget _buildInfoTile(IconData icon, String title, String value, Color primaryColor, Color textColor, Color cardColor) {
     return Card(
+      color: cardColor, // Uses passed cardColor
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -350,7 +371,7 @@ class AttabadLakePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(icon, size: 24, color: primaryColor),
+            Icon(icon, size: 24, color: primaryColor), // Uses passed primaryColor
             const SizedBox(height: 8),
             Text(
               title,
@@ -365,7 +386,7 @@ class AttabadLakePage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.w600,
-                color: textColor,
+                color: textColor, // Uses passed textColor
               ),
             ),
           ],
@@ -374,7 +395,7 @@ class AttabadLakePage extends StatelessWidget {
     );
   }
 
-  // Nearby Attractions Grid
+  // Nearby Attractions Grid (No changes needed here for color parameters)
   Widget _buildAttractionGrid() {
     final List<Map<String, dynamic>> attractions = [
       {
@@ -477,33 +498,43 @@ class AttabadLakePage extends StatelessWidget {
     );
   }
 
-  // Seasonal Guide
-  Widget _buildSeasonalGuide() {
+  // Seasonal Guide (Updated to pass color parameters)
+  Widget _buildSeasonalGuide(Color cardColor, Color textColor, Color primaryColor) {
     return Column(
       children: [
         _buildSeasonCard(
           'Spring (May-Jun)',
           '• Melting snow, muddy trails\n• Mild temperatures\n• Green valley views',
           Icons.wb_sunny,
+          cardColor,
+          textColor,
+          primaryColor,
         ),
         const SizedBox(height: 12),
         _buildSeasonCard(
           'Summer (Jul-Sep)',
           '• Warm days, cool nights\n• Boat rides available\n• Clear mountain vistas',
           Icons.beach_access,
+          cardColor,
+          textColor,
+          primaryColor,
         ),
         const SizedBox(height: 12),
         _buildSeasonCard(
           'Autumn (Oct-Nov)',
           '• Golden foliage\n• Fewer tourists\n• Crisp morning air',
           Icons.energy_savings_leaf,
+          cardColor,
+          textColor,
+          primaryColor,
         ),
       ],
     );
   }
 
-  Widget _buildSeasonCard(String season, String details, IconData icon) {
+  Widget _buildSeasonCard(String season, String details, IconData icon, Color cardColor, Color textColor, Color primaryColor) {
     return Card(
+      color: cardColor, // Uses passed cardColor
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -517,10 +548,10 @@ class AttabadLakePage extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: primaryColor.withOpacity(0.1),
+                color: primaryColor.withOpacity(0.1), // Uses primaryColor
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Icon(icon, size: 24, color: primaryColor),
+              child: Icon(icon, size: 24, color: primaryColor), // Uses primaryColor
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -532,7 +563,7 @@ class AttabadLakePage extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      color: textColor,
+                      color: textColor, // Uses textColor
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -553,9 +584,10 @@ class AttabadLakePage extends StatelessWidget {
     );
   }
 
-  // Weather Advisory Info
-  Widget _buildWeatherAdvisoryInfo() {
+  // Weather Advisory Info (Updated to pass color parameters)
+  Widget _buildWeatherAdvisoryInfo(Color cardColor, Color textColor, Color accentColor, Color primaryColor) {
     return Card(
+      color: cardColor, // Uses passed cardColor
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -568,28 +600,28 @@ class AttabadLakePage extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(Icons.heat_pump, size: 24, color: primaryColor),
+                Icon(Icons.heat_pump, size: 24, color: primaryColor), // Uses primaryColor
                 const SizedBox(width: 8),
                 Text(
                   'Weather Advisory',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    color: textColor,
+                    color: textColor, // Uses textColor
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 12),
-            _buildWeatherItem('Monsoon Rain:', 'July-September'),
-            _buildWeatherItem('Landslide Risk:', 'High in monsoon'),
-            _buildWeatherItem('Winter Chill:', '-5°C at night'),
-            _buildWeatherItem('Road Access:', 'Year-round (except floods)'),
+            _buildWeatherItem('Monsoon Rain:', 'July-September', textColor), // Pass textColor
+            _buildWeatherItem('Landslide Risk:', 'High in monsoon', textColor), // Pass textColor
+            _buildWeatherItem('Winter Chill:', '-5°C at night', textColor), // Pass textColor
+            _buildWeatherItem('Road Access:', 'Year-round (except floods)', textColor), // Pass textColor
             const SizedBox(height: 12),
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: accentColor.withOpacity(0.1),
+                color: accentColor.withOpacity(0.1), // Uses accentColor
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
@@ -607,7 +639,7 @@ class AttabadLakePage extends StatelessWidget {
     );
   }
 
-  Widget _buildWeatherItem(String label, String value) {
+  Widget _buildWeatherItem(String label, String value, Color textColor) { // Added textColor parameter
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
@@ -626,7 +658,7 @@ class AttabadLakePage extends StatelessWidget {
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w600,
-              color: textColor,
+              color: textColor, // Uses textColor
             ),
           ),
         ],
@@ -634,30 +666,40 @@ class AttabadLakePage extends StatelessWidget {
     );
   }
 
-  // Clothing Guide
-  Widget _buildClothingGuide() {
+  // Clothing Guide (Updated to pass color parameters)
+  Widget _buildClothingGuide(Color cardColor, Color textColor, Color primaryColor) {
     return Column(
       children: [
         _buildClothingSeasonCard(
           'Spring (May-Jun)',
           '• Waterproof jacket\n• Lightweight sweater\n• Comfortable shoes',
+          cardColor,
+          textColor,
+          primaryColor,
         ),
         const SizedBox(height: 12),
         _buildClothingSeasonCard(
           'Summer (Jul-Sep)',
           '• UV-protected sunglasses\n• Quick-dry pants\n• Sun hat',
+          cardColor,
+          textColor,
+          primaryColor,
         ),
         const SizedBox(height: 12),
         _buildClothingSeasonCard(
           'Autumn (Oct-Nov)',
           '• Insulated jacket\n• Thermal socks\n• Windproof gloves',
+          cardColor,
+          textColor,
+          primaryColor,
         ),
       ],
     );
   }
 
-  Widget _buildClothingSeasonCard(String season, String items) {
+  Widget _buildClothingSeasonCard(String season, String items, Color cardColor, Color textColor, Color primaryColor) {
     return Card(
+      color: cardColor, // Uses passed cardColor
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -673,7 +715,7 @@ class AttabadLakePage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: textColor,
+                color: textColor, // Uses textColor
               ),
             ),
             const SizedBox(height: 8),
@@ -682,7 +724,7 @@ class AttabadLakePage extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(Icons.circle, size: 8, color: primaryColor),
+                  Icon(Icons.circle, size: 8, color: primaryColor), // Uses primaryColor
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
@@ -702,8 +744,8 @@ class AttabadLakePage extends StatelessWidget {
     );
   }
 
-  // Accessories List
-  Widget _buildAccessoriesList() {
+  // Accessories List (Updated to pass color parameters)
+  Widget _buildAccessoriesList(Color cardColor, Color textColor, Color primaryColor) {
     final List<String> accessories = [
       'Waterproof backpack',
       'UV-protected sunglasses',
@@ -713,6 +755,7 @@ class AttabadLakePage extends StatelessWidget {
       'Binoculars (for wildlife)',
     ];
     return Card(
+      color: cardColor, // Uses passed cardColor
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -728,7 +771,7 @@ class AttabadLakePage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: textColor,
+                color: textColor, // Uses textColor
               ),
             ),
             const SizedBox(height: 12),
@@ -736,12 +779,12 @@ class AttabadLakePage extends StatelessWidget {
               spacing: 8,
               runSpacing: 8,
               children: accessories.map((item) => Chip(
-                backgroundColor: primaryColor.withOpacity(0.1),
+                backgroundColor: primaryColor.withOpacity(0.1), // Uses primaryColor
                 label: Text(
                   item,
                   style: TextStyle(
                     fontSize: 13,
-                    color: textColor,
+                    color: textColor, // Uses textColor
                   ),
                 ),
               )).toList(),
@@ -752,8 +795,8 @@ class AttabadLakePage extends StatelessWidget {
     );
   }
 
-  // Safety Equipment Grid
-  Widget _buildEquipmentList() {
+  // Safety Equipment Grid (Updated to pass color parameters)
+  Widget _buildEquipmentList(Color cardColor, Color textColor, Color primaryColor) {
     final List<Map<String, dynamic>> equipment = [
       {'icon': Icons.medical_services, 'item': 'First aid kit'},
       {'icon': Icons.water_drop, 'item': 'Water purification'},
@@ -776,13 +819,17 @@ class AttabadLakePage extends StatelessWidget {
         return _buildEquipmentItem(
           equipment[index]['icon'],
           equipment[index]['item'],
+          primaryColor,
+          textColor,
+          cardColor,
         );
       },
     );
   }
 
-  Widget _buildEquipmentItem(IconData icon, String item) {
+  Widget _buildEquipmentItem(IconData icon, String item, Color primaryColor, Color textColor, Color cardColor) {
     return Card(
+      color: cardColor, // Uses passed cardColor
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -793,14 +840,14 @@ class AttabadLakePage extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(icon, size: 24, color: primaryColor),
+            Icon(icon, size: 24, color: primaryColor), // Uses primaryColor
             const SizedBox(width: 12),
             Expanded(
               child: Text(
                 item,
                 style: TextStyle(
                   fontSize: 14,
-                  color: textColor,
+                  color: textColor, // Uses textColor
                 ),
                 maxLines: 2,
                 overflow: TextOverflow.visible,
@@ -812,8 +859,8 @@ class AttabadLakePage extends StatelessWidget {
     );
   }
 
-  // Emergency Contacts
-  Widget _buildEmergencyContacts() {
+  // Emergency Contacts (Updated to pass color parameters)
+  Widget _buildEmergencyContacts(Color cardColor, Color textColor, Color primaryColor) {
     final List<Map<String, dynamic>> contacts = [
       {'type': 'Nearest Hospital', 'contact': 'Karimabad GH (15 km)'},
       {'type': 'Rescue Service', 'contact': '1122 Emergency'},
@@ -821,6 +868,7 @@ class AttabadLakePage extends StatelessWidget {
       {'type': 'Tourist Info', 'contact': 'GB Tourism Office'},
     ];
     return Card(
+      color: cardColor, // Uses passed cardColor
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -836,7 +884,7 @@ class AttabadLakePage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: textColor,
+                color: textColor, // Uses textColor
               ),
             ),
             const SizedBox(height: 12),
@@ -861,7 +909,7 @@ class AttabadLakePage extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
-                        color: textColor,
+                        color: textColor, // Uses textColor
                       ),
                     ),
                   ),

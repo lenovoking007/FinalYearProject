@@ -142,7 +142,7 @@ class _TripPageState extends State<TripPage> {
       'title': 'Mohenjo Daro',
       'description': 'Anncient Indus Valley Civilization',
       'image': 'assets/images/ma1.jpg',
-      'page': MohenjoDaroPage
+      'page':MohenjoDaroPage()
     },
     {
       'title': 'Desosai Plains',

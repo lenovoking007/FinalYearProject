@@ -26,12 +26,6 @@ class RamameadowPage extends StatelessWidget {
     'assets/images/rama/r5.jpg',
   ];
 
-  // Colors
-  final Color primaryColor = const Color(0xFF0066CC);
-  final Color secondaryColor = Colors.white;
-  final Color textColor = Colors.black87;
-  final Color accentColor = const Color(0xFF88F2E8);
-
   RamameadowPage({super.key}) {
     _recordTouristPlaceAccess(); // Call the activity recording method
   }
@@ -60,22 +54,30 @@ class RamameadowPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Adopt dynamic color logic based on theme brightness
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final primaryColor = isDarkMode ? const Color(0xFF1E88E5) : const Color(0xFF0066CC); // Lighter blue for dark mode
+    final cardColor = isDarkMode ? Colors.grey[800]! : Colors.white; // Darker card for dark mode
+    final textColor = isDarkMode ? Colors.white : Colors.black87; // White text for dark mode
+    final accentColor = isDarkMode ? const Color(0xFF64B5F6) : const Color(0xFF88F2E8); // Consistent accent
+
     return DefaultTabController(
       length: 4,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: primaryColor,
+          backgroundColor: primaryColor, // Dynamic primary color
           elevation: 0,
           automaticallyImplyLeading: true,
-          iconTheme: IconThemeData(color: secondaryColor),
+          iconTheme: const IconThemeData(color: Colors.white), // Icons always white on primary
           title: Text(
             'Rama Meadow',
-            style: TextStyle(color: secondaryColor),
+            style: const TextStyle(color: Colors.white), // Title always white on primary
           ),
+          centerTitle: true, // Consistent with other pages
           bottom: TabBar(
-            labelColor: secondaryColor,
-            unselectedLabelColor: secondaryColor.withOpacity(0.7),
-            indicatorColor: secondaryColor,
+            labelColor: Colors.white, // Labels always white
+            unselectedLabelColor: Colors.white.withOpacity(0.7), // Unselected labels also white
+            indicatorColor: Colors.white, // Indicator white
             indicatorWeight: 3,
             tabs: const [
               Tab(icon: Icon(Icons.info_outline)),
@@ -87,18 +89,19 @@ class RamameadowPage extends StatelessWidget {
         ),
         body: TabBarView(
           children: [
-            _buildOverviewTab(),
-            _buildSeasonsTab(),
-            _buildClothingTab(),
-            _buildSafetyTab(),
+            _buildOverviewTab(isDarkMode, cardColor, textColor, primaryColor, accentColor),
+            _buildSeasonsTab(isDarkMode, cardColor, textColor, primaryColor, accentColor),
+            _buildClothingTab(isDarkMode, cardColor, textColor, primaryColor, accentColor),
+            _buildSafetyTab(isDarkMode, cardColor, textColor, primaryColor, accentColor),
           ],
         ),
       ),
     );
   }
 
-  // Tab Builders (Identical structure, updated content)
-  Widget _buildOverviewTab() {
+  // --- Tab Builders (Updated to pass color parameters) ---
+
+  Widget _buildOverviewTab(bool isDarkMode, Color cardColor, Color textColor, Color primaryColor, Color accentColor) {
     return LayoutBuilder(
       builder: (context, constraints) {
         return SingleChildScrollView(
@@ -110,21 +113,25 @@ class RamameadowPage extends StatelessWidget {
               children: [
                 _buildImageCarousel(overviewImages),
                 const SizedBox(height: 24),
-                _buildSectionTitle('About Rama Meadow'),
+                _buildSectionTitle('About Rama Meadow', primaryColor),
                 _buildInfoCard(
                   'A lush alpine meadow nestled in the Himalayas, known for its wildflower blooms and serene ambiance. Perfect for nature lovers and hikers.',
+                  cardColor,
+                  textColor,
                 ),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Key Information'),
-                _buildKeyInfoGrid(),
+                _buildSectionTitle('Key Information', primaryColor),
+                _buildKeyInfoGrid(primaryColor, textColor, cardColor),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Legend'),
+                _buildSectionTitle('Legend', primaryColor),
                 _buildInfoCard(
                   'Named after the ancient sage Rama who meditated here. Locals believe the meadow is blessed with healing energy from sacred springs.',
+                  cardColor,
+                  textColor,
                 ),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Nearby Attractions'),
-                _buildAttractionGrid(),
+                _buildSectionTitle('Nearby Attractions', primaryColor),
+                _buildAttractionGrid(), // This widget doesn't need color params
                 const SizedBox(height: 24),
               ],
             ),
@@ -135,7 +142,7 @@ class RamameadowPage extends StatelessWidget {
   }
 
   // Seasons Tab
-  Widget _buildSeasonsTab() {
+  Widget _buildSeasonsTab(bool isDarkMode, Color cardColor, Color textColor, Color primaryColor, Color accentColor) {
     return LayoutBuilder(
       builder: (context, constraints) {
         return SingleChildScrollView(
@@ -147,16 +154,18 @@ class RamameadowPage extends StatelessWidget {
               children: [
                 _buildImageCarousel(seasonImages),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Best Time to Visit'),
+                _buildSectionTitle('Best Time to Visit', primaryColor),
                 _buildInfoCard(
                   'June to September for wildflowers; March to May for mild weather. Winter brings snowfall, transforming it into a snowy paradise.',
+                  cardColor,
+                  textColor,
                 ),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Seasonal Guide'),
-                _buildSeasonalGuide(),
+                _buildSectionTitle('Seasonal Guide', primaryColor),
+                _buildSeasonalGuide(cardColor, textColor, primaryColor),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Snowfall Information'),
-                _buildSnowfallInfo(),
+                _buildSectionTitle('Snowfall Information', primaryColor),
+                _buildSnowfallInfo(cardColor, textColor, accentColor, primaryColor),
                 const SizedBox(height: 24),
               ],
             ),
@@ -167,7 +176,7 @@ class RamameadowPage extends StatelessWidget {
   }
 
   // Clothing Tab
-  Widget _buildClothingTab() {
+  Widget _buildClothingTab(bool isDarkMode, Color cardColor, Color textColor, Color primaryColor, Color accentColor) {
     return LayoutBuilder(
       builder: (context, constraints) {
         return SingleChildScrollView(
@@ -179,16 +188,18 @@ class RamameadowPage extends StatelessWidget {
               children: [
                 _buildImageCarousel(clothesImages),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Clothing Recommendations'),
+                _buildSectionTitle('Clothing Recommendations', primaryColor),
                 _buildInfoCard(
                   'Layered clothing is essential due to fluctuating mountain temperatures. Prepare for sudden weather changes.',
+                  cardColor,
+                  textColor,
                 ),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Seasonal Clothing Guide'),
-                _buildClothingGuide(),
+                _buildSectionTitle('Seasonal Clothing Guide', primaryColor),
+                _buildClothingGuide(cardColor, textColor, primaryColor),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Essential Accessories'),
-                _buildAccessoriesList(),
+                _buildSectionTitle('Essential Accessories', primaryColor),
+                _buildAccessoriesList(cardColor, textColor, primaryColor),
                 const SizedBox(height: 24),
               ],
             ),
@@ -199,7 +210,7 @@ class RamameadowPage extends StatelessWidget {
   }
 
   // Safety Tab
-  Widget _buildSafetyTab() {
+  Widget _buildSafetyTab(bool isDarkMode, Color cardColor, Color textColor, Color primaryColor, Color accentColor) {
     return LayoutBuilder(
       builder: (context, constraints) {
         return SingleChildScrollView(
@@ -211,16 +222,18 @@ class RamameadowPage extends StatelessWidget {
               children: [
                 _buildImageCarousel(safetyImages),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Safety Information'),
+                _buildSectionTitle('Safety Information', primaryColor),
                 _buildInfoCard(
                   'High-altitude terrain requires caution. Be prepared for altitude sickness, wildlife encounters, and trail hazards.',
+                  cardColor,
+                  textColor,
                 ),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Essential Equipment'),
-                _buildEquipmentList(),
+                _buildSectionTitle('Essential Equipment', primaryColor),
+                _buildEquipmentList(cardColor, textColor, primaryColor),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Emergency Contacts'),
-                _buildEmergencyContacts(),
+                _buildSectionTitle('Emergency Contacts', primaryColor),
+                _buildEmergencyContacts(cardColor, textColor, primaryColor),
                 const SizedBox(height: 24),
               ],
             ),
@@ -230,7 +243,8 @@ class RamameadowPage extends StatelessWidget {
     );
   }
 
-  // Component Builders (Same as original)
+  // --- Component Builders (Updated to accept color parameters and use them) ---
+
   Widget _buildImageCarousel(List<String> images) {
     return SizedBox(
       height: 200,
@@ -269,7 +283,7 @@ class RamameadowPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSectionTitle(String title) {
+  Widget _buildSectionTitle(String title, Color primaryColor) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Text(
@@ -277,14 +291,15 @@ class RamameadowPage extends StatelessWidget {
         style: TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.bold,
-          color: primaryColor,
+          color: primaryColor, // Uses passed primaryColor
         ),
       ),
     );
   }
 
-  Widget _buildInfoCard(String content) {
+  Widget _buildInfoCard(String content, Color cardColor, Color textColor) {
     return Card(
+      color: cardColor, // Uses passed cardColor
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -292,12 +307,15 @@ class RamameadowPage extends StatelessWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
-        child: Text(
-          content,
-          style: TextStyle(
-            fontSize: 15,
-            height: 1.5,
-            color: textColor,
+        child: SizedBox(
+          width: double.infinity, // Ensures card takes full width
+          child: Text(
+            content,
+            style: TextStyle(
+              fontSize: 15,
+              height: 1.5,
+              color: textColor, // Uses passed textColor
+            ),
           ),
         ),
       ),
@@ -305,7 +323,7 @@ class RamameadowPage extends StatelessWidget {
   }
 
   // Key Info Grid
-  Widget _buildKeyInfoGrid() {
+  Widget _buildKeyInfoGrid(Color primaryColor, Color textColor, Color cardColor) {
     final List<Map<String, dynamic>> infoItems = [
       {'icon': Icons.location_on, 'title': 'Location', 'value': 'Himalayas, Gilgit'},
       {'icon': Icons.landscape, 'title': 'Elevation', 'value': '2,800 meters'},
@@ -327,13 +345,17 @@ class RamameadowPage extends StatelessWidget {
           infoItems[index]['icon'],
           infoItems[index]['title'],
           infoItems[index]['value'],
+          primaryColor,
+          textColor,
+          cardColor,
         );
       },
     );
   }
 
-  Widget _buildInfoTile(IconData icon, String title, String value) {
+  Widget _buildInfoTile(IconData icon, String title, String value, Color primaryColor, Color textColor, Color cardColor) {
     return Card(
+      color: cardColor, // Uses passed cardColor
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -345,7 +367,7 @@ class RamameadowPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(icon, size: 24, color: primaryColor),
+            Icon(icon, size: 24, color: primaryColor), // Uses passed primaryColor
             const SizedBox(height: 8),
             Text(
               title,
@@ -360,7 +382,7 @@ class RamameadowPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.w600,
-                color: textColor,
+                color: textColor, // Uses passed textColor
               ),
             ),
           ],
@@ -369,7 +391,7 @@ class RamameadowPage extends StatelessWidget {
     );
   }
 
-  // Nearby Attractions Grid
+  // Nearby Attractions Grid (No changes needed here for color parameters)
   Widget _buildAttractionGrid() {
     final List<Map<String, dynamic>> attractions = [
       {
@@ -472,33 +494,43 @@ class RamameadowPage extends StatelessWidget {
     );
   }
 
-  // Seasonal Guide
-  Widget _buildSeasonalGuide() {
+  // Seasonal Guide (Updated to pass color parameters)
+  Widget _buildSeasonalGuide(Color cardColor, Color textColor, Color primaryColor) {
     return Column(
       children: [
         _buildSeasonCard(
           'Summer (Jun-Aug)',
           '• Warm days, cool nights\n• Wildflower blooms\n• Ideal for hiking',
           Icons.wb_sunny,
+          cardColor,
+          textColor,
+          primaryColor,
         ),
         const SizedBox(height: 12),
         _buildSeasonCard(
           'Autumn (Sep-Oct)',
           '• Mild temperatures\n• Golden foliage\n• Fewer crowds',
           Icons.energy_savings_leaf,
+          cardColor,
+          textColor,
+          primaryColor,
         ),
         const SizedBox(height: 12),
         _buildSeasonCard(
           'Winter (Dec-Feb)',
           '• Heavy snowfall\n• Snowshoeing opportunities\n• Peaceful solitude',
           Icons.ac_unit,
+          cardColor,
+          textColor,
+          primaryColor,
         ),
       ],
     );
   }
 
-  Widget _buildSeasonCard(String season, String details, IconData icon) {
+  Widget _buildSeasonCard(String season, String details, IconData icon, Color cardColor, Color textColor, Color primaryColor) {
     return Card(
+      color: cardColor, // Uses passed cardColor
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -512,10 +544,10 @@ class RamameadowPage extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: primaryColor.withOpacity(0.1),
+                color: primaryColor.withOpacity(0.1), // Uses primaryColor
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Icon(icon, size: 24, color: primaryColor),
+              child: Icon(icon, size: 24, color: primaryColor), // Uses primaryColor
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -527,7 +559,7 @@ class RamameadowPage extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      color: textColor,
+                      color: textColor, // Uses textColor
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -548,9 +580,10 @@ class RamameadowPage extends StatelessWidget {
     );
   }
 
-  // Snowfall Info
-  Widget _buildSnowfallInfo() {
+  // Snowfall Info (Updated to pass color parameters)
+  Widget _buildSnowfallInfo(Color cardColor, Color textColor, Color accentColor, Color primaryColor) {
     return Card(
+      color: cardColor, // Uses passed cardColor
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -563,28 +596,28 @@ class RamameadowPage extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(Icons.ac_unit, size: 24, color: primaryColor),
+                Icon(Icons.ac_unit, size: 24, color: primaryColor), // Uses primaryColor
                 const SizedBox(width: 8),
                 Text(
                   'Winter Conditions',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    color: textColor,
+                    color: textColor, // Uses textColor
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 12),
-            _buildSnowfallItem('First Snow:', 'Late November'),
-            _buildSnowfallItem('Peak Snow:', 'January-February'),
-            _buildSnowfallItem('Snow Depth:', 'Up to 2.5 meters'),
-            _buildSnowfallItem('Road Closure:', 'Dec-Mar'),
+            _buildSnowfallItem('First Snow:', 'Late November', textColor), // Pass textColor
+            _buildSnowfallItem('Peak Snow:', 'January-February', textColor), // Pass textColor
+            _buildSnowfallItem('Snow Depth:', 'Up to 2.5 meters', textColor), // Pass textColor
+            _buildSnowfallItem('Road Closure:', 'Dec-Mar', textColor), // Pass textColor
             const SizedBox(height: 12),
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: accentColor.withOpacity(0.1),
+                color: accentColor.withOpacity(0.1), // Uses accentColor
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
@@ -602,7 +635,7 @@ class RamameadowPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSnowfallItem(String label, String value) {
+  Widget _buildSnowfallItem(String label, String value, Color textColor) { // Added textColor parameter
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
@@ -621,7 +654,7 @@ class RamameadowPage extends StatelessWidget {
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w600,
-              color: textColor,
+              color: textColor, // Uses textColor
             ),
           ),
         ],
@@ -629,30 +662,40 @@ class RamameadowPage extends StatelessWidget {
     );
   }
 
-  // Clothing Guide
-  Widget _buildClothingGuide() {
+  // Clothing Guide (Updated to pass color parameters)
+  Widget _buildClothingGuide(Color cardColor, Color textColor, Color primaryColor) {
     return Column(
       children: [
         _buildClothingSeasonCard(
           'Summer (Jun-Aug)',
           '• Lightweight clothing\n• Breathable fabrics\n• Sun protection gear',
+          cardColor,
+          textColor,
+          primaryColor,
         ),
         const SizedBox(height: 12),
         _buildClothingSeasonCard(
           'Autumn (Sep-Oct)',
           '• Fleece jackets\n• Waterproof layers\n• Sturdy hiking boots',
+          cardColor,
+          textColor,
+          primaryColor,
         ),
         const SizedBox(height: 12),
         _buildClothingSeasonCard(
           'Winter (Dec-Feb)',
           '• Thermal innerwear\n• Insulated jackets\n• Waterproof pants',
+          cardColor,
+          textColor,
+          primaryColor,
         ),
       ],
     );
   }
 
-  Widget _buildClothingSeasonCard(String season, String items) {
+  Widget _buildClothingSeasonCard(String season, String items, Color cardColor, Color textColor, Color primaryColor) {
     return Card(
+      color: cardColor, // Uses passed cardColor
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -668,7 +711,7 @@ class RamameadowPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: textColor,
+                color: textColor, // Uses textColor
               ),
             ),
             const SizedBox(height: 8),
@@ -677,7 +720,7 @@ class RamameadowPage extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(Icons.circle, size: 8, color: primaryColor),
+                  Icon(Icons.circle, size: 8, color: primaryColor), // Uses primaryColor
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
@@ -697,8 +740,8 @@ class RamameadowPage extends StatelessWidget {
     );
   }
 
-  // Accessories List
-  Widget _buildAccessoriesList() {
+  // Accessories List (Updated to pass color parameters)
+  Widget _buildAccessoriesList(Color cardColor, Color textColor, Color primaryColor) {
     final List<String> accessories = [
       'Waterproof backpack',
       'UV-protected sunglasses',
@@ -708,6 +751,7 @@ class RamameadowPage extends StatelessWidget {
       'First-aid kit',
     ];
     return Card(
+      color: cardColor, // Uses passed cardColor
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -723,7 +767,7 @@ class RamameadowPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: textColor,
+                color: textColor, // Uses textColor
               ),
             ),
             const SizedBox(height: 12),
@@ -731,12 +775,12 @@ class RamameadowPage extends StatelessWidget {
               spacing: 8,
               runSpacing: 8,
               children: accessories.map((item) => Chip(
-                backgroundColor: primaryColor.withOpacity(0.1),
+                backgroundColor: primaryColor.withOpacity(0.1), // Uses primaryColor
                 label: Text(
                   item,
                   style: TextStyle(
                     fontSize: 13,
-                    color: textColor,
+                    color: textColor, // Uses textColor
                   ),
                 ),
               )).toList(),
@@ -747,8 +791,8 @@ class RamameadowPage extends StatelessWidget {
     );
   }
 
-  // Safety Equipment Grid
-  Widget _buildEquipmentList() {
+  // Safety Equipment Grid (Updated to pass color parameters)
+  Widget _buildEquipmentList(Color cardColor, Color textColor, Color primaryColor) {
     final List<Map<String, dynamic>> equipment = [
       {'icon': Icons.medical_services, 'item': 'First aid kit'},
       {'icon': Icons.air, 'item': 'Portable oxygen'},
@@ -771,13 +815,17 @@ class RamameadowPage extends StatelessWidget {
         return _buildEquipmentItem(
           equipment[index]['icon'],
           equipment[index]['item'],
+          primaryColor,
+          textColor,
+          cardColor,
         );
       },
     );
   }
 
-  Widget _buildEquipmentItem(IconData icon, String item) {
+  Widget _buildEquipmentItem(IconData icon, String item, Color primaryColor, Color textColor, Color cardColor) {
     return Card(
+      color: cardColor, // Uses passed cardColor
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -788,14 +836,14 @@ class RamameadowPage extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(icon, size: 24, color: primaryColor),
+            Icon(icon, size: 24, color: primaryColor), // Uses primaryColor
             const SizedBox(width: 12),
             Expanded(
               child: Text(
                 item,
                 style: TextStyle(
                   fontSize: 14,
-                  color: textColor,
+                  color: textColor, // Uses textColor
                 ),
                 maxLines: 2,
                 overflow: TextOverflow.visible,
@@ -807,8 +855,8 @@ class RamameadowPage extends StatelessWidget {
     );
   }
 
-  // Emergency Contacts
-  Widget _buildEmergencyContacts() {
+  // Emergency Contacts (Updated to pass color parameters)
+  Widget _buildEmergencyContacts(Color cardColor, Color textColor, Color primaryColor) {
     final List<Map<String, dynamic>> contacts = [
       {'type': 'Nearest Hospital', 'contact': 'Skardu General (80 km)'},
       {'type': 'Rescue Service', 'contact': '1122 Emergency'},
@@ -816,6 +864,7 @@ class RamameadowPage extends StatelessWidget {
       {'type': 'Tourist Info', 'contact': 'GB Tourism Office'},
     ];
     return Card(
+      color: cardColor, // Uses passed cardColor
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -831,7 +880,7 @@ class RamameadowPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: textColor,
+                color: textColor, // Uses textColor
               ),
             ),
             const SizedBox(height: 12),
@@ -856,7 +905,7 @@ class RamameadowPage extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
-                        color: textColor,
+                        color: textColor, // Uses textColor
                       ),
                     ),
                   ),

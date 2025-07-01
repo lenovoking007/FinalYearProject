@@ -26,12 +26,6 @@ class FairyMeadowsPage extends StatelessWidget {
     'assets/images/fai/f3.jpg',
   ];
 
-  // Colors (same as original)
-  final Color primaryColor = const Color(0xFF0066CC);
-  final Color secondaryColor = Colors.white;
-  final Color textColor = Colors.black87;
-  final Color accentColor = const Color(0xFF88F2E8);
-
   // Constructor now calls the method to record access
   FairyMeadowsPage({super.key}) {
     _recordTouristPlaceAccess();
@@ -64,6 +58,13 @@ class FairyMeadowsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Adopt SaifUlMalookPage's dynamic color logic
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final primaryColor = isDarkMode ? const Color(0xFF1E88E5) : const Color(0xFF0066CC);
+    final cardColor = isDarkMode ? Colors.grey[800]! : Colors.white;
+    final textColor = isDarkMode ? Colors.white : Colors.black87;
+    final accentColor = isDarkMode ? const Color(0xFF64B5F6) : const Color(0xFF88F2E8);
+
     return DefaultTabController(
       length: 4,
       child: Scaffold(
@@ -71,15 +72,16 @@ class FairyMeadowsPage extends StatelessWidget {
           backgroundColor: primaryColor,
           elevation: 0,
           automaticallyImplyLeading: true,
-          iconTheme: IconThemeData(color: secondaryColor),
+          iconTheme: const IconThemeData(color: Colors.white), // Consistent with others
           title: Text(
             'Fairy Meadows',
-            style: TextStyle(color: secondaryColor),
+            style: TextStyle(color: Colors.white), // Consistent with others
           ),
+          centerTitle: true, // Added for consistency
           bottom: TabBar(
-            labelColor: secondaryColor,
-            unselectedLabelColor: secondaryColor.withOpacity(0.7),
-            indicatorColor: secondaryColor,
+            labelColor: Colors.white, // Consistent with others
+            unselectedLabelColor: Colors.white.withOpacity(0.7), // Consistent
+            indicatorColor: Colors.white, // Consistent
             indicatorWeight: 3,
             tabs: const [
               Tab(icon: Icon(Icons.info_outline)),
@@ -91,18 +93,19 @@ class FairyMeadowsPage extends StatelessWidget {
         ),
         body: TabBarView(
           children: [
-            _buildOverviewTab(),
-            _buildSeasonsTab(),
-            _buildClothingTab(),
-            _buildSafetyTab(),
+            _buildOverviewTab(isDarkMode, cardColor, textColor, primaryColor, accentColor),
+            _buildSeasonsTab(isDarkMode, cardColor, textColor, primaryColor, accentColor),
+            _buildClothingTab(isDarkMode, cardColor, textColor, primaryColor, accentColor),
+            _buildSafetyTab(isDarkMode, cardColor, textColor, primaryColor, accentColor),
           ],
         ),
       ),
     );
   }
 
-  // Tab Builders (Same structure, updated content)
-  Widget _buildOverviewTab() {
+  // --- Tab Builders (Updated to pass color parameters) ---
+
+  Widget _buildOverviewTab(bool isDarkMode, Color cardColor, Color textColor, Color primaryColor, Color accentColor) {
     return LayoutBuilder(
       builder: (context, constraints) {
         return SingleChildScrollView(
@@ -114,21 +117,25 @@ class FairyMeadowsPage extends StatelessWidget {
               children: [
                 _buildImageCarousel(overviewImages),
                 const SizedBox(height: 24),
-                _buildSectionTitle('About Fairy Meadows'),
+                _buildSectionTitle('About Fairy Meadows', primaryColor),
                 _buildInfoCard(
                   'A breathtaking alpine meadow at 3,300 meters (10,800 feet) near Nanga Parbat, known as the "Killer Mountain". Surrounded by pine forests and offering panoramic views of the Himalayas.',
+                  cardColor,
+                  textColor,
                 ),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Key Information'),
-                _buildKeyInfoGrid(),
+                _buildSectionTitle('Key Information', primaryColor),
+                _buildKeyInfoGrid(primaryColor, textColor, cardColor),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Legend'),
+                _buildSectionTitle('Legend', primaryColor),
                 _buildInfoCard(
                   'Local folklore says the meadow was named for fairies who danced here under moonlight. Trekkers often report hearing mysterious whispers in the wind.',
+                  cardColor,
+                  textColor,
                 ),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Nearby Attractions'),
-                _buildAttractionGrid(),
+                _buildSectionTitle('Nearby Attractions', primaryColor),
+                _buildAttractionGrid(), // This widget doesn't use color params directly
                 const SizedBox(height: 24),
               ],
             ),
@@ -139,7 +146,7 @@ class FairyMeadowsPage extends StatelessWidget {
   }
 
   // Seasons Tab
-  Widget _buildSeasonsTab() {
+  Widget _buildSeasonsTab(bool isDarkMode, Color cardColor, Color textColor, Color primaryColor, Color accentColor) {
     return LayoutBuilder(
       builder: (context, constraints) {
         return SingleChildScrollView(
@@ -151,16 +158,18 @@ class FairyMeadowsPage extends StatelessWidget {
               children: [
                 _buildImageCarousel(seasonImages),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Best Time to Visit'),
+                _buildSectionTitle('Best Time to Visit', primaryColor),
                 _buildInfoCard(
                   'May to September for clear skies and blooming flora. Winter (Nov-Mar) brings heavy snowfall, transforming it into a snowy wonderland but closing the trail.',
+                  cardColor,
+                  textColor,
                 ),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Seasonal Guide'),
-                _buildSeasonalGuide(),
+                _buildSectionTitle('Seasonal Guide', primaryColor),
+                _buildSeasonalGuide(cardColor, textColor, primaryColor),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Snowfall Information'),
-                _buildSnowfallInfo(),
+                _buildSectionTitle('Snowfall Information', primaryColor),
+                _buildSnowfallInfo(cardColor, textColor, accentColor, primaryColor), // Pass primaryColor here too
                 const SizedBox(height: 24),
               ],
             ),
@@ -171,7 +180,7 @@ class FairyMeadowsPage extends StatelessWidget {
   }
 
   // Clothing Tab
-  Widget _buildClothingTab() {
+  Widget _buildClothingTab(bool isDarkMode, Color cardColor, Color textColor, Color primaryColor, Color accentColor) {
     return LayoutBuilder(
       builder: (context, constraints) {
         return SingleChildScrollView(
@@ -183,16 +192,18 @@ class FairyMeadowsPage extends StatelessWidget {
               children: [
                 _buildImageCarousel(clothesImages),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Clothing Recommendations'),
+                _buildSectionTitle('Clothing Recommendations', primaryColor),
                 _buildInfoCard(
                   'Layered clothing is essential due to extreme temperature shifts. Prepare for sudden weather changes and high-altitude conditions.',
+                  cardColor,
+                  textColor,
                 ),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Seasonal Clothing Guide'),
-                _buildClothingGuide(),
+                _buildSectionTitle('Seasonal Clothing Guide', primaryColor),
+                _buildClothingGuide(cardColor, textColor, primaryColor), // Pass primaryColor
                 const SizedBox(height: 24),
-                _buildSectionTitle('Essential Accessories'),
-                _buildAccessoriesList(),
+                _buildSectionTitle('Essential Accessories', primaryColor),
+                _buildAccessoriesList(cardColor, textColor, primaryColor),
                 const SizedBox(height: 24),
               ],
             ),
@@ -203,7 +214,7 @@ class FairyMeadowsPage extends StatelessWidget {
   }
 
   // Safety Tab
-  Widget _buildSafetyTab() {
+  Widget _buildSafetyTab(bool isDarkMode, Color cardColor, Color textColor, Color primaryColor, Color accentColor) {
     return LayoutBuilder(
       builder: (context, constraints) {
         return SingleChildScrollView(
@@ -215,16 +226,18 @@ class FairyMeadowsPage extends StatelessWidget {
               children: [
                 _buildImageCarousel(safetyImages),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Safety Information'),
+                _buildSectionTitle('Safety Information', primaryColor),
                 _buildInfoCard(
                   'Remote location and steep trails require preparation. Be cautious of altitude sickness, slippery paths, and sudden storms.',
+                  cardColor,
+                  textColor,
                 ),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Essential Equipment'),
-                _buildEquipmentList(),
+                _buildSectionTitle('Essential Equipment', primaryColor),
+                _buildEquipmentList(cardColor, textColor, primaryColor),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Emergency Contacts'),
-                _buildEmergencyContacts(),
+                _buildSectionTitle('Emergency Contacts', primaryColor),
+                _buildEmergencyContacts(cardColor, textColor, primaryColor),
                 const SizedBox(height: 24),
               ],
             ),
@@ -234,7 +247,8 @@ class FairyMeadowsPage extends StatelessWidget {
     );
   }
 
-  // Component Builders (Same as original)
+  // --- Component Builders (Updated to accept color parameters and use them) ---
+
   Widget _buildImageCarousel(List<String> images) {
     return SizedBox(
       height: 200,
@@ -273,7 +287,7 @@ class FairyMeadowsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSectionTitle(String title) {
+  Widget _buildSectionTitle(String title, Color primaryColor) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Text(
@@ -281,14 +295,15 @@ class FairyMeadowsPage extends StatelessWidget {
         style: TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.bold,
-          color: primaryColor,
+          color: primaryColor, // Uses passed primaryColor
         ),
       ),
     );
   }
 
-  Widget _buildInfoCard(String content) {
+  Widget _buildInfoCard(String content, Color cardColor, Color textColor) {
     return Card(
+      color: cardColor, // Uses passed cardColor
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -296,12 +311,15 @@ class FairyMeadowsPage extends StatelessWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
-        child: Text(
-          content,
-          style: TextStyle(
-            fontSize: 15,
-            height: 1.5,
-            color: textColor,
+        child: SizedBox(
+          width: double.infinity, // Ensures the card takes full width
+          child: Text(
+            content,
+            style: TextStyle(
+              fontSize: 15,
+              height: 1.5,
+              color: textColor, // Uses passed textColor
+            ),
           ),
         ),
       ),
@@ -309,7 +327,7 @@ class FairyMeadowsPage extends StatelessWidget {
   }
 
   // Key Info Grid
-  Widget _buildKeyInfoGrid() {
+  Widget _buildKeyInfoGrid(Color primaryColor, Color textColor, Color cardColor) {
     final List<Map<String, dynamic>> infoItems = [
       {'icon': Icons.location_on, 'title': 'Location', 'value': 'Nanga Parbat, AJK'},
       {'icon': Icons.landscape, 'title': 'Elevation', 'value': '3,300 meters'},
@@ -331,13 +349,17 @@ class FairyMeadowsPage extends StatelessWidget {
           infoItems[index]['icon'],
           infoItems[index]['title'],
           infoItems[index]['value'],
+          primaryColor,
+          textColor,
+          cardColor,
         );
       },
     );
   }
 
-  Widget _buildInfoTile(IconData icon, String title, String value) {
+  Widget _buildInfoTile(IconData icon, String title, String value, Color primaryColor, Color textColor, Color cardColor) {
     return Card(
+      color: cardColor, // Uses passed cardColor
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -349,7 +371,7 @@ class FairyMeadowsPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(icon, size: 24, color: primaryColor),
+            Icon(icon, size: 24, color: primaryColor), // Uses passed primaryColor
             const SizedBox(height: 8),
             Text(
               title,
@@ -364,7 +386,7 @@ class FairyMeadowsPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.w600,
-                color: textColor,
+                color: textColor, // Uses passed textColor
               ),
             ),
           ],
@@ -373,7 +395,7 @@ class FairyMeadowsPage extends StatelessWidget {
     );
   }
 
-  // Nearby Attractions Grid
+  // Nearby Attractions Grid (No changes needed here for color parameters)
   Widget _buildAttractionGrid() {
     final List<Map<String, dynamic>> attractions = [
       {
@@ -400,7 +422,7 @@ class FairyMeadowsPage extends StatelessWidget {
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount( // Corrected typo here
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         childAspectRatio: 0.85,
         crossAxisSpacing: 12,
@@ -476,33 +498,43 @@ class FairyMeadowsPage extends StatelessWidget {
     );
   }
 
-  // Seasonal Guide
-  Widget _buildSeasonalGuide() {
+  // Seasonal Guide (Updated to pass color parameters)
+  Widget _buildSeasonalGuide(Color cardColor, Color textColor, Color primaryColor) {
     return Column(
       children: [
         _buildSeasonCard(
           'Spring (May-Jun)',
           '• Wildflower blooms\n• Mild temperatures\n• Melting snow trails',
           Icons.wb_sunny,
+          cardColor,
+          textColor,
+          primaryColor,
         ),
         const SizedBox(height: 12),
         _buildSeasonCard(
           'Summer (Jul-Aug)',
           '• Pleasant days, cool nights\n• Ideal for trekking\n• Clear mountain views',
           Icons.beach_access,
+          cardColor,
+          textColor,
+          primaryColor,
         ),
         const SizedBox(height: 12),
         _buildSeasonCard(
           'Autumn (Sep-Oct)',
           '• Golden foliage\n• Fewer crowds\n• Crisp morning air',
           Icons.energy_savings_leaf,
+          cardColor,
+          textColor,
+          primaryColor,
         ),
       ],
     );
   }
 
-  Widget _buildSeasonCard(String season, String details, IconData icon) {
+  Widget _buildSeasonCard(String season, String details, IconData icon, Color cardColor, Color textColor, Color primaryColor) {
     return Card(
+      color: cardColor, // Uses passed cardColor
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -516,10 +548,10 @@ class FairyMeadowsPage extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: primaryColor.withOpacity(0.1),
+                color: primaryColor.withOpacity(0.1), // Uses primaryColor
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Icon(icon, size: 24, color: primaryColor),
+              child: Icon(icon, size: 24, color: primaryColor), // Uses primaryColor
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -531,7 +563,7 @@ class FairyMeadowsPage extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      color: textColor,
+                      color: textColor, // Uses textColor
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -552,60 +584,62 @@ class FairyMeadowsPage extends StatelessWidget {
     );
   }
 
-  // Snowfall Info
-  Widget _buildSnowfallInfo() {
+  // Snowfall Info (Updated to pass color parameters)
+  Widget _buildSnowfallInfo(Color cardColor, Color textColor, Color accentColor, Color primaryColor) {
     return Card(
-        elevation: 0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-          side: BorderSide(color: Colors.grey.shade300),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Icon(Icons.ac_unit, size: 24, color: primaryColor),
-                  const SizedBox(width: 8),
-                  Text(
-                    'Winter Conditions',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: textColor,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              _buildSnowfallItem('First Snow:', 'Late October'),
-              _buildSnowfallItem('Peak Snow:', 'December - February'),
-              _buildSnowfallItem('Snow Depth:', 'Up to 4 meters'),
-              _buildSnowfallItem('Trail Closure:', 'Nov - Apr'),
-              const SizedBox(height: 12),
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: accentColor.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  'The trail becomes inaccessible during snowfall. Guided tours are required for winter visits.',
+      color: cardColor, // Uses passed cardColor
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: Colors.grey.shade300),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(Icons.ac_unit, size: 24, color: primaryColor), // Uses primaryColor
+                const SizedBox(width: 8),
+                Text(
+                  'Winter Conditions',
                   style: TextStyle(
-                    fontSize: 13,
-                    color: Colors.grey.shade700,
-                    fontStyle: FontStyle.italic,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: textColor, // Uses textColor
                   ),
                 ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            _buildSnowfallItem('First Snow:', 'Late October', textColor), // Pass textColor
+            _buildSnowfallItem('Peak Snow:', 'December - February', textColor), // Pass textColor
+            _buildSnowfallItem('Snow Depth:', 'Up to 4 meters', textColor), // Pass textColor
+            _buildSnowfallItem('Trail Closure:', 'Nov - Apr', textColor), // Pass textColor
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: accentColor.withOpacity(0.1), // Uses accentColor
+                borderRadius: BorderRadius.circular(8),
               ),
-            ],
-          ),
-        ));
+              child: Text(
+                'The trail becomes inaccessible during snowfall. Guided tours are required for winter visits.',
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Colors.grey.shade700,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
-  Widget _buildSnowfallItem(String label, String value) {
+  Widget _buildSnowfallItem(String label, String value, Color textColor) { // Added textColor parameter
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
@@ -624,7 +658,7 @@ class FairyMeadowsPage extends StatelessWidget {
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w600,
-              color: textColor,
+              color: textColor, // Uses textColor
             ),
           ),
         ],
@@ -632,30 +666,40 @@ class FairyMeadowsPage extends StatelessWidget {
     );
   }
 
-  // Clothing Guide
-  Widget _buildClothingGuide() {
+  // Clothing Guide (Updated to pass color parameters)
+  Widget _buildClothingGuide(Color cardColor, Color textColor, Color primaryColor) {
     return Column(
       children: [
         _buildClothingSeasonCard(
           'Spring (May-Jun)',
           '• Waterproof jacket\n• Thermal layers\n• Sturdy hiking boots',
+          cardColor,
+          textColor,
+          primaryColor,
         ),
         const SizedBox(height: 12),
         _buildClothingSeasonCard(
           'Summer (Jul-Sep)',
           '• Fleece + light jacket\n• Quick-dry pants\n• UV-protected sunglasses',
+          cardColor,
+          textColor,
+          primaryColor,
         ),
         const SizedBox(height: 12),
         _buildClothingSeasonCard(
           'Autumn (Sep-Oct)',
           '• Insulated jacket\n• Woolen socks\n• Windproof gloves',
+          cardColor,
+          textColor,
+          primaryColor,
         ),
       ],
     );
   }
 
-  Widget _buildClothingSeasonCard(String season, String items) {
+  Widget _buildClothingSeasonCard(String season, String items, Color cardColor, Color textColor, Color primaryColor) {
     return Card(
+      color: cardColor, // Uses passed cardColor
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -671,7 +715,7 @@ class FairyMeadowsPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: textColor,
+                color: textColor, // Uses textColor
               ),
             ),
             const SizedBox(height: 8),
@@ -680,7 +724,7 @@ class FairyMeadowsPage extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(Icons.circle, size: 8, color: primaryColor),
+                  Icon(Icons.circle, size: 8, color: primaryColor), // Uses primaryColor
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
@@ -700,8 +744,8 @@ class FairyMeadowsPage extends StatelessWidget {
     );
   }
 
-  // Accessories List
-  Widget _buildAccessoriesList() {
+  // Accessories List (Updated to pass color parameters)
+  Widget _buildAccessoriesList(Color cardColor, Color textColor, Color primaryColor) {
     final List<String> accessories = [
       'Trekking poles',
       'UV-protected sunglasses',
@@ -711,6 +755,7 @@ class FairyMeadowsPage extends StatelessWidget {
       'Portable oxygen',
     ];
     return Card(
+      color: cardColor, // Uses passed cardColor
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -726,7 +771,7 @@ class FairyMeadowsPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: textColor,
+                color: textColor, // Uses textColor
               ),
             ),
             const SizedBox(height: 12),
@@ -734,12 +779,12 @@ class FairyMeadowsPage extends StatelessWidget {
               spacing: 8,
               runSpacing: 8,
               children: accessories.map((item) => Chip(
-                backgroundColor: primaryColor.withOpacity(0.1),
+                backgroundColor: primaryColor.withOpacity(0.1), // Uses primaryColor
                 label: Text(
                   item,
                   style: TextStyle(
                     fontSize: 13,
-                    color: textColor,
+                    color: textColor, // Uses textColor
                   ),
                 ),
               )).toList(),
@@ -750,8 +795,8 @@ class FairyMeadowsPage extends StatelessWidget {
     );
   }
 
-  // Safety Equipment Grid
-  Widget _buildEquipmentList() {
+  // Safety Equipment Grid (Updated to pass color parameters)
+  Widget _buildEquipmentList(Color cardColor, Color textColor, Color primaryColor) {
     final List<Map<String, dynamic>> equipment = [
       {'icon': Icons.medical_services, 'item': 'First aid kit'},
       {'icon': Icons.air, 'item': 'Oxygen cylinder'},
@@ -774,13 +819,17 @@ class FairyMeadowsPage extends StatelessWidget {
         return _buildEquipmentItem(
           equipment[index]['icon'],
           equipment[index]['item'],
+          primaryColor,
+          textColor,
+          cardColor,
         );
       },
     );
   }
 
-  Widget _buildEquipmentItem(IconData icon, String item) {
+  Widget _buildEquipmentItem(IconData icon, String item, Color primaryColor, Color textColor, Color cardColor) {
     return Card(
+      color: cardColor, // Uses passed cardColor
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -791,14 +840,14 @@ class FairyMeadowsPage extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(icon, size: 24, color: primaryColor),
+            Icon(icon, size: 24, color: primaryColor), // Uses primaryColor
             const SizedBox(width: 12),
             Expanded(
               child: Text(
                 item,
                 style: TextStyle(
                   fontSize: 14,
-                  color: textColor,
+                  color: textColor, // Uses textColor
                 ),
                 maxLines: 2,
                 overflow: TextOverflow.visible,
@@ -810,8 +859,8 @@ class FairyMeadowsPage extends StatelessWidget {
     );
   }
 
-  // Emergency Contacts
-  Widget _buildEmergencyContacts() {
+  // Emergency Contacts (Updated to pass color parameters)
+  Widget _buildEmergencyContacts(Color cardColor, Color textColor, Color primaryColor) {
     final List<Map<String, dynamic>> contacts = [
       {'type': 'Nearest Hospital', 'contact': 'Mansehra GH (60 km)'},
       {'type': 'Rescue Service', 'contact': '1122 Emergency'},
@@ -819,6 +868,7 @@ class FairyMeadowsPage extends StatelessWidget {
       {'type': 'Tourist Info', 'contact': 'AJK Tourism Office'},
     ];
     return Card(
+      color: cardColor, // Uses passed cardColor
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -834,7 +884,7 @@ class FairyMeadowsPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: textColor,
+                color: textColor, // Uses textColor
               ),
             ),
             const SizedBox(height: 12),
@@ -859,7 +909,7 @@ class FairyMeadowsPage extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
-                        color: textColor,
+                        color: textColor, // Uses textColor
                       ),
                     ),
                   ),
