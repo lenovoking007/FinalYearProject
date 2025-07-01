@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart'; // Import for Firestore
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class BullanValleyPage extends StatelessWidget {
   // Image paths
@@ -25,12 +25,6 @@ class BullanValleyPage extends StatelessWidget {
     'assets/images/bul/bul4.jpg',
     'assets/images/bul/bul6.jpg',
   ];
-
-  // Colors (same as original)
-  final Color primaryColor = const Color(0xFF0066CC);
-  final Color secondaryColor = Colors.white;
-  final Color textColor = Colors.black87;
-  final Color accentColor = const Color(0xFF88F2E8);
 
   // Constructor now calls the method to record access
   BullanValleyPage({super.key}) {
@@ -64,6 +58,13 @@ class BullanValleyPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Adopt SaifUlMalookPage's dynamic color logic
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final primaryColor = isDarkMode ? const Color(0xFF1E88E5) : const Color(0xFF0066CC);
+    final cardColor = isDarkMode ? Colors.grey[800]! : Colors.white;
+    final textColor = isDarkMode ? Colors.white : Colors.black87;
+    final accentColor = isDarkMode ? const Color(0xFF64B5F6) : const Color(0xFF88F2E8);
+
     return DefaultTabController(
       length: 4,
       child: Scaffold(
@@ -71,15 +72,16 @@ class BullanValleyPage extends StatelessWidget {
           backgroundColor: primaryColor,
           elevation: 0,
           automaticallyImplyLeading: true,
-          iconTheme: IconThemeData(color: secondaryColor),
+          iconTheme: const IconThemeData(color: Colors.white), // Use const as color is fixed here
           title: Text(
             'Bullan Valley',
-            style: TextStyle(color: secondaryColor),
+            style: TextStyle(color: Colors.white),
           ),
+          centerTitle: true, // Added for consistency
           bottom: TabBar(
-            labelColor: secondaryColor,
-            unselectedLabelColor: secondaryColor.withOpacity(0.7),
-            indicatorColor: secondaryColor,
+            labelColor: Colors.white,
+            unselectedLabelColor: Colors.white.withOpacity(0.7),
+            indicatorColor: Colors.white,
             indicatorWeight: 3,
             tabs: const [
               Tab(icon: Icon(Icons.info_outline)),
@@ -91,18 +93,19 @@ class BullanValleyPage extends StatelessWidget {
         ),
         body: TabBarView(
           children: [
-            _buildOverviewTab(),
-            _buildSeasonsTab(),
-            _buildClothingTab(),
-            _buildSafetyTab(),
+            _buildOverviewTab(isDarkMode, cardColor, textColor, primaryColor, accentColor),
+            _buildSeasonsTab(isDarkMode, cardColor, textColor, primaryColor, accentColor),
+            _buildClothingTab(isDarkMode, cardColor, textColor, primaryColor, accentColor),
+            _buildSafetyTab(isDarkMode, cardColor, textColor, primaryColor, accentColor),
           ],
         ),
       ),
     );
   }
 
-  // Tab Builders (Same structure, updated content)
-  Widget _buildOverviewTab() {
+  // --- Tab Builders (Updated to pass color parameters) ---
+
+  Widget _buildOverviewTab(bool isDarkMode, Color cardColor, Color textColor, Color primaryColor, Color accentColor) {
     return LayoutBuilder(
       builder: (context, constraints) {
         return SingleChildScrollView(
@@ -114,21 +117,25 @@ class BullanValleyPage extends StatelessWidget {
               children: [
                 _buildImageCarousel(overviewImages),
                 const SizedBox(height: 24),
-                _buildSectionTitle('About Bullan Valley'),
+                _buildSectionTitle('About Bullan Valley', primaryColor),
                 _buildInfoCard(
                   'A hidden gem in Balochistan’s Ziarat District, Bullan Valley is surrounded by juniper forests and ancient rock formations. Known for its tranquility, it offers panoramic views of the Sulaiman Range and is home to centuries-old tribal heritage.',
+                  cardColor,
+                  textColor,
                 ),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Key Information'),
-                _buildKeyInfoGrid(),
+                _buildSectionTitle('Key Information', primaryColor),
+                _buildKeyInfoGrid(primaryColor, textColor, cardColor),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Legend'),
+                _buildSectionTitle('Legend', primaryColor),
                 _buildInfoCard(
                   'Local folklore says the valley was named after a tribal chief’s daughter, Bullan, who fell in love with a traveler. Her tears formed the valley’s streams, and her spirit is said to guard the land from outsiders.',
+                  cardColor,
+                  textColor,
                 ),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Nearby Attractions'),
-                _buildAttractionGrid(),
+                _buildSectionTitle('Nearby Attractions', primaryColor),
+                _buildAttractionGrid(), // This widget doesn't use color params directly
                 const SizedBox(height: 24),
               ],
             ),
@@ -139,7 +146,7 @@ class BullanValleyPage extends StatelessWidget {
   }
 
   // Seasons Tab
-  Widget _buildSeasonsTab() {
+  Widget _buildSeasonsTab(bool isDarkMode, Color cardColor, Color textColor, Color primaryColor, Color accentColor) {
     return LayoutBuilder(
       builder: (context, constraints) {
         return SingleChildScrollView(
@@ -151,16 +158,18 @@ class BullanValleyPage extends StatelessWidget {
               children: [
                 _buildImageCarousel(seasonImages),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Best Time to Visit'),
+                _buildSectionTitle('Best Time to Visit', primaryColor),
                 _buildInfoCard(
                   'October to March for pleasant weather. Summers (Apr-Jun) are extremely hot, while winters (Dec-Feb) bring cool temperatures and occasional rain.',
+                  cardColor,
+                  textColor,
                 ),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Seasonal Guide'),
-                _buildSeasonalGuide(),
+                _buildSectionTitle('Seasonal Guide', primaryColor),
+                _buildSeasonalGuide(cardColor, textColor, primaryColor),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Weather Advisory'),
-                _buildWeatherAdvisoryInfo(),
+                _buildSectionTitle('Weather Advisory', primaryColor),
+                _buildWeatherAdvisoryInfo(cardColor, textColor, accentColor, primaryColor), // Pass primaryColor here too
                 const SizedBox(height: 24),
               ],
             ),
@@ -171,7 +180,7 @@ class BullanValleyPage extends StatelessWidget {
   }
 
   // Clothing Tab
-  Widget _buildClothingTab() {
+  Widget _buildClothingTab(bool isDarkMode, Color cardColor, Color textColor, Color primaryColor, Color accentColor) {
     return LayoutBuilder(
       builder: (context, constraints) {
         return SingleChildScrollView(
@@ -183,16 +192,18 @@ class BullanValleyPage extends StatelessWidget {
               children: [
                 _buildImageCarousel(clothesImages),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Clothing Recommendations'),
+                _buildSectionTitle('Clothing Recommendations', primaryColor),
                 _buildInfoCard(
                   'Lightweight fabrics for summer heat, warm layers for winter nights. Sun protection is critical due to intense UV exposure.',
+                  cardColor,
+                  textColor,
                 ),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Seasonal Clothing Guide'),
-                _buildClothingGuide(),
+                _buildSectionTitle('Seasonal Clothing Guide', primaryColor),
+                _buildClothingGuide(cardColor, textColor, primaryColor), // Pass primaryColor
                 const SizedBox(height: 24),
-                _buildSectionTitle('Essential Accessories'),
-                _buildAccessoriesList(),
+                _buildSectionTitle('Essential Accessories', primaryColor),
+                _buildAccessoriesList(cardColor, textColor, primaryColor),
                 const SizedBox(height: 24),
               ],
             ),
@@ -203,7 +214,7 @@ class BullanValleyPage extends StatelessWidget {
   }
 
   // Safety Tab
-  Widget _buildSafetyTab() {
+  Widget _buildSafetyTab(bool isDarkMode, Color cardColor, Color textColor, Color primaryColor, Color accentColor) {
     return LayoutBuilder(
       builder: (context, constraints) {
         return SingleChildScrollView(
@@ -215,16 +226,18 @@ class BullanValleyPage extends StatelessWidget {
               children: [
                 _buildImageCarousel(safetyImages),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Safety Information'),
+                _buildSectionTitle('Safety Information', primaryColor),
                 _buildInfoCard(
                   'Remote location and rugged terrain require preparation. Be cautious of extreme heat, limited water sources, and sudden sandstorms.',
+                  cardColor,
+                  textColor,
                 ),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Essential Equipment'),
-                _buildEquipmentList(),
+                _buildSectionTitle('Essential Equipment', primaryColor),
+                _buildEquipmentList(cardColor, textColor, primaryColor),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Emergency Contacts'),
-                _buildEmergencyContacts(),
+                _buildSectionTitle('Emergency Contacts', primaryColor),
+                _buildEmergencyContacts(cardColor, textColor, primaryColor),
                 const SizedBox(height: 24),
               ],
             ),
@@ -234,7 +247,8 @@ class BullanValleyPage extends StatelessWidget {
     );
   }
 
-  // Component Builders (Same as original)
+  // --- Component Builders (Updated to accept color parameters and use them) ---
+
   Widget _buildImageCarousel(List<String> images) {
     return SizedBox(
       height: 200,
@@ -273,7 +287,7 @@ class BullanValleyPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSectionTitle(String title) {
+  Widget _buildSectionTitle(String title, Color primaryColor) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Text(
@@ -281,14 +295,15 @@ class BullanValleyPage extends StatelessWidget {
         style: TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.bold,
-          color: primaryColor,
+          color: primaryColor, // Uses passed primaryColor
         ),
       ),
     );
   }
 
-  Widget _buildInfoCard(String content) {
+  Widget _buildInfoCard(String content, Color cardColor, Color textColor) {
     return Card(
+      color: cardColor, // Uses passed cardColor
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -301,7 +316,7 @@ class BullanValleyPage extends StatelessWidget {
           style: TextStyle(
             fontSize: 15,
             height: 1.5,
-            color: textColor,
+            color: textColor, // Uses passed textColor
           ),
         ),
       ),
@@ -309,7 +324,7 @@ class BullanValleyPage extends StatelessWidget {
   }
 
   // Key Info Grid
-  Widget _buildKeyInfoGrid() {
+  Widget _buildKeyInfoGrid(Color primaryColor, Color textColor, Color cardColor) {
     final List<Map<String, dynamic>> infoItems = [
       {'icon': Icons.location_on, 'title': 'Location', 'value': 'Ziarat, Balochistan'},
       {'icon': Icons.landscape, 'title': 'Elevation', 'value': '2,200 meters'},
@@ -331,13 +346,17 @@ class BullanValleyPage extends StatelessWidget {
           infoItems[index]['icon'],
           infoItems[index]['title'],
           infoItems[index]['value'],
+          primaryColor,
+          textColor,
+          cardColor,
         );
       },
     );
   }
 
-  Widget _buildInfoTile(IconData icon, String title, String value) {
+  Widget _buildInfoTile(IconData icon, String title, String value, Color primaryColor, Color textColor, Color cardColor) {
     return Card(
+      color: cardColor, // Uses passed cardColor
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -349,7 +368,7 @@ class BullanValleyPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(icon, size: 24, color: primaryColor),
+            Icon(icon, size: 24, color: primaryColor), // Uses passed primaryColor
             const SizedBox(height: 8),
             Text(
               title,
@@ -364,7 +383,7 @@ class BullanValleyPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.w600,
-                color: textColor,
+                color: textColor, // Uses passed textColor
               ),
             ),
           ],
@@ -373,7 +392,7 @@ class BullanValleyPage extends StatelessWidget {
     );
   }
 
-  // Nearby Attractions Grid
+  // Nearby Attractions Grid (No changes needed here for color parameters)
   Widget _buildAttractionGrid() {
     final List<Map<String, dynamic>> attractions = [
       {
@@ -476,33 +495,43 @@ class BullanValleyPage extends StatelessWidget {
     );
   }
 
-  // Seasonal Guide
-  Widget _buildSeasonalGuide() {
+  // Seasonal Guide (Updated to pass color parameters)
+  Widget _buildSeasonalGuide(Color cardColor, Color textColor, Color primaryColor) {
     return Column(
       children: [
         _buildSeasonCard(
           'Spring (Oct-Nov)',
           '• Mild temperatures\n• Blooming wildflowers\n• Clear skies',
           Icons.wb_sunny,
+          cardColor,
+          textColor,
+          primaryColor,
         ),
         const SizedBox(height: 12),
         _buildSeasonCard(
           'Winter (Dec-Mar)',
           '• Cool days, chilly nights\n• Occasional rain\n• Fewer tourists',
           Icons.beach_access,
+          cardColor,
+          textColor,
+          primaryColor,
         ),
         const SizedBox(height: 12),
         _buildSeasonCard(
           'Summer (Apr-Jun)',
           '• Extreme heat\n• Dust storms\n• Limited access',
           Icons.ac_unit,
+          cardColor,
+          textColor,
+          primaryColor,
         ),
       ],
     );
   }
 
-  Widget _buildSeasonCard(String season, String details, IconData icon) {
+  Widget _buildSeasonCard(String season, String details, IconData icon, Color cardColor, Color textColor, Color primaryColor) {
     return Card(
+      color: cardColor, // Uses passed cardColor
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -516,10 +545,10 @@ class BullanValleyPage extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: primaryColor.withOpacity(0.1),
+                color: primaryColor.withOpacity(0.1), // Uses primaryColor
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Icon(icon, size: 24, color: primaryColor),
+              child: Icon(icon, size: 24, color: primaryColor), // Uses primaryColor
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -531,7 +560,7 @@ class BullanValleyPage extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      color: textColor,
+                      color: textColor, // Uses textColor
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -552,9 +581,10 @@ class BullanValleyPage extends StatelessWidget {
     );
   }
 
-  // Weather Advisory Info
-  Widget _buildWeatherAdvisoryInfo() {
+  // Weather Advisory Info (Updated to pass color parameters)
+  Widget _buildWeatherAdvisoryInfo(Color cardColor, Color textColor, Color accentColor, Color primaryColor) {
     return Card(
+      color: cardColor, // Uses passed cardColor
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -567,28 +597,28 @@ class BullanValleyPage extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(Icons.heat_pump, size: 24, color: primaryColor),
+                Icon(Icons.heat_pump, size: 24, color: primaryColor), // Uses primaryColor
                 const SizedBox(width: 8),
                 Text(
                   'Weather Advisory',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    color: textColor,
+                    color: textColor, // Uses textColor
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 12),
-            _buildWeatherItem('Summer Heat:', 'Up to 45°C'),
-            _buildWeatherItem('Winter Chill:', '-5°C at night'),
-            _buildWeatherItem('Sandstorms:', 'Common in summer'),
-            _buildWeatherItem('Rainfall:', 'Winter only'),
+            _buildWeatherItem('Summer Heat:', 'Up to 45°C', textColor), // Pass textColor
+            _buildWeatherItem('Winter Chill:', '-5°C at night', textColor), // Pass textColor
+            _buildWeatherItem('Sandstorms:', 'Common in summer', textColor), // Pass textColor
+            _buildWeatherItem('Rainfall:', 'Winter only', textColor), // Pass textColor
             const SizedBox(height: 12),
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: accentColor.withOpacity(0.1),
+                color: accentColor.withOpacity(0.1), // Uses accentColor
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
@@ -606,7 +636,7 @@ class BullanValleyPage extends StatelessWidget {
     );
   }
 
-  Widget _buildWeatherItem(String label, String value) {
+  Widget _buildWeatherItem(String label, String value, Color textColor) { // Added textColor parameter
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
@@ -625,7 +655,7 @@ class BullanValleyPage extends StatelessWidget {
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w600,
-              color: textColor,
+              color: textColor, // Uses textColor
             ),
           ),
         ],
@@ -633,30 +663,40 @@ class BullanValleyPage extends StatelessWidget {
     );
   }
 
-  // Clothing Guide
-  Widget _buildClothingGuide() {
+  // Clothing Guide (Updated to pass color parameters)
+  Widget _buildClothingGuide(Color cardColor, Color textColor, Color primaryColor) {
     return Column(
       children: [
         _buildClothingSeasonCard(
           'Spring (Oct-Nov)',
           '• Lightweight cotton\n• Sun hat\n• Comfortable shoes',
+          cardColor,
+          textColor,
+          primaryColor,
         ),
         const SizedBox(height: 12),
         _buildClothingSeasonCard(
           'Winter (Dec-Mar)',
           '• Woolen sweaters\n• Thermal layers\n• Windproof jacket',
+          cardColor,
+          textColor,
+          primaryColor,
         ),
         const SizedBox(height: 12),
         _buildClothingSeasonCard(
           'Summer (Apr-Jun)',
           '• Loose pants\n• UV-protected sunglasses\n• Cooling towels',
+          cardColor,
+          textColor,
+          primaryColor,
         ),
       ],
     );
   }
 
-  Widget _buildClothingSeasonCard(String season, String items) {
+  Widget _buildClothingSeasonCard(String season, String items, Color cardColor, Color textColor, Color primaryColor) {
     return Card(
+      color: cardColor, // Uses passed cardColor
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -672,7 +712,7 @@ class BullanValleyPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: textColor,
+                color: textColor, // Uses textColor
               ),
             ),
             const SizedBox(height: 8),
@@ -681,7 +721,7 @@ class BullanValleyPage extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(Icons.circle, size: 8, color: primaryColor),
+                  Icon(Icons.circle, size: 8, color: primaryColor), // Uses primaryColor
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
@@ -701,8 +741,8 @@ class BullanValleyPage extends StatelessWidget {
     );
   }
 
-  // Accessories List
-  Widget _buildAccessoriesList() {
+  // Accessories List (Updated to pass color parameters)
+  Widget _buildAccessoriesList(Color cardColor, Color textColor, Color primaryColor) {
     final List<String> accessories = [
       'Sunscreen SPF 50+',
       'UV-protected sunglasses',
@@ -712,6 +752,7 @@ class BullanValleyPage extends StatelessWidget {
       'Portable shade tent',
     ];
     return Card(
+      color: cardColor, // Uses passed cardColor
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -727,7 +768,7 @@ class BullanValleyPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: textColor,
+                color: textColor, // Uses textColor
               ),
             ),
             const SizedBox(height: 12),
@@ -735,12 +776,12 @@ class BullanValleyPage extends StatelessWidget {
               spacing: 8,
               runSpacing: 8,
               children: accessories.map((item) => Chip(
-                backgroundColor: primaryColor.withOpacity(0.1),
+                backgroundColor: primaryColor.withOpacity(0.1), // Uses primaryColor
                 label: Text(
                   item,
                   style: TextStyle(
                     fontSize: 13,
-                    color: textColor,
+                    color: textColor, // Uses textColor
                   ),
                 ),
               )).toList(),
@@ -751,8 +792,8 @@ class BullanValleyPage extends StatelessWidget {
     );
   }
 
-  // Safety Equipment Grid
-  Widget _buildEquipmentList() {
+  // Safety Equipment Grid (Updated to pass color parameters)
+  Widget _buildEquipmentList(Color cardColor, Color textColor, Color primaryColor) {
     final List<Map<String, dynamic>> equipment = [
       {'icon': Icons.medical_services, 'item': 'First aid kit'},
       {'icon': Icons.water_drop, 'item': 'Hydration pack'},
@@ -775,13 +816,17 @@ class BullanValleyPage extends StatelessWidget {
         return _buildEquipmentItem(
           equipment[index]['icon'],
           equipment[index]['item'],
+          primaryColor,
+          textColor,
+          cardColor,
         );
       },
     );
   }
 
-  Widget _buildEquipmentItem(IconData icon, String item) {
+  Widget _buildEquipmentItem(IconData icon, String item, Color primaryColor, Color textColor, Color cardColor) {
     return Card(
+      color: cardColor, // Uses passed cardColor
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -792,14 +837,14 @@ class BullanValleyPage extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(icon, size: 24, color: primaryColor),
+            Icon(icon, size: 24, color: primaryColor), // Uses primaryColor
             const SizedBox(width: 12),
             Expanded(
               child: Text(
                 item,
                 style: TextStyle(
                   fontSize: 14,
-                  color: textColor,
+                  color: textColor, // Uses textColor
                 ),
                 maxLines: 2,
                 overflow: TextOverflow.visible,
@@ -811,8 +856,8 @@ class BullanValleyPage extends StatelessWidget {
     );
   }
 
-  // Emergency Contacts
-  Widget _buildEmergencyContacts() {
+  // Emergency Contacts (Updated to pass color parameters)
+  Widget _buildEmergencyContacts(Color cardColor, Color textColor, Color primaryColor) {
     final List<Map<String, dynamic>> contacts = [
       {'type': 'Nearest Hospital', 'contact': 'Ziarat GH (30 km)'},
       {'type': 'Rescue Service', 'contact': '1122 Emergency'},
@@ -820,6 +865,7 @@ class BullanValleyPage extends StatelessWidget {
       {'type': 'Tourist Info', 'contact': 'Balochistan Tourism'},
     ];
     return Card(
+      color: cardColor, // Uses passed cardColor
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -835,7 +881,7 @@ class BullanValleyPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: textColor,
+                color: textColor, // Uses textColor
               ),
             ),
             const SizedBox(height: 12),
@@ -860,7 +906,7 @@ class BullanValleyPage extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
-                        color: textColor,
+                        color: textColor, // Uses textColor
                       ),
                     ),
                   ),
