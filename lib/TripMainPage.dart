@@ -29,6 +29,7 @@ import 'FeaturedCities.dart';
 import 'FAmousPlaces.dart';
 import 'FeaturedCities/PeshawarPage.dart';
 import 'FeaturedCities/RawalpindiPage.dart';
+import 'package:travelmate/SkarduPage.dart';
 
 class TripPage extends StatefulWidget {
   const TripPage({Key? key}) : super(key: key);
@@ -81,7 +82,6 @@ class _TripPageState extends State<TripPage> {
       'title': 'Rawalpindi',
       'description': 'The Twin City',
       'image': 'assets/images/raw/ra1.jpg',
-      'image': 'assets/images/raw/ra4.jpg',
       'page': RawalpindiPage()
     },
     {
@@ -96,6 +96,12 @@ class _TripPageState extends State<TripPage> {
       'image': 'assets/images/muree/mo2.jpg',
       'page': MureePage()
     },
+    {
+      'title': 'Skardu', // <--- NEW CARD TITLE
+      'description': 'Gateway to the mighty mountains', // <--- NEW CARD DESCRIPTION
+      'image': 'assets/images/pesh/po1.jpg', // <--- USING PESHAWAR IMAGE AS REQUESTED
+      'page': SkarduPage() // <--- REFERENCING SkarduPage
+    },
   ];
 
   final List<Map<String, dynamic>> famousActivities = [
@@ -109,7 +115,7 @@ class _TripPageState extends State<TripPage> {
       'title': 'Sightseeing',
       'description': 'Badshahi Mosque',
       'image': 'assets/images/sight/si2.jpg',
-      'page':SightseeingTourPage()
+      'page': SightseeingTourPage()
     },
     {
       'title': 'JeepRally',
@@ -238,7 +244,8 @@ class _TripPageState extends State<TripPage> {
     );
   }
 
-  Widget _buildCard(String title, String description, String imagePath, double cardHeight, Widget page) {
+  Widget _buildCard(String title, String description, String imagePath,
+      double cardHeight, Widget page) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -329,7 +336,8 @@ class _TripPageState extends State<TripPage> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: screenHeight * 0.02, vertical: screenHeight * 0.01),
+      padding: EdgeInsets.symmetric(
+          horizontal: screenHeight * 0.02, vertical: screenHeight * 0.01),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -424,115 +432,119 @@ class _TripPageState extends State<TripPage> {
           ),
         ),
       ),
-      body: LayoutBuilder(
-          builder: (context, constraints) {
-            return SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // 1. Categories Section
-                  _buildSectionHeader("Categories", null),
-                  SizedBox(
-                    height: screenHeight * 0.12,
-                    child: ListView.builder(
-                      padding: EdgeInsets.symmetric(horizontal: screenHeight * 0.03),
-                      scrollDirection: Axis.horizontal,
-                      itemCount: categories.length,
-                      itemBuilder: (context, index) {
-                        return _buildCategoryItem(categories[index]);
-                      },
-                    ),
-                  ),
-                  SizedBox(height: screenHeight * 0.02),
-
-                  // 2. Recommended Trips Section
-                  _buildSectionHeader("Featured Cities", () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const FeaturedCitiesPage()),
-                    );
-                  }),
-                  SizedBox(
-                    height: screenHeight * 0.3,
-                    child: ListView.builder(
-                      padding: EdgeInsets.symmetric(horizontal: screenHeight * 0.02),
-                      scrollDirection: Axis.horizontal,
-                      itemCount: recommendedTrips.length,
-                      itemBuilder: (context, index) {
-                        return SizedBox(
-                          width: screenWidth * 0.8,
-                          child: _buildCard(
-                            recommendedTrips[index]['title'],
-                            recommendedTrips[index]['description'],
-                            recommendedTrips[index]['image'],
-                            screenHeight * 0.28,
-                            recommendedTrips[index]['page'],
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-
-                  // 3. Famous Activities Section
-                  _buildSectionHeader("Famous Activities", () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const FamousActivitiesPage()),
-                    );
-                  }),
-                  SizedBox(
-                    height: screenHeight * 0.22,
-                    child: ListView.builder(
-                      padding: EdgeInsets.symmetric(horizontal: screenHeight * 0.02),
-                      scrollDirection: Axis.horizontal,
-                      itemCount: famousActivities.length,
-                      itemBuilder: (context, index) {
-                        return SizedBox(
-                          width: screenWidth * 0.4,
-                          child: _buildCard(
-                            famousActivities[index]['title'],
-                            famousActivities[index]['description'],
-                            famousActivities[index]['image'],
-                            screenHeight * 0.2,
-                            famousActivities[index]['page'],
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-
-                  // 4. Featured Destinations Section
-                  _buildSectionHeader("Famous Tourists Places", () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const FamousTouristPlacesPage()),
-                    );
-                  }),
-                  SizedBox(
-                    height: screenHeight * 0.28,
-                    child: ListView.builder(
-                      padding: EdgeInsets.symmetric(horizontal: screenHeight * 0.02),
-                      scrollDirection: Axis.horizontal,
-                      itemCount: featuredDestinations.length,
-                      itemBuilder: (context, index) {
-                        return SizedBox(
-                          width: screenWidth * 0.8,
-                          child: _buildCard(
-                            featuredDestinations[index]['title'],
-                            featuredDestinations[index]['description'],
-                            featuredDestinations[index]['image'],
-                            screenHeight * 0.26,
-                            featuredDestinations[index]['page'],
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ],
+      body: LayoutBuilder(builder: (context, constraints) {
+        return SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // 1. Categories Section
+              _buildSectionHeader("Categories", null),
+              SizedBox(
+                height: screenHeight * 0.12,
+                child: ListView.builder(
+                  padding: EdgeInsets.symmetric(horizontal: screenHeight * 0.03),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: categories.length,
+                  itemBuilder: (context, index) {
+                    return _buildCategoryItem(categories[index]);
+                  },
+                ),
               ),
-            );
-          }
-      ),
+              SizedBox(height: screenHeight * 0.02),
+
+              // 2. Recommended Trips Section
+              _buildSectionHeader("Featured Cities", () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const FeaturedCitiesPage()),
+                );
+              }),
+              SizedBox(
+                height: screenHeight * 0.3,
+                child: ListView.builder(
+                  padding:
+                  EdgeInsets.symmetric(horizontal: screenHeight * 0.02),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: recommendedTrips.length,
+                  itemBuilder: (context, index) {
+                    return SizedBox(
+                      width: screenWidth * 0.8,
+                      child: _buildCard(
+                        recommendedTrips[index]['title'],
+                        recommendedTrips[index]['description'],
+                        recommendedTrips[index]['image'],
+                        screenHeight * 0.28,
+                        recommendedTrips[index]['page'],
+                      ),
+                    );
+                  },
+                ),
+              ),
+
+              // 3. Famous Activities Section
+              _buildSectionHeader("Famous Activities", () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const FamousActivitiesPage()),
+                );
+              }),
+              SizedBox(
+                height: screenHeight * 0.22,
+                child: ListView.builder(
+                  padding:
+                  EdgeInsets.symmetric(horizontal: screenHeight * 0.02),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: famousActivities.length,
+                  itemBuilder: (context, index) {
+                    return SizedBox(
+                      width: screenWidth * 0.4,
+                      child: _buildCard(
+                        famousActivities[index]['title'],
+                        famousActivities[index]['description'],
+                        famousActivities[index]['image'],
+                        screenHeight * 0.2,
+                        famousActivities[index]['page'],
+                      ),
+                    );
+                  },
+                ),
+              ),
+
+              // 4. Featured Destinations Section
+              _buildSectionHeader("Famous Tourists Places", () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const FamousTouristPlacesPage()),
+                );
+              }),
+              SizedBox(
+                height: screenHeight * 0.28,
+                child: ListView.builder(
+                  padding:
+                  EdgeInsets.symmetric(horizontal: screenHeight * 0.02),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: featuredDestinations.length,
+                  itemBuilder: (context, index) {
+                    return SizedBox(
+                      width: screenWidth * 0.8,
+                      child: _buildCard(
+                        featuredDestinations[index]['title'],
+                        featuredDestinations[index]['description'],
+                        featuredDestinations[index]['image'],
+                        screenHeight * 0.26,
+                        featuredDestinations[index]['page'],
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      }),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           boxShadow: [
@@ -599,7 +611,8 @@ class _TripPageState extends State<TripPage> {
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          color: isActive ? const Color(0XFF0066CC).withOpacity(0.1) : Colors.transparent,
+          color:
+          isActive ? const Color(0XFF0066CC).withOpacity(0.1) : Colors.transparent,
         ),
         child: Icon(icon, color: isActive ? const Color(0XFF0066CC) : Colors.grey[600]),
       ),

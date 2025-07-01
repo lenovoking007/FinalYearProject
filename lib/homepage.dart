@@ -15,6 +15,8 @@ import 'package:travelmate/tools.dart';
 import 'package:travelmate/TripMainPage.dart';
 import 'ActvitiesCode/SwimmingPage.dart';
 import 'ActvitiesCode/ZiplinePage.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -29,6 +31,8 @@ class _HomePageState extends State<HomePage> {
   late String currentSubtext;
   String? profileImageUrl;
   final TextEditingController _searchController = TextEditingController();
+  final FirebaseStorage _storage = FirebaseStorage.instance; // Initialize Firebase Storage
+
 
   @override
   void initState() {
@@ -40,11 +44,23 @@ class _HomePageState extends State<HomePage> {
   Future<void> _loadProfileImage() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      final userDoc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
-      if (mounted) {
-        setState(() {
-          profileImageUrl = userDoc['profileImageUrl'];
-        });
+      try {
+        // Fetch the download URL from Firebase Storage
+        final url = await _storage.ref('profile_images/${user.uid}').getDownloadURL();
+        if (mounted) {
+          setState(() {
+            profileImageUrl = url;
+          });
+        }
+      } catch (e) {
+        // If no image exists or an error occurs, set profileImageUrl to null
+        // so the default_avatar.png is used.
+        if (mounted) {
+          setState(() {
+            profileImageUrl = null;
+          });
+        }
+        print("Error loading profile image: $e");
       }
     }
   }
@@ -165,12 +181,15 @@ class _HomePageState extends State<HomePage> {
                         MaterialPageRoute(
                           builder: (context) => const SettingsMenuPage(previousIndex: 0),
                         ),
-                      );
+                      ).then((_) {
+                        // This ensures the profile image is reloaded when returning from SettingsMenuPage
+                        _loadProfileImage();
+                      });
                     },
                     child: CircleAvatar(
                       radius: 18,
                       backgroundColor: Colors.white24,
-                      backgroundImage: const AssetImage('assets/images/default_avatar.png'),
+                      backgroundImage: _getProfileImage(), // Use the updated _getProfileImage method
                     ),
                   ),
                 ),
@@ -650,4 +669,7 @@ class _HomePageState extends State<HomePage> {
       label: label,
     );
   }
-}
+}git add .
+git commit -m "Initial commit for renamed project"
+git branch -M main
+git push -u origin main
