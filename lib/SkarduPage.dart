@@ -579,81 +579,83 @@ class _SkarduPageState extends State<SkarduPage> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         child: Padding(
           padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: const Color(0xFFE8F5E9),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.green.withOpacity(0.2),
-                      blurRadius: 10,
-                      spreadRadius: 2,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: const Color(0xFFE8F5E9),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.green.withOpacity(0.2),
+                        blurRadius: 10,
+                        spreadRadius: 2,
+                      ),
+                    ],
+                  ),
+                  child: const Icon(
+                    Icons.check_circle,
+                    color: Colors.green,
+                    size: 48,
+                  ),
+                ),
+                const SizedBox(height: 24),
+                Text(
+                  "Trip Saved!",
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: const Color(0xFF0066CC).withOpacity(0.9),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[50],
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.grey[200]!),
+                  ),
+                  child: Column(
+                    children: [
+                      _buildSuccessDetailRow("Trip Name:", tripName),
+                      const Divider(height: 16, thickness: 0.5),
+                      _buildSuccessDetailRow("Destination:", "Skardu"), // Changed from Lahore to Skardu
+                      const Divider(height: 16, thickness: 0.5),
+                      _buildSuccessDetailRow("Trip Type:", tripType),
+                      const Divider(height: 16, thickness: 0.5),
+                      _buildSuccessDetailRow("Duration:", "$duration days"),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 24),
+                const Text(
+                  "You can view your trip in the 'My Trips' section",
+                  style: TextStyle(fontSize: 14, color: Colors.grey),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 24),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF0066CC),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      elevation: 2,
                     ),
-                  ],
-                ),
-                child: const Icon(
-                  Icons.check_circle,
-                  color: Colors.green,
-                  size: 48,
-                ),
-              ),
-              const SizedBox(height: 24),
-              Text(
-                "Trip Saved!",
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: const Color(0xFF0066CC).withOpacity(0.9),
-                ),
-              ),
-              const SizedBox(height: 16),
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.grey[50],
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.grey[200]!),
-                ),
-                child: Column(
-                  children: [
-                    _buildSuccessDetailRow("Trip Name:", tripName),
-                    const Divider(height: 16, thickness: 0.5),
-                    _buildSuccessDetailRow("Destination:", "Skardu"), // Changed from Lahore to Skardu
-                    const Divider(height: 16, thickness: 0.5),
-                    _buildSuccessDetailRow("Trip Type:", tripType),
-                    const Divider(height: 16, thickness: 0.5),
-                    _buildSuccessDetailRow("Duration:", "$duration days"),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 24),
-              const Text(
-                "You can view your trip in the 'My Trips' section",
-                style: TextStyle(fontSize: 14, color: Colors.grey),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 24),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF0066CC),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    elevation: 2,
-                  ),
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text(
-                    "DONE",
-                    style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text(
+                      "DONE",
+                      style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
