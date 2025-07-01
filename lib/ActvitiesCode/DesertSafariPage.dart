@@ -256,6 +256,17 @@ class DesertSafariPage extends StatelessWidget {
         'type': 'Pakistan Desert Safari',
         'image': 'assets/images/desert/dn2.jpg',
       },
+      {
+        'name': 'Thar Desert Safari',
+        'type': 'Pakistan Desert Safari',
+        'image': 'assets/images/desert/do4.jpg',
+      },
+      {
+        'name': 'Cholistan Desert Adventure',
+        'type': 'Pakistan Desert Safari',
+        'image': 'assets/images/desert/do1.jpg',
+      },
+
     ];
 
     return SingleChildScrollView(

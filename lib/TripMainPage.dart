@@ -224,6 +224,7 @@ class _TripPageState extends State<TripPage> {
         child: Column(
           children: [
             Container(
+
               width: screenHeight * 0.08,
               height: screenHeight * 0.08,
               decoration: BoxDecoration(
@@ -267,8 +268,7 @@ class _TripPageState extends State<TripPage> {
         margin: const EdgeInsets.symmetric(horizontal: 4), // Kept for Famous Activities ListView
         clipBehavior: Clip.antiAlias, // Ensures content is clipped to card's rounded corners
         child: SizedBox(
-          // Removed 'width: double.infinity' here. The parent widget (SizedBox in ListView,
-          // or CarouselSlider's viewportFraction) will correctly provide the width.
+          width: 330, // Ensures SizedBox fills its parent's width
           height: cardHeight,
           child: Stack(
             children: [
@@ -500,8 +500,8 @@ class _TripPageState extends State<TripPage> {
                   aspectRatio: 16/9, // Optional: maintains aspect ratio
                   initialPage: 0,
                   enableInfiniteScroll: true,
-                  autoPlayInterval: const Duration(seconds: 4),
-                  autoPlayAnimationDuration: const Duration(milliseconds: 800),
+                  autoPlayInterval: Duration(seconds: 1), // faster movement
+                  autoPlayAnimationDuration: Duration(milliseconds: 600),
                   autoPlayCurve: Curves.fastOutSlowIn,
                   scrollDirection: Axis.horizontal,
                 ),
@@ -570,8 +570,8 @@ class _TripPageState extends State<TripPage> {
                   aspectRatio: 16/9, // Optional: maintains aspect ratio
                   initialPage: 0,
                   enableInfiniteScroll: true,
-                  autoPlayInterval: const Duration(seconds: 5),
-                  autoPlayAnimationDuration: const Duration(milliseconds: 800),
+                  autoPlayInterval: const Duration(seconds: 1),
+                  autoPlayAnimationDuration: const Duration(milliseconds: 600),
                   autoPlayCurve: Curves.fastOutSlowIn,
                   scrollDirection: Axis.horizontal,
                 ),

@@ -105,6 +105,25 @@ flutter:
     - assets/images/islambad/
     - assets/images/Karachii/
     - assets/images/multan/
+    - assets/images/a/
+    - assets/images/des/
+    - assets/images/babu/
+    - assets/images/bul/
+    - assets/images/white/
+    - assets/images/desert/
+    - assets/images/ballon/
+    - assets/images/biking/
+    - assets/images/hiking/
+    - assets/images/sight/
+    - assets/images/fai/
+    - assets/images/jeep/
+    - assets/images/rock/
+    - assets/images/rama/
+    - assets/images/saif/
+    - assets/images/shan/
+    - assets/images/zipline/
+    - assets/images/swimming/
+    - assets/images/nel/
     - assets/images/sialkot/
     - assets/images/hyderabad/
     - assets/images/gwadar/
@@ -126,6 +145,7 @@ flutter:
     - assets/images/hiking/
     - assets/images/muree/
     - assets/images/raw/
+    - assets/images/man/
     - assets/images/pesh/
 
 

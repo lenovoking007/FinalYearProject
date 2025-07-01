@@ -382,6 +382,11 @@ class MohenjoDaroPage extends StatelessWidget {
         'subtitle': 'Largest public bath of the Indus Valley'
       },
       {
+        'image': 'assets/images/man/m03.jpg',
+        'title': 'Citadel of Mohenjo-daro',
+        'subtitle': 'Fortified area used for rituals and public gatherings',
+      },
+      {
         'image': 'assets/images/man/mo3.jpg',
         'title': 'Granary Complex',
         'subtitle': 'Ancient grain storage facility'

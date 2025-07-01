@@ -16,7 +16,7 @@ class _HyderabadPageState extends State<HyderabadPage> {
   final List<String> overviewImages = [
     'assets/images/hyderabad/hyderabado1.jpg',
     'assets/images/hyderabad/hyderabado2.jpg',
-    'assets/images/hyderabad/hyderabado3.jpg',
+    'assets/images/hyderabad/hyderabad03.png',
   ];
   final List<String> clothesImages = [
     'assets/images/Lahore/cl1.jpg',

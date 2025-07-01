@@ -248,9 +248,13 @@ class _HomePageState extends State<HomePage> {
                   options: CarouselOptions(
                     height: cardHeight,
                     autoPlay: true,
+                    autoPlayInterval: Duration(seconds: 1), // faster movement
+                    autoPlayAnimationDuration: Duration(milliseconds: 600), // smoother transition
+                    autoPlayCurve: Curves.linear, // linear animation
                     enlargeCenterPage: true,
-                    aspectRatio: 16/9,
-                    viewportFraction: 0.85,
+                    aspectRatio: 16 / 9,
+                    viewportFraction: 0.8, // Show part of next/previous cards
+                    scrollDirection: Axis.horizontal,
                   ),
                 ),
               ),
@@ -278,9 +282,14 @@ class _HomePageState extends State<HomePage> {
                   options: CarouselOptions(
                     height: cardHeight,
                     autoPlay: true,
+                    autoPlayInterval: Duration(seconds: 1), // faster movement
+                    autoPlayAnimationDuration: Duration(milliseconds: 600), // smoother transition
+                    autoPlayCurve: Curves.linear, // linear animation
                     enlargeCenterPage: true,
-                    aspectRatio: 16/9,
-                    viewportFraction: 0.85,
+                    aspectRatio: 16 / 9,
+                    viewportFraction: 0.8, // Show part of next/previous cards
+                    scrollDirection: Axis.horizontal,
+                    reverse: true,
                   ),
                 ),
               ),
@@ -306,11 +315,14 @@ class _HomePageState extends State<HomePage> {
                     _buildActivityCard('Zipline', 'assets/images/zipline.jpg', cardHeight),
                   ],
                   options: CarouselOptions(
-                    height: cardHeight,
                     autoPlay: true,
+                    autoPlayInterval: Duration(seconds: 1), // faster movement
+                    autoPlayAnimationDuration: Duration(milliseconds: 600), // smoother transition
+                    autoPlayCurve: Curves.linear, // linear animation
                     enlargeCenterPage: true,
-                    aspectRatio: 16/9,
-                    viewportFraction: 0.85,
+                    aspectRatio: 16 / 9,
+                    viewportFraction: 0.8, // Show part of next/previous cards
+                    scrollDirection: Axis.horizontal,
                   ),
                 ),
               ),

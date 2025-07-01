@@ -251,6 +251,18 @@ class WhiteWaterRaftingPage extends StatelessWidget {
         'details': 'Enjoy thrilling rapids in the Swat River surrounded by lush green mountains',
         'image': 'assets/images/white/wn3.jpg',
       },
+      {
+        'name': 'Kunhar River Thrill',
+        'location': 'Balakot, Kaghan Valley',
+        'details': 'Experience heart-pounding rafting in the swift waters of the Kunhar River',
+        'image': 'assets/images/white/ws2.jpg',
+      },
+      {
+        'name': 'Neelum River Surge',
+        'location': 'Athmuqam, Neelum Valley',
+        'details': 'Navigate through powerful surges of the Neelum River amid scenic beauty',
+        'image': 'assets/images/white/w03.jpg',
+      },
     ];
 
     return GridView.builder(

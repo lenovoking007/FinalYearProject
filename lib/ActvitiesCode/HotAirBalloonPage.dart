@@ -253,6 +253,18 @@ class HotAirBalloonPage extends StatelessWidget {
         'details': '',
         'image': 'assets/images/ballon/ao3.jpg',
       },
+      {
+        'name': 'Hunza Valley',
+        'location': 'Pakistan',
+        'details': '',
+        'image': 'assets/images/hunza/hhhh.jpg',
+      },
+      {
+        'name': 'Skardu',
+        'location': 'Pakistan',
+        'details': '',
+        'image': 'assets/images/hunza/download.jpg',
+      },
     ];
 
     return GridView.builder(

@@ -257,6 +257,18 @@ class JeepRallyPage extends StatelessWidget {
         'details': 'Challenging rally on the salt flats.',
         'image': 'assets/images/jeep/chn1.jpg',
       },
+      {
+        "name": "Hingol National Park",
+        "location": "Balochistan, Pakistan",
+        "details": "Technical tracks through rocky canyons and mud volcanoes.",
+        "image": "assets/images/jeep/cho4.jpg"
+      },
+      {
+        "name": "Deosai Plains",
+        "location": "Gilgit-Baltistan, Pakistan",
+        "details": "High-altitude rally above 4,000m with river crossings.",
+        "image": "assets/images/des/deso2.jpg"
+      }
     ];
 
     return GridView.builder(
