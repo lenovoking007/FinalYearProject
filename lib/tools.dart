@@ -406,7 +406,7 @@ final List<Tool> tools = [
     subtitle: 'Book shared rides',
     icon: Icons.directions_car,
     iconColor: Colors.deepOrange,
-    page: RideSharingPage(),
+    page: SpaceSharingPage(),
   ),
   Tool(
     title: 'Google Maps',

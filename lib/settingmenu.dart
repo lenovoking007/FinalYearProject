@@ -398,16 +398,16 @@ class _SettingsMenuPageState extends State<SettingsMenuPage> {
     final result = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Logout'),
-        content: const Text('Are you sure you want to logout?'),
+        title: const Text('Logout',style: TextStyle(color: Color(0xFF0066CC)),),
+        content: const Text('Are you sure you want to logout?', style: TextStyle(color: Color(0xFF0066CC)),),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: const Text('Cancel' , style: TextStyle(color: Color(0xFF0066CC)),),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Logout', style: TextStyle(color: Colors.red)),
+            child: const Text('Logout', style: TextStyle(color: Color(0xFF0066CC))),
           ),
         ],
       ),
