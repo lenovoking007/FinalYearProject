@@ -283,7 +283,7 @@ class _ReminderDialogueState extends State<ReminderDialogue> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Set Reminder', style: TextStyle(fontSize: 20),), centerTitle: true,),
+      appBar: AppBar(title: const Text('Set Reminder', style: TextStyle(fontSize: 20, color: Colors.white),), centerTitle: true,),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -318,7 +318,7 @@ class _ReminderDialogueState extends State<ReminderDialogue> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _scheduleNotificationDialog,
-              child: const Text("Schedule Notification", style: TextStyle(color: Colors.black),),
+              child: const Text("Schedule Notification", style: TextStyle(color: Colors.white),),
               style: ElevatedButton.styleFrom(
                 minimumSize: Size(350, 50),
                 backgroundColor: Color(0xFF0066CC)
@@ -329,7 +329,7 @@ class _ReminderDialogueState extends State<ReminderDialogue> {
 
               child: ElevatedButton(
                 onPressed: _saveReminder,
-                child: const Text('Save Reminder', style: TextStyle(color: Colors.black),),
+                child: const Text('Save Reminder', style: TextStyle(color: Colors.white),),
                 style: ElevatedButton.styleFrom(
                   minimumSize: Size(350, 50),
                   backgroundColor: Color(0xFF0066CC)

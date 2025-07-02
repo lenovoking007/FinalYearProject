@@ -23,7 +23,7 @@ class ReminderScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Reminders'),
+        title: const Text('Reminders', style: TextStyle(color: Colors.white),),
         centerTitle: true,
       ),
       body: StreamBuilder<QuerySnapshot>(
@@ -95,7 +95,7 @@ class ReminderScreen extends StatelessWidget {
             MaterialPageRoute(builder: (context) => const ReminderDialogue()),
           );
         },
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.add,color: Colors.white,),
       ),
     );
   }

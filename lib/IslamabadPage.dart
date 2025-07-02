@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:travelmate/tripprogresspage.dart';
 import 'package:travelmate/city_planner.dart';
 
@@ -19,14 +21,12 @@ class _IslamabadPageState extends State<IslamabadPage> {
     'assets/images/islambad/islambad3.jpg',
   ];
   final List<String> clothesImages = [
-    // Updated to Islamabad-specific images
     'assets/images/islambad/islambadc1.jpg',
     'assets/images/islambad/islambadc2.jpg',
     'assets/images/islambad/islambadc3.jpg',
     'assets/images/islambad/islambadc4.jpg',
   ];
   final List<String> foodImages = [
-    // Updated to Islamabad-specific images
     'assets/images/islambad/islambadfood2.jpg',
     'assets/images/islambad/islambadfood5.jpg',
     'assets/images/islambad/islambadfood3.jpg',
@@ -41,6 +41,7 @@ class _IslamabadPageState extends State<IslamabadPage> {
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseStorage _storage = FirebaseStorage.instance;
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
   String? _errorMessage;
@@ -48,11 +49,9 @@ class _IslamabadPageState extends State<IslamabadPage> {
   @override
   void initState() {
     super.initState();
-    // Added this method to ensure the 'islamabad' city document exists in Firestore
     _addCityToCollection();
   }
 
-  // Method to add 'islamabad' to the 'cities' collection if it doesn't exist
   Future<void> _addCityToCollection() async {
     try {
       final doc = await _firestore.collection('cities').doc('islamabad').get();
@@ -66,6 +65,15 @@ class _IslamabadPageState extends State<IslamabadPage> {
       setState(() {
         _errorMessage = 'Failed to initialize city data: ${e.toString()}';
       });
+    }
+  }
+
+  Future<String?> _getProfileImageUrl(String userId) async {
+    try {
+      final url = await _storage.ref('profile_images/$userId').getDownloadURL();
+      return url;
+    } catch (e) {
+      return null;
     }
   }
 
@@ -419,7 +427,7 @@ class _IslamabadPageState extends State<IslamabadPage> {
                                     'budget': int.parse(budgetController.text.replaceAll(',', '')),
                                     'startDate': Timestamp.fromDate(startDate),
                                     'endDate': Timestamp.fromDate(endDate),
-                                    'destination': 'Islamabad', // Correctly set for Islamabad
+                                    'destination': 'Islamabad',
                                     'status': 'planned',
                                     'createdAt': Timestamp.now(),
                                   };
@@ -571,81 +579,83 @@ class _IslamabadPageState extends State<IslamabadPage> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         child: Padding(
           padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: const Color(0xFFE8F5E9),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.green.withOpacity(0.2),
-                      blurRadius: 10,
-                      spreadRadius: 2,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: const Color(0xFFE8F5E9),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.green.withOpacity(0.2),
+                        blurRadius: 10,
+                        spreadRadius: 2,
+                      ),
+                    ],
+                  ),
+                  child: const Icon(
+                    Icons.check_circle,
+                    color: Colors.green,
+                    size: 48,
+                  ),
+                ),
+                const SizedBox(height: 24),
+                Text(
+                  "Trip Saved!",
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: const Color(0xFF0066CC).withOpacity(0.9),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[50],
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.grey[200]!),
+                  ),
+                  child: Column(
+                    children: [
+                      _buildSuccessDetailRow("Trip Name:", tripName),
+                      const Divider(height: 16, thickness: 0.5),
+                      _buildSuccessDetailRow("Destination:", "Islamabad"),
+                      const Divider(height: 16, thickness: 0.5),
+                      _buildSuccessDetailRow("Trip Type:", tripType),
+                      const Divider(height: 16, thickness: 0.5),
+                      _buildSuccessDetailRow("Duration:", "$duration days"),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 24),
+                const Text(
+                  "You can view your trip in the 'My Trips' section",
+                  style: TextStyle(fontSize: 14, color: Colors.grey),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 24),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF0066CC),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      elevation: 2,
                     ),
-                  ],
-                ),
-                child: const Icon(
-                  Icons.check_circle,
-                  color: Colors.green,
-                  size: 48,
-                ),
-              ),
-              const SizedBox(height: 24),
-              Text(
-                "Trip Saved!",
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: const Color(0xFF0066CC).withOpacity(0.9),
-                ),
-              ),
-              const SizedBox(height: 16),
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.grey[50],
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.grey[200]!),
-                ),
-                child: Column(
-                  children: [
-                    _buildSuccessDetailRow("Trip Name:", tripName),
-                    const Divider(height: 16, thickness: 0.5),
-                    _buildSuccessDetailRow("Destination:", "Islamabad"), // Correctly set for Islamabad
-                    const Divider(height: 16, thickness: 0.5),
-                    _buildSuccessDetailRow("Trip Type:", tripType),
-                    const Divider(height: 16, thickness: 0.5),
-                    _buildSuccessDetailRow("Duration:", "$duration days"),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 24),
-              const Text(
-                "You can view your trip in the 'My Trips' section",
-                style: TextStyle(fontSize: 14, color: Colors.grey),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 24),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF0066CC),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    elevation: 2,
-                  ),
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text(
-                    "DONE",
-                    style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text(
+                      "DONE",
+                      style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -1225,13 +1235,12 @@ class _IslamabadPageState extends State<IslamabadPage> {
 
         final List<QueryDocumentSnapshot> reviewDocs = snapshot.data?.docs ?? [];
         final List<Map<String, dynamic>> firestoreReviews = reviewDocs.map((doc) {
-          final data = doc.data() as Map<String, dynamic>? ?? {};
+          final data = doc.data() as Map<String, dynamic>;
           return {
-            'name': data['name'] as String? ?? 'Anonymous',
-            'rating': (data['rating'] as int?) ?? 0,
-            'review': data['review'] as String? ?? '',
-            // Standardized image path to lowercase 'islamabad'
-            'imageUrl': 'assets/images/islambad/u${(doc.hashCode % 3) + 1}.png',
+            'name': data['name'] ?? 'Anonymous',
+            'userId': data['userId'],
+            'rating': data['rating'] ?? 0,
+            'review': data['review'] ?? '',
             'date': data['timestamp'] != null
                 ? _formatReviewDate(data['timestamp'].toDate())
                 : 'Recently',
@@ -1241,21 +1250,21 @@ class _IslamabadPageState extends State<IslamabadPage> {
         final List<Map<String, dynamic>> localReviews = [
           {
             'name': 'Nature Lover',
+            'userId': 'local1',
             'rating': 5,
             'review': 'Islamabad is the most beautiful city in Pakistan! The Margalla Hills provide stunning views and great hiking opportunities.',
-            'imageUrl': 'assets/images/islambad/u1.png', // Standardized image path
             'date': '3 months ago'
           },
           {
             'name': 'Food Explorer',
+            'userId': 'local2',
             'rating': 4,
             'review': 'The food in Islamabad is diverse and delicious. From street food to fine dining, the city offers great culinary experiences.',
-            'imageUrl': 'assets/images/islambad/u2.png', // Standardized image path
             'date': '2 months ago'
           }
         ];
 
-        return SingleChildScrollView(
+        return SingleChildScrollView (
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1273,7 +1282,7 @@ class _IslamabadPageState extends State<IslamabadPage> {
                 name: review['name'],
                 rating: review['rating'],
                 review: review['review'],
-                imageUrl: review['imageUrl'],
+                userId: review['userId'],
                 date: review['date'],
               )).toList(),
 
@@ -1295,7 +1304,7 @@ class _IslamabadPageState extends State<IslamabadPage> {
                   name: review['name'],
                   rating: review['rating'],
                   review: review['review'],
-                  imageUrl: review['imageUrl'],
+                  userId: review['userId'],
                   date: review['date'],
                 )).toList(),
 
@@ -1342,6 +1351,97 @@ class _IslamabadPageState extends State<IslamabadPage> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildReviewCard({
+    required String name,
+    required int rating,
+    required String review,
+    required String userId,
+    required String date,
+  }) {
+    return Card(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: BorderSide(color: Colors.grey.shade200),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                FutureBuilder<String?>(
+                  future: _getProfileImageUrl(userId),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircleAvatar(
+                        radius: 24,
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF0066CC)),
+                        ),
+                      );
+                    }
+                    return CircleAvatar(
+                      radius: 24,
+                      backgroundImage: snapshot.hasData
+                          ? CachedNetworkImageProvider(snapshot.data!)
+                          : const AssetImage('assets/images/circleimage.png') as ImageProvider,
+                    );
+                  },
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        name,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Row(
+                        children: [
+                          ...List.generate(5, (index) {
+                            return Icon(
+                              index < rating ? Icons.star : Icons.star_border,
+                              color: Colors.amber,
+                              size: 16,
+                            );
+                          }),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Text(
+              date,
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.grey.shade600,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              review,
+              style: const TextStyle(
+                fontSize: 14,
+                color: Colors.black87,
+                height: 1.5,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -1665,82 +1765,6 @@ class _IslamabadPageState extends State<IslamabadPage> {
           ),
         );
       },
-    );
-  }
-
-  Widget _buildReviewCard({
-    required String name,
-    required int rating,
-    required String review,
-    required String imageUrl,
-    required String date,
-  }) {
-    return Card(
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side: BorderSide(color: Colors.grey.shade200),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                CircleAvatar(
-                  radius: 24,
-                  backgroundImage: AssetImage(imageUrl),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        name,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Row(
-                        children: [
-                          ...List.generate(5, (index) {
-                            return Icon(
-                              index < rating ? Icons.star : Icons.star_border,
-                              color: Colors.amber,
-                              size: 16,
-                            );
-                          },
-                          )],
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Text(
-              date,
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.grey.shade600,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              review,
-              style: const TextStyle(
-                fontSize: 14,
-                color: Colors.black87,
-                height: 1.5,
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 

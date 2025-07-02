@@ -47,7 +47,9 @@ class _ReminderPageState extends State<ReminderPage> {
   Widget build(BuildContext context) {
     if (!_initialized) {
       return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
+        body: Center(child: CircularProgressIndicator(
+          color: Color(0XFF0066CC),
+        )),
       );
     }
     return const ReminderScreen();
