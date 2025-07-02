@@ -19,16 +19,16 @@ class _FaisalabadPageState extends State<FaisalabadPage> {
     'assets/images/faislabad/fas03.jpg',
   ];
   final List<String> clothesImages = [
-    'assets/images/Lahore/cl1.jpg',
-    'assets/images/Lahore/cl2.jpg',
-    'assets/images/Lahore/cl3.jpg',
-    'assets/images/Lahore/cl4.jpg',
+    'assets/images/faislabad/fascl1.jpg', // Updated to Faisalabad specific image
+    'assets/images/faislabad/fascl2.jpg', // Updated to Faisalabad specific image
+    'assets/images/faislabad/fascl3.jpg', // Updated to Faisalabad specific image
+    'assets/images/faislabad/fascl4.jpg', // Updated to Faisalabad specific image
   ];
   final List<String> foodImages = [
-    'assets/images/Lahore/food1.jpg',
-    'assets/images/Lahore/food2.jpeg',
-    'assets/images/Lahore/food3.jpg',
-    'assets/images/Lahore/food4.jpg',
+    'assets/images/faislabad/fasfood1.jpg', // Updated to Faisalabad specific image
+    'assets/images/faislabad/fasfood2.jpg', // Updated to Faisalabad specific image
+    'assets/images/faislabad/fasfood3.jpg', // Updated to Faisalabad specific image
+    'assets/images/faislabad/fasfood4.jpg', // Updated to Faisalabad specific image
   ];
   final List<String> festivalImages = [
     'assets/images/faislabad/fasf1.jpg',
@@ -46,6 +46,24 @@ class _FaisalabadPageState extends State<FaisalabadPage> {
   @override
   void initState() {
     super.initState();
+    _addCityToCollection(); // Call the method to add Faisalabad to Firestore
+  }
+
+  // Method to add Faisalabad to the 'cities' collection if it doesn't exist
+  Future<void> _addCityToCollection() async {
+    try {
+      final doc = await _firestore.collection('cities').doc('faisalabad').get();
+      if (!doc.exists) {
+        await _firestore.collection('cities').doc('faisalabad').set({
+          'name': 'Faisalabad',
+          'createdAt': FieldValue.serverTimestamp(),
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Failed to initialize city data: ${e.toString()}';
+      });
+    }
   }
 
   Future<void> _saveTripPlanToFirebase(Map<String, dynamic> tripPlan) async {
@@ -398,7 +416,7 @@ class _FaisalabadPageState extends State<FaisalabadPage> {
                                     'budget': int.parse(budgetController.text.replaceAll(',', '')),
                                     'startDate': Timestamp.fromDate(startDate),
                                     'endDate': Timestamp.fromDate(endDate),
-                                    'destination': 'Faisalabad',
+                                    'destination': 'Faisalabad', // Set destination to Faisalabad
                                     'status': 'planned',
                                     'createdAt': Timestamp.now(),
                                   };
@@ -593,7 +611,7 @@ class _FaisalabadPageState extends State<FaisalabadPage> {
                   children: [
                     _buildSuccessDetailRow("Trip Name:", tripName),
                     const Divider(height: 16, thickness: 0.5),
-                    _buildSuccessDetailRow("Destination:", "Faisalabad"),
+                    _buildSuccessDetailRow("Destination:", "Faisalabad"), // Display Faisalabad as destination
                     const Divider(height: 16, thickness: 0.5),
                     _buildSuccessDetailRow("Trip Type:", tripType),
                     const Divider(height: 16, thickness: 0.5),
@@ -1166,7 +1184,7 @@ class _FaisalabadPageState extends State<FaisalabadPage> {
     return StreamBuilder<QuerySnapshot>(
       stream: _firestore
           .collection('reviews')
-          .where('destination', isEqualTo: 'Faisalabad')
+          .where('destination', isEqualTo: 'Faisalabad') // Filter reviews for Faisalabad
           .orderBy('timestamp', descending: true)
           .snapshots(),
       builder: (context, snapshot) {
@@ -1217,7 +1235,7 @@ class _FaisalabadPageState extends State<FaisalabadPage> {
             'name': data['name'] as String? ?? 'Anonymous',
             'rating': (data['rating'] as int?) ?? 0,
             'review': data['review'] as String? ?? '',
-            'imageUrl': 'assets/images/Lahore/u${(doc.hashCode % 3) + 1}.png',
+            'imageUrl': 'assets/images/Lahore/u${(doc.hashCode % 3) + 1}.png', // Keep generic user images
             'date': data['timestamp'] != null
                 ? _formatReviewDate(data['timestamp'].toDate())
                 : 'Recently',
@@ -1229,14 +1247,14 @@ class _FaisalabadPageState extends State<FaisalabadPage> {
             'name': 'Textile Enthusiast',
             'rating': 5,
             'review': 'Faisalabad is the textile capital of Pakistan! The markets here offer amazing fabrics at great prices. The Clock Tower area is a must-visit.',
-            'imageUrl': 'assets/images/Lahore/u1.png',
+            'imageUrl': 'assets/images/Lahore/u1.png', // Keep generic user images
             'date': '3 months ago'
           },
           {
             'name': 'Food Explorer',
             'rating': 4,
             'review': 'The food in Faisalabad is delicious and affordable. The street food scene is vibrant, and the traditional Punjabi cuisine is exceptional.',
-            'imageUrl': 'assets/images/Lahore/u2.png',
+            'imageUrl': 'assets/images/Lahore/u2.png', // Keep generic user images
             'date': '2 months ago'
           }
         ];

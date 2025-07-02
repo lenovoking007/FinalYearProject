@@ -19,16 +19,16 @@ class _GwadarPageState extends State<GwadarPage> {
     'assets/images/gwadar/gao3.jpg',
   ];
   final List<String> clothesImages = [
-    'assets/images/Lahore/cl1.jpg',
-    'assets/images/Lahore/cl2.jpg',
-    'assets/images/Lahore/cl3.jpg',
-    'assets/images/Lahore/cl4.jpg',
+    'assets/images/gwadar/gacl1.jpg', // Updated to Gwadar specific image
+    'assets/images/gwadar/gacl2.jpg', // Updated to Gwadar specific image
+    'assets/images/gwadar/gacl3.jpg', // Updated to Gwadar specific image
+    'assets/images/gwadar/gacl4.jpg', // Updated to Gwadar specific image
   ];
   final List<String> foodImages = [
-    'assets/images/Lahore/food1.jpg',
-    'assets/images/Lahore/food2.jpeg',
-    'assets/images/Lahore/food3.jpg',
-    'assets/images/Lahore/food4.jpg',
+    'assets/images/gwadar/gafood1.jpg', // Updated to Gwadar specific image
+    'assets/images/gwadar/gafood2.jpg', // Updated to Gwadar specific image
+    'assets/images/gwadar/gafood3.jpg', // Updated to Gwadar specific image
+    'assets/images/gwadar/gafood4.jpg', // Updated to Gwadar specific image
   ];
   final List<String> festivalImages = [
     'assets/images/gwadar/gaf1.jpg',
@@ -46,6 +46,24 @@ class _GwadarPageState extends State<GwadarPage> {
   @override
   void initState() {
     super.initState();
+    _addCityToCollection(); // Call the method to add Gwadar to Firestore
+  }
+
+  // Method to add Gwadar to the 'cities' collection if it doesn't exist
+  Future<void> _addCityToCollection() async {
+    try {
+      final doc = await _firestore.collection('cities').doc('gwadar').get();
+      if (!doc.exists) {
+        await _firestore.collection('cities').doc('gwadar').set({
+          'name': 'Gwadar',
+          'createdAt': FieldValue.serverTimestamp(),
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Failed to initialize city data: ${e.toString()}';
+      });
+    }
   }
 
   Future<void> _saveTripPlanToFirebase(Map<String, dynamic> tripPlan) async {
@@ -398,7 +416,7 @@ class _GwadarPageState extends State<GwadarPage> {
                                     'budget': int.parse(budgetController.text.replaceAll(',', '')),
                                     'startDate': Timestamp.fromDate(startDate),
                                     'endDate': Timestamp.fromDate(endDate),
-                                    'destination': 'Gwadar',
+                                    'destination': 'Gwadar', // Set destination to Gwadar
                                     'status': 'planned',
                                     'createdAt': Timestamp.now(),
                                   };
@@ -593,7 +611,7 @@ class _GwadarPageState extends State<GwadarPage> {
                   children: [
                     _buildSuccessDetailRow("Trip Name:", tripName),
                     const Divider(height: 16, thickness: 0.5),
-                    _buildSuccessDetailRow("Destination:", "Gwadar"),
+                    _buildSuccessDetailRow("Destination:", "Gwadar"), // Display Gwadar as destination
                     const Divider(height: 16, thickness: 0.5),
                     _buildSuccessDetailRow("Trip Type:", tripType),
                     const Divider(height: 16, thickness: 0.5),
@@ -848,18 +866,13 @@ class _GwadarPageState extends State<GwadarPage> {
           const SizedBox(height: 24),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Top Attractions',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: const Color(0xFF0066CC).withOpacity(0.9),
-                  ),
-                ),
-              ],
+            child: Text(
+              'Top Attractions',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: const Color(0xFF0066CC).withOpacity(0.9),
+              ),
             ),
           ),
           const SizedBox(height: 12),
@@ -1170,7 +1183,7 @@ class _GwadarPageState extends State<GwadarPage> {
     return StreamBuilder<QuerySnapshot>(
       stream: _firestore
           .collection('reviews')
-          .where('destination', isEqualTo: 'Gwadar')
+          .where('destination', isEqualTo: 'Gwadar') // Filter reviews for Gwadar
           .orderBy('timestamp', descending: true)
           .snapshots(),
       builder: (context, snapshot) {

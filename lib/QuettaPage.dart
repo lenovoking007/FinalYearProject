@@ -20,16 +20,16 @@ class _QuettaPageState extends State<QuettaPage> {
     'assets/images/quetta/quettao1.jpg',
   ];
   final List<String> clothesImages = [
-    'assets/images/quetta/quettacl4.jpg',
-    'assets/images/Lahore/cl2.jpg',
-    'assets/images/Lahore/cl3.jpg',
-    'assets/images/Lahore/cl4.jpg',
+    'assets/images/quetta/quettacl1.jpg', // Updated to Quetta specific image
+    'assets/images/quetta/quettacl2.jpg', // Updated to Quetta specific image
+    'assets/images/quetta/quettacl3.jpeg', // Updated to Quetta specific image
+    'assets/images/quetta/quettacl4.jpg', // Updated to Quetta specific image
   ];
   final List<String> foodImages = [
-    'assets/images/Lahore/food1.jpg',
-    'assets/images/Lahore/food2.jpeg',
-    'assets/images/Lahore/food3.jpg',
-    'assets/images/Lahore/food4.jpg',
+    'assets/images/quetta/quettafood1.jpg', // Updated to Quetta specific image
+    'assets/images/quetta/quettafood2.jpg', // Updated to Quetta specific image
+    'assets/images/quetta/quettafood3.jpg', // Updated to Quetta specific image
+    'assets/images/quetta/quettafood4.jpg', // Updated to Quetta specific image
   ];
   final List<String> festivalImages = [
     'assets/images/quetta/quettaf1.jpg',
@@ -47,6 +47,24 @@ class _QuettaPageState extends State<QuettaPage> {
   @override
   void initState() {
     super.initState();
+    _addCityToCollection(); // Call the method to add Quetta to Firestore
+  }
+
+  // Method to add Quetta to the 'cities' collection if it doesn't exist
+  Future<void> _addCityToCollection() async {
+    try {
+      final doc = await _firestore.collection('cities').doc('quetta').get();
+      if (!doc.exists) {
+        await _firestore.collection('cities').doc('quetta').set({
+          'name': 'Quetta',
+          'createdAt': FieldValue.serverTimestamp(),
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Failed to initialize city data: ${e.toString()}';
+      });
+    }
   }
 
   Future<void> _saveTripPlanToFirebase(Map<String, dynamic> tripPlan) async {
@@ -399,7 +417,7 @@ class _QuettaPageState extends State<QuettaPage> {
                                     'budget': int.parse(budgetController.text.replaceAll(',', '')),
                                     'startDate': Timestamp.fromDate(startDate),
                                     'endDate': Timestamp.fromDate(endDate),
-                                    'destination': 'Quetta',
+                                    'destination': 'Quetta', // Set destination to Quetta
                                     'status': 'planned',
                                     'createdAt': Timestamp.now(),
                                   };
@@ -594,7 +612,7 @@ class _QuettaPageState extends State<QuettaPage> {
                   children: [
                     _buildSuccessDetailRow("Trip Name:", tripName),
                     const Divider(height: 16, thickness: 0.5),
-                    _buildSuccessDetailRow("Destination:", "Quetta"),
+                    _buildSuccessDetailRow("Destination:", "Quetta"), // Display Quetta as destination
                     const Divider(height: 16, thickness: 0.5),
                     _buildSuccessDetailRow("Trip Type:", tripType),
                     const Divider(height: 16, thickness: 0.5),
@@ -849,18 +867,13 @@ class _QuettaPageState extends State<QuettaPage> {
           const SizedBox(height: 24),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Top Attractions',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: const Color(0xFF0066CC).withOpacity(0.9),
-                  ),
-                ),
-              ],
+            child: Text(
+              'Top Attractions',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: const Color(0xFF0066CC).withOpacity(0.9),
+              ),
             ),
           ),
           const SizedBox(height: 12),
@@ -1171,7 +1184,7 @@ class _QuettaPageState extends State<QuettaPage> {
     return StreamBuilder<QuerySnapshot>(
       stream: _firestore
           .collection('reviews')
-          .where('destination', isEqualTo: 'Quetta')
+          .where('destination', isEqualTo: 'Quetta') // Filter reviews for Quetta
           .orderBy('timestamp', descending: true)
           .snapshots(),
       builder: (context, snapshot) {

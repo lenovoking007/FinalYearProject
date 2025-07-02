@@ -16,7 +16,7 @@ import 'package:travelmate/spacesharing.dart';
 import 'package:travelmate/travelbuddy.dart';
 import 'package:travelmate/TripMainPage.dart';
 import 'ToolsCode/weather_app.dart';
-
+import 'package:travelmate/reminder.dart'; // This should point to your new reminder.dart
 class Tools extends StatefulWidget {
   @override
   _ToolsState createState() => _ToolsState();

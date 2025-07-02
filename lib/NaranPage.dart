@@ -20,16 +20,16 @@ class _NaranPageState extends State<NaranPage> {
     'assets/images/naran/naran04.jpg',
   ];
   final List<String> clothesImages = [
-    'assets/images/Lahore/cl1.jpg',
-    'assets/images/Lahore/cl2.jpg',
-    'assets/images/Lahore/cl3.jpg',
-    'assets/images/Lahore/cl4.jpg',
+    'assets/images/naran/narancl1.jpg', // Updated to Naran specific image
+    'assets/images/naran/narancl2.jpg', // Updated to Naran specific image
+    'assets/images/naran/narancl3.jpg', // Updated to Naran specific image
+    'assets/images/naran/narancl4.jpg', // Updated to Naran specific image
   ];
   final List<String> foodImages = [
-    'assets/images/Lahore/food1.jpg',
-    'assets/images/Lahore/food2.jpeg',
-    'assets/images/Lahore/food3.jpg',
-    'assets/images/Lahore/food4.jpg',
+    'assets/images/naran/naranfood1.jpg', // Updated to Naran specific image
+    'assets/images/naran/naranfood2.jpg', // Updated to Naran specific image
+    'assets/images/naran/naranfood3.jpg', // Updated to Naran specific image
+    'assets/images/naran/naranfood4.jpeg', // Updated to Naran specific image
   ];
   final List<String> festivalImages = [
     'assets/images/naran/naranf1.jpg',
@@ -47,6 +47,24 @@ class _NaranPageState extends State<NaranPage> {
   @override
   void initState() {
     super.initState();
+    _addCityToCollection(); // Call the method to add Naran to Firestore
+  }
+
+  // Method to add Naran to the 'cities' collection if it doesn't exist
+  Future<void> _addCityToCollection() async {
+    try {
+      final doc = await _firestore.collection('cities').doc('naran').get();
+      if (!doc.exists) {
+        await _firestore.collection('cities').doc('naran').set({
+          'name': 'Naran',
+          'createdAt': FieldValue.serverTimestamp(),
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Failed to initialize city data: ${e.toString()}';
+      });
+    }
   }
 
   Future<void> _saveTripPlanToFirebase(Map<String, dynamic> tripPlan) async {
@@ -399,7 +417,7 @@ class _NaranPageState extends State<NaranPage> {
                                     'budget': int.parse(budgetController.text.replaceAll(',', '')),
                                     'startDate': Timestamp.fromDate(startDate),
                                     'endDate': Timestamp.fromDate(endDate),
-                                    'destination': 'Naran',
+                                    'destination': 'Naran', // Set destination to Naran
                                     'status': 'planned',
                                     'createdAt': Timestamp.now(),
                                   };
@@ -594,7 +612,7 @@ class _NaranPageState extends State<NaranPage> {
                   children: [
                     _buildSuccessDetailRow("Trip Name:", tripName),
                     const Divider(height: 16, thickness: 0.5),
-                    _buildSuccessDetailRow("Destination:", "Naran"),
+                    _buildSuccessDetailRow("Destination:", "Naran"), // Display Naran as destination
                     const Divider(height: 16, thickness: 0.5),
                     _buildSuccessDetailRow("Trip Type:", tripType),
                     const Divider(height: 16, thickness: 0.5),
@@ -901,26 +919,26 @@ class _NaranPageState extends State<NaranPage> {
 
   Widget _buildShoppingTab() {
     final List<Map<String, dynamic>> shoppingSpots = [
-   {
-     "name": "Naran Bazaar",
-    "details": "Local market offering woolen clothes, handicrafts, and souvenirs.",
-    "image": "assets/images/naran/narancl1.jpg"
-    },
-  {
-  "name": "Kaghan Handicrafts",
-  "details": "Specializes in handmade woolen goods and traditional crafts.",
-  "image": "assets/images/naran/narancl2.jpg"
-  },
-  {
-  "name": "Mountain View Market",
-  "details": "Offers warm clothing suitable for the cold mountain weather.",
-  "image": "assets/images/naran/narancl3.jpg"
-  },
-  {
-  "name": "Valley Souvenirs",
-  "details": "Features locally made handicrafts and traditional items.",
-  "image": "assets/images/naran/narancl4.jpg"
-  }
+      {
+        "name": "Naran Bazaar",
+        "details": "Local market offering woolen clothes, handicrafts, and souvenirs.",
+        "image": "assets/images/naran/narancl1.jpg"
+      },
+      {
+        "name": "Kaghan Handicrafts",
+        "details": "Specializes in handmade woolen goods and traditional crafts.",
+        "image": "assets/images/naran/narancl2.jpg"
+      },
+      {
+        "name": "Mountain View Market",
+        "details": "Offers warm clothing suitable for the cold mountain weather.",
+        "image": "assets/images/naran/narancl3.jpg"
+      },
+      {
+        "name": "Valley Souvenirs",
+        "details": "Features locally made handicrafts and traditional items.",
+        "image": "assets/images/naran/narancl4.jpg"
+      }
     ];
 
     final filteredShoppingSpots = _searchQuery.isEmpty
@@ -1165,7 +1183,7 @@ class _NaranPageState extends State<NaranPage> {
     return StreamBuilder<QuerySnapshot>(
       stream: _firestore
           .collection('reviews')
-          .where('destination', isEqualTo: 'Naran')
+          .where('destination', isEqualTo: 'Naran') // Filter reviews for Naran
           .orderBy('timestamp', descending: true)
           .snapshots(),
       builder: (context, snapshot) {
@@ -1216,7 +1234,7 @@ class _NaranPageState extends State<NaranPage> {
             'name': data['name'] as String? ?? 'Anonymous',
             'rating': (data['rating'] as int?) ?? 0,
             'review': data['review'] as String? ?? '',
-            'imageUrl': 'assets/images/Naran/u${(doc.hashCode % 3) + 1}.png',
+            'imageUrl': 'assets/images/Lahore/u${(doc.hashCode % 3) + 1}.png', // Keep generic user images
             'date': data['timestamp'] != null
                 ? _formatReviewDate(data['timestamp'].toDate())
                 : 'Recently',
@@ -1228,14 +1246,14 @@ class _NaranPageState extends State<NaranPage> {
             'name': 'Mountain Lover',
             'rating': 5,
             'review': 'Naran is absolutely breathtaking! The lakes and mountains are like something from a dream.',
-            'imageUrl': 'assets/images/Naran/u1.png',
+            'imageUrl': 'assets/images/Lahore/u1.png', // Keep generic user images
             'date': '3 months ago'
           },
           {
             'name': 'Adventure Seeker',
             'rating': 4,
             'review': 'The trek to Saif-ul-Malook was challenging but worth every step. The views are incredible!',
-            'imageUrl': 'assets/images/Naran/u2.png',
+            'imageUrl': 'assets/images/Lahore/u2.png', // Keep generic user images
             'date': '2 months ago'
           }
         ];

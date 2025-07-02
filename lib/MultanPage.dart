@@ -19,16 +19,16 @@ class _MultanPageState extends State<MultanPage> {
     'assets/images/multan/multano3.jpg',
   ];
   final List<String> clothesImages = [
-    'assets/images/Lahore/cl1.jpg',
-    'assets/images/Lahore/cl2.jpg',
-    'assets/images/Lahore/cl3.jpg',
-    'assets/images/Lahore/cl4.jpg',
+    'assets/images/multan/multancl1.jpg', // Updated to Multan specific image
+    'assets/images/multan/multancl2.jpg', // Updated to Multan specific image
+    'assets/images/multan/multancl3.jpg', // Updated to Multan specific image
+    'assets/images/multan/multancl4.jpg', // Updated to Multan specific image
   ];
   final List<String> foodImages = [
-    'assets/images/Lahore/food1.jpg',
-    'assets/images/Lahore/food2.jpeg',
-    'assets/images/Lahore/food3.jpg',
-    'assets/images/Lahore/food4.jpg',
+    'assets/images/multan/multanfood1.jpg', // Updated to Multan specific image
+    'assets/images/multan/multanfood2.jpg', // Updated to Multan specific image
+    'assets/images/multan/multanfood3.jpg', // Updated to Multan specific image
+    'assets/images/multan/multanfood4.jpg', // Updated to Multan specific image
   ];
   final List<String> festivalImages = [
     'assets/images/multan/multanfes3.jpg',
@@ -44,6 +44,24 @@ class _MultanPageState extends State<MultanPage> {
   @override
   void initState() {
     super.initState();
+    _addCityToCollection(); // Call the method to add Multan to Firestore
+  }
+
+  // Method to add Multan to the 'cities' collection if it doesn't exist
+  Future<void> _addCityToCollection() async {
+    try {
+      final doc = await _firestore.collection('cities').doc('multan').get();
+      if (!doc.exists) {
+        await _firestore.collection('cities').doc('multan').set({
+          'name': 'Multan',
+          'createdAt': FieldValue.serverTimestamp(),
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Failed to initialize city data: ${e.toString()}';
+      });
+    }
   }
 
   Future<void> _saveTripPlanToFirebase(Map<String, dynamic> tripPlan) async {
@@ -591,7 +609,7 @@ class _MultanPageState extends State<MultanPage> {
                   children: [
                     _buildSuccessDetailRow("Trip Name:", tripName),
                     const Divider(height: 16, thickness: 0.5),
-                    _buildSuccessDetailRow("Destination:", "Multan"),
+                    _buildSuccessDetailRow("Destination:", "Multan"), // Display Multan as destination
                     const Divider(height: 16, thickness: 0.5),
                     _buildSuccessDetailRow("Trip Type:", tripType),
                     const Divider(height: 16, thickness: 0.5),
@@ -844,18 +862,13 @@ class _MultanPageState extends State<MultanPage> {
           const SizedBox(height: 24),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Top Attractions',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: const Color(0xFF0066CC).withOpacity(0.9),
-                  ),
-                ),
-              ],
+            child: Text(
+              'Top Attractions',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: const Color(0xFF0066CC).withOpacity(0.9),
+              ),
             ),
           ),
           const SizedBox(height: 12),
@@ -1162,7 +1175,7 @@ class _MultanPageState extends State<MultanPage> {
     return StreamBuilder<QuerySnapshot>(
       stream: _firestore
           .collection('reviews')
-          .where('destination', isEqualTo: 'Multan')
+          .where('destination', isEqualTo: 'Multan') // Filter reviews for Multan
           .orderBy('timestamp', descending: true)
           .snapshots(),
       builder: (context, snapshot) {

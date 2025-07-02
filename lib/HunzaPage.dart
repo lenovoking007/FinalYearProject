@@ -21,15 +21,15 @@ class _HunzaPageState extends State<HunzaPage> {
   ];
   final List<String> clothesImages = [
     'assets/images/hunza/hunzacl1.jpg',
-    'assets/images/Lahore/cl2.jpg',
-    'assets/images/Lahore/cl3.jpg',
-    'assets/images/Lahore/cl4.jpg',
+    'assets/images/hunza/hunzacl2.jpg',
+    'assets/images/hunza/hunzacl3.jpg',
+    'assets/images/hunza/hunzacl4.jpg',
   ];
   final List<String> foodImages = [
-    'assets/images/Lahore/food1.jpg',
-    'assets/images/Lahore/food2.jpeg',
-    'assets/images/Lahore/food3.jpg',
-    'assets/images/Lahore/food4.jpg',
+    'assets/images/hunza/hunzafood1.jpg',
+    'assets/images/hunza/hunzafood2.jpg',
+    'assets/images/hunza/hunzafood3.jpg',
+    'assets/images/hunza/hunzafood4.jpg',
   ];
   final List<String> festivalImages = [
     'assets/images/hunza/hunzaf1.jpg',
@@ -49,6 +49,25 @@ class _HunzaPageState extends State<HunzaPage> {
   @override
   void initState() {
     super.initState();
+    // Added this method to ensure the 'hunza' city document exists in Firestore
+    _addCityToCollection();
+  }
+
+  // Method to add 'hunza' to the 'cities' collection if it doesn't exist
+  Future<void> _addCityToCollection() async {
+    try {
+      final doc = await _firestore.collection('cities').doc('hunza').get();
+      if (!doc.exists) {
+        await _firestore.collection('cities').doc('hunza').set({
+          'name': 'Hunza',
+          'createdAt': FieldValue.serverTimestamp(),
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Failed to initialize city data: ${e.toString()}';
+      });
+    }
   }
 
   Future<void> _saveTripPlanToFirebase(Map<String, dynamic> tripPlan) async {
@@ -401,7 +420,7 @@ class _HunzaPageState extends State<HunzaPage> {
                                     'budget': int.parse(budgetController.text.replaceAll(',', '')),
                                     'startDate': Timestamp.fromDate(startDate),
                                     'endDate': Timestamp.fromDate(endDate),
-                                    'destination': 'Hunza',
+                                    'destination': 'Hunza', // Correctly set for Hunza
                                     'status': 'planned',
                                     'createdAt': Timestamp.now(),
                                   };
@@ -596,7 +615,7 @@ class _HunzaPageState extends State<HunzaPage> {
                   children: [
                     _buildSuccessDetailRow("Trip Name:", tripName),
                     const Divider(height: 16, thickness: 0.5),
-                    _buildSuccessDetailRow("Destination:", "Hunza"),
+                    _buildSuccessDetailRow("Destination:", "Hunza"), // Correctly set for Hunza
                     const Divider(height: 16, thickness: 0.5),
                     _buildSuccessDetailRow("Trip Type:", tripType),
                     const Divider(height: 16, thickness: 0.5),
@@ -852,18 +871,13 @@ class _HunzaPageState extends State<HunzaPage> {
           const SizedBox(height: 24),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Top Attractions',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: const Color(0xFF0066CC).withOpacity(0.9),
-                  ),
-                ),
-              ],
+            child: Text(
+              'Top Attractions',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: const Color(0xFF0066CC).withOpacity(0.9),
+              ),
             ),
           ),
           const SizedBox(height: 12),
@@ -1227,7 +1241,7 @@ class _HunzaPageState extends State<HunzaPage> {
             'name': data['name'] as String? ?? 'Anonymous',
             'rating': (data['rating'] as int?) ?? 0,
             'review': data['review'] as String? ?? '',
-            'imageUrl': 'assets/images/Hunza/u${(doc.hashCode % 3) + 1}.png',
+            'imageUrl': 'assets/images/hunza/u${(doc.hashCode % 3) + 1}.png',
             'date': data['timestamp'] != null
                 ? _formatReviewDate(data['timestamp'].toDate())
                 : 'Recently',
@@ -1239,14 +1253,14 @@ class _HunzaPageState extends State<HunzaPage> {
             'name': 'Mountain Lover',
             'rating': 5,
             'review': 'Hunza is truly paradise on earth! The views are breathtaking and the people are incredibly friendly.',
-            'imageUrl': 'assets/images/Hunza/u1.png',
+            'imageUrl': 'assets/images/hunza/u1.png',
             'date': '2 months ago'
           },
           {
             'name': 'Culture Explorer',
             'rating': 4,
             'review': 'The cultural heritage of Hunza is fascinating. The ancient forts are a must-see!',
-            'imageUrl': 'assets/images/Hunza/u2.png',
+            'imageUrl': 'assets/images/hunza/u2.png',
             'date': '1 month ago'
           }
         ];

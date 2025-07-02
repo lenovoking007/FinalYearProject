@@ -21,16 +21,18 @@ class _SawatPageState extends State<SawatPage> {
 
   ];
   final List<String> clothesImages = [
-    'assets/images/Lahore/cl1.jpg',
-    'assets/images/Lahore/cl2.jpg',
-    'assets/images/Lahore/cl3.jpg',
-    'assets/images/Lahore/cl4.jpg',
+    // Updated to Swat-specific images
+    'assets/images/sawat/sawatcl1.jpg',
+    'assets/images/sawat/sawatcl2.jpg',
+    'assets/images/sawat/sawatcl3.jpg',
+    'assets/images/sawat/sawatcl4.jpg',
   ];
   final List<String> foodImages = [
-    'assets/images/Lahore/food1.jpg',
-    'assets/images/Lahore/food2.jpeg',
-    'assets/images/Lahore/food3.jpg',
-    'assets/images/Lahore/food4.jpg',
+    // Updated to Swat-specific images
+    'assets/images/sawat/sawatfood1.jpg',
+    'assets/images/sawat/sawatfood2.jpg',
+    'assets/images/sawat/sawatfood3.jpg',
+    'assets/images/sawat/sawatfood4.png',
   ];
   final List<String> festivalImages = [
     'assets/images/sawat/sawatf1.jpg',
@@ -48,6 +50,25 @@ class _SawatPageState extends State<SawatPage> {
   @override
   void initState() {
     super.initState();
+    // Added this method to ensure the 'sawat' city document exists in Firestore
+    _addCityToCollection();
+  }
+
+  // Method to add 'sawat' to the 'cities' collection if it doesn't exist
+  Future<void> _addCityToCollection() async {
+    try {
+      final doc = await _firestore.collection('cities').doc('sawat').get();
+      if (!doc.exists) {
+        await _firestore.collection('cities').doc('sawat').set({
+          'name': 'Sawat',
+          'createdAt': FieldValue.serverTimestamp(),
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Failed to initialize city data: ${e.toString()}';
+      });
+    }
   }
 
   Future<void> _saveTripPlanToFirebase(Map<String, dynamic> tripPlan) async {
@@ -400,7 +421,7 @@ class _SawatPageState extends State<SawatPage> {
                                     'budget': int.parse(budgetController.text.replaceAll(',', '')),
                                     'startDate': Timestamp.fromDate(startDate),
                                     'endDate': Timestamp.fromDate(endDate),
-                                    'destination': 'Sawat',
+                                    'destination': 'Swat', // Correctly set for Sawat
                                     'status': 'planned',
                                     'createdAt': Timestamp.now(),
                                   };
@@ -595,7 +616,7 @@ class _SawatPageState extends State<SawatPage> {
                   children: [
                     _buildSuccessDetailRow("Trip Name:", tripName),
                     const Divider(height: 16, thickness: 0.5),
-                    _buildSuccessDetailRow("Destination:", "Sawat"),
+                    _buildSuccessDetailRow("Destination:", "Swat"), // Correctly set for Sawat
                     const Divider(height: 16, thickness: 0.5),
                     _buildSuccessDetailRow("Trip Type:", tripType),
                     const Divider(height: 16, thickness: 0.5),
@@ -662,7 +683,7 @@ class _SawatPageState extends State<SawatPage> {
       return Scaffold(
         appBar: AppBar(
           backgroundColor: const Color(0xFF0066CC),
-          title: const Text('Sawat', style: TextStyle(color: Colors.white)),
+          title: const Text('Swat', style: TextStyle(color: Colors.white)),
           iconTheme: const IconThemeData(color: Colors.white),
         ),
         body: Center(
@@ -700,7 +721,7 @@ class _SawatPageState extends State<SawatPage> {
                       });
                     },
                     decoration: InputDecoration(
-                      hintText: 'Search in Sawat...',
+                      hintText: 'Search in Swat...',
                       hintStyle: const TextStyle(color: Colors.white70),
                       prefixIcon: const Icon(Icons.search, color: Colors.white, size: 20),
                       border: InputBorder.none,
@@ -828,7 +849,7 @@ class _SawatPageState extends State<SawatPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Discover Sawat",
+                  "Discover Swat",
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -840,27 +861,22 @@ class _SawatPageState extends State<SawatPage> {
           ),
           const SizedBox(height: 16),
           _buildInfoCard(
-            title: 'About Sawat',
+            title: 'About Swat',
             description:
-            'Sawat Valley, known as the "Switzerland of Pakistan," is famous for its lush green valleys, '
+            'Swat Valley, known as the "Switzerland of Pakistan," is famous for its lush green valleys, '
                 'crystal clear rivers, and snow-capped mountains. Located in Khyber Pakhtunkhwa, it offers '
                 'breathtaking landscapes, diverse wildlife, and rich cultural heritage of the Pashtun people.',
           ),
           const SizedBox(height: 24),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Top Attractions',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: const Color(0xFF0066CC).withOpacity(0.9),
-                  ),
-                ),
-              ],
+            child: Text(
+              'Top Attractions',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: const Color(0xFF0066CC).withOpacity(0.9),
+              ),
             ),
           ),
           const SizedBox(height: 12),
@@ -954,7 +970,7 @@ class _SawatPageState extends State<SawatPage> {
           _buildInfoCard(
             title: 'Traditional Attire',
             description:
-            'Sawat offers traditional Pashtun clothing including embroidered shawls, woolen caps, '
+            'Swat offers traditional Pashtun clothing including embroidered shawls, woolen caps, '
                 'and handwoven fabrics. The vibrant colors and intricate patterns reflect the rich '
                 'cultural heritage of the region.',
           ),
@@ -1040,9 +1056,9 @@ class _SawatPageState extends State<SawatPage> {
           ),
           const SizedBox(height: 16),
           _buildInfoCard(
-            title: 'Sawat Cuisine',
+            title: 'Swat Cuisine',
             description:
-            'Sawat cuisine features fresh mountain ingredients with distinctive flavors. '
+            'Swat cuisine features fresh mountain ingredients with distinctive flavors. '
                 'Must-try dishes include Chapli Kabab, Swati Pulao, fresh trout from mountain streams, '
                 'and the famous Swati green tea.',
           ),
@@ -1129,7 +1145,7 @@ class _SawatPageState extends State<SawatPage> {
           _buildInfoCard(
               title: 'Cultural Festivals',
               description:
-              "Sawat celebrates vibrant festivals reflecting its rich cultural heritage. "
+              "Swat celebrates vibrant festivals reflecting its rich cultural heritage. "
                   "The Jashn-e-Swat festival showcases traditional music and dance, while the Ski Festival "
                   "attracts winter sports enthusiasts to Malam Jabba."
           ),
@@ -1168,7 +1184,7 @@ class _SawatPageState extends State<SawatPage> {
     return StreamBuilder<QuerySnapshot>(
       stream: _firestore
           .collection('reviews')
-          .where('destination', isEqualTo: 'Sawat')
+          .where('destination', isEqualTo: 'Swat')
           .orderBy('timestamp', descending: true)
           .snapshots(),
       builder: (context, snapshot) {
@@ -1219,7 +1235,8 @@ class _SawatPageState extends State<SawatPage> {
             'name': data['name'] as String? ?? 'Anonymous',
             'rating': (data['rating'] as int?) ?? 0,
             'review': data['review'] as String? ?? '',
-            'imageUrl': 'assets/images/Sawat/u${(doc.hashCode % 3) + 1}.png',
+            // Standardized image path to lowercase 'sawat'
+            'imageUrl': 'assets/images/sawat/u${(doc.hashCode % 3) + 1}.png',
             'date': data['timestamp'] != null
                 ? _formatReviewDate(data['timestamp'].toDate())
                 : 'Recently',
@@ -1230,15 +1247,15 @@ class _SawatPageState extends State<SawatPage> {
           {
             'name': 'Nature Explorer',
             'rating': 5,
-            'review': 'Sawat is truly paradise on earth! The valleys and rivers are breathtaking.',
-            'imageUrl': 'assets/images/Sawat/u1.png',
+            'review': 'Swat is truly paradise on earth! The valleys and rivers are breathtaking.',
+            'imageUrl': 'assets/images/sawat/u1.png', // Standardized image path
             'date': '2 months ago'
           },
           {
             'name': 'Culture Enthusiast',
             'rating': 4,
-            'review': 'The Pashtun culture in Sawat is fascinating. The traditional music and dance are a must-see!',
-            'imageUrl': 'assets/images/Sawat/u2.png',
+            'review': 'The Pashtun culture in Swat is fascinating. The traditional music and dance are a must-see!',
+            'imageUrl': 'assets/images/sawat/u2.png', // Standardized image path
             'date': '1 month ago'
           }
         ];

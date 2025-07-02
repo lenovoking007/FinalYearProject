@@ -19,16 +19,18 @@ class _IslamabadPageState extends State<IslamabadPage> {
     'assets/images/islambad/islambad3.jpg',
   ];
   final List<String> clothesImages = [
-    'assets/images/Lahore/cl1.jpg',
-    'assets/images/Lahore/cl2.jpg',
-    'assets/images/Lahore/cl3.jpg',
-    'assets/images/Lahore/cl4.jpg',
+    // Updated to Islamabad-specific images
+    'assets/images/islambad/islambadc1.jpg',
+    'assets/images/islambad/islambadc2.jpg',
+    'assets/images/islambad/islambadc3.jpg',
+    'assets/images/islambad/islambadc4.jpg',
   ];
   final List<String> foodImages = [
-    'assets/images/Lahore/food1.jpg',
-    'assets/images/Lahore/food2.jpeg',
-    'assets/images/Lahore/food3.jpg',
-    'assets/images/Lahore/food4.jpg',
+    // Updated to Islamabad-specific images
+    'assets/images/islambad/islambadfood2.jpg',
+    'assets/images/islambad/islambadfood5.jpg',
+    'assets/images/islambad/islambadfood3.jpg',
+    'assets/images/islambad/islambadfood4.jpg',
   ];
   final List<String> festivalImages = [
     'assets/images/islambad/islambadf1.jpeg',
@@ -46,6 +48,25 @@ class _IslamabadPageState extends State<IslamabadPage> {
   @override
   void initState() {
     super.initState();
+    // Added this method to ensure the 'islamabad' city document exists in Firestore
+    _addCityToCollection();
+  }
+
+  // Method to add 'islamabad' to the 'cities' collection if it doesn't exist
+  Future<void> _addCityToCollection() async {
+    try {
+      final doc = await _firestore.collection('cities').doc('islamabad').get();
+      if (!doc.exists) {
+        await _firestore.collection('cities').doc('islamabad').set({
+          'name': 'Islamabad',
+          'createdAt': FieldValue.serverTimestamp(),
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Failed to initialize city data: ${e.toString()}';
+      });
+    }
   }
 
   Future<void> _saveTripPlanToFirebase(Map<String, dynamic> tripPlan) async {
@@ -398,7 +419,7 @@ class _IslamabadPageState extends State<IslamabadPage> {
                                     'budget': int.parse(budgetController.text.replaceAll(',', '')),
                                     'startDate': Timestamp.fromDate(startDate),
                                     'endDate': Timestamp.fromDate(endDate),
-                                    'destination': 'Islamabad',
+                                    'destination': 'Islamabad', // Correctly set for Islamabad
                                     'status': 'planned',
                                     'createdAt': Timestamp.now(),
                                   };
@@ -593,7 +614,7 @@ class _IslamabadPageState extends State<IslamabadPage> {
                   children: [
                     _buildSuccessDetailRow("Trip Name:", tripName),
                     const Divider(height: 16, thickness: 0.5),
-                    _buildSuccessDetailRow("Destination:", "Islamabad"),
+                    _buildSuccessDetailRow("Destination:", "Islamabad"), // Correctly set for Islamabad
                     const Divider(height: 16, thickness: 0.5),
                     _buildSuccessDetailRow("Trip Type:", tripType),
                     const Divider(height: 16, thickness: 0.5),
@@ -846,18 +867,13 @@ class _IslamabadPageState extends State<IslamabadPage> {
           const SizedBox(height: 24),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Top Attractions',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: const Color(0xFF0066CC).withOpacity(0.9),
-                  ),
-                ),
-              ],
+            child: Text(
+              'Top Attractions',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: const Color(0xFF0066CC).withOpacity(0.9),
+              ),
             ),
           ),
           const SizedBox(height: 12),
@@ -925,7 +941,7 @@ class _IslamabadPageState extends State<IslamabadPage> {
         ? shoppingSpots
         : shoppingSpots.where((spot) =>
     spot['name'].toLowerCase().contains(_searchQuery) ||
-        spot['address'].toLowerCase().contains(_searchQuery)).toList();
+        spot['details'].toLowerCase().contains(_searchQuery)).toList();
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
@@ -1013,7 +1029,7 @@ class _IslamabadPageState extends State<IslamabadPage> {
         ? foodLocations
         : foodLocations.where((location) =>
     location['name'].toLowerCase().contains(_searchQuery) ||
-        location['address'].toLowerCase().contains(_searchQuery)).toList();
+        location['details'].toLowerCase().contains(_searchQuery)).toList();
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
@@ -1100,7 +1116,7 @@ class _IslamabadPageState extends State<IslamabadPage> {
         ? festivalLocations
         : festivalLocations.where((location) =>
     location['name'].toLowerCase().contains(_searchQuery) ||
-        location['address'].toLowerCase().contains(_searchQuery)).toList();
+        location['details'].toLowerCase().contains(_searchQuery)).toList();
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
@@ -1214,7 +1230,8 @@ class _IslamabadPageState extends State<IslamabadPage> {
             'name': data['name'] as String? ?? 'Anonymous',
             'rating': (data['rating'] as int?) ?? 0,
             'review': data['review'] as String? ?? '',
-            'imageUrl': 'assets/images/Lahore/u${(doc.hashCode % 3) + 1}.png',
+            // Standardized image path to lowercase 'islamabad'
+            'imageUrl': 'assets/images/islambad/u${(doc.hashCode % 3) + 1}.png',
             'date': data['timestamp'] != null
                 ? _formatReviewDate(data['timestamp'].toDate())
                 : 'Recently',
@@ -1226,14 +1243,14 @@ class _IslamabadPageState extends State<IslamabadPage> {
             'name': 'Nature Lover',
             'rating': 5,
             'review': 'Islamabad is the most beautiful city in Pakistan! The Margalla Hills provide stunning views and great hiking opportunities.',
-            'imageUrl': 'assets/images/Lahore/u1.png',
+            'imageUrl': 'assets/images/islambad/u1.png', // Standardized image path
             'date': '3 months ago'
           },
           {
             'name': 'Food Explorer',
             'rating': 4,
             'review': 'The food in Islamabad is diverse and delicious. From street food to fine dining, the city offers great culinary experiences.',
-            'imageUrl': 'assets/images/Lahore/u2.png',
+            'imageUrl': 'assets/images/islambad/u2.png', // Standardized image path
             'date': '2 months ago'
           }
         ];

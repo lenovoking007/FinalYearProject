@@ -19,16 +19,16 @@ class _PeshawarPageState extends State<PeshawarPage> {
     'assets/images/pesh/po3.jpg',
   ];
   final List<String> clothesImages = [
-    'assets/images/Lahore/cl1.jpg',
-    'assets/images/Lahore/cl4.jpg',
-    'assets/images/Lahore/cl3.jpg',
-    'assets/images/Lahore/cl4.jpg',
+    'assets/images/pesh/pc1.jpg', // Updated to Peshawar specific image
+    'assets/images/pesh/pcl4.jpg', // Updated to Peshawar specific image
+    'assets/images/pesh/pcl3.jpg', // Updated to Peshawar specific image
+    'assets/images/pesh/pcl4.jpg', // Updated to Peshawar specific image
   ];
   final List<String> foodImages = [
-    'assets/images/Lahore/food1.jpg',
-    'assets/images/Lahore/food2.jpeg',
-    'assets/images/Lahore/food3.jpg',
-    'assets/images/Lahore/food4.jpg',
+    'assets/images/pesh/pfo1.jpg', // Updated to Peshawar specific image
+    'assets/images/pesh/pfo2.jpg', // Updated to Peshawar specific image
+    'assets/images/pesh/pfo3.jpg', // Updated to Peshawar specific image
+    'assets/images/pesh/pfo4.jpg', // Updated to Peshawar specific image
   ];
   final List<String> festivalImages = [
     'assets/images/pesh/pf1.jpg',
@@ -47,6 +47,24 @@ class _PeshawarPageState extends State<PeshawarPage> {
   @override
   void initState() {
     super.initState();
+    _addCityToCollection(); // Call the method to add Peshawar to Firestore
+  }
+
+  // Method to add Peshawar to the 'cities' collection if it doesn't exist
+  Future<void> _addCityToCollection() async {
+    try {
+      final doc = await _firestore.collection('cities').doc('peshawar').get();
+      if (!doc.exists) {
+        await _firestore.collection('cities').doc('peshawar').set({
+          'name': 'Peshawar',
+          'createdAt': FieldValue.serverTimestamp(),
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Failed to initialize city data: ${e.toString()}';
+      });
+    }
   }
 
   Future<void> _saveTripPlanToFirebase(Map<String, dynamic> tripPlan) async {
@@ -399,7 +417,7 @@ class _PeshawarPageState extends State<PeshawarPage> {
                                     'budget': int.parse(budgetController.text.replaceAll(',', '')),
                                     'startDate': Timestamp.fromDate(startDate),
                                     'endDate': Timestamp.fromDate(endDate),
-                                    'destination': 'Peshawar',
+                                    'destination': 'Peshawar', // Set destination to Peshawar
                                     'status': 'planned',
                                     'createdAt': Timestamp.now(),
                                   };
@@ -594,7 +612,7 @@ class _PeshawarPageState extends State<PeshawarPage> {
                   children: [
                     _buildSuccessDetailRow("Trip Name:", tripName),
                     const Divider(height: 16, thickness: 0.5),
-                    _buildSuccessDetailRow("Destination:", "Peshawar"),
+                    _buildSuccessDetailRow("Destination:", "Peshawar"), // Display Peshawar as destination
                     const Divider(height: 16, thickness: 0.5),
                     _buildSuccessDetailRow("Trip Type:", tripType),
                     const Divider(height: 16, thickness: 0.5),
@@ -832,18 +850,13 @@ class _PeshawarPageState extends State<PeshawarPage> {
           const SizedBox(height: 24),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Top Attractions',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: const Color(0xFF0066CC).withOpacity(0.9),
-                  ),
-                ),
-              ],
+            child: Text(
+              'Top Attractions',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: const Color(0xFF0066CC).withOpacity(0.9),
+              ),
             ),
           ),
           const SizedBox(height: 12),
@@ -1101,7 +1114,7 @@ class _PeshawarPageState extends State<PeshawarPage> {
     return StreamBuilder<QuerySnapshot>(
       stream: _firestore
           .collection('reviews')
-          .where('destination', isEqualTo: 'Peshawar')
+          .where('destination', isEqualTo: 'Peshawar') // Filter reviews for Peshawar
           .orderBy('timestamp', descending: true)
           .snapshots(),
       builder: (context, snapshot) {
@@ -1152,7 +1165,7 @@ class _PeshawarPageState extends State<PeshawarPage> {
             'name': data['name'] as String? ?? 'Anonymous',
             'rating': (data['rating'] as int?) ?? 0,
             'review': data['review'] as String? ?? '',
-            'imageUrl': 'assets/images/Lahore/u${(doc.hashCode % 3) + 1}.png',
+            'imageUrl': 'assets/images/Lahore/u${(doc.hashCode % 3) + 1}.png', // Keep generic user images
             'date': data['timestamp'] != null
                 ? _formatReviewDate(data['timestamp'].toDate())
                 : 'Recently',

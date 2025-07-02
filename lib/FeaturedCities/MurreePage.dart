@@ -19,16 +19,18 @@ class _MureePageState extends State<MureePage> {
     'assets/images/muree/m03.jpg',
   ];
   final List<String> clothesImages = [
-    'assets/images/Lahore/cl1.jpg',
-    'assets/images/Lahore/cl2.jpg',
-    'assets/images/Lahore/cl3.jpg',
-    'assets/images/Lahore/cl4.jpg',
+    // Updated to Murree-specific images
+    'assets/images/muree/mcl1.jpg',
+    'assets/images/muree/mcl2.jpg',
+    'assets/images/muree/mcl3.jpg',
+    'assets/images/muree/mcl4.jpg',
   ];
   final List<String> foodImages = [
-    'assets/images/Lahore/food1.jpg',
-    'assets/images/Lahore/food2.jpeg',
-    'assets/images/Lahore/food3.jpg',
-    'assets/images/Lahore/food4.jpg',
+    // Updated to Murree-specific images
+    'assets/images/muree/mfo1.jpg',
+    'assets/images/muree/mcfo2.jpg',
+    'assets/images/muree/mfo3.jpg',
+    'assets/images/muree/mfo4.jpg',
   ];
   final List<String> festivalImages = [
     'assets/images/muree/mf1.jpg',
@@ -46,6 +48,25 @@ class _MureePageState extends State<MureePage> {
   @override
   void initState() {
     super.initState();
+    // Added this method to ensure the 'muree' city document exists in Firestore
+    _addCityToCollection();
+  }
+
+  // Method to add 'muree' to the 'cities' collection if it doesn't exist
+  Future<void> _addCityToCollection() async {
+    try {
+      final doc = await _firestore.collection('cities').doc('muree').get();
+      if (!doc.exists) {
+        await _firestore.collection('cities').doc('muree').set({
+          'name': 'Muree',
+          'createdAt': FieldValue.serverTimestamp(),
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Failed to initialize city data: ${e.toString()}';
+      });
+    }
   }
 
   Future<void> _saveTripPlanToFirebase(Map<String, dynamic> tripPlan) async {
@@ -398,7 +419,7 @@ class _MureePageState extends State<MureePage> {
                                     'budget': int.parse(budgetController.text.replaceAll(',', '')),
                                     'startDate': Timestamp.fromDate(startDate),
                                     'endDate': Timestamp.fromDate(endDate),
-                                    'destination': 'Muree',
+                                    'destination': 'Muree', // Correctly set for Muree
                                     'status': 'planned',
                                     'createdAt': Timestamp.now(),
                                   };
@@ -593,7 +614,7 @@ class _MureePageState extends State<MureePage> {
                   children: [
                     _buildSuccessDetailRow("Trip Name:", tripName),
                     const Divider(height: 16, thickness: 0.5),
-                    _buildSuccessDetailRow("Destination:", "Muree"),
+                    _buildSuccessDetailRow("Destination:", "Muree"), // Correctly set for Muree
                     const Divider(height: 16, thickness: 0.5),
                     _buildSuccessDetailRow("Trip Type:", tripType),
                     const Divider(height: 16, thickness: 0.5),
@@ -885,7 +906,7 @@ class _MureePageState extends State<MureePage> {
     final List<Map<String, dynamic>> shoppingSpots = [
       {'name': 'Bazaar-e-Murree', 'details': 'Traditional market with handcrafted goods.', 'image': 'assets/images/muree/mcl1.jpg'},
       {'name': 'Gulshan Market', 'details': 'Modern shopping area.', 'image': 'assets/images/muree/mcl2.jpg'},
-      {'name': 'Alpine Plaza', 'details': 'Gifts, winter wear, and souvenirs.','image': 'assets/images/muree/mcl2.jpg'},
+      {'name': 'Alpine Plaza', 'details': 'Gifts, winter wear, and souvenirs.','image': 'assets/images/muree/mcl3.jpg'}, // Changed to mcl3.jpg
       {'name': 'Anwar Mall', 'details': 'Small mall with local brands.', 'image': 'assets/images/muree/mcl4.jpg'},
 
     ];
@@ -1151,7 +1172,8 @@ class _MureePageState extends State<MureePage> {
             'name': data['name'] as String? ?? 'Anonymous',
             'rating': (data['rating'] as int?) ?? 0,
             'review': data['review'] as String? ?? '',
-            'imageUrl': 'assets/images/Muree/u${(doc.hashCode % 3) + 1}.png',
+            // Standardized image path to lowercase 'muree'
+            'imageUrl': 'assets/images/muree/u${(doc.hashCode % 3) + 1}.png',
             'date': data['timestamp'] != null
                 ? _formatReviewDate(data['timestamp'].toDate())
                 : 'Recently',
@@ -1163,14 +1185,14 @@ class _MureePageState extends State<MureePage> {
             'name': 'Nature Lover',
             'rating': 5,
             'review': 'Muree is absolutely breathtaking! The pine forests and mountain views are spectacular.',
-            'imageUrl': 'assets/images/Muree/u1.png',
+            'imageUrl': 'assets/images/muree/u1.png', // Standardized image path
             'date': '3 months ago'
           },
           {
             'name': 'Adventure Seeker',
             'rating': 4,
             'review': 'The chairlift ride at Patriata was amazing. The views from the top are worth the trip!',
-            'imageUrl': 'assets/images/Muree/u2.png',
+            'imageUrl': 'assets/images/muree/u2.png', // Standardized image path
             'date': '2 months ago'
           }
         ];
