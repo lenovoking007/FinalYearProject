@@ -16,7 +16,8 @@ import 'package:travelmate/spacesharing.dart';
 import 'package:travelmate/travelbuddy.dart';
 import 'package:travelmate/TripMainPage.dart';
 import 'ToolsCode/weather_app.dart';
-import 'package:travelmate/reminder.dart'; // This should point to your new reminder.dart
+import 'package:travelmate/reminder.dart';
+
 class Tools extends StatefulWidget {
   @override
   _ToolsState createState() => _ToolsState();
@@ -44,7 +45,6 @@ class _ToolsState extends State<Tools> {
           });
         }
       } catch (e) {
-        // Use default image if no profile image exists
         if (mounted) {
           setState(() {
             _profileImageUrl = null;
@@ -102,7 +102,6 @@ class _ToolsState extends State<Tools> {
                         builder: (context) => const SettingsMenuPage(previousIndex: 1),
                       ),
                     ).then((_) {
-                      // Refresh profile image when returning from settings
                       _loadProfileImage();
                     });
                   },
@@ -119,60 +118,58 @@ class _ToolsState extends State<Tools> {
           ),
         ),
       ),
-      body: LayoutBuilder(
-          builder: (context, constraints) {
-            return Padding(
-              padding: EdgeInsets.all(screenHeight * 0.02),
-              child: CustomScrollView(
-                physics: const BouncingScrollPhysics(),
-                slivers: [
-                  SliverToBoxAdapter(
-                    child: Column(
-                      children: [
-                        SizedBox(height: screenHeight * 0.01),
-                        Text(
-                          'Travel Tools',
-                          style: TextStyle(
-                            color: Color(0XFF0066CC),
-                            fontSize: screenHeight * 0.035,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: screenHeight * 0.01),
-                        Text(
-                          'Everything you need for your perfect trip',
-                          style: TextStyle(
-                            color: Colors.grey[600],
-                            fontSize: screenHeight * 0.018,
-                          ),
-                        ),
-                        SizedBox(height: screenHeight * 0.02),
-                      ],
-                    ),
-                  ),
-                  SliverPadding(
-                    padding: EdgeInsets.only(bottom: screenHeight * 0.03),
-                    sliver: SliverGrid(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: screenHeight * 0.02,
-                        mainAxisSpacing: screenHeight * 0.02,
-                        childAspectRatio: 1,
-                      ),
-                      delegate: SliverChildBuilderDelegate(
-                            (context, index) {
-                          final tool = tools[index];
-                          return ToolCard(tool: tool);
-                        },
-                        childCount: tools.length,
+      body: LayoutBuilder(builder: (context, constraints) {
+        return Padding(
+          padding: EdgeInsets.all(screenHeight * 0.02),
+          child: CustomScrollView(
+            physics: const BouncingScrollPhysics(),
+            slivers: [
+              SliverToBoxAdapter(
+                child: Column(
+                  children: [
+                    SizedBox(height: screenHeight * 0.01),
+                    Text(
+                      'Travel Tools',
+                      style: TextStyle(
+                        color: Color(0XFF0066CC),
+                        fontSize: screenHeight * 0.035,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ),
-                ],
+                    SizedBox(height: screenHeight * 0.01),
+                    Text(
+                      'Everything you need for your perfect trip',
+                      style: TextStyle(
+                        color: Colors.grey[600],
+                        fontSize: screenHeight * 0.018,
+                      ),
+                    ),
+                    SizedBox(height: screenHeight * 0.02),
+                  ],
+                ),
               ),
-            );
-          }
-      ),
+              SliverPadding(
+                padding: EdgeInsets.only(bottom: screenHeight * 0.03),
+                sliver: SliverGrid(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: screenHeight * 0.02,
+                    mainAxisSpacing: screenHeight * 0.02,
+                    childAspectRatio: 1,
+                  ),
+                  delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                      final tool = tools[index];
+                      return ToolCard(tool: tool);
+                    },
+                    childCount: tools.length,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      }),
       bottomNavigationBar: _buildBottomNavigationBar(context, 1),
     );
   }
@@ -286,7 +283,7 @@ class ToolCard extends StatelessWidget {
     return GestureDetector(
       onTap: () => Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => tool.page),
+        MaterialPageRoute(builder: (context) => tool.pageBuilder()),
       ),
       child: Container(
         decoration: BoxDecoration(
@@ -347,14 +344,14 @@ class Tool {
   final String? subtitle;
   final IconData icon;
   final Color iconColor;
-  final Widget page;
+  final Widget Function() pageBuilder;
 
   Tool({
     required this.title,
     this.subtitle,
     required this.icon,
     required this.iconColor,
-    required this.page,
+    required this.pageBuilder,
   });
 }
 
@@ -364,69 +361,69 @@ final List<Tool> tools = [
     subtitle: 'Real-time updates',
     icon: Icons.cloud,
     iconColor: Colors.blue,
-    page: WeatherApp(),
+    pageBuilder: () => WeatherApp(),
   ),
   Tool(
     title: 'Travel Buddy',
     subtitle: 'Find companions',
     icon: Icons.group,
     iconColor: Colors.green,
-    page: TravelBuddy(),
+    pageBuilder: () => TravelBuddy(),
   ),
   Tool(
     title: 'Reminders',
     subtitle: 'Never miss anything',
     icon: Icons.notifications,
     iconColor: Colors.orange,
-    page: ReminderPage(),
+    pageBuilder: () => ReminderPage(),
   ),
   Tool(
     title: 'Packing List',
     subtitle: 'Smart suggestions',
     icon: Icons.checklist,
     iconColor: Colors.purple,
-    page: PackingListPage(),
+    pageBuilder: () => PackingListPage(),
   ),
   Tool(
     title: 'Journey Estimator',
     subtitle: 'Calculate trip costs',
     icon: Icons.attach_money,
     iconColor: Colors.deepPurple,
-    page: JourneyEstimatorPage(),
+    pageBuilder: () => JourneyEstimatorPage(),
   ),
   Tool(
     title: 'Currency Converter',
     subtitle: 'Live exchange rates',
     icon: Icons.currency_exchange,
     iconColor: Colors.indigo,
-    page: CurrencyConverterPage(),
+    pageBuilder: () => CurrencyConverterPage(),
   ),
   Tool(
     title: 'Ride Sharing',
     subtitle: 'Book shared rides',
     icon: Icons.directions_car,
     iconColor: Colors.deepOrange,
-    page: SpaceSharingPage(),
+    pageBuilder: () => SpaceSharingPage(),
   ),
   Tool(
     title: 'Google Maps',
     subtitle: 'Navigation & routes',
     icon: Icons.map,
     iconColor: Colors.red,
-    page: GoogleMapView(),
+    pageBuilder: () => const GoogleMapsPage(),
   ),
   Tool(
     title: 'Safety Alerts',
     subtitle: 'Travel advisories',
     icon: Icons.warning,
     iconColor: Colors.amber,
-    page: SafetyAlertPage(),
+    pageBuilder: () => SafetyAlertPage(),
   ),
   Tool(
     title: 'Photos Gallery',
     subtitle: 'Organized memories',
     icon: Icons.photo,
     iconColor: Colors.pink,
-    page: GalleryPage(),
+    pageBuilder: () => GalleryPage(),
   ),
 ];

@@ -64,6 +64,9 @@ dependencies:
   flutter_local_notifications: ^17.1.2
   googleapis_auth: ^1.4.1
   firebase_database: ^11.1.0
+  flutter_google_places_sdk: ^0.4.2+1
+
+
 
 
 
