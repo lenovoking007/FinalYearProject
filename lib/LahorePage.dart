@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:travelmate/tripprogresspage.dart';
-import 'package:travelmate/city_planner.dart'; // Add this import
+import 'package:travelmate/city_planner.dart';
 
 class LahorePage extends StatefulWidget {
   const LahorePage({super.key});
@@ -38,6 +40,7 @@ class _LahorePageState extends State<LahorePage> {
   ];
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseStorage _storage = FirebaseStorage.instance;
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
   String? _errorMessage;
@@ -61,6 +64,15 @@ class _LahorePageState extends State<LahorePage> {
       setState(() {
         _errorMessage = 'Failed to initialize city data: ${e.toString()}';
       });
+    }
+  }
+
+  Future<String?> _getProfileImageUrl(String userId) async {
+    try {
+      final url = await _storage.ref('profile_images/$userId').getDownloadURL();
+      return url;
+    } catch (e) {
+      return null;
     }
   }
 
@@ -119,10 +131,9 @@ class _LahorePageState extends State<LahorePage> {
       if (num == null) {
         return 'Please enter a valid number';
       }
-      if (num < 5000)
-        {
-          return 'Minimum trip budget is 5000 PKR.';
-        }
+      if (num < 5000) {
+        return 'Minimum trip budget is 5000 PKR.';
+      }
       if (num > 9999999) {
         return 'Budget cannot exceed 99,99,999';
       }
@@ -146,29 +157,29 @@ class _LahorePageState extends State<LahorePage> {
         return StatefulBuilder(
           builder: (context, setState) {
             return Dialog(
-              insetPadding: const EdgeInsets.symmetric(horizontal: 16),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
+                insetPadding: const EdgeInsets.symmetric(horizontal: 16),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                child: SingleChildScrollView(
+                    child: Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                          Row(
                           children: [
-                            const Icon(Icons.flight_takeoff, color: Color(0xFF0066CC), size: 28),
-                            const SizedBox(width: 12),
-                            Text(
-                              "Plan Your Trip",
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: const Color(0xFF0066CC).withOpacity(0.9),
-                              ),
+                          const Icon(Icons.flight_takeoff, color: Color(0xFF0066CC), size: 28),
+                          const SizedBox(width: 12),
+                          Text(
+                            "Plan Your Trip",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: const Color(0xFF0066CC).withOpacity(0.9),
                             ),
+                          ),
                           ],
                         ),
                         const SizedBox(height: 24),
@@ -342,121 +353,127 @@ class _LahorePageState extends State<LahorePage> {
                           },
                         ),
                         if (validateTripDuration(startDate, endDate) != null)
-                          Padding(
-                            padding: const EdgeInsets.only(top: 8),
-                            child: Text(
-                              validateTripDuration(startDate, endDate)!,
-                              style: const TextStyle(color: Colors.red, fontSize: 12),
-                            ),
-                          ),
-                        const SizedBox(height: 16),
-                        Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: Colors.amber.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: Colors.amber.withOpacity(0.3)),
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(Icons.info_outline, color: Colors.amber.shade700),
-                              const SizedBox(width: 8),
-                              Flexible(
-                                child: Text(
-                                  "Trip duration: ${endDate.difference(startDate).inDays + 1} days",
-                                  style: TextStyle(color: Colors.amber.shade800),
+                Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Text(
+            validateTripDuration(startDate, endDate)!,
+            style: const TextStyle(color: Colors.red, fontSize: 12),
+            ),
+            ),
+            const SizedBox(height: 16),
+                                Container(
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.all(12),
+                                  decoration: BoxDecoration(
+                                    color: Colors.amber.withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(12),
+                                    border: Border.all(color: Colors.amber.withOpacity(0.3)),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.info_outline, color: Colors.amber.shade700),
+                                      const SizedBox(width: 8),
+                                      Flexible(
+                                        child: Text(
+                                          "Trip duration: ${endDate.difference(startDate).inDays + 1} days",
+                                          style: TextStyle(color: Colors.amber.shade800),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 24),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            TextButton(
-                              onPressed: () => Navigator.pop(context),
-                              style: TextButton.styleFrom(
-                                foregroundColor: const Color(0xFF0066CC),
-                                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                              ),
-                              child: const Text(
-                                "CANCEL",
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            ElevatedButton(
-                              onPressed: () async {
-                                if (!_formKey.currentState!.validate()) {
-                                  return;
-                                }
-
-                                final durationError = validateTripDuration(startDate, endDate);
-                                if (durationError != null) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(durationError),
-                                      backgroundColor: Colors.red,
+                                const SizedBox(height: 24),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    TextButton(
+                                      onPressed: () => Navigator.pop(context),
+                                      style: TextButton.styleFrom(
+                                        foregroundColor: const Color(0xFF0066CC),
+                                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                                      ),
+                                      child: const Text(
+                                        "CANCEL",
+                                        style: TextStyle(fontWeight: FontWeight.bold),
+                                      ),
                                     ),
-                                  );
-                                  return;
-                                }
+                                    const SizedBox(width: 12),
+                                    ElevatedButton(
+                                      onPressed: () async {
+                                        if (!_formKey.currentState!.validate()) {
+                                          return;
+                                        }
 
-                                try {
-                                  final User? user = _auth.currentUser;
-                                  if (user == null) throw Exception('User not authenticated');
-                                  final Map<String, dynamic> tripPlan = {
-                                    'userId': user.uid,
-                                    'tripName': tripNameController.text,
-                                    'tripType': selectedTripType,
-                                    'numberOfPeople': int.parse(peopleCountController.text),
-                                    'budget': int.parse(budgetController.text.replaceAll(',', '')),
-                                    'startDate': Timestamp.fromDate(startDate),
-                                    'endDate': Timestamp.fromDate(endDate),
-                                    'destination': 'Lahore',
-                                    'status': 'planned',
-                                    'createdAt': Timestamp.now(),
-                                  };
-                                  await _saveTripPlanToFirebase(tripPlan);
-                                  Navigator.pop(context);
-                                  _showSuccessDialog(
-                                    context,
-                                    tripNameController.text,
-                                    selectedTripType ?? 'Not specified',
-                                    endDate.difference(startDate).inDays + 1,
-                                  );
-                                } catch (e) {
-                                  Navigator.pop(context);
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text('Error saving trip: ${e.toString()}'),
-                                      backgroundColor: Colors.red,
+                                        final durationError = validateTripDuration(startDate, endDate);
+                                        if (durationError != null) {
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            SnackBar(
+                                              content: Text(durationError),
+                                              backgroundColor: Colors.red,
+                                            ),
+                                          );
+                                          return;
+                                        }
+
+                                        try {
+                                          final User? user = _auth.currentUser;
+                                          if (user == null) throw Exception('User not authenticated');
+
+                                          final Map<String, dynamic> tripPlan = {
+                                            'userId': user.uid,
+                                            'tripName': tripNameController.text,
+                                            'tripType': selectedTripType,
+                                            'numberOfPeople': int.parse(peopleCountController.text),
+                                            'budget': int.parse(budgetController.text.replaceAll(',', '')),
+                                            'startDate': Timestamp.fromDate(startDate),
+                                            'endDate': Timestamp.fromDate(endDate),
+                                            'destination': 'Lahore',
+                                            'status': 'planned',
+                                            'createdAt': Timestamp.now(),
+                                          };
+
+                                          await _saveTripPlanToFirebase(tripPlan);
+                                          Navigator.pop(context);
+
+                                          _showSuccessDialog(
+                                            context,
+                                            tripNameController.text,
+                                            selectedTripType ?? 'Not specified',
+                                            endDate.difference(startDate).inDays + 1,
+                                          );
+                                        } catch (e) {
+                                          Navigator.pop(context);
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            SnackBar(
+                                              content: Text('Error saving trip: ${e.toString()}'),
+                                              backgroundColor: Colors.red,
+                                            ),
+                                          );
+                                        }
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: const Color(0xFF0066CC),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(12),
+                                        ),
+                                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                                      ),
+                                      child: const Text(
+                                        "SAVE TRIP",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
                                     ),
-                                  );
-                                }
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF0066CC),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                              ),
-                              child: const Text(
-                                "SAVE TRIP",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+                                  ],
+                                )
+
+                              ],
+            ),
+            ),
+            ),
+            ),
             );
           },
         );
@@ -473,30 +490,31 @@ class _LahorePageState extends State<LahorePage> {
     int? maxLength,
   }) {
     return TextFormField(
-      controller: controller,
-      keyboardType: keyboardType,
-      maxLength: maxLength,
-      validator: validator,
-      decoration: InputDecoration(
+        controller: controller,
+        keyboardType: keyboardType,
+        maxLength: maxLength,
+        validator: validator,
+        decoration: InputDecoration(
         filled: true,
         fillColor: const Color(0xFF88F2E8).withOpacity(0.1),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: const Color(0xFF0066CC).withOpacity(0.5)),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFF0066CC)),
-        ),
-        labelText: label,
-        labelStyle: const TextStyle(color: Colors.grey),
-        suffixIcon: Icon(icon, color: const Color(0xFF0066CC).withOpacity(0.7)),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        counterText: '',
-        errorStyle: const TextStyle(fontSize: 12),
-      ),
-    );
-  }
+    enabledBorder: OutlineInputBorder(
+    borderRadius: BorderRadius.circular(12),
+    borderSide: BorderSide(color: const Color(0xFF0066CC).withOpacity(0.5)),
+    ),
+    focusedBorder: OutlineInputBorder(
+    borderRadius: BorderRadius.circular(12),
+    borderSide: const BorderSide(color: Color(0xFF0066CC)),
+    ),
+    labelText: label,
+    labelStyle: const TextStyle(color: Colors.grey),
+    suffixIcon: Icon(icon, color: const Color(0xFF0066CC).withOpacity(0.7)),
+    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+    counterText: '',
+    errorStyle: const TextStyle(fontSize: 12),
+    ));
+
+
+    }
 
   Widget _buildDateSelector(
       BuildContext context,
@@ -569,81 +587,83 @@ class _LahorePageState extends State<LahorePage> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         child: Padding(
           padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: const Color(0xFFE8F5E9),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.green.withOpacity(0.2),
-                      blurRadius: 10,
-                      spreadRadius: 2,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: const Color(0xFFE8F5E9),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.green.withOpacity(0.2),
+                        blurRadius: 10,
+                        spreadRadius: 2,
+                      ),
+                    ],
+                  ),
+                  child: const Icon(
+                    Icons.check_circle,
+                    color: Colors.green,
+                    size: 48,
+                  ),
+                ),
+                const SizedBox(height: 24),
+                Text(
+                  "Trip Saved!",
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: const Color(0xFF0066CC).withOpacity(0.9),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[50],
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.grey[200]!),
+                  ),
+                  child: Column(
+                    children: [
+                      _buildSuccessDetailRow("Trip Name:", tripName),
+                      const Divider(height: 16, thickness: 0.5),
+                      _buildSuccessDetailRow("Destination:", "Lahore"),
+                      const Divider(height: 16, thickness: 0.5),
+                      _buildSuccessDetailRow("Trip Type:", tripType),
+                      const Divider(height: 16, thickness: 0.5),
+                      _buildSuccessDetailRow("Duration:", "$duration days"),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 24),
+                const Text(
+                  "You can view your trip in the 'My Trips' section",
+                  style: TextStyle(fontSize: 14, color: Colors.grey),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 24),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF0066CC),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      elevation: 2,
                     ),
-                  ],
-                ),
-                child: const Icon(
-                  Icons.check_circle,
-                  color: Colors.green,
-                  size: 48,
-                ),
-              ),
-              const SizedBox(height: 24),
-              Text(
-                "Trip Saved!",
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: const Color(0xFF0066CC).withOpacity(0.9),
-                ),
-              ),
-              const SizedBox(height: 16),
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.grey[50],
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.grey[200]!),
-                ),
-                child: Column(
-                  children: [
-                    _buildSuccessDetailRow("Trip Name:", tripName),
-                    const Divider(height: 16, thickness: 0.5),
-                    _buildSuccessDetailRow("Destination:", "Lahore"),
-                    const Divider(height: 16, thickness: 0.5),
-                    _buildSuccessDetailRow("Trip Type:", tripType),
-                    const Divider(height: 16, thickness: 0.5),
-                    _buildSuccessDetailRow("Duration:", "$duration days"),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 24),
-              const Text(
-                "You can view your trip in the 'My Trips' section",
-                style: TextStyle(fontSize: 14, color: Colors.grey),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 24),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF0066CC),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    elevation: 2,
-                  ),
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text(
-                    "DONE",
-                    style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text(
+                      "DONE",
+                      style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -669,6 +689,137 @@ class _LahorePageState extends State<LahorePage> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  String _formatReviewDate(DateTime date) {
+    final now = DateTime.now();
+    final difference = now.difference(date);
+
+    if (difference.inDays > 30) {
+      return '${(difference.inDays / 30).floor()} months ago';
+    } else if (difference.inDays > 0) {
+      return '${difference.inDays} days ago';
+    } else if (difference.inHours > 0) {
+      return '${difference.inHours} hours ago';
+    } else {
+      return 'Just now';
+    }
+  }
+
+  Widget _buildNoReviewsPlaceholder() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 32),
+      child: Column(
+        children: [
+          Icon(Icons.reviews, size: 50, color: Colors.grey.shade400),
+          const SizedBox(height: 16),
+          const Text(
+            'No user reviews yet',
+            style: TextStyle(fontSize: 16, color: Colors.grey),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Be the first to share your experience!',
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.grey.shade500,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildReviewCard({
+    required String name,
+    required int rating,
+    required String review,
+    required String userId, // Changed from imageUrl to userId for Firestore reviews
+    required String date,
+  }) {
+    return Card(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: BorderSide(color: Colors.grey.shade200),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                // For all reviews (both local and Firestore), use FutureBuilder to get the profile image
+                FutureBuilder<String?>(
+                  future: _getProfileImageUrl(userId),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircleAvatar(
+                        radius: 24,
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF0066CC)),
+                        ),
+                      );
+                    }
+                    return CircleAvatar(
+                      radius: 24,
+                      backgroundImage: snapshot.hasData
+                          ? CachedNetworkImageProvider(snapshot.data!)
+                          : const AssetImage('assets/images/circleimage.png') as ImageProvider,
+                    );
+                  },
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        name,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Row(
+                        children: [
+                          ...List.generate(5, (index) {
+                            return Icon(
+                              index < rating ? Icons.star : Icons.star_border,
+                              color: Colors.amber,
+                              size: 16,
+                            );
+                          }),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Text(
+              date,
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.grey.shade600,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              review,
+              style: const TextStyle(
+                fontSize: 14,
+                color: Colors.black87,
+                height: 1.5,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -798,7 +949,6 @@ class _LahorePageState extends State<LahorePage> {
             ),
           ],
         ),
-
       ),
     );
   }
@@ -1226,9 +1376,9 @@ class _LahorePageState extends State<LahorePage> {
           final data = doc.data() as Map<String, dynamic>;
           return {
             'name': data['name'] ?? 'Anonymous',
+            'userId': data['userId'], // Make sure this field exists in your Firestore
             'rating': data['rating'] ?? 0,
             'review': data['review'] ?? '',
-            'imageUrl': 'assets/images/Lahore/u${(doc.hashCode % 3) + 1}.png',
             'date': data['timestamp'] != null
                 ? _formatReviewDate(data['timestamp'].toDate())
                 : 'Recently',
@@ -1238,18 +1388,18 @@ class _LahorePageState extends State<LahorePage> {
         final List<Map<String, dynamic>> localReviews = [
           {
             'name': 'Travel Enthusiast',
+            'userId': 'local1', // Unique identifier for local reviews
             'rating': 5,
             'review': 'Lahore is an amazing city with rich culture and history. '
                 'The food is incredible and the people are very hospitable.',
-            'imageUrl': 'assets/images/Lahore/u1.png',
             'date': '2 months ago'
           },
           {
             'name': 'History Lover',
+            'userId': 'local2', // Unique identifier for local reviews
             'rating': 4,
             'review': 'The historical sites in Lahore are breathtaking. '
                 'Badshahi Mosque and Lahore Fort are must-visit places.',
-            'imageUrl': 'assets/images/Lahore/u2.png',
             'date': '1 month ago'
           }
         ];
@@ -1272,7 +1422,7 @@ class _LahorePageState extends State<LahorePage> {
                 name: review['name'],
                 rating: review['rating'],
                 review: review['review'],
-                imageUrl: review['imageUrl'],
+                userId: review['userId'], // Pass userId instead of imageUrl
                 date: review['date'],
               )).toList(),
 
@@ -1294,7 +1444,7 @@ class _LahorePageState extends State<LahorePage> {
                   name: review['name'],
                   rating: review['rating'],
                   review: review['review'],
-                  imageUrl: review['imageUrl'],
+                  userId: review['userId'], // Pass userId to fetch profile image
                   date: review['date'],
                 )).toList(),
 
@@ -1303,45 +1453,6 @@ class _LahorePageState extends State<LahorePage> {
           ),
         );
       },
-    );
-  }
-
-  String _formatReviewDate(DateTime date) {
-    final now = DateTime.now();
-    final difference = now.difference(date);
-
-    if (difference.inDays > 30) {
-      return '${(difference.inDays / 30).floor()} months ago';
-    } else if (difference.inDays > 0) {
-      return '${difference.inDays} days ago';
-    } else if (difference.inHours > 0) {
-      return '${difference.inHours} hours ago';
-    } else {
-      return 'Just now';
-    }
-  }
-
-  Widget _buildNoReviewsPlaceholder() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 32),
-      child: Column(
-        children: [
-          Icon(Icons.reviews, size: 50, color: Colors.grey.shade400),
-          const SizedBox(height: 16),
-          const Text(
-            'No user reviews yet',
-            style: TextStyle(fontSize: 16, color: Colors.grey),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Be the first to share your experience!',
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey.shade500,
-            ),
-          ),
-        ],
-      ),
     );
   }
 
@@ -1664,82 +1775,6 @@ class _LahorePageState extends State<LahorePage> {
           ),
         );
       },
-    );
-  }
-
-  Widget _buildReviewCard({
-    required String name,
-    required int rating,
-    required String review,
-    required String imageUrl,
-    required String date,
-  }) {
-    return Card(
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side: BorderSide(color: Colors.grey.shade200),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                CircleAvatar(
-                  radius: 24,
-                  backgroundImage: AssetImage(imageUrl),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        name,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Row(
-                        children: [
-                          ...List.generate(5, (index) {
-                            return Icon(
-                              index < rating ? Icons.star : Icons.star_border,
-                              color: Colors.amber,
-                              size: 16,
-                            );
-                          },
-                          )],
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Text(
-              date,
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.grey.shade600,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              review,
-              style: const TextStyle(
-                fontSize: 14,
-                color: Colors.black87,
-                height: 1.5,
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 
