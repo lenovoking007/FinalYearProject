@@ -87,9 +87,70 @@ class _TestingNotificationState extends State<TestingNotification> {
       initialDate: DateTime.now(),
       firstDate: DateTime(2000),
       lastDate: DateTime(2100),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: Colors.blue, // Header background, selected date circle
+              onPrimary: Colors.white, // Text on primary color (e.g., month/year in header)
+              surface: Colors.white, // Dialog background
+              onSurface: Colors.black, // Text on surface (e.g., day numbers)
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.blue, // OK/CANCEL button text color
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
     if (date != null) {
-      TimeOfDay? time = await showTimePicker(context: context, initialTime: TimeOfDay.now());
+      TimeOfDay? time = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.now(),
+        builder: (context, child) {
+          return Theme(
+            data: Theme.of(context).copyWith(
+              colorScheme: ColorScheme.light(
+                primary: Colors.blue, // Header background, selected time circle
+                onPrimary: Colors.white, // Text on primary color
+                surface: Colors.white, // Dialog background
+                onSurface: Colors.black, // Text on surface
+              ),
+              textButtonTheme: TextButtonThemeData(
+                style: TextButton.styleFrom(
+                  foregroundColor: Colors.blue, // OK/CANCEL button text color
+                ),
+              ),
+              timePickerTheme: TimePickerThemeData(
+                hourMinuteTextColor: MaterialStateColor.resolveWith((states) {
+                  if (states.contains(MaterialState.selected)) {
+                    return Colors.white; // Color of selected hour/minute text
+                  }
+                  return Colors.black; // Color of unselected hour/minute text
+                }),
+                hourMinuteColor: MaterialStateColor.resolveWith((states) {
+                  if (states.contains(MaterialState.selected)) {
+                    return Colors.blue; // Background color of selected hour/minute
+                  }
+                  return Colors.grey.shade200; // Background color of unselected hour/minute
+                }),
+                dialHandColor: Colors.blue, // Hand of the clock dial
+                dialTextColor: MaterialStateColor.resolveWith((states) {
+                  if (states.contains(MaterialState.selected)) {
+                    return Colors.white; // Text color on dial when selected
+                  }
+                  return Colors.black; // Text color on dial when not selected
+                }),
+                // Removed: entryModeInputStyle as it might cause compatibility issues
+              ),
+            ),
+            child: child!,
+          );
+        },
+      );
       if (time != null) {
         setState(() {
           _selectedDateTime = DateTime(date.year, date.month, date.day, time.hour, time.minute);

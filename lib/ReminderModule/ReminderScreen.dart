@@ -48,7 +48,7 @@ class ReminderScreen extends StatelessWidget {
               final id = reminders[index].id;
 
               return Card(
-                color: Color(0xFF939FAD),
+                color: Colors.white,
                 elevation: 5,
                 margin: const EdgeInsets.all(10),
                 child: ListTile(
@@ -58,7 +58,7 @@ class ReminderScreen extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       IconButton(
-                        icon: const Icon(Icons.edit),
+                        icon: const Icon(Icons.edit,color: Color(0xFF0066CC),),
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -74,7 +74,7 @@ class ReminderScreen extends StatelessWidget {
                         },
                       ),
                       IconButton(
-                        icon: const Icon(Icons.delete, color: Colors.red),
+                        icon: const Icon(Icons.delete, color: Color(0xFF0066CC)),
                         onPressed: () {
                           _deleteReminder(id);
                         },
@@ -88,6 +88,7 @@ class ReminderScreen extends StatelessWidget {
         },
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Color(0xFF0066CC),
         onPressed: () {
           Navigator.push(
             context,

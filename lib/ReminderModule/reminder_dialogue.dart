@@ -151,7 +151,7 @@ class _ReminderDialogueState extends State<ReminderDialogue> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text("Title and Body cannot be empty."),
-            backgroundColor: Colors.red,
+            backgroundColor: Colors.blue,
           ),
         );
       }
@@ -165,7 +165,7 @@ class _ReminderDialogueState extends State<ReminderDialogue> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text("Invalid Time! Please select a future time."),
-            backgroundColor: Colors.red,
+            backgroundColor: Colors.blue,
           ),
         );
       }
@@ -178,7 +178,7 @@ class _ReminderDialogueState extends State<ReminderDialogue> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text("Your scheduled notification has been sent!"),
-            backgroundColor: Colors.green,
+            backgroundColor: Colors.blue,
           ),
         );
       }
@@ -321,7 +321,7 @@ class _ReminderDialogueState extends State<ReminderDialogue> {
               child: const Text("Schedule Notification", style: TextStyle(color: Colors.black),),
               style: ElevatedButton.styleFrom(
                 minimumSize: Size(350, 50),
-                backgroundColor: Color(0xFF5893BB),
+                backgroundColor: Color(0xFF0066CC)
               ),
             ),
             SizedBox(height: 10),
@@ -332,7 +332,7 @@ class _ReminderDialogueState extends State<ReminderDialogue> {
                 child: const Text('Save Reminder', style: TextStyle(color: Colors.black),),
                 style: ElevatedButton.styleFrom(
                   minimumSize: Size(350, 50),
-                  backgroundColor: Color(0xFF5893BB),
+                  backgroundColor: Color(0xFF0066CC)
                 ),
               ),
             ),
