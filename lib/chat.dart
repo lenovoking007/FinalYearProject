@@ -9,7 +9,7 @@ import 'package:travelmate/homepage.dart';
 import 'package:travelmate/settingmenu.dart';
 import 'package:travelmate/tools.dart';
 import 'package:travelmate/TripMainPage.dart';
-import 'package:cached_network_image/cached_network_image.dart'; // Import for CachedNetworkImage
+import 'package:cached_network_image/cached_network_image.dart';
 
 class MessagePage extends StatefulWidget {
   @override
@@ -19,7 +19,7 @@ class MessagePage extends StatefulWidget {
 class _MessagePageState extends State<MessagePage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseStorage _storage = FirebaseStorage.instance; // Added Firebase Storage
+  final FirebaseStorage _storage = FirebaseStorage.instance;
   late User _currentUser;
   int currentIndex = 3;
   final TextEditingController _searchController = TextEditingController();
@@ -44,7 +44,6 @@ class _MessagePageState extends State<MessagePage> {
           });
         }
       } catch (e) {
-        // Use default image if no profile image exists
         if (mounted) {
           setState(() {
             _profileImageUrl = null;
@@ -54,17 +53,31 @@ class _MessagePageState extends State<MessagePage> {
     }
   }
 
-  // Function to get user profile image URL (replicated for MessagePage)
   Future<String?> _getProfileImageUrl(String userId) async {
     try {
       final url = await _storage.ref('profile_images/$userId').getDownloadURL();
       return url;
     } catch (e) {
-      // If no profile image exists, return null to indicate default image
       return null;
     }
   }
 
+  Future<List<DocumentSnapshot>> _searchUsersByName(String query) async {
+    if (query.isEmpty) return [];
+
+    try {
+      final usersSnapshot = await _firestore
+          .collection('users')
+          .where('name', isGreaterThanOrEqualTo: query)
+          .where('name', isLessThan: query + 'z')
+          .get();
+
+      return usersSnapshot.docs;
+    } catch (e) {
+      print("Error searching users: $e");
+      return [];
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -120,7 +133,6 @@ class _MessagePageState extends State<MessagePage> {
                         builder: (context) => const SettingsMenuPage(previousIndex: 3),
                       ),
                     ).then((_) {
-                      // Refresh profile image when returning from settings
                       _loadProfileImage();
                     });
                   },
@@ -161,85 +173,99 @@ class _MessagePageState extends State<MessagePage> {
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    // Full-page circular indicator while initial data loads
                     return const Center(
                       child: CircularProgressIndicator(
                         valueColor: AlwaysStoppedAnimation<Color>(Color(0XFF0066CC)),
                       ),
                     );
                   }
+
                   if (snapshot.hasError) {
                     return Center(
                       child: Text('Error loading chats: ${snapshot.error}', style: const TextStyle(color: Colors.red)),
                     );
                   }
 
-                  final buddies = snapshot.data!.docs;
+                  final buddies = snapshot.data?.docs ?? [];
 
-                  if (buddies.isEmpty) {
-                    return Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Icon(Icons.group, size: 64, color: Colors.grey),
-                          SizedBox(height: 16),
-                          Text(
-                            'No buddies yet',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.grey,
-                            ),
+                  return FutureBuilder<List<DocumentSnapshot>>(
+                    future: _searchUsersByName(_searchQuery),
+                    builder: (context, searchSnapshot) {
+                      if (searchSnapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(Color(0XFF0066CC)),
                           ),
-                          SizedBox(height: 8),
-                          Text(
-                            'Add friends to start chatting',
-                            style: TextStyle(color: Colors.grey),
+                        );
+                      }
+
+                      if (searchSnapshot.hasError) {
+                        return Center(
+                          child: Text('Error searching users: ${searchSnapshot.error}', style: const TextStyle(color: Colors.red)),
+                        );
+                      }
+
+                      final List<DocumentSnapshot> combinedList = [];
+
+                      // Add buddies first
+                      combinedList.addAll(buddies);
+
+                      // Add search results if available
+                      if (searchSnapshot.hasData) {
+                        combinedList.addAll(searchSnapshot.data!);
+                      }
+
+                      // Filter duplicates
+                      final uniqueIds = <String>{};
+                      final uniqueList = combinedList.where((doc) {
+                        if (uniqueIds.contains(doc.id)) return false;
+                        uniqueIds.add(doc.id);
+                        return true;
+                      }).toList();
+
+                      // Filter based on search
+                      final filteredList = uniqueList.where((doc) {
+                        if (_searchQuery.isEmpty) return true;
+                        final name = _safeGetField(doc, 'name')?.toString().toLowerCase() ?? '';
+                        return name.contains(_searchQuery);
+                      }).toList();
+
+                      if (filteredList.isEmpty) {
+                        return Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(Icons.search_off, size: 64, color: Colors.grey),
+                              const SizedBox(height: 16),
+                              Text(
+                                _searchQuery.isEmpty
+                                    ? 'No buddies yet'
+                                    : 'No results for "$_searchQuery"',
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                _searchQuery.isEmpty
+                                    ? 'Add friends to start chatting'
+                                    : 'Try a different search term',
+                                style: const TextStyle(color: Colors.grey),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    );
-                  }
+                        );
+                      }
 
-                  // Filter buddies based on search query
-                  final filteredBuddies = buddies.where((buddy) {
-                    if (_searchQuery.isEmpty) return true;
-                    // Ensure 'name' field exists and is a String
-                    final buddyName = buddy.data() is Map<String, dynamic> ? (buddy.data() as Map<String, dynamic>)['name']?.toString().toLowerCase() : null;
-                    return buddyName?.contains(_searchQuery) ?? false;
-                  }).toList();
-
-
-                  if (filteredBuddies.isEmpty) {
-                    return Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(Icons.search_off, size: 64, color: Colors.grey),
-                          const SizedBox(height: 16),
-                          Text(
-                            'No results for "$_searchQuery"',
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.grey,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          const Text(
-                            'Try a different search term',
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                        ],
-                      ),
-                    );
-                  }
-
-                  return ListView.builder(
-                    itemCount: filteredBuddies.length,
-                    itemBuilder: (context, index) {
-                      final buddy = filteredBuddies[index];
-                      return _buildBuddyCard(buddy.id);
+                      return ListView.builder(
+                        itemCount: filteredList.length,
+                        itemBuilder: (context, index) {
+                          final userDoc = filteredList[index];
+                          return _buildBuddyCard(userDoc.id);
+                        },
+                      );
                     },
                   );
                 },
@@ -319,12 +345,20 @@ class _MessagePageState extends State<MessagePage> {
     );
   }
 
-  Widget _buildBuddyCard(String buddyId) {
+  // Helper function to safely get document fields
+  dynamic _safeGetField(DocumentSnapshot doc, String field) {
+    try {
+      return doc.get(field);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Widget _buildBuddyCard(String userId) {
     return FutureBuilder<Map<String, dynamic>>(
-      future: _getBuddyCardData(buddyId),
+      future: _getBuddyCardData(userId),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          // Show a loading state for individual cards while data is being fetched
           return Card(
             margin: const EdgeInsets.symmetric(vertical: 8),
             shape: RoundedRectangleBorder(
@@ -343,6 +377,7 @@ class _MessagePageState extends State<MessagePage> {
             ),
           );
         }
+
         if (snapshot.hasError) {
           return Card(
             margin: const EdgeInsets.symmetric(vertical: 8),
@@ -368,7 +403,8 @@ class _MessagePageState extends State<MessagePage> {
         final lastMessageTime = data['lastMessageTime'] as String;
         final isBlocked = data['isBlocked'] as bool;
         final isOnline = userData['isOnline'] ?? false;
-        final peerAvatarUrl = userData['photoUrl']; // Get photoUrl from fetched user data
+        final peerAvatarUrl = userData['photoUrl'];
+        final isBuddy = data['isBuddy'] as bool;
 
         return Card(
           margin: const EdgeInsets.symmetric(vertical: 8),
@@ -380,12 +416,12 @@ class _MessagePageState extends State<MessagePage> {
             contentPadding: const EdgeInsets.all(12),
             leading: Stack(
               children: [
-                ClipOval( // Ensure the image is clipped to a circle
+                ClipOval(
                   child: SizedBox(
-                    width: 48, // 24 radius * 2
-                    height: 48, // 24 radius * 2
+                    width: 48,
+                    height: 48,
                     child: CachedNetworkImage(
-                      imageUrl: peerAvatarUrl ?? '', // Use the fetched photoUrl
+                      imageUrl: peerAvatarUrl ?? '',
                       fit: BoxFit.cover,
                       placeholder: (context, url) => const Center(
                         child: CircularProgressIndicator(
@@ -393,7 +429,7 @@ class _MessagePageState extends State<MessagePage> {
                         ),
                       ),
                       errorWidget: (context, url, error) => Image.asset(
-                        'assets/images/circleimage.png', // Default image on error
+                        'assets/images/circleimage.png',
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -415,7 +451,7 @@ class _MessagePageState extends State<MessagePage> {
               ],
             ),
             title: Text(
-              userData['name'] ?? 'Unknown',
+              userData['name']?.toString() ?? 'Unknown',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: isBlocked ? Colors.grey[600] : null,
@@ -427,7 +463,7 @@ class _MessagePageState extends State<MessagePage> {
               style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
             )
                 : Text(
-              lastMessage,
+              isBuddy ? lastMessage : 'Tap to start chatting',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(color: Colors.grey[600]),
@@ -436,10 +472,10 @@ class _MessagePageState extends State<MessagePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  lastMessageTime,
+                  isBuddy ? lastMessageTime : '',
                   style: TextStyle(color: Colors.grey[500], fontSize: 12),
                 ),
-                if (!isBlocked && unreadCount > 0)
+                if (!isBlocked && isBuddy && unreadCount > 0)
                   Container(
                     margin: const EdgeInsets.only(top: 4),
                     padding: const EdgeInsets.all(6),
@@ -460,17 +496,32 @@ class _MessagePageState extends State<MessagePage> {
             ),
             onTap: isBlocked
                 ? null
-                : () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => _ChatScreen(
-                    peerId: buddyId,
-                    peerName: userData['name'] ?? 'Unknown',
-                    peerAvatar: peerAvatarUrl ?? 'assets/images/circleimage.png', // Pass fetched URL or default
+                : () async {
+              if (isBuddy) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => _ChatScreen(
+                      peerId: userId,
+                      peerName: userData['name']?.toString() ?? 'Unknown',
+                      peerAvatar: peerAvatarUrl ?? 'assets/images/circleimage.png',
+                    ),
                   ),
-                ),
-              );
+                );
+              } else {
+                // Add non-buddy as a new buddy
+                await _addBuddy(userId, userData['name']?.toString() ?? 'Unknown');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => _ChatScreen(
+                      peerId: userId,
+                      peerName: userData['name']?.toString() ?? 'Unknown',
+                      peerAvatar: peerAvatarUrl ?? 'assets/images/circleimage.png',
+                    ),
+                  ),
+                );
+              }
             },
           ),
         );
@@ -478,56 +529,98 @@ class _MessagePageState extends State<MessagePage> {
     );
   }
 
-  Future<Map<String, dynamic>> _getBuddyCardData(String buddyId) async {
+  Future<Map<String, dynamic>> _getBuddyCardData(String userId) async {
     final currentUser = _auth.currentUser!;
-    final chatId = _getChatId(currentUser.uid, buddyId);
 
-    // Fetch user data
-    final userDoc = await _firestore.collection('users').doc(buddyId).get();
-    final userData = userDoc.data() as Map<String, dynamic>;
-    // Add photoUrl to userData if it exists in the user document
-    userData['photoUrl'] = await _getProfileImageUrl(buddyId);
+    // Check if this user is a buddy
+    bool isBuddy = false;
+    try {
+      isBuddy = (await _firestore
+          .collection('users')
+          .doc(currentUser.uid)
+          .collection('buddies')
+          .doc(userId)
+          .get())
+          .exists;
+    } catch (e) {
+      print("Error checking buddy status: $e");
+    }
 
+    Map<String, dynamic> userData = {
+      'name': 'Unknown',
+      'isOnline': false,
+      'photoUrl': null,
+    };
 
-    // Fetch chat data for last message and time
-    final chatDoc = await _firestore.collection('chats').doc(chatId).get();
+    try {
+      // Fetch user data
+      final userDoc = await _firestore.collection('users').doc(userId).get();
+      if (userDoc.exists && userDoc.data() != null) {
+        userData = userDoc.data()!;
+        // Add photoUrl to userData
+        userData['photoUrl'] = await _getProfileImageUrl(userId);
+      }
+    } catch (e) {
+      print("Error fetching user data: $e");
+    }
+
+    // Initialize chat-related variables
     String lastMessage = "Tap to chat";
     String lastMessageTime = "";
-    if (chatDoc.exists) {
-      final chatData = chatDoc.data() as Map<String, dynamic>;
-      lastMessage = chatData['lastMessage'] ?? "Tap to chat";
-      final timestamp = chatData['lastMessageTime'] as Timestamp?;
-      if (timestamp != null) {
-        lastMessageTime = _formatTime(timestamp.toDate());
+    int unreadCount = 0;
+
+    // Only fetch chat data if they are buddies
+    if (isBuddy) {
+      final chatId = _getChatId(currentUser.uid, userId);
+
+      try {
+        final chatDoc = await _firestore.collection('chats').doc(chatId).get();
+        if (chatDoc.exists && chatDoc.data() != null) {
+          final chatData = chatDoc.data()!;
+          lastMessage = chatData['lastMessage']?.toString() ?? "Tap to chat";
+          final timestamp = chatData['lastMessageTime'] as Timestamp?;
+          if (timestamp != null) {
+            lastMessageTime = _formatTime(timestamp.toDate());
+          }
+        }
+
+        // Get unread message count
+        final unreadSnapshot = await _firestore
+            .collection('chats')
+            .doc(chatId)
+            .collection('messages')
+            .where('receiverId', isEqualTo: currentUser.uid)
+            .where('isRead', isEqualTo: false)
+            .get();
+        unreadCount = unreadSnapshot.docs.length;
+      } catch (e) {
+        print("Error fetching chat data: $e");
       }
     }
 
-    // Get unread message count
-    final unreadSnapshot = await _firestore
-        .collection('chats')
-        .doc(chatId)
-        .collection('messages')
-        .where('receiverId', isEqualTo: currentUser.uid)
-        .where('isRead', isEqualTo: false)
-        .get();
-    final unreadCount = unreadSnapshot.docs.length;
-
     // Check if current user blocked buddy OR if buddy blocked current user
-    final blockedByMe = await _firestore
-        .collection('users')
-        .doc(currentUser.uid)
-        .collection('blocked')
-        .doc(buddyId)
-        .get()
-        .then((doc) => doc.exists);
+    bool blockedByMe = false;
+    bool blockedByBuddy = false;
 
-    final blockedByBuddy = await _firestore
-        .collection('users')
-        .doc(buddyId)
-        .collection('blocked')
-        .doc(currentUser.uid)
-        .get()
-        .then((doc) => doc.exists);
+    try {
+      blockedByMe = (await _firestore
+          .collection('users')
+          .doc(currentUser.uid)
+          .collection('blocked')
+          .doc(userId)
+          .get())
+          .exists;
+
+      blockedByBuddy = (await _firestore
+          .collection('users')
+          .doc(userId)
+          .collection('blocked')
+          .doc(currentUser.uid)
+          .get())
+          .exists;
+    } catch (e) {
+      print("Error checking blocked status: $e");
+    }
 
     final isBlocked = blockedByMe || blockedByBuddy;
 
@@ -537,7 +630,41 @@ class _MessagePageState extends State<MessagePage> {
       'lastMessage': lastMessage,
       'lastMessageTime': lastMessageTime,
       'isBlocked': isBlocked,
+      'isBuddy': isBuddy,
     };
+  }
+
+  Future<void> _addBuddy(String userId, String userName) async {
+    final currentUser = _auth.currentUser!;
+
+    try {
+      // Add to current user's buddies
+      await _firestore
+          .collection('users')
+          .doc(currentUser.uid)
+          .collection('buddies')
+          .doc(userId)
+          .set({
+        'name': userName,
+        'timestamp': FieldValue.serverTimestamp(),
+      });
+
+      // Add current user to the buddy's buddies list
+      await _firestore
+          .collection('users')
+          .doc(userId)
+          .collection('buddies')
+          .doc(currentUser.uid)
+          .set({
+        'name': currentUser.displayName ?? 'Unknown',
+        'timestamp': FieldValue.serverTimestamp(),
+      });
+    } catch (e) {
+      print("Error adding buddy: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Failed to add buddy. Please try again.")),
+      );
+    }
   }
 
   String _getChatId(String uid1, String uid2) {
@@ -590,7 +717,7 @@ class _MessagePageState extends State<MessagePage> {
 class _ChatScreen extends StatefulWidget {
   final String peerId;
   final String peerName;
-  final String peerAvatar; // This can be a URL or asset path
+  final String peerAvatar;
 
   const _ChatScreen({
     required this.peerId,
@@ -617,7 +744,7 @@ class __ChatScreenState extends State<_ChatScreen> {
     super.initState();
     _currentUser = _auth.currentUser!;
     _setupMessageReadListener();
-    _updatePeerLastSeen(); // Keep this for showing peer's online/last seen status
+    _updatePeerLastSeen();
   }
 
   Future<void> _clearChatHistory() async {
@@ -651,7 +778,6 @@ class __ChatScreenState extends State<_ChatScreen> {
                 }
                 await batch.commit();
 
-                // Clear last message in parent chat document
                 await _firestore.collection('chats').doc(_getChatId()).set({
                   'lastMessage': '',
                   'lastMessageTime': null,
@@ -662,7 +788,7 @@ class __ChatScreenState extends State<_ChatScreen> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Chat history cleared')),
                 );
-                _exitSelectionMode(); // Exit selection mode if active
+                _exitSelectionMode();
               } catch (e) {
                 print("Error clearing chat history: $e");
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -676,6 +802,7 @@ class __ChatScreenState extends State<_ChatScreen> {
       ),
     );
   }
+
   void _setupMessageReadListener() {
     _messageSubscription = _firestore
         .collection('chats')
@@ -702,6 +829,9 @@ class __ChatScreenState extends State<_ChatScreen> {
 
   Stream<Map<String, dynamic>> _getPeerStatusStream() {
     return _firestore.collection('users').doc(widget.peerId).snapshots().map((snapshot) {
+      if (!snapshot.exists) {
+        return {'isOnline': false, 'lastSeen': null};
+      }
       final data = snapshot.data() as Map<String, dynamic>;
       final isOnline = data['isOnline'] ?? false;
       final lastSeenTimestamp = data['lastSeen'] as Timestamp?;
@@ -715,15 +845,12 @@ class __ChatScreenState extends State<_ChatScreen> {
     });
   }
 
-  // Periodically update current user's last seen status (for other users to see)
   void _updatePeerLastSeen() {
-    // This function updates the CURRENT USER's presence status, not the peer's.
-    // The peer's status is read via _getPeerStatusStream().
     Timer.periodic(const Duration(seconds: 15), (timer) {
       if (mounted) {
         _firestore.collection('users').doc(_currentUser.uid).set({
           'lastSeen': FieldValue.serverTimestamp(),
-          'isOnline': true, // Keep online status updated
+          'isOnline': true,
         }, SetOptions(merge: true)).catchError((e) {
           print("Error updating user presence: $e");
         });
@@ -732,7 +859,6 @@ class __ChatScreenState extends State<_ChatScreen> {
       }
     });
   }
-
 
   String _getChatId() {
     return _currentUser.uid.hashCode <= widget.peerId.hashCode
@@ -878,7 +1004,7 @@ class __ChatScreenState extends State<_ChatScreen> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Buddy removed successfully')),
                 );
-                Navigator.pop(context); // Go back to chat list
+                Navigator.pop(context);
               } catch (e) {
                 print("Error removing buddy: $e");
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -938,7 +1064,7 @@ class __ChatScreenState extends State<_ChatScreen> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('User blocked successfully')),
                 );
-                Navigator.pop(context); // Go back to chat list
+                Navigator.pop(context);
               } catch (e) {
                 print("Error blocking user: $e");
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -967,27 +1093,26 @@ class __ChatScreenState extends State<_ChatScreen> {
             ? Text('${_selectedMessageIds.length} selected', style: const TextStyle(color: Colors.white))
             : Row(
           children: [
-            // Use ClipOval and CachedNetworkImage for the peer's avatar in the app bar
             ClipOval(
               child: SizedBox(
-                width: 36, // 18 radius * 2
-                height: 36, // 18 radius * 2
+                width: 36,
+                height: 36,
                 child: widget.peerAvatar.startsWith('http')
                     ? CachedNetworkImage(
                   imageUrl: widget.peerAvatar,
                   fit: BoxFit.cover,
                   placeholder: (context, url) => const Center(
                     child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white), // White for app bar
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                     ),
                   ),
                   errorWidget: (context, url, error) => Image.asset(
-                    'assets/images/circleimage.png', // Default image on error
+                    'assets/images/circleimage.png',
                     fit: BoxFit.cover,
                   ),
                 )
                     : Image.asset(
-                  widget.peerAvatar, // Assume it's a local asset if not a URL
+                  widget.peerAvatar,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -1007,8 +1132,8 @@ class __ChatScreenState extends State<_ChatScreen> {
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const SizedBox(
-                          height: 12, // Maintain space during loading
-                          width: 50, // Arbitrary width for loading
+                          height: 12,
+                          width: 50,
                           child: LinearProgressIndicator(
                             valueColor: AlwaysStoppedAnimation<Color>(Colors.white70),
                             backgroundColor: Colors.transparent,
@@ -1163,11 +1288,8 @@ class __ChatScreenState extends State<_ChatScreen> {
               }
               final chatData = snapshot.data!.data() as Map<String, dynamic>;
               final peerLastMessageSeenBy = chatData['lastMessageSeenBy.${widget.peerId}'] as Timestamp?;
-              final myLastSentMessageTimestamp = chatData['lastMessageTime'] as Timestamp?; // This is the timestamp of my last sent message updated in the chat doc
+              final myLastSentMessageTimestamp = chatData['lastMessageTime'] as Timestamp?;
 
-              // Determine if "Seen" status should be displayed
-              // This is a simplified "seen" indicator for the overall chat, not per message.
-              // A more precise per-message "seen" requires tracking each message's seen status more deeply.
               final bool showOverallSeenStatus = peerLastMessageSeenBy != null &&
                   myLastSentMessageTimestamp != null &&
                   peerLastMessageSeenBy.toDate().isAfter(myLastSentMessageTimestamp.toDate());

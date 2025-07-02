@@ -45,6 +45,9 @@ class _TripPageState extends State<TripPage> {
   final FirebaseStorage _storage = FirebaseStorage.instance;
   String? _profileImageUrl;
 
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
+
   final List<Map<String, dynamic>> categories = [
     {
       'title': 'Adventure',
@@ -119,13 +122,13 @@ class _TripPageState extends State<TripPage> {
       'page': SightseeingTourPage()
     },
     {
-      'title': 'JeepRally',
+      'title': 'Jeep Rally',
       'description': 'Rallies',
       'image': 'assets/images/jeep/chn1.jpg',
       'page': JeepRallyPage()
     },
     {
-      'title': 'Rockclimbing',
+      'title': 'Rock Climbing',
       'description': 'Scale the cliffs of Hunza Valley',
       'image': 'assets/images/rock/ro2.jpg',
       'page': RockClimbingPage()
@@ -146,7 +149,7 @@ class _TripPageState extends State<TripPage> {
       'page':MohenjoDaroPage()
     },
     {
-      'title': 'Desosai Plains',
+      'title': 'Deosai Plains',
       'description': 'Lands of Giants',
       'image': 'assets/images/desasoi.jpg',
       'page': DeosaiPage()
@@ -169,6 +172,32 @@ class _TripPageState extends State<TripPage> {
   void initState() {
     super.initState();
     _loadProfileImage();
+    _searchController.addListener(_onSearchChanged);
+  }
+
+  @override
+  void dispose() {
+    _searchController.removeListener(_onSearchChanged);
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _onSearchChanged() {
+    setState(() {
+      _searchQuery = _searchController.text.toLowerCase();
+    });
+  }
+
+  // Helper function to filter lists
+  List<Map<String, dynamic>> _filterList(List<Map<String, dynamic>> originalList) {
+    if (_searchQuery.isEmpty) {
+      return originalList;
+    }
+    return originalList.where((item) {
+      final title = item['title'].toLowerCase();
+      final description = item['description'].toLowerCase();
+      return title.contains(_searchQuery) || description.contains(_searchQuery);
+    }).toList();
   }
 
   Future<void> _loadProfileImage() async {
@@ -210,6 +239,11 @@ class _TripPageState extends State<TripPage> {
 
   Widget _buildCategoryItem(Map<String, dynamic> category) {
     final screenHeight = MediaQuery.of(context).size.height;
+    // Filter categories based on search query
+    if (_searchQuery.isNotEmpty &&
+        !(category['title'].toLowerCase().contains(_searchQuery))) {
+      return const SizedBox.shrink(); // Hide if it doesn't match
+    }
 
     return GestureDetector(
       onTap: () {
@@ -263,12 +297,10 @@ class _TripPageState extends State<TripPage> {
       },
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        // The margin is now handled by the CarouselSlider's options or internal padding.
-        // For ListView.builder, the horizontal padding in the parent SizedBox below is enough.
-        margin: const EdgeInsets.symmetric(horizontal: 4), // Kept for Famous Activities ListView
-        clipBehavior: Clip.antiAlias, // Ensures content is clipped to card's rounded corners
+        margin: const EdgeInsets.symmetric(horizontal: 4),
+        clipBehavior: Clip.antiAlias,
         child: SizedBox(
-          width: 330, // Ensures SizedBox fills its parent's width
+          width: 330,
           height: cardHeight,
           child: Stack(
             children: [
@@ -276,9 +308,9 @@ class _TripPageState extends State<TripPage> {
                 borderRadius: BorderRadius.circular(12),
                 child: Image.asset(
                   imagePath,
-                  fit: BoxFit.cover, // Ensures image covers the space
-                  width: double.infinity, // Ensures image fills width of ClipRRect
-                  height: double.infinity, // Ensures image fills height of ClipRRect
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  height: double.infinity,
                   errorBuilder: (context, error, stackTrace) {
                     return Center(
                       child: Icon(
@@ -356,6 +388,24 @@ class _TripPageState extends State<TripPage> {
   Widget _buildSectionHeader(String title, VoidCallback? onViewAll) {
     final screenHeight = MediaQuery.of(context).size.height;
 
+    // Only show header if there are filtered items for that section, or if no search is active
+    bool shouldShowHeader = true; // Default to true
+    if (_searchQuery.isNotEmpty) {
+      if (title == "Categories") {
+        shouldShowHeader = categories.any((item) => item['title'].toLowerCase().contains(_searchQuery));
+      } else if (title == "Featured Cities") {
+        shouldShowHeader = recommendedTrips.any((item) => item['title'].toLowerCase().contains(_searchQuery) || item['description'].toLowerCase().contains(_searchQuery));
+      } else if (title == "Famous Activities") {
+        shouldShowHeader = famousActivities.any((item) => item['title'].toLowerCase().contains(_searchQuery) || item['description'].toLowerCase().contains(_searchQuery));
+      } else if (title == "Famous Tourists Places") {
+        shouldShowHeader = featuredDestinations.any((item) => item['title'].toLowerCase().contains(_searchQuery) || item['description'].toLowerCase().contains(_searchQuery));
+      }
+    }
+
+    if (!shouldShowHeader) {
+      return const SizedBox.shrink(); // Hide the header if no matching items
+    }
+
     return Padding(
       padding: EdgeInsets.symmetric(
           horizontal: screenHeight * 0.02, vertical: screenHeight * 0.01),
@@ -370,7 +420,7 @@ class _TripPageState extends State<TripPage> {
               color: const Color(0XFF0066CC),
             ),
           ),
-          if (onViewAll != null)
+          if (onViewAll != null && _searchQuery.isEmpty) // Hide "See All" button when search is active
             TextButton(
               onPressed: onViewAll,
               child: Text(
@@ -390,7 +440,10 @@ class _TripPageState extends State<TripPage> {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-    // final screenWidth = MediaQuery.of(context).size.width; // Not directly used in sizing items anymore with CarouselSlider's viewportFraction
+
+    final filteredRecommendedTrips = _filterList(recommendedTrips);
+    final filteredFamousActivities = _filterList(famousActivities);
+    final filteredFeaturedDestinations = _filterList(featuredDestinations);
 
     return Scaffold(
       appBar: AppBar(
@@ -412,16 +465,28 @@ class _TripPageState extends State<TripPage> {
                     color: Colors.white.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const TextField(
+                  child: TextField(
+                    controller: _searchController,
                     decoration: InputDecoration(
                       hintText: 'Search here...',
-                      hintStyle: TextStyle(color: Colors.white70),
-                      prefixIcon: Icon(Icons.search, color: Colors.white, size: 20),
+                      hintStyle: const TextStyle(color: Colors.white70),
+                      prefixIcon: const Icon(Icons.search, color: Colors.white, size: 20),
+                      suffixIcon: _searchQuery.isNotEmpty
+                          ? IconButton(
+                        icon: const Icon(Icons.clear, color: Colors.white),
+                        onPressed: () {
+                          _searchController.clear();
+                          setState(() {
+                            _searchQuery = '';
+                          });
+                        },
+                      )
+                          : null,
                       border: InputBorder.none,
-                      contentPadding: EdgeInsets.symmetric(vertical: 8),
+                      contentPadding: const EdgeInsets.symmetric(vertical: 8),
                       isDense: true,
                     ),
-                    style: TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white),
                   ),
                 ),
               ),
@@ -474,112 +539,139 @@ class _TripPageState extends State<TripPage> {
               SizedBox(height: screenHeight * 0.02),
 
               // 2. Featured Cities Section (Using CarouselSlider for 'no half image' effect)
-              _buildSectionHeader("Featured Cities", () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const FeaturedCitiesPage()),
-                );
-              }),
-              CarouselSlider.builder(
-                itemCount: recommendedTrips.length,
-                itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) {
-                  return _buildCard(
-                    recommendedTrips[itemIndex]['title'],
-                    recommendedTrips[itemIndex]['description'],
-                    recommendedTrips[itemIndex]['image'],
-                    screenHeight * 0.28, // Height for the card content
-                    recommendedTrips[itemIndex]['page'],
+              if (filteredRecommendedTrips.isNotEmpty)
+                _buildSectionHeader("Featured Cities", () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const FeaturedCitiesPage()),
                   );
-                },
-                options: CarouselOptions(
-                  height: screenHeight * 0.3, // Overall height of the carousel area
-                  autoPlay: true,
-                  enlargeCenterPage: false, // Set to false for full-width items
-                  viewportFraction: 1.0, // <-- Changed to 1.0 for full-width items
-                  aspectRatio: 16/9, // Optional: maintains aspect ratio
-                  initialPage: 0,
-                  enableInfiniteScroll: true,
-                  autoPlayInterval: Duration(seconds: 1), // faster movement
-                  autoPlayAnimationDuration: Duration(milliseconds: 600),
-                  autoPlayCurve: Curves.fastOutSlowIn,
-                  scrollDirection: Axis.horizontal,
+                }),
+              if (filteredRecommendedTrips.isNotEmpty)
+                CarouselSlider.builder(
+                  itemCount: filteredRecommendedTrips.length,
+                  itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) {
+                    return _buildCard(
+                      filteredRecommendedTrips[itemIndex]['title'],
+                      filteredRecommendedTrips[itemIndex]['description'],
+                      filteredRecommendedTrips[itemIndex]['image'],
+                      screenHeight * 0.28, // Height for the card content
+                      filteredRecommendedTrips[itemIndex]['page'],
+                    );
+                  },
+                  options: CarouselOptions(
+                    height: screenHeight * 0.3, // Overall height of the carousel area
+                    autoPlay: true,
+                    enlargeCenterPage: false, // Set to false for full-width items
+                    viewportFraction: 1.0, // <-- Changed to 1.0 for full-width items
+                    aspectRatio: 16/9, // Optional: maintains aspect ratio
+                    initialPage: 0,
+                    enableInfiniteScroll: true,
+                    autoPlayInterval: const Duration(seconds: 1), // faster movement
+                    autoPlayAnimationDuration: const Duration(milliseconds: 600),
+                    autoPlayCurve: Curves.fastOutSlowIn,
+                    scrollDirection: Axis.horizontal,
+                  ),
                 ),
-              ),
-              SizedBox(height: screenHeight * 0.02),
+              if (filteredRecommendedTrips.isNotEmpty)
+                SizedBox(height: screenHeight * 0.02),
 
               // 3. Famous Activities Section (Kept as ListView.builder, showing multiple smaller cards)
-              _buildSectionHeader("Famous Activities", () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const FamousActivitiesPage()),
-                );
-              }),
-              CarouselSlider.builder(
-                itemCount: famousActivities.length,
-                itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                    child: _buildCard(
-                      famousActivities[itemIndex]['title'],
-                      famousActivities[itemIndex]['description'],
-                      famousActivities[itemIndex]['image'],
-                      screenHeight * 0.2,
-                      famousActivities[itemIndex]['page'],
-                    ),
+              if (filteredFamousActivities.isNotEmpty)
+                _buildSectionHeader("Famous Activities", () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const FamousActivitiesPage()),
                   );
-                },
-                options: CarouselOptions(
-                  height: screenHeight * 0.22,
-                  autoPlay: true,
-                  reverse: true,
-                  viewportFraction: 0.55, // Slightly less than half screen for 2 cards visible
-                  autoPlayInterval: const Duration(seconds: 1),
-                  autoPlayAnimationDuration: const Duration(milliseconds: 600),
-                  autoPlayCurve: Curves.fastOutSlowIn,
-                  enlargeCenterPage: false,
-                  enableInfiniteScroll: true,
-                  scrollDirection: Axis.horizontal,
+                }),
+              if (filteredFamousActivities.isNotEmpty)
+                CarouselSlider.builder(
+                  itemCount: filteredFamousActivities.length,
+                  itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 6.0),
+                      child: _buildCard(
+                        filteredFamousActivities[itemIndex]['title'],
+                        filteredFamousActivities[itemIndex]['description'],
+                        filteredFamousActivities[itemIndex]['image'],
+                        screenHeight * 0.2,
+                        filteredFamousActivities[itemIndex]['page'],
+                      ),
+                    );
+                  },
+                  options: CarouselOptions(
+                    height: screenHeight * 0.22,
+                    autoPlay: true,
+                    reverse: true,
+                    viewportFraction: 0.55, // Slightly less than half screen for 2 cards visible
+                    autoPlayInterval: const Duration(seconds: 1),
+                    autoPlayAnimationDuration: const Duration(milliseconds: 600),
+                    autoPlayCurve: Curves.fastOutSlowIn,
+                    enlargeCenterPage: false,
+                    enableInfiniteScroll: true,
+                    scrollDirection: Axis.horizontal,
+                  ),
                 ),
-              ),
-              SizedBox(height: screenHeight * 0.02),
+              if (filteredFamousActivities.isNotEmpty)
+                SizedBox(height: screenHeight * 0.02),
 
               // 4. Featured Destinations Section (Using CarouselSlider for 'no half image' effect)
-              _buildSectionHeader("Famous Tourists Places", () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const FamousTouristPlacesPage()),
-                );
-              }),
-              CarouselSlider.builder(
-                itemCount: featuredDestinations.length,
-                itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) {
-                  return _buildCard(
-                    featuredDestinations[itemIndex]['title'],
-                    featuredDestinations[itemIndex]['description'],
-                    featuredDestinations[itemIndex]['image'],
-                    screenHeight * 0.26, // Height for the card content
-                    featuredDestinations[itemIndex]['page'],
+              if (filteredFeaturedDestinations.isNotEmpty)
+                _buildSectionHeader("Famous Tourists Places", () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const FamousTouristPlacesPage()),
                   );
-                },
-                options: CarouselOptions(
-                  height: screenHeight * 0.28, // Overall height of the carousel area
-                  autoPlay: true,
-                  enlargeCenterPage: false, // Set to false for full-width items
-                  viewportFraction: 1.0, // <-- Changed to 1.0 for full-width items
-                  aspectRatio: 16/9, // Optional: maintains aspect ratio
-                  initialPage: 0,
-                  enableInfiniteScroll: true,
-                  autoPlayInterval: const Duration(seconds: 1),
-                  autoPlayAnimationDuration: const Duration(milliseconds: 600),
-                  autoPlayCurve: Curves.fastOutSlowIn,
-                  scrollDirection: Axis.horizontal,
-                  reverse: true,
+                }),
+              if (filteredFeaturedDestinations.isNotEmpty)
+                CarouselSlider.builder(
+                  itemCount: filteredFeaturedDestinations.length,
+                  itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) {
+                    return _buildCard(
+                      filteredFeaturedDestinations[itemIndex]['title'],
+                      filteredFeaturedDestinations[itemIndex]['description'],
+                      filteredFeaturedDestinations[itemIndex]['image'],
+                      screenHeight * 0.26, // Height for the card content
+                      filteredFeaturedDestinations[itemIndex]['page'],
+                    );
+                  },
+                  options: CarouselOptions(
+                    height: screenHeight * 0.28, // Overall height of the carousel area
+                    autoPlay: true,
+                    enlargeCenterPage: false, // Set to false for full-width items
+                    viewportFraction: 1.0, // <-- Changed to 1.0 for full-width items
+                    aspectRatio: 16/9, // Optional: maintains aspect ratio
+                    initialPage: 0,
+                    enableInfiniteScroll: true,
+                    autoPlayInterval: const Duration(seconds: 1),
+                    autoPlayAnimationDuration: const Duration(milliseconds: 600),
+                    autoPlayCurve: Curves.fastOutSlowIn,
+                    scrollDirection: Axis.horizontal,
+                    reverse: true,
+                  ),
                 ),
-              ),
-              SizedBox(height: screenHeight * 0.02), // Add padding at the bottom
+              if (filteredFeaturedDestinations.isNotEmpty)
+                SizedBox(height: screenHeight * 0.02), // Add padding at the bottom
+              if (_searchQuery.isNotEmpty &&
+                  filteredRecommendedTrips.isEmpty &&
+                  filteredFamousActivities.isEmpty &&
+                  filteredFeaturedDestinations.isEmpty &&
+                  !categories.any((element) => element['title'].toLowerCase().contains(_searchQuery)))
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Center(
+                    child: Text(
+                      'No results found for "${_searchController.text}".',
+                      style: TextStyle(
+                        fontSize: screenHeight * 0.02,
+                        color: Colors.grey,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
             ],
           ),
         );

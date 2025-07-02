@@ -12,7 +12,7 @@ import 'package:travelmate/packinglist.dart';
 import 'package:travelmate/reminder.dart';
 import 'package:travelmate/safetyalert.dart';
 import 'package:travelmate/settingmenu.dart';
-import 'package:travelmate/spacesharing.dart';
+import 'package:travelmate/spacesharing.dart'; // Assuming this is RideSharingPage
 import 'package:travelmate/travelbuddy.dart';
 import 'package:travelmate/TripMainPage.dart';
 import 'ToolsCode/weather_app.dart';
@@ -27,11 +27,27 @@ class _ToolsState extends State<Tools> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseStorage _storage = FirebaseStorage.instance;
   String? _profileImageUrl;
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = ''; // State for the search query
 
   @override
   void initState() {
     super.initState();
     _loadProfileImage();
+    _searchController.addListener(_onSearchChanged); // Listen for search input changes
+  }
+
+  @override
+  void dispose() {
+    _searchController.removeListener(_onSearchChanged);
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _onSearchChanged() {
+    setState(() {
+      _searchQuery = _searchController.text.toLowerCase(); // Update search query and trigger rebuild
+    });
   }
 
   Future<void> _loadProfileImage() async {
@@ -45,6 +61,7 @@ class _ToolsState extends State<Tools> {
           });
         }
       } catch (e) {
+        // Use default image if no profile image exists
         if (mounted) {
           setState(() {
             _profileImageUrl = null;
@@ -54,9 +71,22 @@ class _ToolsState extends State<Tools> {
     }
   }
 
+  // Filtered list of tools based on search query
+  List<Tool> get _filteredTools {
+    if (_searchQuery.isEmpty) {
+      return tools;
+    }
+    return tools.where((tool) {
+      final title = tool.title.toLowerCase();
+      final subtitle = (tool.subtitle ?? '').toLowerCase(); // Handle null subtitle
+      return title.contains(_searchQuery) || subtitle.contains(_searchQuery);
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
+    final filteredTools = _filteredTools; // Get the filtered list
 
     return Scaffold(
       appBar: AppBar(
@@ -78,16 +108,28 @@ class _ToolsState extends State<Tools> {
                     color: Colors.white.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const TextField(
+                  child: TextField(
+                    controller: _searchController,
                     decoration: InputDecoration(
                       hintText: 'Search here...',
-                      hintStyle: TextStyle(color: Colors.white70),
-                      prefixIcon: Icon(Icons.search, color: Colors.white, size: 20),
+                      hintStyle: const TextStyle(color: Colors.white70),
+                      prefixIcon: const Icon(Icons.search, color: Colors.white, size: 20),
+                      suffixIcon: _searchQuery.isNotEmpty
+                          ? IconButton(
+                        icon: const Icon(Icons.clear, color: Colors.white),
+                        onPressed: () {
+                          _searchController.clear();
+                          setState(() {
+                            _searchQuery = ''; // Clear search query
+                          });
+                        },
+                      )
+                          : null, // Show clear icon only if text is present
                       border: InputBorder.none,
-                      contentPadding: EdgeInsets.symmetric(vertical: 8),
+                      contentPadding: const EdgeInsets.symmetric(vertical: 8),
                       isDense: true,
                     ),
-                    style: TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white),
                   ),
                 ),
               ),
@@ -102,6 +144,7 @@ class _ToolsState extends State<Tools> {
                         builder: (context) => const SettingsMenuPage(previousIndex: 1),
                       ),
                     ).then((_) {
+                      // Refresh profile image when returning from settings
                       _loadProfileImage();
                     });
                   },
@@ -148,24 +191,41 @@ class _ToolsState extends State<Tools> {
                   ],
                 ),
               ),
-              SliverPadding(
-                padding: EdgeInsets.only(bottom: screenHeight * 0.03),
-                sliver: SliverGrid(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: screenHeight * 0.02,
-                    mainAxisSpacing: screenHeight * 0.02,
-                    childAspectRatio: 1,
-                  ),
-                  delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                      final tool = tools[index];
-                      return ToolCard(tool: tool);
-                    },
-                    childCount: tools.length,
+              if (filteredTools.isEmpty && _searchQuery.isNotEmpty)
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Center(
+                      child: Text(
+                        'No tools found for "${_searchController.text}".',
+                        style: TextStyle(
+                          fontSize: screenHeight * 0.02,
+                          color: Colors.grey,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
                   ),
                 ),
-              ),
+              if (filteredTools.isNotEmpty)
+                SliverPadding(
+                  padding: EdgeInsets.only(bottom: screenHeight * 0.03),
+                  sliver: SliverGrid(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: screenHeight * 0.02,
+                      mainAxisSpacing: screenHeight * 0.02,
+                      childAspectRatio: 1,
+                    ),
+                    delegate: SliverChildBuilderDelegate(
+                          (context, index) {
+                        final tool = filteredTools[index]; // Use the filtered list
+                        return ToolCard(tool: tool);
+                      },
+                      childCount: filteredTools.length, // Use the filtered list length
+                    ),
+                  ),
+                ),
             ],
           ),
         );
@@ -283,7 +343,7 @@ class ToolCard extends StatelessWidget {
     return GestureDetector(
       onTap: () => Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => tool.pageBuilder()),
+        MaterialPageRoute(builder: (context) => tool.page),
       ),
       child: Container(
         decoration: BoxDecoration(
@@ -344,14 +404,14 @@ class Tool {
   final String? subtitle;
   final IconData icon;
   final Color iconColor;
-  final Widget Function() pageBuilder;
+  final Widget page;
 
   Tool({
     required this.title,
     this.subtitle,
     required this.icon,
     required this.iconColor,
-    required this.pageBuilder,
+    required this.page,
   });
 }
 
@@ -361,69 +421,69 @@ final List<Tool> tools = [
     subtitle: 'Real-time updates',
     icon: Icons.cloud,
     iconColor: Colors.blue,
-    pageBuilder: () => WeatherApp(),
+    page: WeatherApp(),
   ),
   Tool(
     title: 'Travel Buddy',
     subtitle: 'Find companions',
     icon: Icons.group,
     iconColor: Colors.green,
-    pageBuilder: () => TravelBuddy(),
+    page: TravelBuddy(),
   ),
   Tool(
     title: 'Reminders',
     subtitle: 'Never miss anything',
     icon: Icons.notifications,
     iconColor: Colors.orange,
-    pageBuilder: () => ReminderPage(),
+    page: ReminderPage(),
   ),
   Tool(
     title: 'Packing List',
     subtitle: 'Smart suggestions',
     icon: Icons.checklist,
     iconColor: Colors.purple,
-    pageBuilder: () => PackingListPage(),
+    page: PackingListPage(),
   ),
   Tool(
     title: 'Journey Estimator',
     subtitle: 'Calculate trip costs',
     icon: Icons.attach_money,
     iconColor: Colors.deepPurple,
-    pageBuilder: () => JourneyEstimatorPage(),
+    page: JourneyEstimatorPage(),
   ),
   Tool(
     title: 'Currency Converter',
     subtitle: 'Live exchange rates',
     icon: Icons.currency_exchange,
     iconColor: Colors.indigo,
-    pageBuilder: () => CurrencyConverterPage(),
+    page: CurrencyConverterPage(),
   ),
   Tool(
     title: 'Ride Sharing',
     subtitle: 'Book shared rides',
     icon: Icons.directions_car,
     iconColor: Colors.deepOrange,
-    pageBuilder: () => SpaceSharingPage(),
+    page: SpaceSharingPage(),
   ),
   Tool(
     title: 'Google Maps',
     subtitle: 'Navigation & routes',
     icon: Icons.map,
     iconColor: Colors.red,
-    pageBuilder: () => const GoogleMapsPage(),
+    page: GoogleMapsPage()
   ),
   Tool(
     title: 'Safety Alerts',
     subtitle: 'Travel advisories',
     icon: Icons.warning,
     iconColor: Colors.amber,
-    pageBuilder: () => SafetyAlertPage(),
+    page: SafetyAlertPage(),
   ),
   Tool(
     title: 'Photos Gallery',
     subtitle: 'Organized memories',
     icon: Icons.photo,
     iconColor: Colors.pink,
-    pageBuilder: () => GalleryPage(),
+    page: GalleryPage(),
   ),
 ];
